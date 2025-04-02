@@ -1,0 +1,4 @@
+set colored-stats on
+set colored-completion-prefix on
+set completion-display-width 0
+set completion-ignore-case on

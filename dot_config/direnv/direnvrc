@@ -1,0 +1,45 @@
+layout_python() {
+  local old_env
+  local python=${1:-python}
+  [[ $# -gt 0 ]] && shift
+  old_env=$(direnv_layout_dir)/virtualenv
+  unset PYTHONHOME
+  if [[ -d $old_env && $python == python ]]; then
+    VIRTUAL_ENV=$old_env
+  else
+    local python_version ve
+    # shellcheck disable=SC2046
+    read -r python_version ve <<<$($python -c "import importlib.util as u, platform as p;ve='venv' if u.find_spec('venv') else ('virtualenv' if u.find_spec('virtualenv') else '');print('.'.join(p.python_version_tuple()[:2])+' '+ve)")
+    if [[ -z $python_version ]]; then
+      log_error "Could not find python's version"
+      return 1
+    fi
+
+    if [[ -n "${VIRTUAL_ENV_PROMPT:-}" ]]; then
+      export VIRTUAL_ENV_PROMPT="$VIRTUAL_ENV_PROMPT"
+    else
+      export VIRTUAL_ENV_PROMPT='.venv'
+    fi
+
+    VIRTUAL_ENV=.venv
+
+    case $ve in
+    "venv")
+      if [[ ! -d $VIRTUAL_ENV ]]; then
+        $python -m venv "$@" "$VIRTUAL_ENV"
+      fi
+      ;;
+    "virtualenv")
+      if [[ ! -d $VIRTUAL_ENV ]]; then
+        $python -m virtualenv "$@" "$VIRTUAL_ENV"
+      fi
+      ;;
+    *)
+      log_error "Error: neither venv nor virtualenv are available."
+      return 1
+      ;;
+    esac
+  fi
+  export VIRTUAL_ENV
+  PATH_add "$VIRTUAL_ENV/bin"
+}

@@ -1,0 +1,24 @@
+gui:
+  nerdFontsVersion: 3
+  spinner:
+    frames:
+      - ⠙
+      - ⠹
+      - ⠸
+      - ⠼
+      - ⠴
+      - ⠦
+      - ⠧
+      - ⠇
+      - ⠏
+      - ⠋
+    rate: 50
+  switchTabsWithPanelJumpKeys: true
+os:
+  edit: nvim-clean -- {{filename}}
+  editAtLine: nvim-clean +{{line}} -- {{filename}}
+  editAtLineAndWait: nvim-clean +{{line}} -- {{filename}}
+  openDirInEditor: nvim -- {{dir}}
+disableStartupPopups: true
+promptToReturnFromSubprocess: false
+

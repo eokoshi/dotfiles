@@ -1,0 +1,152 @@
+#!/bin/bash
+
+# MKPS1
+# (Mike Kasberg PS1)
+# (Or, Make PS1)
+
+# Different functions generate different parts (segments) of the PS1 prompt.
+# Each function should leave the colors in a clean state (e.g. call reset if they changed any colors).
+
+
+
+__mkps1_debian_chroot() {
+    # This string is intentionally single-quoted:
+    # It will be evaluated when $PS1 is evaluated to generate the prompt each time.
+    echo '${debian_chroot:+($debian_chroot)}';
+}
+
+__mkps1_exitcode() {
+    local code="${LAST_EXIT:-0}"
+    local lsep=$'\ue0b2';
+    local rsep=$'\ue0b0';
+    local fg=7;
+    local bg=88;
+    local textcolor="\[\e[0;38;5;${fg};48;5;${bg}m\]";
+    local sepcolor="\[\e[38;5;${bg}m\]";
+    local reset='\[\e[00m\]';
+    
+    if [[ $code -ne 0 ]]; then
+        echo "$sepcolor$lsep$textcolor$code$reset$sepcolor$rsep"
+    fi
+}
+
+__mkps1_time() {
+    local l_arrow=$'\uE0B2';
+    local r_arrow=$'\uE0B0';
+    local bg=240
+    local sepcolor="\[\e[38;5;${bg}m\]";
+    local textcolor="\[\e[1;38;5;7;48;5;${bg}m\]";
+    local reset='\[\e[00m\]';
+
+    echo "$sepcolor$l_arrow$textcolor \t $reset$sepcolor$r_arrow$reset";
+}
+
+__mkps1_username() {
+    local textcolor='\[\e[3;38;5;6m\]\]';
+    local reset='\[\e[00m\]';
+
+    echo "$textcolor\u$reset";
+}
+
+__mkps1_atmark() {
+    local textcolor='\[\e[0;38;5;214m\]' ;
+    local reset='\[\e[00m\]';
+    local icon=$'\ue27f'
+    
+    echo "$textcolor@$reset";
+}
+
+__mkps1_hostname() {
+    local textcolor='\[\e[0;38;5;9m\]';
+    local reset='\[\e[00m\]';
+
+    echo "$textcolor\h$reset";
+}
+
+__mkps1_workdir() {
+    local lsep=$'\ue0ba';
+    local rsep=$'\ue0b0';
+    local fg=7;
+    local bg=4;
+    local textcolor="\[\e[0;38;5;${fg};48;5;${bg}m\]";
+    local sepcolor="\[\e[38;5;${bg}m\]";
+    # match this value with git bg below
+    local sepcolor2="\[\e[38;5;${bg};48;5;235m\]";
+    local reset='\[\e[00m\]';
+
+    echo "$sepcolor$lsep$textcolor \w $reset$sepcolor2$rsep"
+}
+
+# For Git PS1
+source /usr/lib/git-core/git-sh-prompt;
+GIT_PS1_SHOWDIRTYSTATE=0
+GIT_PS1_SHOWUPSTREAM="auto"
+
+__mkps1_git() {
+    local lsep=$'\ue0b6';
+    local rsep=$'\ue0b4';
+    local gitbranch=$'\ue0a0';
+    local fg=248;
+    local bg=235;
+    local textcolor="\[\e[0;38;5;${fg};48;5;${bg}m\]";
+    local sepcolor="\[\e[38;05;${bg}m\]";
+    local reset='\[\e[00m\]';
+
+    # Escaping the $ is intentional:
+    # This is evaluated when the prompt is generated.
+    echo "\$(__git_ps1 '$textcolor $gitbranch %s ')$reset$sepcolor$rsep$reset";
+}
+
+__mkps1_venv_get() {
+    local python=$'\ue73c';
+    local lsep=$'\ue0b6';
+    local rsep=$'\ue0b4';
+    local fg=220;
+    local bg=33;
+    local textcolor="\[\e[0;38;5;${fg};48;5;${bg}m\]";
+    local sepcolor="\[\e[38;05;${bg}m\]";
+    local reset='\[\e[00m\]';
+    
+    if [[ -n "${VIRTUAL_ENV_PROMPT:-}" && -n "${DIRENV_DIR:-}" ]]; then
+        echo " ${sepcolor}${lsep}${textcolor}${python} ${VIRTUAL_ENV_PROMPT}${reset}${sepcolor}${rsep}${reset}";
+    fi
+}
+
+__mkps1_venv() {
+    echo "\$(__mkps1_venv_get)";
+}
+
+
+__mkps1_box_top() {
+    local top='\[\e[38;5;10m\]';
+    local reset='\[\e[00m\]';
+
+    echo "$top╭$reset";
+}
+
+__mkps1_box_bottom() {
+    local bottom='\[\e[38;5;10m\]';
+    local reset='\[\e[00m\]';
+
+    echo "$bottom╰$reset";
+}
+
+
+__mkps1_user_prompt() {
+    local icon=$'\ueab6'
+    local textcolor='\[\e[1;38;5;10m\]';
+    local reset='\[\e[00m\]';
+    local input='\[\e[0;97m\]'
+    
+    echo "$textcolor$icon$reset ";
+}
+
+__mkps1() {
+    local ps1="\n$(__mkps1_box_top)$(__mkps1_debian_chroot)$(__mkps1_exitcode)$(__mkps1_username)$(__mkps1_atmark)$(__mkps1_hostname) $(__mkps1_workdir)$(__mkps1_git)$(__mkps1_venv)\n$(__mkps1_box_bottom)$(__mkps1_user_prompt)";
+    echo "$ps1";
+}
+
+# To test, for example, print output before changes and after changes
+# and see if the diff is correct.
+# Uncomment for testing:
+# echo "$(__mkps1)";
