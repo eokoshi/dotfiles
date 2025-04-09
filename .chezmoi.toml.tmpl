@@ -12,3 +12,8 @@
         {{ printf "%q" "{{ .Source }}" }},
         {{ printf "%q" "{{ .Target }}" }},
     ]
+
+encryption = "age"
+[age]
+    identity = "~/.config/chezmoi/key.txt"
+    recipient = ""
