@@ -78,7 +78,7 @@ fi
 
 if [ -n "$NVIM" ]; then
     unset PROMPT_COMMAND
-    PS1=$'\e[0;34m\]\uE0Ba\e[1;97m\]\e[0;44m\] \\w \e[00m\]\e[0;34m\]\uE0b0\e[00m\] '
+    PS1=$'\e[0;37m\]\w \e[00m\]\$'
 fi
     
 # If this is an xterm set the title to user@host:dir
