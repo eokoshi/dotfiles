@@ -1,3 +1,8 @@
+encryption = "age"
+[age]
+    identity = "~/.config/chezmoi/key.txt"
+    recipient = "age1f4296xdyucwf7sava20va3ht9cwyp5kxyxmck32ctezsh5zexpeqg2qe73"
+
 [git]
   autoPush=true
 
@@ -12,8 +17,3 @@
         {{ printf "%q" "{{ .Source }}" }},
         {{ printf "%q" "{{ .Target }}" }},
     ]
-
-encryption = "age"
-[age]
-    identity = "~/.config/chezmoi/key.txt"
-    recipient = ""
