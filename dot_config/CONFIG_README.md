@@ -94,6 +94,8 @@ I prefer SSH, so add your public key to github.com
 
 ### uv
 
+python project manager
+
 ```sh
 curl -LsSf https://astral.sh/uv/install.sh | sh
 ```
@@ -102,9 +104,17 @@ curl -LsSf https://astral.sh/uv/install.sh | sh
 
 not sure if this one is necessary anymore with uv
 
+### age
+
+encryption tool
+
+```sh
+sudo apt install age
+```
+
 ### chezmoi
 
-1. Install chezmoi
+config manager
 
 ```sh
 sh -c "$(curl -fsLS get.chezmoi.io)" -- -b $HOME/.local/bin
