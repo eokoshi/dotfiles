@@ -12,6 +12,7 @@ return {
     ---@type render.md.UserConfig
     opts = {},
   },
+  --- change colorscheme to more header-friendly colors
   {
     "AstroNvim/astrocore",
     ---@type AstroCoreOpts
