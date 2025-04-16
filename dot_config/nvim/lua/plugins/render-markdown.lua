@@ -33,8 +33,10 @@ return {
             pattern = "*.md",
             callback = function()
               -- Save the current colorscheme *only if it hasn't been saved already*
-              if vim.g._previous_colorscheme == nil then vim.g._previous_colorscheme = vim.g.colors_name end
-              vim.cmd "colorscheme astrodark"
+              if vim.g._previous_colorscheme == nil then
+                vim.g._previous_colorscheme = vim.g.colors_name
+              end
+              vim.cmd("colorscheme onedark")
             end,
           },
           {
