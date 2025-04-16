@@ -36,7 +36,7 @@ return {
               if vim.g._previous_colorscheme == nil then
                 vim.g._previous_colorscheme = vim.g.colors_name
               end
-              vim.cmd("colorscheme onedark")
+              vim.cmd("colorscheme tokyonight")
             end,
           },
           {

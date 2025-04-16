@@ -7,7 +7,7 @@ return {
 	},
 	{
 		"olimorris/onedarkpro.nvim",
-		lazy = false,
+		lazy = true,
 		opts = {
 			options = {
 				highlight_inactive_windows = true,
@@ -18,7 +18,7 @@ return {
 		"sainnhe/everforest",
 		lazy = true,
 	},
-	{ "luisiacc/gruvbox-baby", lazy = true },
+	{ "luisiacc/gruvbox-baby",    lazy = true },
 	{ "ellisonleao/gruvbox.nvim", lazy = true },
 	{
 		"folke/tokyonight.nvim",
