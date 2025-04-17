@@ -79,7 +79,7 @@ __mkps1_workdir() {
 
 # For Git PS1
 source /usr/lib/git-core/git-sh-prompt;
-GIT_PS1_SHOWDIRTYSTATE=0
+# GIT_PS1_SHOWDIRTYSTATE=0
 # GIT_PS1_SHOWUPSTREAM="auto"
 
 __mkps1_git() {
