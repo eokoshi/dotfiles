@@ -9,9 +9,6 @@ rules = ""
 [formatting]
 line_length = 90
 
-[experimental]
-lsp = false
-
 [runtime]
 output_max_bytes = 8000000
 reactive_tests = true
