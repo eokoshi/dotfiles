@@ -1,9 +1,6 @@
 [formatting]
 line_length = 90
 
-[experimental]
-lsp = false
-
 [server]
 browser = "default"
 follow_symlink = false
