@@ -11,13 +11,12 @@ esac
 # don't put duplicate lines or lines starting with space in the history.
 # See bash(1) for more options
 HISTCONTROL=ignoreboth
-
-# append to the history file, don't overwrite it
+# save commands from multiple sessions
 shopt -s histappend
-
-# for setting history length see HISTSIZE and HISTFILESIZE in bash(1)
-HISTSIZE=10000
-HISTFILESIZE=20000
+# save the last 50 lines in this session
+HISTSIZE=50
+# save up to 2000 lines from multiple sessions
+HISTFILESIZE=2000
 
 # check the window size after each command and, if necessary,
 # update the values of LINES and COLUMNS.
@@ -40,9 +39,6 @@ case "$TERM" in
     xterm-color|*-256color) color_prompt=yes;;
 esac
 
-# uncomment for a colored prompt, if the terminal has the capability; turned
-# off by default to not distract the user: the focus in a terminal window
-# should be on the output of commands, not on the prompt
 force_color_prompt=yes
 
 if [ -n "$force_color_prompt" ]; then
@@ -64,7 +60,6 @@ if [ "$color_prompt" = yes ]; then
     # POWERLINE_BASH_SELECT=1
     
     source "$HOME/.config/bash/prompt.sh"
-    # PROMPT_COMMAND='LAST_EXIT="$?"; PS1=$(__mkps1)'
     PROMPT_COMMAND='LAST_EXIT="$?"; eval "PS1=\"$(__mkps1)\"";'
 else
     PS1='${debian_chroot:+($debian_chroot)}\u@\h:\w\$ '
@@ -82,30 +77,16 @@ if [ -n "$NVIM" ]; then
     PS1=$'\e[0;32m\]\w \e[00m\]\$ '
 fi
     
-# If this is an xterm set the title to user@host:dir
-# case "$TERM" in
-# xterm*|rxvt*)
-#     PS1="\[\e]0;${debian_chroot:+($debian_chroot)}\u@\h: \w\a\]$PS1"
-#     ;;
-# *)
-#     ;;
-# esac
 
 # enable color support of ls and also add handy aliases
 if [ -x /usr/bin/dircolors ]; then
     test -r ~/.dircolors && eval "$(dircolors -b ~/.dircolors)" || eval "$(dircolors -b)"
     alias ls='ls --color=auto'
-    #alias dir='dir --color=auto'
-    #alias vdir='vdir --color=auto'
-
     alias grep='grep --color=auto'
     alias fgrep='fgrep --color=auto'
     alias egrep='egrep --color=auto'
-    alias watch='watch -c'
+    alias watch='watch -c -n 0.5'
 fi
-
-# colored GCC warnings and errors
-#export GCC_COLORS='error=01;31:warning=01;35:note=01;36:caret=01;32:locus=01:quote=01'
 
 # some more ls aliases
 alias ll='ls -alF'
@@ -126,6 +107,9 @@ alias tm="tmux"
 if [ -f ~/.bash_aliases ]; then
     . ~/.bash_aliases
 fi
+
+# colored GCC warnings and errors
+export GCC_COLORS='error=01;31:warning=01;35:note=01;36:caret=01;32:locus=01:quote=01'
 
 # enable programmable completion features (you don't need to enable
 # this, if it's already enabled in /etc/bash.bashrc and /etc/profile
@@ -168,9 +152,12 @@ fi
 # export -f show_virtual_env
 # PS1='$(show_virtual_env)'$PS1
 
-export EDITOR=nvim
-export PATH="$PATH:/opt/nvim/bin"
-
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+
+export EDITOR=nvim
+export PATH="$PATH:/opt/nvim/bin"
+
+export TS_IP="$(hostname -I | awk '{print $2}')"
+export IP="$(hostname -I | awk '{print $1}')"
