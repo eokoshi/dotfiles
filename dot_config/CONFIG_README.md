@@ -100,9 +100,11 @@ python project manager
 curl -LsSf https://astral.sh/uv/install.sh | sh
 ```
 
-### direnv? (optional)
+### direnv
 
-not sure if this one is necessary anymore with uv
+```sh
+sudo apt install direnv
+```
 
 ### age
 
@@ -136,6 +138,4 @@ chezmoi apply -v
 ```
 
 otherwise, you can use `chezmoi edit $FILE` or `chezmoi merge $FILE` to make changes before updating your system
-
-
 

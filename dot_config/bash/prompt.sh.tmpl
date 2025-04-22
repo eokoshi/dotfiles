@@ -20,13 +20,13 @@ __mkps1_exitcode() {
     local lsep=$'\ue0b2';
     local rsep=$'\ue0b0';
     local fg=7;
-    local bg=88;
+    local bg=1;
     local textcolor="\[\e[0;38;5;${fg};48;5;${bg}m\]";
     local sepcolor="\[\e[38;5;${bg}m\]";
     local reset='\[\e[00m\]';
     
     if [[ $code -ne 0 ]]; then
-        echo "$sepcolor$lsep$textcolor$code$reset$sepcolor$rsep"
+        echo "$sepcolor$lsep$textcolor $code $reset$sepcolor$rsep"
     fi
 }
 
@@ -42,14 +42,43 @@ __mkps1_time() {
 }
 
 __mkps1_username() {
-    local textcolor='\[\e[3;38;5;6m\]\]';
+    {{ if eq .chezmoi.hostname "eeftop" }}
+    local textcolor='\[\e[3;38;5;9m\]';
+    {{ else if eq .chezmoi.hostname "office" }}
+    local textcolor='\[\e[3;38;5;10m\]';
+    {{ else if eq .chezmoi.hostname "DF1" }}
+    local textcolor='\[\e[3;38;5;11m\]';
+    {{ else if eq .chezmoi.hostname "DF2" }}
+    local textcolor='\[\e[3;38;5;12m\]';
+    {{ else if eq .chezmoi.hostname "blue-starfish" }}
+    local textcolor='\[\e[3;38;5;13m\]';
+    {{ else if eq .chezmoi.hostname "lab" }}
+    local textcolor='\[\e[3;38;5;14m\]';
+    {{ else }}
+    local textcolor='\[\e[3;38;5;34m\]';
+    {{ end }}
+
     local reset='\[\e[00m\]';
 
     echo "$textcolor\u$reset";
 }
 
 __mkps1_atmark() {
-    local textcolor='\[\e[0;38;5;214m\]' ;
+    {{ if eq .chezmoi.hostname "eeftop" }}
+    local textcolor='\[\e[3;38;5;10m\]';
+    {{ else if eq .chezmoi.hostname "office" }}
+    local textcolor='\[\e[3;38;5;11m\]';
+    {{ else if eq .chezmoi.hostname "DF1" }}
+    local textcolor='\[\e[3;38;5;12m\]';
+    {{ else if eq .chezmoi.hostname "DF2" }}
+    local textcolor='\[\e[3;38;5;13m\]';
+    {{ else if eq .chezmoi.hostname "blue-starfish" }}
+    local textcolor='\[\e[3;38;5;14m\]';
+    {{ else if eq .chezmoi.hostname "lab" }}
+    local textcolor='\[\e[3;38;5;9m\]';
+    {{ else }}
+    local textcolor='\[\e[3;38;5;36m\]';
+    {{ end }}
     local reset='\[\e[00m\]';
     local icon=$'\ue27f'
     
@@ -57,7 +86,21 @@ __mkps1_atmark() {
 }
 
 __mkps1_hostname() {
-    local textcolor='\[\e[0;38;5;9m\]';
+    {{ if eq .chezmoi.hostname "eeftop" }}
+    local textcolor='\[\e[3;38;5;37m\]';
+    {{ else if eq .chezmoi.hostname "office" }}
+    local textcolor='\[\e[3;38;5;10m\]';
+    {{ else if eq .chezmoi.hostname "DF1" }}
+    local textcolor='\[\e[3;38;5;214m\]';
+    {{ else if eq .chezmoi.hostname "DF2" }}
+    local textcolor='\[\e[3;38;5;1m\]';
+    {{ else if eq .chezmoi.hostname "blue-starfish" }}
+    local textcolor='\[\e[3;38;5;123m\]';
+    {{ else if eq .chezmoi.hostname "lab" }}
+    local textcolor='\[\e[3;38;5;208m\]';
+    {{ else }}
+    local textcolor='\[\e[3;38;5;38m\]';
+    {{ end }}
     local reset='\[\e[00m\]';
 
     echo "$textcolor\h$reset";
@@ -69,12 +112,14 @@ __mkps1_workdir() {
     local fg=7;
     local bg=4;
     local textcolor="\[\e[0;38;5;${fg};48;5;${bg}m\]";
+    local textcolor2="\[\e[0;38;5;69m\]";
     local sepcolor="\[\e[38;5;${bg}m\]";
     # match this value with git bg below
     local sepcolor2="\[\e[38;5;${bg};48;5;235m\]";
     local reset='\[\e[00m\]';
 
-    echo "$sepcolor$lsep$textcolor \w $reset$sepcolor2$rsep"
+    # echo "$sepcolor$lsep$textcolor \w $reset$sepcolor2$rsep"
+    echo "$textcolor2\w$reset"
 }
 
 # For Git PS1
@@ -89,12 +134,15 @@ __mkps1_git() {
     local fg=248;
     local bg=235;
     local textcolor="\[\e[0;38;5;${fg};48;5;${bg}m\]";
+    local textcolor2="\[\e[0;38;5;248m\]";
     local sepcolor="\[\e[38;05;${bg}m\]";
     local reset='\[\e[00m\]';
 
     # Escaping the $ is intentional:
     # This is evaluated when the prompt is generated.
-    echo "\$(__git_ps1 '$textcolor $gitbranch %s ')$reset$sepcolor$rsep$reset";
+    # echo "\$(__git_ps1 '$textcolor $gitbranch %s ')$reset$sepcolor$rsep$reset";
+    echo "\$(__git_ps1 '$textcolor2 $gitbranch %s ')$reset";
+
 }
 
 __mkps1_venv_get() {
@@ -108,7 +156,7 @@ __mkps1_venv_get() {
     local reset='\[\e[00m\]';
     
     if [[ -n "${VIRTUAL_ENV_PROMPT:-}" && -n "${DIRENV_DIR:-}" ]]; then
-        echo " ${sepcolor}${lsep}${textcolor}${python} ${VIRTUAL_ENV_PROMPT}${reset}${sepcolor}${rsep}${reset}";
+        echo "${sepcolor}${lsep}${textcolor}${python}${reset}${sepcolor}${rsep}${reset}";
     fi
 }
 
@@ -134,15 +182,17 @@ __mkps1_box_bottom() {
 
 __mkps1_user_prompt() {
     local icon=$'\ueab6'
-    local textcolor='\[\e[1;38;5;10m\]';
+    local icon=$'\u3009'
+    local textcolor='\[\e[1;38;5;13m\]';
     local reset='\[\e[00m\]';
     local input='\[\e[0;97m\]'
     
-    echo "$textcolor$icon$reset ";
+    echo "$textcolor$icon$reset";
 }
 
 __mkps1() {
-    local ps1="\n$(__mkps1_box_top)$(__mkps1_debian_chroot)$(__mkps1_exitcode)$(__mkps1_username)$(__mkps1_atmark)$(__mkps1_hostname) $(__mkps1_workdir)$(__mkps1_git)$(__mkps1_venv)\n$(__mkps1_box_bottom)$(__mkps1_user_prompt)";
+    # local ps1="\n$(__mkps1_box_top)$(__mkps1_debian_chroot)$(__mkps1_exitcode)$(__mkps1_username)$(__mkps1_atmark)$(__mkps1_hostname) $(__mkps1_workdir) $(__mkps1_git) $(__mkps1_venv)\n$(__mkps1_box_bottom)$(__mkps1_user_prompt)";
+    local ps1="\n$(__mkps1_debian_chroot)$(__mkps1_workdir) $(__mkps1_git) $(__mkps1_venv)  $(__mkps1_exitcode)\n$(__mkps1_hostname) $(__mkps1_user_prompt)";
     echo "$ps1";
 }
 
