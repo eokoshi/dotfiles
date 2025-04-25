@@ -20,7 +20,7 @@ __mkps1_exitcode() {
     local lsep=$'\ue0b2';
     local rsep=$'\ue0b0';
     local fg=7;
-    local bg=124;
+    local bg=1;
     local textcolor="\[\e[0;38;5;${fg};48;5;${bg}m\]";
     local sepcolor="\[\e[38;5;${bg}m\]";
     local reset='\[\e[00m\]';
@@ -155,9 +155,7 @@ __mkps1_venv_get() {
     local sepcolor="\[\e[38;05;${bg}m\]";
     local reset='\[\e[00m\]';
     
-    if [[ -n "${VIRTUAL_ENV_PROMPT:-}" && -n "${DIRENV_DIR:-}" ]]; then
-        echo "${sepcolor}${lsep}${textcolor}${python}${reset}${sepcolor}${rsep}${reset}";
-    fi
+    [ -n "${VIRTUAL_ENV}" ] && echo "${sepcolor}${lsep}${textcolor}${python}${reset}${sepcolor}${rsep}${reset}";
 }
 
 __mkps1_venv() {
