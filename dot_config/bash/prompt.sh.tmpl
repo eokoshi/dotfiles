@@ -87,7 +87,7 @@ __mkps1_atmark() {
 
 __mkps1_hostname() {
     {{ if eq .chezmoi.hostname "eeftop" }}
-    local textcolor='\[\e[3;38;5;37m\]';
+    local textcolor='\[\e[3;38;5;31m\]';
     {{ else if eq .chezmoi.hostname "office" }}
     local textcolor='\[\e[3;38;5;10m\]';
     {{ else if eq .chezmoi.hostname "DF1" }}
