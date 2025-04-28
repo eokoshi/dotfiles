@@ -21,7 +21,7 @@ return {
 			"dockerfile",
 			-- add more arguments for adding more treesitter parsers
 		},
-		highlights = {
+		highlight = {
 			disable = {
 				"csv",
 				"tsv",
