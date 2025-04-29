@@ -87,7 +87,7 @@ __mkps1_atmark() {
 
 __mkps1_hostname() {
     {{ if eq .chezmoi.hostname "eeftop" }}
-    local textcolor='\[\e[3;38;5;31m\]';
+    local textcolor='\[\e[3;38;5;14m\]';
     {{ else if eq .chezmoi.hostname "office" }}
     local textcolor='\[\e[3;38;5;10m\]';
     {{ else if eq .chezmoi.hostname "DF1" }}
@@ -112,12 +112,14 @@ __mkps1_workdir() {
     local fg=7;
     local bg=4;
     local textcolor="\[\e[0;38;5;${fg};48;5;${bg}m\]";
-    local textcolor2="\[\e[0;38;5;69m\]";
     local sepcolor="\[\e[38;5;${bg}m\]";
     # match this value with git bg below
     local sepcolor2="\[\e[38;5;${bg};48;5;235m\]";
+
+    local textcolor2="\[\e[0;38;5;141m\]";
     local reset='\[\e[00m\]';
 
+    # use top one for the powerline style, bottom one for simple colored text
     # echo "$sepcolor$lsep$textcolor \w $reset$sepcolor2$rsep"
     echo "$textcolor2\w$reset"
 }
