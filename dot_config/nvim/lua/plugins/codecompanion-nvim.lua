@@ -6,6 +6,17 @@ return {
 		"j-hui/fidget.nvim",
 	},
 	opts = {
+		display = {
+			chat = {
+				start_in_insert_mode = true,
+				show_settings = true,
+			},
+			action_palette = {
+				opts = {
+					show_default_adapters = false,
+				},
+			},
+		},
 		strategies = {
 			chat = {
 				adapter = "ollama",
@@ -25,6 +36,14 @@ return {
 					},
 					headers = {
 						["Content-Type"] = "application/json",
+					},
+					parameters = {
+						sync = true,
+					},
+					schema = {
+						num_ctx = {
+							default = 16384,
+						},
 					},
 				})
 			end,
