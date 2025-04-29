@@ -41,6 +41,9 @@ return {
 						sync = true,
 					},
 					schema = {
+						model = {
+							default = "gemma3:latest",
+						},
 						num_ctx = {
 							default = 16384,
 						},
