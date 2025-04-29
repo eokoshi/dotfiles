@@ -19,6 +19,7 @@ return {
 			"r",
 			"git_config",
 			"dockerfile",
+			"yaml",
 			-- add more arguments for adding more treesitter parsers
 		},
 		highlight = {
