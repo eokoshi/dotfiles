@@ -42,10 +42,54 @@ return {
 					},
 					schema = {
 						model = {
+							default = "hf.co/bartowski/Qwen2.5.1-Coder-7B-Instruct-GGUF:Q6_K_L",
+						},
+						num_ctx = {
+							default = 8192,
+						},
+					},
+				})
+			end,
+			qwen3 = function()
+				return require("codecompanion.adapters").extend("ollama", {
+					name = "qwen3",
+					env = {
+						url = "http://100.113.130.46:11434",
+					},
+					headers = {
+						["Content-Type"] = "application/json",
+					},
+					parameters = {
+						sync = true,
+					},
+					schema = {
+						model = {
+							default = "qwen3:latest",
+						},
+						num_ctx = {
+							default = 8192,
+						},
+					},
+				})
+			end,
+			gemma3 = function()
+				return require("codecompanion.adapters").extend("ollama", {
+					name = "gemma3",
+					env = {
+						url = "http://100.113.130.46:11434",
+					},
+					headers = {
+						["Content-Type"] = "application/json",
+					},
+					parameters = {
+						sync = true,
+					},
+					schema = {
+						model = {
 							default = "gemma3:latest",
 						},
 						num_ctx = {
-							default = 16384,
+							default = 8192,
 						},
 					},
 				})
