@@ -25,6 +25,8 @@ map("n", "<C-u>", "<C-u>zz", { desc = "Jump up half page" })
 map("n", "<C-d>", "<C-d>zz", { desc = "Jump down half page" })
 map("n", "<C-o>", "<C-o>zz", { desc = "Jump to previous location" })
 map("n", "<C-i>", "<C-i>zz", { desc = "Jump to next location" })
+map("n", "n", "nzzzv", { desc = "Jump to next search result" })
+map("n", "N", "Nzzzv", { desc = "Jump to previous search result" })
 
 -- move windows with ctrl
 map("n", "<C-h>", "<C-w>h", { desc = "Move to window left" })
