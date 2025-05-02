@@ -56,31 +56,30 @@ vim.api.nvim_create_autocmd("FileType", {
 	desc = "Enable Wrap in these filetypes",
 })
 
--- Change colorscheme based on filetype
+-- Filetype colorschemes
+local ft_colorschemes = vim.api.nvim_create_augroup("ft_colorschemes", { clear = true })
 
--- local ft_colorschemes = vim.api.nvim_create_augroup("ft_colorschemes", { clear = true })
---
--- vim.api.nvim_create_autocmd({ "BufEnter", "BufWinEnter" }, {
--- 	desc = "Temporarily change colorscheme for Markdown",
--- 	pattern = "*.md",
--- 	callback = function()
--- 		-- Save the current colorscheme *only if it hasn't been saved already*
--- 		if vim.g._previous_colorscheme == nil then
--- 			vim.g._previous_colorscheme = vim.g.colors_name
--- 		end
--- 		vim.cmd("colorscheme tokyonight")
--- 	end,
--- 	group = ft_colorschemes,
--- })
---
--- vim.api.nvim_create_autocmd({ "BufLeave", "BufWinLeave" }, {
--- 	desc = "Restore previous colorscheme after leaving Markdown",
--- 	pattern = "*.md",
--- 	callback = function()
--- 		if vim.g._previous_colorscheme then
--- 			vim.cmd("colorscheme " .. vim.g._previous_colorscheme)
--- 			vim.g._previous_colorscheme = nil
--- 		end
--- 	end,
--- 	group = ft_colorschemes,
--- })
+vim.api.nvim_create_autocmd({ "BufEnter", "BufWinEnter" }, {
+	desc = "Temporarily change colorscheme for Markdown",
+	pattern = "*.md",
+	callback = function()
+		-- Save the current colorscheme *only if it hasn't been saved already*
+		if vim.g._previous_colorscheme == nil then
+			vim.g._previous_colorscheme = vim.g.colors_name
+		end
+		vim.cmd("colorscheme tokyonight")
+	end,
+	group = ft_colorschemes,
+})
+
+vim.api.nvim_create_autocmd({ "BufLeave", "BufWinLeave" }, {
+	desc = "Restore previous colorscheme after leaving Markdown",
+	pattern = "*.md",
+	callback = function()
+		if vim.g._previous_colorscheme then
+			vim.cmd("colorscheme " .. vim.g._previous_colorscheme)
+			vim.g._previous_colorscheme = nil
+		end
+	end,
+	group = ft_colorschemes,
+})
