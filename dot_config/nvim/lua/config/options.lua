@@ -1,0 +1,11 @@
+vim.opt.number = true
+vim.opt.relativenumber = true
+vim.opt.spell = false
+vim.opt.signcolumn = "yes"
+vim.opt.wrap = false
+vim.opt.expandtab = false
+vim.opt.tabstop = 4
+vim.opt.shiftwidth = 4
+vim.opt.splitbelow = true
+vim.opt.clipboard = ""
+vim.opt.scrolloff = 10
