@@ -36,6 +36,7 @@ return {
 				tabstop = 4,
 				softtabstop = 4,
 				shiftwidth = 4,
+				clipboard = "",
 			},
 			g = { -- vim.g.<key>
 				-- configure global vim variables (vim.g)
@@ -80,6 +81,26 @@ return {
 
 				-- setting a mapping to false will disable it
 				-- ["<C-S>"] = false,
+				["\\"] = false,
+				["<leader>dw"] = {
+					function()
+						require("dapui").elements.watches.add()
+					end,
+					silent = true,
+					desc = "Watch Object",
+				},
+				["<leader>tp"] = {
+					function()
+						local ipyterm = require("toggleterm.terminal").Terminal:new({
+							cmd = "uv run ipython",
+							hidden = true,
+						})
+						ipyterm:toggle()
+					end,
+					noremap = true,
+					silent = true,
+					desc = "ToggleTerm ipython",
+				},
 			},
 		},
 	},
