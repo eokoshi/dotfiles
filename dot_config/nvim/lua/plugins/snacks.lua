@@ -6,7 +6,7 @@ return {
 	opts = {
 		dashboard = {
 			preset = {
-				-- stylua: ignore start
+-- stylua: ignore start
 				header = [[
   ,-.       _,---._ __  / \
  /  )    .-'       `./ /   \
@@ -23,13 +23,13 @@ return {
 			},
 			sections = {
 				{ section = "header" },
-				-- {
-				-- 	pane = 2,
-				-- 	section = "terminal",
-				-- 	cmd = "fortune",
-				-- 	height = 5,
-				-- 	padding = 2,
-				-- },
+				{
+					pane = 2,
+					section = "terminal",
+					cmd = "fortune",
+					height = 5,
+					padding = 2,
+				},
 				{ section = "keys", gap = 1, padding = 2 },
 				{ pane = 2, icon = " ", title = "Recent Files", section = "recent_files", indent = 2, padding = 2 },
 				{
