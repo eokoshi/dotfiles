@@ -17,44 +17,9 @@ return {
 		opts = {
 			heading = {
 				position = "inline",
-				-- icons = { "󰬺 ", "󰬻 ", "󰬼 ", "󰬽 ", "󰬾 ", "󰬿 " },
+				icons = { "󰬺. ", "󰬻. ", "󰬼. ", "󰬽. ", "󰬾. ", "󰬿. " },
 				-- icons = { "󰲠 ", "󰲢 ", "󰲤 ", "󰲦 ", "󰲨 ", "󰲪 " },
-				icons = { "󰎤 ", "󰎧 ", "󰎪 ", "󰎭 ", "󰎱 ", "󰎳 " },
-			},
-		},
-	},
-	--- change colorscheme to more header-friendly colors
-	{
-		"AstroNvim/astrocore",
-		---@type AstroCoreOpts
-		opts = {
-			autocmds = {
-				ft_colorschemes = {
-					-- Save the current colorscheme when entering a markdown file
-					{
-						event = { "BufEnter", "BufWinEnter" },
-						desc = "Temporarily change colorscheme for Markdown",
-						pattern = "*.md",
-						callback = function()
-							-- Save the current colorscheme *only if it hasn't been saved already*
-							if vim.g._previous_colorscheme == nil then
-								vim.g._previous_colorscheme = vim.g.colors_name
-							end
-							vim.cmd("colorscheme tokyonight")
-						end,
-					},
-					{
-						event = { "BufLeave", "BufWinLeave" },
-						desc = "Restore previous colorscheme after leaving Markdown",
-						pattern = "*.md",
-						callback = function()
-							if vim.g._previous_colorscheme then
-								vim.cmd("colorscheme " .. vim.g._previous_colorscheme)
-								vim.g._previous_colorscheme = nil
-							end
-						end,
-					},
-				},
+				-- icons = { "󰎤 ", "󰎧 ", "󰎪 ", "󰎭 ", "󰎱 ", "󰎳 " },
 			},
 		},
 	},
