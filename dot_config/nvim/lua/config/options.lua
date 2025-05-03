@@ -21,3 +21,5 @@ vim.opt.backup = false
 
 vim.opt.hlsearch = false
 vim.opt.incsearch = true
+
+vim.opt.foldmethod = "indent"

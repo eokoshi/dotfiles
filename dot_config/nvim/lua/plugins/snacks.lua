@@ -6,7 +6,7 @@ return {
 	opts = {
 		dashboard = {
 			preset = {
--- stylua: ignore start
+				-- stylua: ignore start
 				header = [[
   ,-.       _,---._ __  / \
  /  )    .-'       `./ /   \
