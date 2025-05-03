@@ -12,7 +12,7 @@ vim.opt.tabstop = 4
 vim.opt.shiftwidth = 4
 vim.opt.smartindent = true
 
-vim.opt.clipboard = ""
+vim.opt.clipboard = "unnamedplus"
 
 vim.opt.undofile = true
 vim.opt.undodir = os.getenv("HOME") .. "/.local/state/nvim/undo"
