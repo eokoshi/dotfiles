@@ -44,7 +44,6 @@ map({ "i", "c" }, "<C-h>", "<C-o>h", { desc = "Move one char left" })
 map("i", "<S-Tab>", "C-d", { desc = "Unindent 1 level" })
 
 -- Terminal
-map("t", "<C-w><C-w>", "<C-\\><C-n>", { desc = "Go to normal mode in terminal" })
 map("n", "<Leader>t<CR>", "<Cmd>ToggleTermSendCurrentLine<CR>", { desc = "Send current line to terminal" })
 map("v", "<Leader>t<CR>", "<Cmd>ToggleTermSendVisualSelection<CR>", { desc = "Send visual selection to terminal" })
 map("n", "<Leader>ts", "<Cmd>TermSelect<CR>", { desc = "Terminal picker" })
