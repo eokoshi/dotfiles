@@ -1,64 +1,67 @@
-[ai]
-rules = ""
-[ai.google]
-
-[ai.anthropic]
-
-[ai.open_ai]
-
-[formatting]
-line_length = 90
+[diagnostics]
+enabled = false
 
 [runtime]
 output_max_bytes = 8000000
-reactive_tests = true
-std_stream_max_bytes = 1000000
 auto_instantiate = false
-on_cell_change = "lazy"
-auto_reload = "lazy"
 watcher_on_save = "lazy"
+std_stream_max_bytes = 1000000
+on_cell_change = "autorun"
+auto_reload = "autorun"
+reactive_tests = true
 
-[language_servers.pylsp]
-enable_pyflakes = false
-enable_pydocstyle = false
-enable_flake8 = false
-enable_ruff = true
-enable_pylint = false
-enabled = false
-enable_mypy = true
+[experimental]
 
-[keymap]
-preset = "vim"
-[keymap.overrides]
-"global.commandPalette" = "Ctrl-Shift-p"
+[server]
+browser = "default"
+follow_symlink = false
+
+[completion]
+copilot = false
+activate_on_typing = true
+
+[ai]
+rules = ""
+[ai.open_ai]
+
+[ai.anthropic]
+
+[ai.google]
 
 [package_management]
 manager = "uv"
 
-[server]
-follow_symlink = false
-browser = "default"
+[keymap]
+preset = "vim"
+
+[keymap.overrides]
+"global.commandPalette" = "Ctrl-Shift-p"
+
+[formatting]
+line_length = 90
+
+[save]
+format_on_save = false
+autosave = "off"
+autosave_delay = 1000
+
+[snippets]
+include_default_snippets = true
+custom_paths = []
+
+[language_servers.pylsp]
+enable_flake8 = false
+enable_ruff = true
+enabled = false
+enable_mypy = true
+enable_pydocstyle = false
+enable_pylint = false
+enable_pyflakes = false
 
 [display]
 cell_output = "below"
-dataframes = "rich"
-default_width = "medium"
-default_table_page_size = 10
 code_editor_font_size = 14
-theme = "system"
-
-[save]
-autosave_delay = 1000
-autosave = "off"
-format_on_save = false
-
-[snippets]
-custom_paths = []
-include_default_snippets = true
-
-[completion]
-activate_on_typing = true
-copilot = false
-
-[diagnostics]
-enabled = false
+default_table_page_size = 10
+theme = "light"
+default_width = "full"
+dataframes = "rich"
