@@ -23,3 +23,5 @@ vim.opt.hlsearch = false
 vim.opt.incsearch = true
 
 vim.opt.foldmethod = "indent"
+
+vim.treesitter.language.register("python", "ipynb")
