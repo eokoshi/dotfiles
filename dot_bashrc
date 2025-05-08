@@ -105,6 +105,10 @@ alias lg="lazygit"
 alias tm="tmux"
 alias ch="chezmoi"
 
+ms() {
+    uv run marimo edit --headless --watch --host "$(tailscale ip -4)"
+}
+
 if [ -f ~/.bash_aliases ]; then
     . ~/.bash_aliases
 fi
