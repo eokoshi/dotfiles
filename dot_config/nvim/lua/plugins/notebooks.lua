@@ -57,9 +57,9 @@ return {
 	{
 		"GCBallesteros/jupytext.nvim",
 		opts = {
-			style = "quarto",
-			output_extension = "qmd",
-			force_ft = "quarto",
+			style = "markdown",
+			output_extension = "md",
+			force_ft = "markdown",
 		},
 	},
 	{
@@ -69,11 +69,10 @@ return {
 			"nvim-treesitter/nvim-treesitter",
 		},
 		opts = {
-			debug = false,
 			closePreviewOnExit = true,
 			lspFeatures = {
 				enabled = true,
-				chunks = "curly",
+				chunks = "all",
 				completion = {
 					enabled = true,
 				},
