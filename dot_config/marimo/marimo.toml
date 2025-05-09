@@ -10,7 +10,7 @@ watcher_on_save = "lazy"
 [save]
 format_on_save = false
 autosave = "on"
-autosave_delay = 1000
+autosave_delay = 30000
 
 [snippets]
 include_default_snippets = true
