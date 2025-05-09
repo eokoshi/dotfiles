@@ -83,3 +83,13 @@ vim.api.nvim_create_autocmd("FileType", {
 -- 	end,
 -- 	group = ft_colorschemes,
 -- })
+
+-- jupyter notebook stuff
+vim.api.nvim_create_autocmd("BufWinEnter", {
+	pattern = "*.ipynb",
+	callback = function()
+		vim.bo.filetype = "markdown"
+		vim.treesitter.language.register("markdown", "ipynb")
+		vim.treesitter.start(vim.api.nvim_get_current_buf(), "markdown")
+	end,
+})

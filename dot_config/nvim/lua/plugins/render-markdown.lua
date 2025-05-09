@@ -10,6 +10,7 @@ return {
 		}, -- if you use standalone mini plugins
 		ft = {
 			"markdown",
+			"ipynb",
 			"codecompanion",
 		},
 		-- dependencies = { 'nvim-treesitter/nvim-treesitter', 'nvim-tree/nvim-web-devicons' }, -- if you prefer nvim-web-devicons
@@ -22,6 +23,14 @@ return {
 				-- icons = { "󰲠 ", "󰲢 ", "󰲤 ", "󰲦 ", "󰲨 ", "󰲪 " },
 				-- icons = { "󰎤 ", "󰎧 ", "󰎪 ", "󰎭 ", "󰎱 ", "󰎳 " },
 				icons = { "󰉫 ", "󰉬 ", "󰉭 ", "󰉮 ", "󰉯 ", "󰉰 " },
+			},
+			code = {
+				sign = false,
+			},
+			completions = {
+				blink = {
+					enabled = true,
+				},
 			},
 		},
 	},
