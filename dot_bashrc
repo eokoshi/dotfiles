@@ -103,6 +103,7 @@ alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo
 # See /usr/share/doc/bash-doc/examples in the bash-doc package.
 alias lg="lazygit"
 alias tm="tmux"
+alias tma="tmux attach -t 0"
 alias ch="chezmoi"
 
 marimo-serve() {
