@@ -25,7 +25,7 @@ default_table_page_size = 10
 code_editor_font_size = 12
 cell_output = "below"
 dataframes = "rich"
-theme = "system"
+theme = "dark"
 default_width = "medium"
 
 [formatting]
