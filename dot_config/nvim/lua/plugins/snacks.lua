@@ -21,31 +21,51 @@ return {
  )  |  \  `.___________|/
 .  `--'   `--'               .]],
 				-- stylua: ignore end
+				keys = {
+					{ icon = " ", key = "n", desc = "New File", action = ":ene | startinsert" },
+					{ icon = " ", key = "f", desc = "Find File", action = ":lua Snacks.dashboard.pick('files')" },
+					{ icon = " ", key = "g", desc = "Find Text", action = ":lua Snacks.dashboard.pick('live_grep')" },
+					{ icon = " ", key = "r", desc = "Recents", action = ":lua Snacks.dashboard.pick('oldfiles')" },
+					{ icon = " ", key = "c", desc = "Config", action = ":Neotree current dir=~/.config/nvim" },
+					{ icon = " ", key = "s", desc = "Restore Session", action = "<Leader>Sl" },
+					{ icon = " ", key = "q", desc = "Quit", action = ":qa" },
+				},
 			},
 			sections = {
-				{ section = "header" },
 				{
-					pane = 2,
 					section = "terminal",
-					cmd = "fortune",
+					cmd = "fortune -s",
 					height = 5,
 					padding = 2,
 				},
-				{ section = "keys", gap = 1, padding = 2 },
-				{ pane = 2, icon = " ", title = "Recent Files", section = "recent_files", indent = 2, padding = 2 },
 				{
-					pane = 2,
-					icon = " ",
-					title = "Projects",
-					section = "projects",
-					indent = 2,
+					section = "header",
+				},
+				{
+					section = "keys",
+					gap = 1,
 					padding = 2,
 				},
 				{
-					pane = 2,
+					section = "recent_files",
+					icon = " ",
+					title = "Recent Files",
+					indent = 2,
+					padding = 2,
+					limit = 7,
+				},
+				{
+					section = "projects",
+					icon = " ",
+					title = "Projects",
+					indent = 2,
+					padding = 2,
+					limit = 3,
+				},
+				{
+					section = "terminal",
 					icon = " ",
 					title = "Git Status",
-					section = "terminal",
 					enabled = function()
 						return require("snacks").git.get_root() ~= nil
 					end,
@@ -55,7 +75,9 @@ return {
 					ttl = 5 * 60,
 					indent = 3,
 				},
-				{ section = "startup" },
+				{
+					section = "startup",
+				},
 			},
 		},
 	},
