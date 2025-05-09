@@ -1,5 +1,5 @@
 local pick_chezmoi = function()
-  local results = require("chezmoi.commands").list {
+  local results = require("chezmoi.commands").list({
     args = {
       "--path-style",
       "absolute",
@@ -8,7 +8,7 @@ local pick_chezmoi = function()
       "--exclude",
       "externals",
     },
-  }
+  })
   local items = {}
 
   for _, czFile in ipairs(results) do
@@ -23,15 +23,16 @@ local pick_chezmoi = function()
     items = items,
     confirm = function(picker, item)
       picker:close()
-      require("chezmoi.commands").edit {
+      require("chezmoi.commands").edit({
         targets = { item.text },
         args = { "--watch" },
-      }
+      })
     end,
   }
   Snacks.picker.pick(opts)
 end
 
+---@type LazySpec
 return {
   {
     "xvzc/chezmoi.nvim",
@@ -60,8 +61,10 @@ return {
     init = function()
       -- run chezmoi edit on file enter
       vim.api.nvim_create_autocmd({ "BufRead", "BufNewFile" }, {
-        pattern = { os.getenv "HOME" .. "/.local/share/chezmoi/*" },
-        callback = function() vim.schedule(require("chezmoi.commands.__edit").watch) end,
+        pattern = { os.getenv("HOME") .. "/.local/share/chezmoi/*" },
+        callback = function()
+          vim.schedule(require("chezmoi.commands.__edit").watch)
+        end,
       })
     end,
   },

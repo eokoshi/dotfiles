@@ -53,6 +53,7 @@ end, {
 	complete = "file",
 })
 
+---@type LazySpec
 return {
 	{
 		"GCBallesteros/jupytext.nvim",
