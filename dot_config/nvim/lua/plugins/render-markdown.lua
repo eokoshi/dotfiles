@@ -32,6 +32,13 @@ return {
 					enabled = true,
 				},
 			},
+			latex = { enabled = false },
+			win_options = {
+				conceallevel = {
+					default = vim.api.nvim_get_option_value("conceallevel", {}),
+					rendered = 2, -- <- especially this, so that both plugins play nice
+				},
+			},
 		},
 	},
 }

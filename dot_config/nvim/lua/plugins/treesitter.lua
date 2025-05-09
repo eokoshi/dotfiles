@@ -9,6 +9,7 @@ return {
 			"bash",
 			"markdown",
 			"markdown_inline",
+			"latex",
 			"json",
 			"jsonc",
 			"ssh_config",
