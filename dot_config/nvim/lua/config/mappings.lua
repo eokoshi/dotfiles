@@ -14,7 +14,7 @@ vim.g.mapleader = " "
 vim.g.maplocalleader = " "
 
 -- system clipboard
-map({ "n", "v" }, "<C-V>", "<C-v", { desc = "Visual block mode" })
+map({ "n", "v" }, "<A-S-V>", "<C-v>", { desc = "Visual block mode" })
 map({ "n" }, "<C-c>", '"+yy', { desc = "Copy line to system clipboard" })
 map({ "v" }, "<C-c>", '"+y', { desc = "Copy selection to system clipboard" })
 map({ "n", "v" }, "<C-v>", '"+p', { desc = "Paste system clipboard" })
@@ -47,7 +47,7 @@ map("i", "<S-Tab>", "C-d", { desc = "Unindent 1 level" })
 map("n", "<Leader>t<CR>", "<Cmd>ToggleTermSendCurrentLine<CR>", { desc = "Send current line to terminal" })
 map("v", "<Leader>t<CR>", "<Cmd>ToggleTermSendVisualSelection<CR>", { desc = "Send visual selection to terminal" })
 map("n", "<Leader>ts", "<Cmd>TermSelect<CR>", { desc = "Terminal picker" })
-map("n", "<Leader>tb", "Vgg:ToggleTermSendVisualSelection<CR><C-o>", { desc = "Send file up to this line to terminal" })
+map("n", "<Leader>tb", "Vgg<Cmd>ToggleTermSendVisualSelection<CR><C-o>", { desc = "Send file up to this line to terminal" })
 map("n", "<Leader>tv", "<Cmd>ToggleTerm size=20 direction=horizontal<CR>", { desc = "ToggleTerm vertical" })
 map("n", "<Leader>th", "<Cmd>ToggleTerm size=80 direction=vertical<CR>", { desc = "ToggleTerm vertical" })
 

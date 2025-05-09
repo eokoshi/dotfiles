@@ -1,20 +1,17 @@
 {
 	"name": "user-snippets",
-	"engines": {
-		"vscode": "^1.11.0"
-	},
 	"contributes": {
 		"snippets": [
 			{
-				"language": "python",
+				"language": [ "python" ],
 				"path": "./python.json"
 			},
 			{
-				"language": "markdown",
+				"language": [ "markdown" ],
 				"path": "./markdown.json"
 			},
 			{
-				"language": "shellscript",
+				"language": [ "shellscript" ],
 				"path": "./shellscript.json"
 			}
 		]
