@@ -5,7 +5,19 @@ return {
 			"nvim-neo-tree/neo-tree.nvim",
 			"williamboman/mason.nvim",
 		},
-		ft = "markdown",
 		lazy = true,
+{{ if eq .chezmoi.hostname "eeftop" }}
+		event = {
+			"BufReadPre /mnt/c/Users/ethan/Documents/Obsidian/*.md",
+			"BufNewFile /mnt/c/Users/ethan/Documents/Obsidian/*.md",
+		},
+{{ else if eq .chezmoi.hostname "office" }}
+		event = {
+			"BufReadPre /mnt/c/Users/pathology/Documents/Obsidian/*.md",
+			"BufNewFile /mnt/c/Users/pathology/Documents/Obsidian/*.md",
+		},
+{{ else }}
+		enabled = false
+{{ end }}
 	},
 }
