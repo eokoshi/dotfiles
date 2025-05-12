@@ -4,6 +4,11 @@
         "body": "\\left[ \\begin{array}\n\t${0:${TM_SELECTED_TEXT}}\n\\end{array} \\right]",
         "description": "square bracket array"
     },
+    bmatrix: {
+        prefix: bmat,
+        body: \\begin{bmatrix} $0 \\end{bmatrix},
+        description: insert bmatrix
+    },
     "fraction": {
         "prefix": "@/",
         "body": "\\frac{$1}{$2}$0",

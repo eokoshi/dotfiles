@@ -61,4 +61,6 @@ map("n", "<Leader>dl", "<Cmd>e .vscode/launch.json<CR>", { desc = "Open workspac
 -- Random
 map("n", "<Leader>im", "/import<CR>", { desc = "Jump to imports" })
 map("n", "<Leader>fx", "<Cmd>cd %:h>", { desc = "cd to current file's directory" })
-map("n", "<Leader>um", "<Cmd>lua require('nabla').popup({border = 'solid'})<CR>", { desc = "Show math popup" })
+map("n", "<Leader>m", "<Cmd>lua require('nabla').popup({border = 'solid'})<CR>", { desc = "Show math popup" })
+map("n", "<Leader>um", "<Cmd>lua require('nabla').toggle_virt({autogen = true, silent = true})<CR>", { desc = "Toggle math virtual text" })
+map("n", "J", "mzJ`z", { desc = "Shift J without moving cursor", noremap = false })
