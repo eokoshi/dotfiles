@@ -16,6 +16,7 @@ return {
 				-- install formatters
 				"stylua",
 				"ruff",
+				"marksman",
 
 				-- install debuggers
 				"debugpy",

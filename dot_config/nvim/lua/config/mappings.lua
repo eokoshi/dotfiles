@@ -19,6 +19,7 @@ map({ "n" }, "<C-c>", '"+yy', { desc = "Copy line to system clipboard" })
 map({ "v" }, "<C-c>", '"+y', { desc = "Copy selection to system clipboard" })
 map({ "n", "v" }, "<C-v>", '"+p', { desc = "Paste system clipboard" })
 map({ "i", "c" }, "<C-v>", '<ESC>"+pa', { desc = "Paste system clipboard" })
+map("n", "<C-a>", "<Cmd>%y+<CR><CR>", { desc = "Copy whole file to clipboard" })
 
 -- center line on jump
 map("n", "<C-u>", "<C-u>zz", { desc = "Jump up half page" })
@@ -41,7 +42,6 @@ map("n", "<Leader>q", "<Cmd>q<CR>", { desc = "Quit window" })
 -- Motions
 map({ "i", "c" }, "<C-l>", "<C-o>a", { desc = "Move one char right" })
 map({ "i", "c" }, "<C-h>", "<C-o>h", { desc = "Move one char left" })
-map("i", "<S-Tab>", "C-d", { desc = "Unindent 1 level" })
 
 -- Terminal
 map("n", "<Leader>t<CR>", "<Cmd>ToggleTermSendCurrentLine<CR>", { desc = "Send current line to terminal" })
@@ -64,3 +64,4 @@ map("n", "<Leader>fx", "<Cmd>cd %:h>", { desc = "cd to current file's directory"
 map("n", "<Leader>m", "<Cmd>lua require('nabla').popup({border = 'solid'})<CR>", { desc = "Show math popup" })
 map("n", "<Leader>um", "<Cmd>lua require('nabla').toggle_virt({autogen = true, silent = true})<CR>", { desc = "Toggle math virtual text" })
 map("n", "J", "mzJ`z", { desc = "Shift J without moving cursor", noremap = false })
+vim.keymap.del("i", "<Tab>")

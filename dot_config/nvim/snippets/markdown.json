@@ -4,10 +4,10 @@
         "body": "\\left[ \\begin{array}\n\t${0:${TM_SELECTED_TEXT}}\n\\end{array} \\right]",
         "description": "square bracket array"
     },
-    bmatrix: {
-        prefix: bmat,
-        body: \\begin{bmatrix} $0 \\end{bmatrix},
-        description: insert bmatrix
+    "bmatrix": {
+        "prefix": "bmat",
+        "body": "\\begin{bmatrix} $0 \\end{bmatrix}",
+        "description": "insert bmatrix"
     },
     "fraction": {
         "prefix": "@/",
@@ -44,4 +44,14 @@
         "body": "\\begin{split}\n\t${0:${TM_SELECTED_TEXT}}\n\\end{split}",
         "description": "split environment"
     },
+    "realnumberspace": {
+        "prefix": "rln",
+        "body": "$\\mathbb{R}^$1$$0",
+        "description": "real number space R with font"
+    },
+    "space": {
+        "prefix": "sp",
+        "body": "\\space$0",
+        "description": "Insert latex math space"
+    }
 }
