@@ -33,13 +33,14 @@ return {
 			},
 			sections = {
 				{
-					section = "terminal",
-					cmd = "fortune -s",
-					height = 5,
-					padding = 2,
+					section = "header",
 				},
 				{
-					section = "header",
+					section = "terminal",
+					cmd = "cbonsai --live -t 2",
+					height = 10,
+					padding = 2,
+					pane = 2,
 				},
 				{
 					section = "keys",
@@ -53,6 +54,7 @@ return {
 					indent = 2,
 					padding = 2,
 					limit = 7,
+					pane = 2,
 				},
 				{
 					section = "projects",
@@ -61,6 +63,7 @@ return {
 					indent = 2,
 					padding = 2,
 					limit = 3,
+					pane = 2,
 				},
 				{
 					section = "terminal",
@@ -74,6 +77,7 @@ return {
 					padding = 2,
 					ttl = 5 * 60,
 					indent = 3,
+					pane = 2,
 				},
 				{
 					section = "startup",
