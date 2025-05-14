@@ -42,6 +42,7 @@ map("n", "<Leader>q", "<Cmd>q<CR>", { desc = "Quit window" })
 -- Motions
 map({ "i", "c" }, "<C-l>", "<C-o>a", { desc = "Move one char right" })
 map({ "i", "c" }, "<C-h>", "<C-o>h", { desc = "Move one char left" })
+map("n", "J", "mzJ`z", { desc = "Shift J without moving cursor", noremap = false })
 
 -- Terminal
 map("n", "<Leader>t<CR>", "<Cmd>ToggleTermSendCurrentLine<CR>", { desc = "Send current line to terminal" })
@@ -59,9 +60,11 @@ map({ "n", "v" }, "<Leader>dfp", "<Cmd>diffput<CR>", { desc = "Put the text from
 map("n", "<Leader>dl", "<Cmd>e .vscode/launch.json<CR>", { desc = "Open workspace debugger config" })
 
 -- Random
-map("n", "<Leader>im", "/import<CR>", { desc = "Jump to imports" })
+map("n", "<Leader>fi", "/import<CR>N", { desc = "Jump to imports" })
 map("n", "<Leader>fx", "<Cmd>cd %:h>", { desc = "cd to current file's directory" })
-map("n", "<Leader>m", "<Cmd>lua require('nabla').popup({border = 'solid'})<CR>", { desc = "Show math popup" })
+
+map("n", "<Leader>m", "", { desc = "Markdown tools" })
+map("n", "<Leader>mm", "<Cmd>lua require('nabla').popup({border = 'solid'})<CR>", { desc = "Show math popup" })
 map("n", "<Leader>um", "<Cmd>lua require('nabla').toggle_virt({autogen = true, silent = true})<CR>", { desc = "Toggle math virtual text" })
-map("n", "J", "mzJ`z", { desc = "Shift J without moving cursor", noremap = false })
+
 vim.keymap.del("i", "<Tab>")
