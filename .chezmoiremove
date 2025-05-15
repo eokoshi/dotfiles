@@ -1,2 +1,2 @@
-nvim/lua/plugins/mappings.lua
-nvim/lua/plugins/jupytertext.lua
+.config/nvim/lua/plugins/mappings.lua
+.config/nvim/lua/plugins/jupytext.lua
