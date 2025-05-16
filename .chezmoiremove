@@ -1,2 +1,7 @@
 .config/nvim/lua/plugins/mappings.lua
 .config/nvim/lua/plugins/jupytext.lua
+<<<<<<< Updated upstream
+=======
+.config/nvim/lua/polish.lua
+.config/nvim/lua/plugins/user.lua
+>>>>>>> Stashed changes

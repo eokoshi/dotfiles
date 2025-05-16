@@ -12,6 +12,7 @@ return {
 				-- install language servers
 				"lua-language-server",
 				"basedpyright",
+				"json-lsp",
 
 				-- install formatters
 				"stylua",
