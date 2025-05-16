@@ -68,3 +68,5 @@ map("n", "<Leader>mm", "<Cmd>lua require('nabla').popup({border = 'solid'})<CR>"
 map("n", "<Leader>um", "<Cmd>lua require('nabla').toggle_virt({autogen = true, silent = true})<CR>", { desc = "Toggle math virtual text" })
 
 vim.keymap.del("i", "<Tab>")
+
+map("n", "<Leader>fe", "<Cmd>Neotree current<CR>", { desc = "Open file explorer for cwd" })
