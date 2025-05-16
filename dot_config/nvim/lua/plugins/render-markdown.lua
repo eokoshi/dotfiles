@@ -6,7 +6,6 @@ return {
 		dependencies = {
 			"nvim-treesitter/nvim-treesitter",
 			"echasnovski/mini.icons",
-			"AstroNvim/astrotheme",
 		}, -- if you use standalone mini plugins
 		ft = {
 			"markdown",

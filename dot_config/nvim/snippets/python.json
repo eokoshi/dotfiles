@@ -65,5 +65,10 @@
     "prefix": "cdc",
     "body": ["@app.cell", "def _():", "    $0", "    return"],
     "description": "Add marimo code cell"
+  },
+  "dataloader": {
+    "prefix": "DL",
+    "body": "torch.utils.data.DataLoader($0)",
+    "description": "Insert DataLoader call"
   }
 }

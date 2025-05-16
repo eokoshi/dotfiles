@@ -59,6 +59,10 @@ map({ "n", "v" }, "<Leader>dfp", "<Cmd>diffput<CR>", { desc = "Put the text from
 -- Debugger
 map("n", "<Leader>dl", "<Cmd>e .vscode/launch.json<CR>", { desc = "Open workspace debugger config" })
 
+-- LSP
+-- map("n", "<Leader>lh", "<Cmd>lua vim.lsp.buf.signature_help({focusable = true})", { desc = "Signature help" })
+-- map("n", "<Leader>gK", "<Cmd>lua vim.lsp.buf.signature_help({focusable = true})", { desc = "Signature help" })
+
 -- Random
 map("n", "<Leader>fi", "/import<CR>N", { desc = "Jump to imports" })
 map("n", "<Leader>fx", "<Cmd>cd %:h>", { desc = "cd to current file's directory" })

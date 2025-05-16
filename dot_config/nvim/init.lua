@@ -19,7 +19,6 @@ vim.g.mapleader = " "
 vim.g.maplocalleader = " "
 
 require("lazy_setup")
-require("polish")
 
 require("config.options")
 require("config.mappings")
@@ -28,3 +27,5 @@ require("config.autocmds")
 if vim.g.neovide then
 	require("config.neovide")
 end
+
+require("final")
