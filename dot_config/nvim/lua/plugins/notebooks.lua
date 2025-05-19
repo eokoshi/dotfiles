@@ -55,6 +55,7 @@ end, {
 
 ---@type LazySpec
 return {
+	-- Converting ipynb json to markdown
 	{
 		"GCBallesteros/jupytext.nvim",
 		opts = {
@@ -63,6 +64,7 @@ return {
 			force_ft = "markdown",
 		},
 	},
+	-- Code block highlighting and LSP activation
 	{
 		"quarto-dev/quarto-nvim",
 		dependencies = {
