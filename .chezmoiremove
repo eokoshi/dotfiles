@@ -1,4 +1,7 @@
 .config/nvim/lua/plugins/mappings.lua
 .config/nvim/lua/plugins/jupytext.lua
 .config/nvim/lua/plugins/user.lua
+.config/nvim/lua/plugins/codecompanion-nvim.lua
+.config/nvim/lua/plugins/chezmoi-nvim.lua
+.config/nvim/lua/plugins/astrocore_rooter.lua
 .config/nvim/lua/polish.lua
