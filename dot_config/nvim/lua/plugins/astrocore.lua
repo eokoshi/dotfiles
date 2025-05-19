@@ -12,12 +12,12 @@ return {
 	opts = {
 		-- Configure core features of AstroNvim
 		features = {
-			large_buf = {}, -- set global limits for large files for disabling features like treesitter
-			autopairs = true, -- enable autopairs at start
-			cmp = true, -- enable completion at start
+			large_buf = {},                                      -- set global limits for large files for disabling features like treesitter
+			autopairs = true,                                    -- enable autopairs at start
+			cmp = true,                                          -- enable completion at start
 			diagnostics = { virtual_text = true, virtual_lines = false }, -- diagnostic settings on startup
-			highlighturl = true, -- highlight URLs at start
-			notifications = true, -- enable notifications at start
+			highlighturl = true,                                 -- highlight URLs at start
+			notifications = true,                                -- enable notifications at start
 		},
 		-- Diagnostics configuration (for vim.diagnostics.config({...})) when diagnostics are on
 		diagnostics = {
@@ -38,6 +38,29 @@ return {
 				-- NOTE: `mapleader` and `maplocalleader` must be set in the AstroNvim opts or before `lazy.setup`
 				-- This can be found in the `lua/lazy_setup.lua` file
 			},
+		},
+		-- Configure project root detection, check status with `:AstroRootInfo`
+		rooter = {
+			-- list of detectors in order of prevalence, elements can be:
+			--   "lsp" : lsp detection
+			--   string[] : a list of directory patterns to look for
+			--   fun(bufnr: integer): string|string[] : a function that takes a buffer number and outputs detected roots
+			detector = {
+				"lsp",                                                    -- highest priority is getting workspace from running language servers
+				{ ".git",      "_darcs",         ".hg", ".bzr",     ".svn" }, -- next check for a version controlled parent directory
+				{ "README.md", "pyproject.toml", "lua", "MakeFile", "package.json" }, -- lastly check for known project root files
+			},
+			-- ignore things from root detection
+			ignore = {
+				servers = {}, -- list of language server names to ignore (Ex. { "efm" })
+				dirs = {}, -- list of directory patterns (Ex. { "~/.cargo/*" })
+			},
+			-- automatically update working directory (update manually with `:AstroRoot`)
+			autochdir = false,
+			-- scope of working directory to change ("global"|"tab"|"win")
+			scope = "win",
+			-- show notification on every working directory change
+			notify = false,
 		},
 		-- Mappings can be configured through AstroCore as well.
 		-- NOTE: keycodes follow the casing in the vimdocs. For example, `<Leader>` must be capitalized
