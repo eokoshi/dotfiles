@@ -23,7 +23,7 @@ return {
 				-- stylua: ignore end
 				keys = {
 					{ icon = " ", key = "n", desc = "New File", action = ":ene | startinsert" },
-					{ icon = " ", key = "e", desc = "File Explorer", action = ":Neotree current" },
+					{ icon = "󰙅 ", key = "e", desc = "File Explorer", action = ":Neotree current" },
 					{ icon = " ", key = "f", desc = "Find File", action = ":lua Snacks.dashboard.pick('files')" },
 					{ icon = " ", key = "g", desc = "Find Text", action = ":lua Snacks.dashboard.pick('live_grep')" },
 					{ icon = " ", key = "r", desc = "Recents", action = ":lua Snacks.dashboard.pick('oldfiles')" },

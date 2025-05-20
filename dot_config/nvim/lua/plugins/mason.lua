@@ -23,7 +23,6 @@ return {
 				"debugpy",
 
 				-- install any other package
-				"selene",
 				"tree-sitter-cli",
 				"jupytext",
 			},
