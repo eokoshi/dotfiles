@@ -72,7 +72,7 @@ if [[ "$TERM_PROGRAM" == "vscode" ]]; then
     PS1=$'\[\e[0;32m\]\w \[\e[00m\]\$ '
 fi
 
-if [ -n "$NVIM" || -n "$RSTUDIO"]; then
+if [[ -n "$NVIM" || -n "$RSTUDIO" ]]; then
     unset PROMPT_COMMAND
     PS1=$'\[\e[0;32m\]\w \[\e[00m\]\$ '
 fi
