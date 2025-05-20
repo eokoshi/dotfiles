@@ -6,4 +6,5 @@
 .config/nvim/lua/plugins/astrocore_rooter.lua
 .config/nvim/lua/plugins/fix_hover.lua
 .config/nvim/lua/plugins/hardtime.lua
+.config/nvim/selene.toml
 .config/nvim/lua/polish.lua
