@@ -19,7 +19,7 @@ vim.opt.undodir = os.getenv("HOME") .. "/.local/state/nvim/undo"
 vim.opt.swapfile = true
 vim.opt.backup = false
 
-vim.opt.hlsearch = false
+vim.opt.hlsearch = true
 vim.opt.incsearch = true
 
 vim.opt.foldmethod = "indent"
