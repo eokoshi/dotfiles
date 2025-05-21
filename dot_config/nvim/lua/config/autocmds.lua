@@ -19,17 +19,6 @@ vim.api.nvim_create_autocmd("FileType", {
 	desc = "Disable New Line Comment",
 })
 
--- vim.api.nvim_create_autocmd({ "FocusLost", "BufLeave", "BufWinLeave", "InsertLeave" }, {
--- 	-- nested = true, -- for format on save
--- 	callback = function()
--- 		if vim.bo.filetype ~= "" and vim.bo.buftype == "" then
--- 			vim.cmd("silent! w")
--- 		end
--- 	end,
--- 	group = general,
--- 	desc = "Auto Save",
--- })
-
 vim.api.nvim_create_autocmd("FocusGained", {
 	callback = function()
 		vim.cmd("checktime")
