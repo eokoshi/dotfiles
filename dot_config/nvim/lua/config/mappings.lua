@@ -70,3 +70,4 @@ map("n", "<Leader>um", "<Cmd>lua require('nabla').toggle_virt({autogen = true, s
 vim.keymap.del("i", "<Tab>")
 
 map("n", "<Leader>fe", "<Cmd>Neotree current<CR>", { desc = "Open file explorer for cwd" })
+map("n", "<leader>ba", "<Cmd>ToggleBufferAutoSave<CR>", { desc = "Toggle autosave for current buffer" })

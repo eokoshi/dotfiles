@@ -1,7 +1,10 @@
 {
   "import matplotlib": {
     "prefix": "plt",
-    "body": ["import matplotlib.pyplot as plt", "$0"],
+    "body": [
+      "import matplotlib.pyplot as plt",
+      "$0"
+    ],
     "description": "import matplotlib"
   },
   "plot image grid": {
@@ -33,13 +36,25 @@
       "__date__ = '$CURRENT_YEAR-$CURRENT_MONTH-$CURRENT_DATE'",
       "__email__ = 'ethanokoshi+code <at> gmail <dot> com'",
       "#endregion",
-      "$0"
+      "",
+      "",
+      "$0",
+      "",
+      "def main()",
+      "    return",
+      "",
+      "if __name__ == '__main__':",
+      "   main()"
     ],
     "description": "executable file header"
   },
   "syspath": {
     "prefix": "syp",
-    "body": ["import sys", "sys.path.append('..')", "$0"],
+    "body": [
+      "import sys",
+      "sys.path.append('..')",
+      "$0"
+    ],
     "description": "make root directory accessable for imports"
   },
   "type ignore": {
@@ -63,12 +78,25 @@
   },
   "code cell marimo": {
     "prefix": "cdc",
-    "body": ["@app.cell", "def _():", "    $0", "    return"],
+    "body": [
+      "@app.cell",
+      "def _():",
+      "    $0",
+      "    return"
+    ],
     "description": "Add marimo code cell"
   },
   "dataloader": {
     "prefix": "DL",
     "body": "torch.utils.data.DataLoader($0)",
     "description": "Insert DataLoader call"
+  },
+  "ifnamemain": {
+    "prefix": "ifname",
+    "body": [
+      "if __name__ == '__main__':",
+      "    main()$0"
+    ],
+    "description": "Insert if name main statement"
   }
 }

@@ -20,12 +20,12 @@ vim.g.maplocalleader = " "
 
 require("lazy_setup")
 
-require("config.options")
-require("config.mappings")
-require("config.autocmds")
-
 if vim.g.neovide then
 	require("config.neovide")
 end
+
+require("config.options")
+require("config.autocmds")
+require("config.mappings")
 
 require("final")
