@@ -107,7 +107,7 @@ alias tma="tmux attach -t 0"
 alias ch="chezmoi"
 
 marimo-serve() {
-    marimo edit --headless --watch --no-token --host $(tailscale ip -4)
+    marimo edit --headless --watch --host $(tailscale ip -4) --no-token
 }
 
 if [ -f ~/.bash_aliases ]; then
