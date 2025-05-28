@@ -16,7 +16,7 @@ sh -c "$(curl -fsLS get.chezmoi.io)" -- -b $HOME/.local/bin
 chezmoi init --apply eokoshi
 
 ## ripgrep and fd
-sudo apt-get -y --ignore-missing install ripgrep fd-find
+sudo apt-get -y --ignore-missing install ripgrep fd-find python3-venv npm
 ln -s $(which fdfind) ~/.local/bin/fd
 
 ## uv
@@ -28,6 +28,7 @@ sudo rm -rf /opt/nvim
 sudo mkdir /opt/nvim
 curl -LO https://github.com/neovim/neovim/releases/latest/download/nvim-linux-x86_64.tar.gz
 sudo tar -C /opt/nvim -xzf nvim-linux-x86_64.tar.gz --strip-components=1
+rm -f nvim-linux-x86_64.tar.gz
 
 ## lazygit
 LAZYGIT_VERSION=$(curl -s "https://api.github.com/repos/jesseduffield/lazygit/releases/latest" | \grep -Po '"tag_name": *"v\K[^"]*')
