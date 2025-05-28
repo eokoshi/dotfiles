@@ -71,6 +71,7 @@ return {
 			"jmbuhr/otter.nvim",
 			"nvim-treesitter/nvim-treesitter",
 		},
+		ft = { "markdown", "ipynb" },
 		opts = {
 			closePreviewOnExit = true,
 			lspFeatures = {
