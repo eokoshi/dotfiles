@@ -15,8 +15,8 @@ gh auth login
 sh -c "$(curl -fsLS get.chezmoi.io)" -- -b $HOME/.local/bin
 chezmoi init --apply eokoshi
 
-## ripgrep and fd
-sudo apt-get -y --ignore-missing install ripgrep fd-find python3-venv npm
+## apt packages
+sudo apt-get -y --ignore-missing install ripgrep fd-find python3-venv npm cbonsai
 ln -s $(which fdfind) ~/.local/bin/fd
 
 ## uv
