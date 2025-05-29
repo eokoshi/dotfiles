@@ -107,7 +107,7 @@ alias tma="tmux attach -t 0"
 alias ch="chezmoi"
 
 marimo-serve() {
-    marimo edit --headless --watch --host $(tailscale ip -4) --no-token 
+    uv run marimo edit --headless --watch --host "$(tailscale ip -4)"
 }
 
 if [ -f ~/.bash_aliases ]; then
@@ -163,6 +163,9 @@ export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 
 export EDITOR=nvim
-export PATH="$PATH:/opt/nvim/bin:$HOME/.local/bin"
+export PATH="$PATH:/opt/nvim/bin"
 
+export TS_IP="$(hostname -I | awk '{print $2}')"
 export IP="$(hostname -I | awk '{print $1}')"
+
+. "$HOME/.local/bin/env"
