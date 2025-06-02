@@ -5,6 +5,6 @@ return {
 		smear_insert_mode = false,
 		legacy_computing_symbols_support = true,
 		legacy_computing_symbols_support_vertical_bars = true,
-		-- cursor_color = "#847e7b",
+		cursor_color = "#847e7b",
 	},
 }
