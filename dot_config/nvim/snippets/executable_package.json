@@ -1,0 +1,19 @@
+{
+	"name": "user-snippets",
+	"contributes": {
+		"snippets": [
+			{
+				"language": [ "python" ],
+				"path": "./python.json"
+			},
+			{
+				"language": [ "markdown" ],
+				"path": "./markdown.json"
+			},
+			{
+				"language": [ "shellscript" ],
+				"path": "./shellscript.json"
+			}
+		]
+	}
+}

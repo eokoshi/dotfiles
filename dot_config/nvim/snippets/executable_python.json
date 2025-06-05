@@ -1,0 +1,105 @@
+{
+	"import matplotlib": {
+		"prefix": "plt",
+		"body": [
+			"import matplotlib.pyplot as plt",
+			"$0"
+		],
+		"description": "import matplotlib"
+	},
+	"plot image grid": {
+		"prefix": "pltimgs",
+		"body": [
+			"import matplotlib.pyplot as plt",
+			"import math",
+			"images = ${1: '__List of Images__'}",
+			"ncols = ${2: '__Number of desired columns__'}",
+			"nrows = math.ceil(len(images) / ncols)",
+			"fig, axs = plt.subplots(nrows, ncols, sharex=True, sharey=True)",
+			"for i, ax in enumerate(axs.flat):",
+			"    ax.imshow(images[i])",
+			"    # ax.imshow(images[i].permute(1,2,0)) # for tensors in format [C,H,W]",
+			"    ax.axis('off')",
+			"plt.show()",
+			"$0"
+		],
+		"description": "Code to show n images in a grid using matplotlib."
+	},
+	"python header": {
+		"prefix": "pyh",
+		"body": [
+			"#!/usr/bin/env python",
+			"# -*- coding: utf-8 -*-",
+			"#region Header",
+			"'${1:Enter Title}; ${2:Description}'",
+			"__author__ = 'Ethan N. Okoshi'",
+			"__date__ = '$CURRENT_YEAR-$CURRENT_MONTH-$CURRENT_DATE'",
+			"__email__ = 'ethanokoshi+code <at> gmail <dot> com'",
+			"#endregion",
+			"$0"
+		],
+		"description": "executable file header"
+	},
+	"syspath": {
+		"prefix": "syp",
+		"body": [
+			"import sys",
+			"sys.path.append('..')",
+			"$0"
+		],
+		"description": "make root directory accessable for imports"
+	},
+	"type ignore": {
+		"prefix": "tig",
+		"body": "# type:ignore",
+		"description": "add tag for type ignore (LSP)"
+	},
+	"md cell marimo": {
+		"prefix": "mdc",
+		"body": [
+			"@app.cell(hide_code=True)",
+			"def _(mo):",
+			"    mo.md(",
+			"        r'''",
+			"        $0",
+			"        '''",
+			"    )",
+			"    return"
+		],
+		"description": "Add marimo markdown cell"
+	},
+	"code cell marimo": {
+		"prefix": "cdc",
+		"body": [
+			"@app.cell",
+			"def _():",
+			"    $0",
+			"    return"
+		],
+		"description": "Add marimo code cell"
+	},
+	"dataloader": {
+		"prefix": "DL",
+		"body": "torch.utils.data.DataLoader($0)",
+		"description": "Insert DataLoader call"
+	},
+	"defmain": {
+		"prefix": "dfm",
+		"body": [
+			"def main()",
+			"    return",
+			"",
+			"if __name__ == '__main__':",
+			"    main()$0"
+		],
+		"description": "Insert if name main statement with def main()"
+	},
+	"ifnamemain": {
+		"prefix": "ifname",
+		"body": [
+			"if __name__ == '__main__':",
+			"    main()$0"
+		],
+		"description": "Insert if name main statement"
+	}
+}
