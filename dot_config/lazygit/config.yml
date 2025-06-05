@@ -20,5 +20,6 @@ os:
   editAtLineAndWait: nvim-clean +{{line}} -- {{filename}}
   openDirInEditor: nvim -- {{dir}}
 disableStartupPopups: true
+showRootItemInFileTree: false
 promptToReturnFromSubprocess: false
 
