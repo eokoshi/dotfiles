@@ -143,13 +143,13 @@ return {
 							snacks_picker_list = "",
 						},
 						use_mode_colors = true,
-						-- cond = function()
-						-- 	if vim.fn.expand("%") == "" then
-						-- 		return false
-						-- 	else
-						-- 		return true
-						-- 	end
-						-- end,
+						cond = function()
+							-- if vim.fn.expand("%") == "" then
+							-- 	return false
+							-- else
+							-- 	return true
+							-- end
+						end,
 					},
 				},
 				lualine_b = {},

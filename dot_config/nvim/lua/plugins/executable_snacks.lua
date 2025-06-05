@@ -14,7 +14,7 @@ return {
 				header = table.concat(require("ascii").art.animals.cats.boxy, "\n"),
 				keys = {
 					{ icon = " ", key = "n", desc = "New File", action = ":ene | startinsert" },
-					{ icon = "󰙅 ", key = "e", desc = "File Explorer", action = ":Neotree current" },
+					{ icon = "󰙅 ", key = "e", desc = "File Explorer", action = ":lua Snacks.explorer.open()" },
 					{ icon = " ", key = "f", desc = "Find File", action = ":lua Snacks.dashboard.pick('files')" },
 					{
 						icon = " ",
