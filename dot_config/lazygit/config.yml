@@ -13,8 +13,8 @@ gui:
       - ⠏
       - ⠋
     rate: 50
-  switchTabsWithPanelJumpKeys: true
   showRootItemInFileTree: false
+  switchTabsWithPanelJumpKeys: true
 os:
   edit: nvim-clean -- {{filename}}
   editAtLine: nvim-clean +{{line}} -- {{filename}}
@@ -22,4 +22,3 @@ os:
   openDirInEditor: nvim -- {{dir}}
 disableStartupPopups: true
 promptToReturnFromSubprocess: false
-
