@@ -50,7 +50,7 @@ return {
 		"sainnhe/edge",
 		lazy = true,
 		config = function()
-			vim.g.everforest_background = "light"
+			vim.g.everforest_background = "dark"
 			vim.g.edge_better_performance = 1
 			vim.g.edge_enable_italic = 1
 		end,

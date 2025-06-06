@@ -1,6 +1,6 @@
 local icons = require("stuff.icons")
 
-vim.cmd.colorscheme("onelight")
+vim.cmd.colorscheme("edge")
 
 vim.opt.autowrite = true -- Enable auto write
 vim.opt.clipboard = "unnamedplus" -- Sync with system clipboard
