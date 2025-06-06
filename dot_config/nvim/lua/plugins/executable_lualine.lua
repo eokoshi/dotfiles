@@ -58,7 +58,7 @@ end
 return {
 	{
 		"eokoshi/lualine.nvim",
-		event = { "BufAdd", "User ResessionLoadPost" },
+		event = "VeryLazy",
 		opts = {
 			options = {
 				theme = "auto",
