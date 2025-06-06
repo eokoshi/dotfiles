@@ -1,6 +1,7 @@
 return {
 	{
 		"jay-babu/mason-nvim-dap.nvim",
+		version = "*",
 		dependencies = {
 			"mason-org/mason.nvim",
 			"mfussenegger/nvim-dap",

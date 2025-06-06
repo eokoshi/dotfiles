@@ -1,5 +1,5 @@
 --stylua: ignore
-if true then return {} end -- uncomment to activate
+-- if true then return {} end -- comment to activate
 
 local pick_chezmoi = function()
 	local results = require("chezmoi.commands").list({

@@ -1,4 +1,9 @@
 return {
 	"max397574/better-escape.nvim",
-	opts = {},
+	version = "*",
+	opts = {
+		mappings = {
+			v = {},
+		},
+	},
 }

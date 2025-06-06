@@ -14,15 +14,15 @@ local function map(mode, lhs, rhs, opts)
 	vim.keymap.set(mode, lhs, rhs, opts)
 end
 
---stylua: ignore start
 vim.g.mapleader = " "
 vim.g.maplocalleader = " "
+
+-- stylua: ignore start
 
 -- Basic operations
 map("n", "<Leader>c", function() Snacks.bufdelete() end, { desc = "Close buffer" })
 map("n", "<Leader>e", function() Snacks.explorer() end, { desc = "File explorer" })
-map("n", "<Leader>n", function() Snacks.picker.notifications({ layout = { preset = "vertical" } }) end,
-	{ desc = "Notification history" })
+map("n", "<Leader>n", function() Snacks.picker.notifications({ layout = { preset = "vertical" } }) end, { desc = "Notification history" })
 map("n", "<Leader>h", function() Snacks.dashboard() end, { desc = "Home" })
 map("n", "<Leader>q", "<CMD>q<CR>", { desc = "Quit window" })
 map("n", "<Leader>Q", "<CMD>qa<CR>", { desc = "Quit nvim" })
@@ -65,8 +65,7 @@ map("n", "<C-Right>", function() require("smart-splits").resize_right() end, { d
 
 -- Find
 map("n", "<Leader>f", "", { desc = "Find" })
-map("n", "<Leader>fa", function() Snacks.picker.files({ cwd = vim.fn.stdpath("config") }) end,
-	{ desc = "config files" })
+map("n", "<Leader>fa", function() Snacks.picker.files({ cwd = vim.fn.stdpath("config") }) end, { desc = "config files" })
 map("n", "<Leader>fb", function() Snacks.picker.buffers() end, { desc = "buffers" })
 map("n", "<Leader>fB", function() Snacks.picker.grep_buffers() end, { desc = "grep in open Buffers" })
 map({ "n", "x" }, "<Leader>fc", function() Snacks.picker.grep_word() end, { desc = "grep current selection" })
@@ -76,8 +75,7 @@ map("n", "<Leader>fD", function() Snacks.picker.diagnostics_buffer() end, { desc
 map("n", "<Leader>fh", function() Snacks.picker.help() end, { desc = "help pages" })
 map("n", "<Leader>fH", function() Snacks.picker.highlights() end, { desc = "Highlights" })
 map("n", "<Leader>ff", function() Snacks.picker.files() end, { desc = "files" })
-map("n", "<Leader>fF", function() Snacks.picker.files({ hidden = true, ignored = true, cmd = "fd" }) end,
-	{ desc = "all files" })
+map("n", "<Leader>fF", function() Snacks.picker.files({ hidden = true, ignored = true, cmd = "fd" }) end, { desc = "all files" })
 map("n", "<Leader>fg", function() Snacks.picker.git_files() end, { desc = "git files" })
 map("n", "<Leader>fk", function() Snacks.picker.keymaps() end, { desc = "keymaps" })
 map("n", "<Leader>fj", function() Snacks.picker.jumps() end, { desc = "jumps" })
@@ -89,14 +87,13 @@ map("n", "<Leader>fq", function() Snacks.picker.qflist() end, { desc = "quickfix
 map("n", "<Leader>fr", function() Snacks.picker.recent() end, { desc = "recent" })
 map("n", "<Leader>fu", function() Snacks.picker.undo() end, { desc = "undo" })
 map("n", "<Leader>fw", function() Snacks.picker.grep({ cmd = "rg" }) end, { desc = "word" })
-map("n", "<Leader>fW", function() Snacks.picker.grep({ cmd = "rg", hidden = true, ignored = true }) end,
-	{ desc = "Word in all files" })
+map("n", "<Leader>fW", function() Snacks.picker.grep({ cmd = "rg", hidden = true, ignored = true }) end, { desc = "Word in all files" })
 map("n", "<Leader>f<CR>", function() Snacks.picker.resume() end, { desc = "Resume last search" })
 
 -- Buffer
 map("n", "<Leader>b", "", { desc = "Buffers" })
-toggles.autosave():map("<Leader>ba")
 map("n", "<Leader>bF", function() functions.DOS_to_Unix() end, { desc = "DOS to Unix" })
+toggles.autosave():map("<Leader>ba")
 
 -- UI
 map("n", "<Leader>u", "", { desc = "UI" })
@@ -105,18 +102,14 @@ map("n", "<Leader>uc", function() Snacks.picker.colorschemes() end, { desc = "se
 map("n", "<Leader>uz", function() Snacks.zen.zoom() end, { desc = "zoom pane" })
 map("n", "<Leader>uZ", function() Snacks.zen() end, { desc = "Zen mode" })
 map("n", "<Leader>un", function() Snacks.notifier.hide() end, { desc = "dismiss all notifications" })
-map("n", "<Leader>uN", function()
-	require("noice").disable()
-	require("noice").enable()
-end, { desc = "reload Noice" })
+map("n", "<Leader>uN", function() require("noice").disable() require("noice").enable() end, { desc = "reload Noice" })
 toggles.virtual_text():map("<Leader>uv")
 toggles.virtual_lines():map("<Leader>uV")
 Snacks.toggle.option("spell", { name = "spellcheck" }):map("<leader>us")
 Snacks.toggle.option("wrap", { name = "wrap" }):map("<leader>uw")
 Snacks.toggle.option("relativenumber", { name = "relative number" }):map("<leader>uL")
 Snacks.toggle.option("hlsearch", { name = "hlsearch" }):map("<Leader>uh")
-Snacks.toggle.option("conceallevel", { off = 0, on = vim.o.conceallevel > 0 and vim.o.conceallevel or 2 }):map(
-	"<leader>uC")
+Snacks.toggle.option("conceallevel", { off = 0, on = vim.o.conceallevel > 0 and vim.o.conceallevel or 2 }):map( "<leader>uC")
 Snacks.toggle.option("background", { off = "light", on = "dark", name = "dark background" }):map("<leader>ub")
 Snacks.toggle.diagnostics():map("<leader>ud")
 Snacks.toggle.line_number():map("<leader>ul")
@@ -185,44 +178,27 @@ map("n", "<Leader>dR", function() require("dap").repl.toggle() end, { desc = "To
 map("n", "<Leader>ds", function() require("dap").run_to_cursor() end, {desc = "Run To Cursor" })
 -- map("n", "<Leader>du", function() require("dapui").toggle() end, {desc = "Toggle Debugger UI" })
 map("n", "<Leader>du", function() require("dap-view").toggle() end, {desc = "Toggle Debugger UI" })
-map("n", "<F21>", function()
-	vim.ui.input(
-		{ prompt = "Condition: " },
-		function(condition)
-			if condition then
-				require("dap").set_breakpoint(condition)
-			end
-		end)
-	end,
-	{ desc = "Debugger: Conditional Breakpoint" }) -- Shift+F9
-map("n", "<Leader>dC", function()
-	vim.ui.input({ prompt = "Condition: " }, function(condition)
-		if condition then require("dap").set_breakpoint(condition) end
-	end)
-	end,
-	{desc = "Conditional Breakpoint (S-F9)",
-})
-map("n", "<Leader>dE", function()
-	vim.ui.input({ prompt = "Expression: " }, function(expr)
-		if expr then require("dapui").eval(expr, { enter = true }) end
-		end)
-	end,
-	{desc = "Evaluate Input"})
+map("n", "<F21>", function() vim.ui.input({ prompt = "Condition: " }, function(condition) if condition then require("dap").set_breakpoint(condition) end end) end, { desc = "Debugger: Conditional Breakpoint" }) -- Shift+F9
+map("n", "<Leader>dC", function() vim.ui.input({ prompt = "Condition: " }, function(condition) if condition then require("dap").set_breakpoint(condition) end end) end, {desc = "Conditional Breakpoint (S-F9)" })
+map("n", "<Leader>dE", function() vim.ui.input({ prompt = "Expression: " }, function(expr) if expr then require("dapui").eval(expr, { enter = true }) end end) end, {desc = "Evaluate Input"})
 
 -- Terminal
 map("n", "<Leader>t", "", { desc = "Terminal" })
 map("n", "<Leader>tt", function() Snacks.terminal() end, { desc = "open terminal" })
-map("n", "<Leader>tf", function() Snacks.terminal.open("echo hi", { auto_close = false, auto_insert = true }) end,
-	{ desc = "open floating terminal" })
+-- map("n", "<Leader>tf", function() Snacks.terminal.open("echo hi", { auto_close = false, auto_insert = true }) end, { desc = "open floating terminal" })
 map({ "n", "t", "i" }, "<F7>", function() Snacks.terminal.toggle() end, { desc = "toggle terminal" })
 
--- Package Management
+-- Package/Plugin Management
 map("n", "<Leader>p", "", { desc = "Packages" })
 map("n", "<Leader>pi", "<CMD>Lazy<CR>", { desc = "Lazy" })
 map("n", "<Leader>pm", "<CMD>Mason<CR>", { desc = "Mason" })
 map("n", "<Leader>pc", function() vim.fn.chdir(vim.fn.stdpath("config")) Snacks.explorer.open() end, { desc = "cd config" })
+map("n", "<Leader>pa", function() vim.ui.input({ prompt = "Edit plugin spec" }, function(input)
+		local file = vim.fn.stdpath("config") .. "/lua/plugins/" .. input .. ".lua"
+		vim.notify("Editing " .. file)
+		vim.cmd("e " .. file)
+	end) end, { desc = "add plugin" })
 
--- stylua: ignore end
 
 -- Blink completion
 vim.keymap.del("i", "<Tab>")
@@ -231,18 +207,8 @@ vim.keymap.del("i", "<Tab>")
 vim.api.nvim_create_autocmd("BufReadPost", {
 	callback = function()
 		if vim.wo[0].diff then
-			map(
-				{ "n", "v" },
-				"<Leader>dfo",
-				"<CMD>diffget<CR>",
-				{ desc = "Get the text from the other buffer to this one" }
-			)
-			map(
-				{ "n", "v" },
-				"<Leader>dfp",
-				"<CMD>diffput<CR>",
-				{ desc = "Put the text from this buffer to the other" }
-			)
+			map({ "n", "v" }, "<Leader>dfo", "<CMD>diffget<CR>", { desc = "Get the text from the other buffer to this one" })
+			map({ "n", "v" }, "<Leader>dfp", "<CMD>diffput<CR>", { desc = "Put the text from this buffer to the other" })
 		end
 	end,
 })
@@ -269,31 +235,25 @@ vim.api.nvim_create_autocmd("BufReadPost", {
 vim.api.nvim_create_autocmd("BufReadPost", {
 	pattern = "*.lua",
 	callback = function()
-		map("n", "<Leader>lx", function()
-			Snacks.scratch()
-		end, { desc = "toggle scratch buffer" })
-		map("n", "<Leader>lX", function()
-			Snacks.scratch.select()
-		end, { desc = "select scratch buffer" })
+		map("n", "<Leader>lx", function() Snacks.scratch() end, { desc = "scratch buffer" })
+		map("n", "<Leader>lX", function() Snacks.scratch.select() end, { desc = "select scratch buffer" })
 	end,
 })
 
 -- Extras/Fun stuff
 map("n", "<Leader>x", "", { desc = "Extras" })
-map("n", "<Leader>xa", function()
-	require("ascii").preview()
-end, { desc = "Ascii art picker" })
+map("n", "<Leader>xa", function() require("ascii").preview() end, { desc = "Ascii art picker" })
 map("n", "<Leader>xN", function()
-	Snacks.win({
-		file = vim.api.nvim_get_runtime_file("doc/news.txt", false)[1],
-		width = 90,
-		height = 0.6,
-		wo = {
-			spell = false,
-			wrap = false,
-			signcolumn = "yes",
-			statuscolumn = " ",
-			conceallevel = 3,
-		},
-	})
-end, { desc = "Neovim News" })
+		Snacks.win({
+			file = vim.api.nvim_get_runtime_file("doc/news.txt", false)[1],
+			width = 90,
+			height = 0.6,
+			wo = {
+				spell = false,
+				wrap = false,
+				signcolumn = "yes",
+				statuscolumn = " ",
+				conceallevel = 3,
+			},
+		})
+	end, { desc = "Neovim News" })
