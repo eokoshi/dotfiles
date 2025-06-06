@@ -69,12 +69,14 @@ unset color_prompt force_color_prompt
 if [[ "$TERM_PROGRAM" == "vscode" ]]; then
     unset PROMPT_COMMAND
     # PS1=$'\e[0;94m\]\uE0Ba\e[0;37m\]\e[0;104m\] \\w \e[00m\]\e[0;94m\]\uE0b0\e[00m\] '
-    PS1=$'\n\[\e[02;32m\]\w\[\e[00m\]\$ '
+    PS1=$'\[\e[02;32m\]\w\[\e[00m\]\$ '
+	PS1="\n$PS1"
 fi
 
 if [[ -n "$NVIM" || -n "$RSTUDIO" ]]; then
     unset PROMPT_COMMAND
-    PS1=$'\n\[\e[00;32m\]\w ❯ \[\e[00m\]'
+    PS1=$'\[\e[00;32m\]\w ❯ \[\e[00m\]'
+	PS1="\n$PS1"
 fi
     
 
