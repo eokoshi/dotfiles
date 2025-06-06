@@ -3,7 +3,7 @@ return {
 	version = "*",
 	opts = {
 		mappings = {
-			v = {},
+			v = nil,
 		},
 	},
 }

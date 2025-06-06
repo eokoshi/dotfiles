@@ -2,7 +2,7 @@ return {
 	{
 		"luukvbaal/statuscol.nvim",
 		enabled = true,
-		event = "VeryLazy",
+		event = "BufAdd",
 		init = function()
 			vim.opt.number = true
 			vim.opt.relativenumber = true

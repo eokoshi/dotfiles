@@ -22,7 +22,7 @@ vim.g.maplocalleader = " "
 -- Basic operations
 map("n", "<Leader>c", function() Snacks.bufdelete() end, { desc = "Close buffer" })
 map("n", "<Leader>e", function() Snacks.explorer() end, { desc = "File explorer" })
-map("n", "<Leader>n", function() Snacks.picker.notifications({ layout = { preset = "vertical" } }) end, { desc = "Notification history" })
+map("n", "<Leader>n", function() functions.notifications_picker() end, { desc = "Notification history" })
 map("n", "<Leader>h", function() Snacks.dashboard() end, { desc = "Home" })
 map("n", "<Leader>q", "<CMD>q<CR>", { desc = "Quit window" })
 map("n", "<Leader>Q", "<CMD>qa<CR>", { desc = "Quit nvim" })

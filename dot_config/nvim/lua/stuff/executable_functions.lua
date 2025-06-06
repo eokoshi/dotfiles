@@ -36,4 +36,21 @@ function M.DOS_to_Unix()
 	vim.cmd("set ff?")
 end
 
+function M.notifications_picker()
+	require("snacks").picker.notifications({
+		layout = {
+			preset = "vertical",
+			layout = {
+				min_width = 100,
+				on_win = function()
+					vim.opt.wrap = true
+				end,
+				on_close = function()
+					vim.opt.wrap = false
+				end,
+			},
+		},
+	})
+end
+
 return M

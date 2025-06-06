@@ -57,7 +57,7 @@ return {
 					limit = 10,
 				},
 				{
-					sections = "startup",
+					section = "startup",
 				},
 			},
 		},
