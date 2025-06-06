@@ -33,10 +33,10 @@ return {
 				},
 				view = "mini",
 			},
-			{
-				filter = { event = "msg_show", min_height = 5 },
-				view = "split",
-			},
+			-- {
+			-- 	filter = { event = "msg_show", min_height = 5 },
+			-- 	view = "split",
+			-- },
 		},
 	},
 }
