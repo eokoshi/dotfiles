@@ -13,6 +13,13 @@ return {
 	},
 	{
 		"ribru17/bamboo.nvim",
+		lazy = true,
+		opts = {},
+	},
+	{
+		"rebelot/kanagawa.nvim",
+		lazy = true,
+		opts = {},
 	},
 	{
 		"olimorris/onedarkpro.nvim",

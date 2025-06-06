@@ -21,7 +21,7 @@ vim.g.maplocalleader = " "
 
 -- Basic operations
 map("n", "<Leader>c", function() Snacks.bufdelete() end, { desc = "Close buffer" })
-map("n", "<Leader>e", function() Snacks.explorer() end, { desc = "File explorer" })
+map("n", "<Leader>e", function() Snacks.explorer({ exclude = {".gitattributes", "__**__", }, follow_file = true, hidden = true, ignored = true, follow = true}) end, { desc = "File explorer" })
 map("n", "<Leader>n", function() functions.notifications_picker() end, { desc = "Notification history" })
 map("n", "<Leader>h", function() Snacks.dashboard() end, { desc = "Home" })
 map("n", "<Leader>q", "<CMD>q<CR>", { desc = "Quit window" })
@@ -184,9 +184,11 @@ map("n", "<Leader>dE", function() vim.ui.input({ prompt = "Expression: " }, func
 
 -- Terminal
 map("n", "<Leader>t", "", { desc = "Terminal" })
-map("n", "<Leader>tt", function() Snacks.terminal() end, { desc = "open terminal" })
--- map("n", "<Leader>tf", function() Snacks.terminal.open("echo hi", { auto_close = false, auto_insert = true }) end, { desc = "open floating terminal" })
-map({ "n", "t", "i" }, "<F7>", function() Snacks.terminal.toggle() end, { desc = "toggle terminal" })
+map("n", "<Leader>tv", function() Snacks.terminal.get("/bin/bash", { win = {wo = {statuscolumn = " "}, position = "bottom", border = "hpad", height = 12}, auto_close=true}) end, { desc = "bottom terminal" })
+map("n", "<Leader>th", function() Snacks.terminal.get("/bin/bash", { win = {wo = {statuscolumn = " "}, position = "right"}, auto_close=true}) end, { desc = "right terminal" })
+map("n", "<Leader>tf", function() Snacks.terminal.get("/bin/bash", { win = {wo = {statuscolumn = " "}, position = "float", border = "rounded", backdrop = 100}, auto_close = true }) end, { desc = "floating terminal" })
+map("n", "<Leader>tt", function() Snacks.terminal.toggle("/bin/bash", { win = {wo = {statuscolumn = " "}, position = "bottom", border = "hpad", height = 12}, auto_close=true}) end, { desc = "toggle terminal" })
+map({ "n", "t", "i" }, "<F7>", function() Snacks.terminal.toggle("/bin/bash", { win = {wo = {statuscolumn = " "}, position = "bottom", border = "hpad", height = 12}, auto_close=true}) end, { desc = "toggle terminal" })
 
 -- Package/Plugin Management
 map("n", "<Leader>p", "", { desc = "Packages" })

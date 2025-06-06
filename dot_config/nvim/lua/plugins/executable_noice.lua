@@ -17,7 +17,7 @@ return {
 		},
 		views = {
 			split = {
-				enter = true,
+				enter = false,
 				size = "30%",
 			},
 		},

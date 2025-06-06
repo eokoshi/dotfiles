@@ -14,7 +14,20 @@ return {
 				header = table.concat(require("ascii").art.animals.cats.boxy, "\n"),
 				keys = {
 					{ icon = " ", key = "n", desc = "New File", action = ":ene | startinsert" },
-					{ icon = "󰙅 ", key = "e", desc = "File Explorer", action = ":lua Snacks.explorer.open()" },
+					{
+						icon = "󰙅 ",
+						key = "e",
+						desc = "File Explorer",
+						action = function()
+							Snacks.explorer({
+								exclude = { ".gitattributes", "__**__" },
+								follow_file = true,
+								hidden = true,
+								ignored = true,
+								follow = true,
+							})
+						end,
+					},
 					{ icon = " ", key = "f", desc = "Find File", action = ":lua Snacks.dashboard.pick('files')" },
 					{
 						icon = " ",
@@ -61,12 +74,22 @@ return {
 				},
 			},
 		},
-		explorer = {
-			enabled = true,
-		},
+		explorer = { enabled = true },
 		indent = { enabled = true },
 		input = { enabled = true },
-		picker = { enabled = true },
+		picker = {
+			enabled = true,
+			sources = {
+				explorer = {
+					opts = {
+						follow_file = true,
+						hidden = true,
+						ignored = true,
+						follow = true,
+					},
+				},
+			},
+		},
 		notifier = { enabled = true },
 		quickfile = { enabled = true },
 		scope = { enabled = true },
