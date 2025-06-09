@@ -1,4 +1,3 @@
----@type LazySpec
 return {
 	{
 		"mason-org/mason-lspconfig.nvim",
@@ -9,13 +8,16 @@ return {
 		config = function()
 			require("mason").setup()
 			require("mason-lspconfig").setup()
-		end,
-		settings = {
-			Lua = {
-				format = {
-					enable = false,
+
+			vim.lsp.config("lua_ls", {
+				settings = {
+					Lua = {
+						format = {
+							enable = false,
+						},
+					},
 				},
-			},
-		},
+			})
+		end,
 	},
 }

@@ -1,8 +1,7 @@
 return {
 	"folke/snacks.nvim",
-	dependencies = {
-		"MaximilianLloyd/ascii.nvim",
-	},
+	version = "*",
+	dependencies = {},
 	priority = 1000,
 	lazy = false,
 	---@type snacks.Config
@@ -77,22 +76,20 @@ return {
 		explorer = { enabled = true },
 		indent = { enabled = true },
 		input = { enabled = true },
-		picker = {
-			enabled = true,
-			sources = {
-				explorer = {
-					opts = {
-						follow_file = true,
-						hidden = true,
-						ignored = true,
-						follow = true,
-					},
-				},
-			},
-		},
+		picker = { enabled = true },
 		notifier = { enabled = true },
 		quickfile = { enabled = true },
 		scope = { enabled = true },
+		-- scratch = {
+		-- 	enabled = true,
+		-- 	win = {
+		-- 		wo = {
+		-- 			number = false,
+		-- 			relativenumber = true,
+		-- 			statuscolumn = "%l %s",
+		-- 		},
+		-- 	},
+		-- },
 		statuscolumn = { enabled = false },
 	},
 	init = function()
