@@ -1,6 +1,6 @@
 local function has_words_before()
 	local line, col = (unpack or table.unpack)(vim.api.nvim_win_get_cursor(0))
-	return col ~= 0 and vim.api.nvim_buf_get_lines(0, line - 1, line, true)[1]:sub(col, col):match "%s" == nil
+	return col ~= 0 and vim.api.nvim_buf_get_lines(0, line - 1, line, true)[1]:sub(col, col):match("%s") == nil
 end
 
 ---@type function?, function?
@@ -12,16 +12,18 @@ local function get_kind_icon(CTX)
 		local _, mini_icons = pcall(require, "mini.icons")
 		if _G.MiniIcons then
 			icon_provider = function(ctx)
-				local is_specific_color = ctx.kind_hl and ctx.kind_hl:match "^HexColor" ~= nil
+				local is_specific_color = ctx.kind_hl and ctx.kind_hl:match("^HexColor") ~= nil
 				if ctx.item.source_name == "LSP" then
 					local icon, hl = mini_icons.get("lsp", ctx.kind or "")
 					if icon then
 						ctx.kind_icon = icon
-						if not is_specific_color then ctx.kind_hl = hl end
+						if not is_specific_color then
+							ctx.kind_hl = hl
+						end
 					end
 				elseif ctx.item.source_name == "Path" then
-					ctx.kind_icon, ctx.kind_hl = mini_icons.get(ctx.kind == "Folder" and "directory" or "file", ctx
-						.label)
+					ctx.kind_icon, ctx.kind_hl =
+						mini_icons.get(ctx.kind == "Folder" and "directory" or "file", ctx.label)
 				elseif ctx.item.source_name == "Snippets" then
 					ctx.kind_icon, ctx.kind_hl = mini_icons.get("lsp", "snippet")
 				end
@@ -33,15 +35,21 @@ local function get_kind_icon(CTX)
 				icon_provider = function(ctx)
 					if ctx.item.source_name == "LSP" then
 						local icon = lspkind.symbolic(ctx.kind, { mode = "symbol" })
-						if icon then ctx.kind_icon = icon end
+						if icon then
+							ctx.kind_icon = icon
+						end
 					elseif ctx.item.source_name == "Snippets" then
 						local icon = lspkind.symbolic("snippet", { mode = "symbol" })
-						if icon then ctx.kind_icon = icon end
+						if icon then
+							ctx.kind_icon = icon
+						end
 					end
 				end
 			end
 		end
-		if not icon_provider then icon_provider = function() end end
+		if not icon_provider then
+			icon_provider = function() end
+		end
 	end
 	-- Evaluate highlight provider
 	if not hl_provider then
@@ -49,21 +57,27 @@ local function get_kind_icon(CTX)
 		if highlight_colors_avail then
 			local kinds
 			hl_provider = function(ctx)
-				if not kinds then kinds = require("blink.cmp.types").CompletionItemKind end
+				if not kinds then
+					kinds = require("blink.cmp.types").CompletionItemKind
+				end
 				if ctx.item.kind == kinds.Color then
 					local doc = vim.tbl_get(ctx, "item", "documentation")
 					if doc then
-						local color_item = highlight_colors_avail and
-							highlight_colors.format(doc, { kind = kinds[kinds.Color] })
+						local color_item = highlight_colors_avail
+							and highlight_colors.format(doc, { kind = kinds[kinds.Color] })
 						if color_item and color_item.abbr_hl_group then
-							if color_item.abbr then ctx.kind_icon = color_item.abbr end
+							if color_item.abbr then
+								ctx.kind_icon = color_item.abbr
+							end
 							ctx.kind_hl = color_item.abbr_hl_group
 						end
 					end
 				end
 			end
 		end
-		if not hl_provider then hl_provider = function() end end
+		if not hl_provider then
+			hl_provider = function() end
+		end
 	end
 	-- Call resolved providers
 	icon_provider(CTX)
@@ -97,7 +111,9 @@ return {
 				"select_next",
 				"snippet_forward",
 				function(cmp)
-					if has_words_before() or vim.api.nvim_get_mode().mode == "c" then return cmp.show() end
+					if has_words_before() or vim.api.nvim_get_mode().mode == "c" then
+						return cmp.show()
+					end
 				end,
 				"fallback",
 			},
@@ -105,7 +121,9 @@ return {
 				"select_prev",
 				"snippet_backward",
 				function(cmp)
-					if vim.api.nvim_get_mode().mode == "c" then return cmp.show() end
+					if vim.api.nvim_get_mode().mode == "c" then
+						return cmp.show()
+					end
 				end,
 				"fallback",
 			},
@@ -114,15 +132,21 @@ return {
 		completion = {
 			list = { selection = { preselect = true, auto_insert = true } },
 			menu = {
-				auto_show = function(ctx) return ctx.mode ~= "cmdline" end,
+				auto_show = function(ctx)
+					return ctx.mode ~= "cmdline"
+				end,
 				border = "rounded",
 				winhighlight = "Normal:NormalFloat,FloatBorder:FloatBorder,CursorLine:PmenuSel,Search:None",
 				draw = {
 					treesitter = { "lsp" },
 					components = {
 						kind_icon = {
-							text = function(ctx) return get_kind_icon(ctx).text end,
-							highlight = function(ctx) return get_kind_icon(ctx).highlight end,
+							text = function(ctx)
+								return get_kind_icon(ctx).text
+							end,
+							highlight = function(ctx)
+								return get_kind_icon(ctx).highlight
+							end,
 						},
 					},
 				},
