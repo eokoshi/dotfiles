@@ -21,7 +21,7 @@ vim.g.maplocalleader = " "
 
 -- Basic operations
 map("n", "<Leader>c", function() Snacks.bufdelete() end, { desc = "Close buffer" })
-map("n", "<Leader>e", function() Snacks.explorer({ exclude = {".gitattributes", "__**__", }, follow_file = true, hidden = true, ignored = true, follow = true}) end, { desc = "File explorer" })
+map("n", "<Leader>e", function() Snacks.explorer({ exclude = {".gitattributes", "__**__", }, follow_file = true, hidden = true, ignored = true, follow = true, }) end, { desc = "File explorer" })
 map("n", "<Leader>n", function() functions.notifications_picker() end, { desc = "Notification history" })
 map("n", "<Leader>h", function() Snacks.dashboard() end, { desc = "Home" })
 map("n", "<Leader>q", "<CMD>q<CR>", { desc = "Quit window" })

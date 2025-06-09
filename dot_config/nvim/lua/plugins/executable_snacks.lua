@@ -80,16 +80,17 @@ return {
 		notifier = { enabled = true },
 		quickfile = { enabled = true },
 		scope = { enabled = true },
-		-- scratch = {
-		-- 	enabled = true,
-		-- 	win = {
-		-- 		wo = {
-		-- 			number = false,
-		-- 			relativenumber = true,
-		-- 			statuscolumn = "%l %s",
-		-- 		},
-		-- 	},
-		-- },
+		scratch = {
+			enabled = true,
+			win = {
+				wo = {
+					number = true,
+					relativenumber = false,
+					numberwidth = 2,
+					statuscolumn = "%l %s",
+				},
+			},
+		},
 		statuscolumn = { enabled = false },
 	},
 	init = function()
