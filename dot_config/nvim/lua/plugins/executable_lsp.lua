@@ -34,6 +34,9 @@ return {
 								"lua/?/init.lua",
 							},
 						},
+						format = {
+							enable = false,
+						},
 						-- Make the server aware of Neovim runtime files
 						workspace = {
 							checkThirdParty = false,
@@ -43,13 +46,6 @@ return {
 						},
 					})
 				end,
-				settings = {
-					Lua = {
-						format = {
-							enable = false,
-						},
-					},
-				},
 			})
 		end,
 	},

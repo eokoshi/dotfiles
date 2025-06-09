@@ -92,7 +92,7 @@ map("n", "<Leader>f<CR>", function() Snacks.picker.resume() end, { desc = "Resum
 
 -- Buffer
 map("n", "<Leader>b", "", { desc = "Buffers" })
-map("n", "<Leader>bF", function() functions.DOS_to_Unix() end, { desc = "DOS to Unix" })
+map("n", "<Leader>bD", function() functions.DOS_to_Unix() end, { desc = "DOS to Unix" })
 toggles.autosave():map("<Leader>ba")
 
 -- UI
