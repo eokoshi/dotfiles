@@ -8,7 +8,6 @@ return {
 	opts = {
 		bigfile = { enabled = true },
 		dashboard = {
-			enabled = true,
 			preset = {
 				header = table.concat(require("ascii").art.animals.cats.boxy, "\n"),
 				keys = {
@@ -18,13 +17,13 @@ return {
 						key = "e",
 						desc = "File Explorer",
 						action = function()
-							Snacks.explorer({
+							Snacks.explorer(vim.tbl_deep_extend("keep", {
 								exclude = { ".gitattributes", "__**__" },
 								follow_file = true,
 								hidden = true,
 								ignored = true,
 								follow = true,
-							})
+							}, require("snacks.picker.config.sources").explorer))
 						end,
 					},
 					{ icon = " ", key = "f", desc = "Find File", action = ":lua Snacks.dashboard.pick('files')" },
@@ -81,7 +80,6 @@ return {
 		quickfile = { enabled = true },
 		scope = { enabled = true },
 		scratch = {
-			enabled = true,
 			win = {
 				wo = {
 					number = true,
@@ -89,6 +87,7 @@ return {
 					numberwidth = 2,
 					statuscolumn = "%l %s",
 				},
+				relative = "editor",
 			},
 		},
 		statuscolumn = { enabled = false },
