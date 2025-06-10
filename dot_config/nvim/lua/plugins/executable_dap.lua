@@ -17,6 +17,7 @@ return {
 					end,
 					python = function(config)
 						config.adapters = {
+							type = "executable",
 							cwd = "${workspaceFolder}",
 							python = "${workspaceFolder}/.venv/bin/python",
 						}
