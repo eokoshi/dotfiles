@@ -11,10 +11,6 @@ return {
 			command_palette = true, -- position the cmdline and popupmenu together
 			lsp_doc_border = true, -- add a border to hover docs and signature help
 		},
-		override = {
-			["vim.lsp.util.convert_input_to_markdown_lines"] = true,
-			["vim.lsp.util.stylize_markdown"] = true,
-		},
 		views = {
 			split = {
 				enter = false,
@@ -38,5 +34,6 @@ return {
 			-- 	view = "split",
 			-- },
 		},
+		lsp = {},
 	},
 }

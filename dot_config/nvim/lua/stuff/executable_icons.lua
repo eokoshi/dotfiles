@@ -45,6 +45,7 @@ return {
 		top = "",
 		bottom = "",
 		center = "󰘢",
+		list = "󰉹",
 	},
 	debug = {
 		breakpoint = "",

@@ -27,6 +27,7 @@ return {
 				{ pattern = "top", icon = icons.basic.top, color = "azure" },
 				{ pattern = "bottom", icon = icons.basic.bottom, color = "azure" },
 				{ pattern = "center", icon = icons.basic.center, color = "azure" },
+				{ pattern = "list", icon = icons.basic.list, color = "blue" },
 			},
 		},
 	},

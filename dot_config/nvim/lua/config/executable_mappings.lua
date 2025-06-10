@@ -93,6 +93,7 @@ map("n", "<Leader>f<CR>", function() Snacks.picker.resume() end, { desc = "Resum
 -- Buffer
 map("n", "<Leader>b", "", { desc = "Buffers" })
 map("n", "<Leader>bD", function() functions.DOS_to_Unix() end, { desc = "DOS to Unix" })
+map("n", "<Leader>bc", function() Snacks.bufdelete.other() end, { desc = "Close all other bufs" })
 toggles.autosave():map("<Leader>ba")
 
 -- UI
@@ -147,8 +148,8 @@ map("n", "<Leader>lS", function() Snacks.picker.lsp_workspace_symbols() end, { d
 map("n", "gd", function() Snacks.picker.lsp_definitions() end, { desc = "Goto definition" })
 map("n", "gD", function() Snacks.picker.lsp_declarations() end, { desc = "Goto Declaration" })
 map("n", "gr", function() Snacks.picker.lsp_references() end, { nowait = true, desc = "references" })
-map("n", "gI", function() Snacks.picker.lsp_implementations() end, { desc = "Goto Implementation" })
-map("n", "gy", function() Snacks.picker.lsp_type_definitions() end, { desc = "Goto t[y]pe definition" })
+map("n", "gI", function() Snacks.picker.lsp_implementations() end, { desc = "Go to Implementation" })
+map("n", "gp", function() Snacks.picker.lsp_type_definitions() end, { desc = "Go to ty[p]e definition" })
 map("n", "gco", "o<Esc>Vcx<Esc><Cmd>normal gcc<CR>fxa<BS>", { desc = "Add comment below" })
 map("n", "gcO", "O<Esc>Vcx<Esc><Cmd>normal gcc<CR>fxa<BS>", { desc = "Add comment above" })
 

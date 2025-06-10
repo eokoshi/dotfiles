@@ -58,7 +58,7 @@ end
 return {
 	{
 		"eokoshi/lualine.nvim",
-		event = "VeryLazy",
+		lazy = false,
 		opts = {
 			options = {
 				theme = "auto",
@@ -115,6 +115,10 @@ return {
 					},
 				},
 				lualine_x = {
+					{
+						"codecompanion",
+						color = "lualine_c_diagnostics_error_insert",
+					},
 					{
 						get_attached_clients,
 					},

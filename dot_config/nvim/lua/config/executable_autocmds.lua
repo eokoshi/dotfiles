@@ -69,3 +69,11 @@ vim.api.nvim_create_autocmd("BufEnter", {
 	end,
 	desc = "Remove colorcolumn in nofile buffers",
 })
+
+vim.api.nvim_create_autocmd("BufEnter", {
+	callback = function()
+		require("noice").disable()
+		require("noice").enable()
+	end,
+	desc = "Reload Noice on bufenter",
+})
