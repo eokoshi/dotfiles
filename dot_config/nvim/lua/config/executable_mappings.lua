@@ -168,6 +168,7 @@ map("n", "<Leader>dc", function() require("dap").continue() end, {desc = "Start/
 map("v", "<Leader>dE", function() require("dapui").eval() end, {desc = "Evaluate Input" })
 map("n", "<Leader>dh", function() require("dap.ui.widgets").hover() end, {desc = "Debugger Hover" })
 map("n", "<Leader>di", function() require("dap").step_into() end, {desc = "Step Into (F11)" })
+map("n", "<Leader>dj", "<CMD>e $PWD/.vscode/launch.json", {desc = "Open workspace DAP config" })
 map("n", "<Leader>do", function() require("dap").step_over() end, {desc = "Step Over (F10)" })
 map("n", "<Leader>dO", function() require("dap").step_out() end, {desc = "Step Out (S-F11)" })
 map("n", "<Leader>dp", function() require("dap").pause() end, {desc = "Pause (F6)" })
@@ -177,7 +178,7 @@ map("n", "<Leader>dr", function() require("dap").restart_frame() end, {desc = "R
 map("n", "<Leader>dR", function() require("dap").repl.toggle() end, { desc = "Toggle REPL" })
 map("n", "<Leader>ds", function() require("dap").run_to_cursor() end, {desc = "Run To Cursor" })
 -- map("n", "<Leader>du", function() require("dapui").toggle() end, {desc = "Toggle Debugger UI" })
-map("n", "<Leader>du", function() require("dap-view").toggle() end, {desc = "Toggle Debugger UI" })
+map("n", "<Leader>du", function() require("dap-view").toggle(true) end, {desc = "Toggle Debugger UI" })
 map("n", "<F21>", function() vim.ui.input({ prompt = "Condition: " }, function(condition) if condition then require("dap").set_breakpoint(condition) end end) end, { desc = "Debugger: Conditional Breakpoint" }) -- Shift+F9
 map("n", "<Leader>dC", function() vim.ui.input({ prompt = "Condition: " }, function(condition) if condition then require("dap").set_breakpoint(condition) end end) end, {desc = "Conditional Breakpoint (S-F9)" })
 map("n", "<Leader>dE", function() vim.ui.input({ prompt = "Expression: " }, function(expr) if expr then require("dapui").eval(expr, { enter = true }) end end) end, {desc = "Evaluate Input"})

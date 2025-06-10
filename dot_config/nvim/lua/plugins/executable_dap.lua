@@ -8,22 +8,7 @@ return {
 		config = function()
 			require("mason").setup()
 			require("mason-nvim-dap").setup({
-				handlers = {
-					function(config)
-						-- all sources with no handler get passed here
-
-						-- Keep original functionality
-						require("mason-nvim-dap").default_setup(config)
-					end,
-					python = function(config)
-						config.adapters = {
-							type = "executable",
-							cwd = "${workspaceFolder}",
-							python = "${workspaceFolder}/.venv/bin/python",
-						}
-						require("mason-nvim-dap").default_setup(config) -- don't forget this!
-					end,
-				},
+				handlers = {},
 			})
 		end,
 	},
@@ -32,8 +17,10 @@ return {
 		---@module 'dap-view'
 		---@type dapview.Config
 		opts = {
-			controls = {
-				enabled = true,
+			winbar = {
+				controls = {
+					enabled = true,
+				},
 			},
 			windows = {
 				height = 20,
@@ -45,17 +32,23 @@ return {
 		},
 		init = function()
 			local dap, dv = require("dap"), require("dap-view")
+			local state = require("dap-view.state")
 			dap.listeners.before.attach["dap-view-config"] = function()
 				dv.open()
+				require("dap-view.term.init").hide_term_buf_win()
+				dv.jump_to_view("scopes")
 			end
 			dap.listeners.before.launch["dap-view-config"] = function()
 				dv.open()
+				require("dap-view.term.init").hide_term_buf_win()
+				dv.jump_to_view("scopes")
 			end
 			dap.listeners.before.event_terminated["dap-view-config"] = function()
-				dv.close()
+				dv.close(true)
 			end
 			dap.listeners.before.event_exited["dap-view-config"] = function()
-				dv.close()
+				dv.close(true)
+				vim.api.nvim_buf_delete(state.term_bufnr, { force = true })
 			end
 		end,
 	},
