@@ -14,40 +14,26 @@ if not (vim.uv or vim.loop).fs_stat(lazypath) then
 	end
 end
 vim.opt.rtp:prepend(lazypath)
+vim.opt.statuscolumn = "%s "
 
 require("lazy").setup({
 	spec = {
 		{ import = "plugins" },
 	},
+	-- defaults = {
+	-- 	version = "*",
+	-- },
 	checker = { enabled = true },
 	ui = {
 		size = {
-			width = 0.7,
-			height = 0.7,
+			width = 0.8,
+			height = 0.8,
 		},
 		border = "rounded",
 		wrap = false,
 		install = {
 			colorscheme = { "wildcharm" },
 		},
-
-		icons = {
-			cmd = "  ",
-			config = "  ",
-			event = "  ",
-			ft = "  ",
-			init = "  ",
-			imports = "  ",
-			keys = "  ",
-			lazy = " ",
-			loaded = " ",
-			not_loaded = " ",
-			plugin = "  ",
-			runtime = "  ",
-			require = "  ",
-			source = " ",
-			start = "",
-			task = "  ",
-		},
+		icons = require("stuff.icons").lazy,
 	},
 })
