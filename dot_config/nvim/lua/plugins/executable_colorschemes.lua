@@ -49,7 +49,17 @@ return {
 			vim.g.edge_enable_italic = 1
 		end,
 	},
-	{ "ellisonleao/gruvbox.nvim", lazy = true },
+	{
+		"sainnhe/gruvbox-material",
+		lazy = true,
+		config = function()
+			vim.g.gruvbox_material_foreground = "material"
+			vim.g.gruvbox_material_background = "medium"
+			vim.g.gruvbox_material_enable_italic = 1
+			vim.g.gruvbox_material_enable_bold = 1
+			vim.g.gruvbox_better_performance = 1
+		end,
+	},
 	{
 		"folke/tokyonight.nvim",
 		lazy = true,

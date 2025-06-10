@@ -29,6 +29,7 @@ return {
 				{ pattern = "center", icon = icons.whichkey.center, color = "azure" },
 				{ pattern = "list", icon = icons.whichkey.list, color = "blue" },
 				{ pattern = "chatbot", icon = icons.whichkey.ai, color = "gray" },
+				{ pattern = "markdown", icon = icons.whichkey.markdown, color = "purple" },
 			},
 		},
 	},

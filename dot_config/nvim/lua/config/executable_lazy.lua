@@ -14,7 +14,6 @@ if not (vim.uv or vim.loop).fs_stat(lazypath) then
 	end
 end
 vim.opt.rtp:prepend(lazypath)
-vim.opt.statuscolumn = "%s "
 
 require("lazy").setup({
 	spec = {

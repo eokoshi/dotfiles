@@ -239,6 +239,10 @@ vim.api.nvim_create_autocmd("BufReadPost", {
 	callback = function()
 		map("n", "<Leader>m", "", { desc = "Markdown" })
 		map("n", "<Leader>mm", "<CMD>lua require('nabla').popup({border = 'solid'})<CR>", { desc = "Show math popup" })
+		map("n", "<Leader>mt", "<CMD>ObsidianToday<CR>", { desc = "today's note" })
+		map("n", "<Leader>my", "<CMD>ObsidianYesterday<CR>", { desc = "yesterday's note" })
+		map("n", "<Leader>mf", "<CMD>ObsidianYesterday<CR>", { desc = "find daily notes" })
+		map("n", "<Leader>mn", "<CMD>ObsidianNewFromTemplate<CR>", { desc = "new from template" })
 		toggles.math_virt():map("<Leader>um")
 	end,
 })

@@ -46,6 +46,7 @@ return {
 		center = "󰘢",
 		list = "󰉹",
 		ai = "󱚡",
+		markdown = "",
 	},
 	debug = {
 		breakpoint = "",
