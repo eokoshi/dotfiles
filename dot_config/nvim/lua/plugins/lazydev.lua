@@ -6,7 +6,7 @@ return {
 	},
 	{
 		"saghen/blink.cmp",
-		opts_extend = { "sources.default", "cmdline.sources", "term.sources" },
+		opts_extend = { "sources.default", "sources.providers" },
 		opts = {
 			sources = {
 				-- add lazydev to your completion providers
