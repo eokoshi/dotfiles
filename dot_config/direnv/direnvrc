@@ -21,7 +21,7 @@ layout_python() {
       export VIRTUAL_ENV_PROMPT='.venv'
     fi
 
-    VIRTUAL_ENV=.venv
+	VIRTUAL_ENV="$PWD/.venv"
 
     case $ve in
     "venv")
