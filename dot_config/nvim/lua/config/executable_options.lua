@@ -1,7 +1,5 @@
 local icons = require("stuff.icons")
 
-vim.cmd.colorscheme("edge")
-
 vim.opt.autowrite = true -- Enable auto write
 vim.opt.clipboard = "unnamedplus" -- Sync with system clipboard
 vim.opt.colorcolumn = "+1"

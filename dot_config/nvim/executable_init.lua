@@ -13,3 +13,5 @@ if vim.g.neovide then
 end
 
 require("config.final")
+
+vim.cmd.colorscheme("everforest")

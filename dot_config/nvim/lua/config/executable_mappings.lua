@@ -125,7 +125,7 @@ map("n", "<Leader>gb", function() Snacks.picker.git_branches() end, { desc = "gi
 map({ "n", "v" }, "<Leader>gB", function() Snacks.gitbrowse() end, { desc = "git browse" })
 map("n", "<Leader>gd", function() Snacks.picker.git_diff() end, { desc = "git diff (hunks)" })
 map("n", "<Leader>gf", function() Snacks.picker.git_log_file() end, { desc = "git log file" })
-map("n", "<Leader>gg", function() Snacks.lazygit() end, { desc = "lazygit" })
+map("n", "<Leader>gg", function() Snacks.lazygit({win = {border = "rounded"}}) end, { desc = "lazygit" })
 map("n", "<Leader>gl", function() Snacks.picker.git_log() end, { desc = "git log" })
 map("n", "<Leader>gL", function() Snacks.picker.git_log_line() end, { desc = "git log line" })
 map("n", "<Leader>gs", function() Snacks.picker.git_status() end, { desc = "git status" })
