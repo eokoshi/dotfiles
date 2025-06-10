@@ -34,6 +34,5 @@ return {
 			-- 	view = "split",
 			-- },
 		},
-		lsp = {},
 	},
 }

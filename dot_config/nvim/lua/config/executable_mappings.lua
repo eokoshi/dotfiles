@@ -204,6 +204,14 @@ map("n", "<Leader>pa", function() vim.ui.input({ prompt = "Edit plugin spec" }, 
 	end) end, { desc = "add plugin" })
 
 
+-- LLM chatbot
+map({"n", "v"}, "<Leader>a", "", { desc = "Chatbot" })
+map({"n", "v"}, "<Leader>aa", "<CMD>CodeCompanionActions<CR>", { desc = "actions" })
+map({ "n", "v" }, "<Leader>at", "<CMD>CodeCompanionChat Toggle<CR>", { desc = "toggle chat window" })
+map({ "n", "v" }, "<Leader>ai", function() vim.ui.input({ prompt = "Inline Assistant"}, function(input) vim.cmd("CodeCompanion " .. input) end) end, { desc = "toggle chat window" })
+map("v", "ga", "<CMD>CodeCompanionChat Add<CR>", { desc = "add visual selection to chat" })
+vim.cmd([[cab cc CodeCompanion]])
+
 -- Blink completion
 vim.keymap.del("i", "<Tab>")
 

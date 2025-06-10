@@ -27,7 +27,7 @@ return {
 		foldline_fill = "",
 		foldsep = " ",
 	},
-	basic = {
+	whichkey = {
 		buffer = "",
 		explorer = "󱏒",
 		undotree = "󰕍",
@@ -39,13 +39,13 @@ return {
 		home = "",
 		cd = "",
 		math = "󰒠",
-		fold = "",
 		right = "󱦰",
 		left = "󱦱",
 		top = "",
 		bottom = "",
 		center = "󰘢",
 		list = "󰉹",
+		ai = "󱚡",
 	},
 	debug = {
 		breakpoint = "",

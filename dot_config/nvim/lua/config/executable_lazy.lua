@@ -25,6 +25,7 @@ require("lazy").setup({
 	-- },
 	checker = { enabled = true },
 	ui = {
+		title = " 󰒲 lazy.nvim ",
 		size = {
 			width = 0.8,
 			height = 0.8,
