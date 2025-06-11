@@ -169,4 +169,3 @@ export PATH="$PATH:/opt/nvim/bin"
 
 export TS_IP="$(hostname -I | awk '{print $2}')"
 export IP="$(hostname -I | awk '{print $1}')"
-export BROWSER=wslview
