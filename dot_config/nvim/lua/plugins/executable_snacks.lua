@@ -35,7 +35,7 @@ return {
 						key = "c",
 						desc = "Config",
 						action = function()
-							vim.fn.chdir(vim.fn.stdpath("config"))
+							vim.fn.chdir(os.getenv("HOME").."/.local/share/chezmoi")
 							Snacks.explorer.open()
 						end,
 					},

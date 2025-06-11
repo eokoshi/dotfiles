@@ -5,6 +5,7 @@ vim.filetype.add({
 	},
 	extension = {
 		tmpl = "gotmpl",
+		age = "age",
 	},
 })
 

@@ -53,14 +53,14 @@ local lsp_af = vim.api.nvim_create_augroup("LspAutoformat", { clear = true })
 vim.api.nvim_create_autocmd("LspAttach", {
 	group = lsp_af,
 	callback = function(args)
-		local prior_aucmds = vim.api.nvim_get_autocmds({ group = "LspAutoformat" })
-		if next(prior_aucmds) ~= nil then
-			vim.api.nvim_del_augroup_by_name("LspAutoformat")
-			vim.api.nvim_create_augroup("LspAutoformat", { clear = true })
-		end
+		-- local prior_aucmds = vim.api.nvim_get_autocmds({ group = "LspAutoformat" })
+		-- if next(prior_aucmds) ~= nil then
+		-- 	vim.api.nvim_del_augroup_by_name("LspAutoformat")
+		-- 	vim.api.nvim_create_augroup("LspAutoformat", { clear = true })
+		-- end
 		local client = vim.lsp.get_client_by_id(args.data.client_id)
 		---@diagnostic disable-next-line: need-check-nil
-		if client:supports_method("textDocument/formatting") then
+		if client.name ~= "lua_ls" and client:supports_method("textDocument/formatting") then
 			vim.api.nvim_create_autocmd("BufWritePre", {
 				buffer = args.buf,
 				callback = function()
@@ -72,13 +72,18 @@ vim.api.nvim_create_autocmd("LspAttach", {
 	desc = "Autoformat on save",
 })
 
-
 -- Chezmoi
--- local chezmoi = vim.api.nvim_create_augroup("Chezmoi", {clear = true})
---
--- vim.api.nvim_create_autocmd("VimLeave"{
--- 	group = chezmoi,
--- 	callback = function(args)
--- 		print("hello")		
--- 	end
--- })
+local chezmoi = vim.api.nvim_create_augroup("Chezmoi", { clear = true })
+
+vim.api.nvim_create_autocmd("VimLeave", {
+	group = chezmoi,
+	callback = function(args)
+		local Job = require("plenary.job")
+		---@diagnostic disable-next-line: missing-fields
+		Job:new({
+			command = "chezmoi",
+			args = { "apply" },
+			cwd = "~",
+		}):start()
+	end,
+})

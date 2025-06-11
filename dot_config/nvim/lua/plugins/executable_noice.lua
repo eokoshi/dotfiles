@@ -12,8 +12,8 @@ return {
 	event = "VeryLazy",
 	opts = {
 		presets = {
-			bottom_search = true, -- use a classic bottom cmdline for search
-			command_palette = true, -- position the cmdline and popupmenu together
+			bottom_search = true,
+			command_palette = true,
 			lsp_doc_border = true, -- add a border to hover docs and signature help
 		},
 		views = {
@@ -48,11 +48,25 @@ return {
 			{ -- send long messages to view
 				filter = {
 					event = "msg_show",
-					min_height = 15,
+					min_height = 20,
 				},
-				view = "popup",
+				view = "split",
+			},
+			{ -- send cmdline outputs to popup
+				filter = {
+					event = "msg_show",
+					min_height = 5,
+					cmdline = true
+				},
+				view = "popup"
 			},
 		},
+		lsp = {
+			override = {
+				["vim.lsp.util.stylize_markdown"] = false,
+				["cmp.entry.get_documentation"] = false,
+			}
+		}
 	},
 	config = function(_, opts)
 		require("noice").setup(opts)

@@ -56,7 +56,6 @@ end, {
 	complete = "file",
 })
 
----@type LazySpec
 return {
 	-- Converting ipynb json to markdown
 	{

@@ -21,6 +21,7 @@ return {
 		modified = "",
 		removed = "",
 		gitbar = "┃",
+		col_delete = "_",
 	},
 	folds = {
 		foldopen = "",
@@ -28,7 +29,7 @@ return {
 		foldline_fill = "",
 		foldsep = " ",
 	},
-	whichkey = {
+	basic = {
 		buffer = "",
 		explorer = "󱏒",
 		undotree = "󰕍",
@@ -48,6 +49,7 @@ return {
 		list = "󰉹",
 		ai = "󱚡",
 		markdown = "",
+		chezmoi = "󱊹",
 	},
 	debug = {
 		bug = "",
@@ -74,5 +76,13 @@ return {
 		source = " ",
 		start = "",
 		task = "  ",
+	},
+	filetype = {
+		dotenv = "",
+		checkhealth = "󰓙",
+		tmpl = "",
+		bash = "",
+		sh = "",
+		age = "󰌋",
 	},
 }

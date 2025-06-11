@@ -11,7 +11,7 @@ return {
 			signs = {
 				add = icons.git.gitbar,
 				change = icons.git.gitbar,
-				delete = icons.git.gitbar,
+				delete = icons.git.col_delete,
 			},
 		},
 	},

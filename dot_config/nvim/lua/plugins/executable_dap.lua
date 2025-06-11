@@ -1,10 +1,12 @@
 -- stylua: ignore
 -- if true then return {} end
 
+local dap_ft = { "python" }
+
 return {
 	{
 		"jay-babu/mason-nvim-dap.nvim",
-		ft = { "python" },
+		ft = dap_ft,
 		dependencies = {
 			"mason-org/mason.nvim",
 			"mfussenegger/nvim-dap",
@@ -18,11 +20,7 @@ return {
 	},
 	{
 		"igorlfs/nvim-dap-view",
-		dependencies = {
-			"mfussenegger/nvim-dap",
-			"jay-babu/mason-nvim-dap.nvim",
-		},
-		lazy = true,
+		ft = dap_ft,
 		---@module 'dap-view'
 		---@type dapview.Config
 		opts = {

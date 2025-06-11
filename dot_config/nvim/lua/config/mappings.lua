@@ -62,8 +62,8 @@ map("n", "<C-Up>", function() require("smart-splits").resize_up() end, { desc = 
 map("n", "<C-Down>", function() require("smart-splits").resize_down() end, { desc = "Resize split down" })
 map("n", "<C-Left>", function() require("smart-splits").resize_left() end, { desc = "Resize split left" })
 map("n", "<C-Right>", function() require("smart-splits").resize_right() end, { desc = "Resize split right" })
-map({"n", "i", "s" }, "<C-u>", function() if not require("noice.lsp").scroll(-4) then return "<C-u>" end end, { desc = "Scroll up hover doc"})
-map({"n", "i", "s" }, "<C-d>", function() if not require("noice.lsp").scroll(4) then return "<C-d>" end end, { desc = "Scroll down hover doc"})
+map({"n", "i", "s"}, "<Leader>lj", function() require("noice.lsp").scroll(4) end, { desc = "Scroll hover down" })
+map({"n", "i", "s"}, "<Leader>lk", function() require("noice.lsp").scroll(-4) end, { desc = "Scroll hover up" })
 
 -- Find
 map("n", "<Leader>f", "", { desc = "Find" })
@@ -133,6 +133,7 @@ map("n", "<Leader>gl", function() Snacks.picker.git_log() end, { desc = "git log
 map("n", "<Leader>gL", function() Snacks.picker.git_log_line() end, { desc = "git log line" })
 map("n", "<Leader>gs", function() Snacks.picker.git_status() end, { desc = "git status" })
 map("n", "<Leader>gS", function() Snacks.picker.git_stash() end, { desc = "git Stash" })
+map("n", "<Leader>gt", "<CMD>lua MiniDiff.toggle_overlay()<CR>", { desc = "toggle mini.diff overlay" })
 
 -- Language Tools
 map("n", "<Leader>l", "", { desc = "Language Tools" })
@@ -199,7 +200,7 @@ map({ "n", "t", "i" }, "<F7>", function() Snacks.terminal.toggle("/bin/bash", { 
 map("n", "<Leader>p", "", { desc = "Packages" })
 map("n", "<Leader>pi", "<CMD>Lazy<CR>", { desc = "Lazy" })
 map("n", "<Leader>pm", "<CMD>Mason<CR>", { desc = "Mason" })
-map("n", "<Leader>pc", function() vim.fn.chdir(vim.fn.stdpath("config")) Snacks.explorer.open() end, { desc = "cd config" })
+map("n", "<Leader>pc", function() vim.fn.chdir(os.getenv("HOME").."/.local/share/chezmoi") Snacks.explorer.open() end, { desc = "cd config" })
 map("n", "<Leader>pa", function() vim.ui.input({ prompt = "Edit plugin spec" }, function(input)
 		local file = vim.fn.stdpath("config") .. "/lua/plugins/" .. input .. ".lua"
 		vim.notify("Editing " .. file)
