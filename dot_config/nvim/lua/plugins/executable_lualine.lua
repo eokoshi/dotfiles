@@ -132,6 +132,13 @@ return {
 						"location",
 						padding = 1,
 						separator = { right = "" },
+						cond = function()
+							if vim.o.filetype == "codecompanion" then
+								return false
+							else
+								return true
+							end
+						end,
 					},
 				},
 			},

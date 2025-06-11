@@ -21,7 +21,7 @@ vim.g.maplocalleader = " "
 
 -- Basic operations
 map("n", "<Leader>c", function() Snacks.bufdelete() end, { desc = "Close buffer" })
-map("n", "<Leader>e", function() Snacks.explorer({ exclude = {".gitattributes", "__**__", }, follow_file = true, hidden = true, ignored = true, follow = true, }) end, { desc = "File explorer" })
+map("n", "<Leader>e", function() Snacks.explorer() end, { desc = "File explorer" })
 map("n", "<Leader>n", function() functions.notifications_picker() end, { desc = "Notification history" })
 map("n", "<Leader>h", function() Snacks.dashboard() end, { desc = "Home" })
 map("n", "<Leader>q", "<CMD>q<CR>", { desc = "Quit window" })
@@ -241,7 +241,7 @@ vim.api.nvim_create_autocmd("BufReadPost", {
 		map("n", "<Leader>mm", "<CMD>lua require('nabla').popup({border = 'solid'})<CR>", { desc = "Show math popup" })
 		map("n", "<Leader>mt", "<CMD>ObsidianToday<CR>", { desc = "today's note" })
 		map("n", "<Leader>my", "<CMD>ObsidianYesterday<CR>", { desc = "yesterday's note" })
-		map("n", "<Leader>mf", "<CMD>ObsidianYesterday<CR>", { desc = "find daily notes" })
+		map("n", "<Leader>mf", "<CMD>Obsidian dailies -48 0<CR>", { desc = "find daily notes" })
 		map("n", "<Leader>mn", "<CMD>ObsidianNewFromTemplate<CR>", { desc = "new from template" })
 		toggles.math_virt():map("<Leader>um")
 	end,

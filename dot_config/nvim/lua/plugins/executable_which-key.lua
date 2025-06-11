@@ -32,5 +32,8 @@ return {
 				{ pattern = "markdown", icon = icons.whichkey.markdown, color = "purple" },
 			},
 		},
+		win = {
+			no_overlap = false,
+		},
 	},
 }

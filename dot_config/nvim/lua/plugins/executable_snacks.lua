@@ -16,13 +16,7 @@ return {
 						key = "e",
 						desc = "File Explorer",
 						action = function()
-							Snacks.explorer(vim.tbl_deep_extend("keep", {
-								exclude = { ".gitattributes", "__**__" },
-								follow_file = true,
-								hidden = true,
-								ignored = true,
-								follow = true,
-							}, require("snacks.picker.config.sources").explorer))
+							Snacks.explorer()
 						end,
 					},
 					{ icon = " ", key = "f", desc = "Find File", action = ":lua Snacks.dashboard.pick('files')" },
@@ -74,7 +68,17 @@ return {
 		explorer = { enabled = true },
 		indent = { enabled = true },
 		input = { enabled = true },
-		picker = { enabled = true },
+		picker = {
+			sources = {
+				explorer = {
+					exclude = { ".gitattributes", "__**__" },
+					follow_file = true,
+					hidden = true,
+					ignored = true,
+					follow = true,
+				},
+			},
+		},
 		notifier = { enabled = true },
 		quickfile = { enabled = true },
 		scope = { enabled = true },

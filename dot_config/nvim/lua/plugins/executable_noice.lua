@@ -16,6 +16,9 @@ return {
 				enter = false,
 				size = "30%",
 			},
+			notify = {
+				style = "fancy",
+			},
 		},
 		routes = {
 			{
@@ -29,10 +32,20 @@ return {
 				},
 				view = "mini",
 			},
-			-- {
-			-- 	filter = { event = "msg_show", min_height = 5 },
-			-- 	view = "split",
-			-- },
+			{ -- send long messages to view
+				filter = {
+					event = "msg_show",
+					min_height = 15,
+				},
+				view = "popup",
+			},
+			{
+				filter = {
+					event = "msg_show",
+					find = "is deprecated",
+				},
+				view = "mini",
+			},
 		},
 	},
 }

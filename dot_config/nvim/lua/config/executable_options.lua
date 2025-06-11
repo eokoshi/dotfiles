@@ -43,6 +43,7 @@ vim.opt.sidescrolloff = 8 -- Columns of context
 vim.opt.smartcase = true -- Don't ignore case with capitals
 vim.opt.smartindent = true -- Insert indents automatically
 vim.opt.smoothscroll = true
+vim.opt.softtabstop = 0
 vim.opt.spelllang = { "en" }
 vim.opt.splitbelow = true -- Put new windows below current
 vim.opt.splitkeep = "screen"
