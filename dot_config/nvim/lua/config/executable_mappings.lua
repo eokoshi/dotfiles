@@ -65,7 +65,7 @@ map("n", "<C-Right>", function() require("smart-splits").resize_right() end, { d
 
 -- Find
 map("n", "<Leader>f", "", { desc = "Find" })
-map("n", "<Leader>fa", function() Snacks.picker.files({ cwd = vim.fn.stdpath("config") }) end, { desc = "config files" })
+map("n", "<Leader>fa", function() functions.pick_chezmoi() end, { desc = "config files (chezmoi)" })
 map("n", "<Leader>fb", function() Snacks.picker.buffers() end, { desc = "buffers" })
 map("n", "<Leader>fB", function() Snacks.picker.grep_buffers() end, { desc = "grep in open Buffers" })
 map({ "n", "x" }, "<Leader>fc", function() Snacks.picker.grep_word() end, { desc = "grep current selection" })
@@ -88,6 +88,7 @@ map("n", "<Leader>fr", function() Snacks.picker.recent() end, { desc = "recent" 
 map("n", "<Leader>fu", function() Snacks.picker.undo() end, { desc = "undo" })
 map("n", "<Leader>fw", function() Snacks.picker.grep({ cmd = "rg" }) end, { desc = "word" })
 map("n", "<Leader>fW", function() Snacks.picker.grep({ cmd = "rg", hidden = true, ignored = true }) end, { desc = "Word in all files" })
+map("n", "<Leader>fz", function() Snacks.picker.files({ cwd = vim.fn.stdpath("config") }) end, { desc = "local config files" })
 map("n", "<Leader>f<CR>", function() Snacks.picker.resume() end, { desc = "Resume last search" })
 
 -- Buffer
