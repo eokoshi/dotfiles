@@ -6,7 +6,7 @@ return {
 			"nvim-treesitter/nvim-treesitter",
 			"echasnovski/mini.icons",
 		}, -- if you use standalone mini plugins
-		version = "^8.4.0",
+		version = "v8.4.0",
 		ft = {
 			"markdown",
 			"ipynb",

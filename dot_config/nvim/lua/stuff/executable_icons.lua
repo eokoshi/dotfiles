@@ -20,6 +20,7 @@ return {
 		added = "",
 		modified = "",
 		removed = "",
+		gitbar = "┃",
 	},
 	folds = {
 		foldopen = "",

@@ -1,5 +1,15 @@
+local icons = require("stuff.icons")
 return {
 	"echasnovski/mini.diff",
 	version = false,
-	opts = {},
+	opts = {
+		view = {
+			style = "sign",
+			signs = {
+				add = icons.git.gitbar,
+				change = icons.git.gitbar,
+				delete = icons.git.gitbar,
+			},
+		},
+	},
 }
