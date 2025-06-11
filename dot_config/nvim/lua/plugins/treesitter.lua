@@ -54,7 +54,7 @@ return {
 				"git_config",
 				"dockerfile",
 				"yaml",
-				-- add more arguments for adding more treesitter parsers
+				"gotmpl",
 			},
 			auto_install = vim.fn.executable("tree-sitter") == 1, -- only enable auto install if `tree-sitter` cli is installed
 			highlight = { enable = true },

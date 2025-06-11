@@ -1,4 +1,6 @@
----@type LazySpec
+if true then
+	return
+end
 return {
 	{
 		"xvzc/chezmoi.nvim",
@@ -34,6 +36,15 @@ return {
 					vim.schedule(require("chezmoi.commands.__edit").watch)
 				end,
 			})
+
+			vim.filetype.add({
+				filename = {
+					["dot_bashrc"] = "bash",
+				},
+				extension = {
+					tmpl = "gotmpl",
+				},
+			})
 		end,
 	},
 	-- Filetype icons
@@ -45,13 +56,7 @@ return {
 				[".chezmoiremove"] = { glyph = "", hl = "MiniIconsGrey" },
 				[".chezmoiroot"] = { glyph = "", hl = "MiniIconsGrey" },
 				[".chezmoiversion"] = { glyph = "", hl = "MiniIconsGrey" },
-				["bash.tmpl"] = { glyph = "", hl = "MiniIconsGrey" },
-				["json.tmpl"] = { glyph = "", hl = "MiniIconsGrey" },
-				["ps1.tmpl"] = { glyph = "󰨊", hl = "MiniIconsGrey" },
-				["sh.tmpl"] = { glyph = "", hl = "MiniIconsGrey" },
-				["toml.tmpl"] = { glyph = "", hl = "MiniIconsGrey" },
-				["yaml.tmpl"] = { glyph = "", hl = "MiniIconsGrey" },
-				["zsh.tmpl"] = { glyph = "", hl = "MiniIconsGrey" },
+				["dot_bashrc"] = { glyph = "", hl = "MiniIconsGrey" },
 			},
 		},
 	},

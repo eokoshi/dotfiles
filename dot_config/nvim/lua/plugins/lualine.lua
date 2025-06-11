@@ -121,6 +121,7 @@ return {
 					},
 					{
 						get_attached_clients,
+						cond = vim.lsp.buf_is_attached,
 					},
 				},
 				lualine_y = {
