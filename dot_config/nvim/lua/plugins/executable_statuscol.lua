@@ -1,8 +1,10 @@
+-- stylua: ignore
+-- if true then return {} end
+
 return {
 	{
 		"luukvbaal/statuscol.nvim",
-		enabled = true,
-		event = { "BufEnter", "User ResessionLoadPost" },
+		event = "VeryLazy",
 		init = function()
 			vim.opt.number = true
 			vim.opt.relativenumber = true
@@ -15,6 +17,7 @@ return {
 		opts = function()
 			local builtin = require("statuscol.builtin")
 			return {
+				bt_ignore = { "nofile" },
 				setopt = true,
 				relculright = true,
 				segments = {

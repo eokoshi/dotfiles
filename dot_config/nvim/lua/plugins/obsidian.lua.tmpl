@@ -1,6 +1,9 @@
+-- stylua: ignore
+-- if true then return {} end
+
 return {
 	"obsidian-nvim/obsidian.nvim",
-	version = "*", -- recommended, use latest release instead of latest commit
+	version = "*", 
 	lazy = true,
 {{ if eq .chezmoi.hostname "eeftop" }}
 	event = {
@@ -16,9 +19,7 @@ return {
 	enabled = false,
 {{ end }}
 	dependencies = {
-		-- Required.
 		"nvim-lua/plenary.nvim",
-		-- see below for full list of optional dependencies 👇
 	},
 	opts = {
 		daily_notes = {

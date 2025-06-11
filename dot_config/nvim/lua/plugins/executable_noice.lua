@@ -1,6 +1,11 @@
---@type LazySpec
+-- stylua: ignore
+-- if true then return {} end
+
 return {
-	"folke/noice.nvim",
+	-- scrollbar issue
+	"Kayzels/noice.nvim",
+	branch = "fix-scrollbar",
+	commit = "43c79b8",
 	dependencies = {
 		"MunifTanjim/nui.nvim",
 	},
@@ -16,9 +21,6 @@ return {
 				enter = false,
 				size = "30%",
 			},
-			notify = {
-				style = "fancy",
-			},
 		},
 		routes = {
 			{
@@ -28,9 +30,20 @@ return {
 						{ find = "%d+L, %d+B" },
 						{ find = "; after #%d+" },
 						{ find = "; before #%d+" },
+						{ find = "%d+ lines" },
+						{ find = "%d+ fewer" },
+						{ find = "is deprecated" },
 					},
 				},
 				view = "mini",
+			},
+			{
+				filter = {
+					event = "msg_show",
+					kind = "lua_print",
+					find = "[nvim-treesitter]",
+				},
+				view = 	"mini",
 			},
 			{ -- send long messages to view
 				filter = {
@@ -39,13 +52,21 @@ return {
 				},
 				view = "popup",
 			},
-			{
-				filter = {
-					event = "msg_show",
-					find = "is deprecated",
-				},
-				view = "mini",
-			},
 		},
 	},
+	config = function(_, opts)
+		require("noice").setup(opts)
+
+		-- lualine position errors
+		local NoiceUser = vim.api.nvim_create_augroup("NoiceUser", { clear = true })
+		vim.api.nvim_create_autocmd("BufEnter", {
+			group = NoiceUser,
+			callback = function()
+				if vim.o.filetype ~= "snacks_dashboard" and vim.o.buftype ~= "nofile" then
+					require("noice").setup(opts)
+				end
+			end,
+			desc = "Reload Noice",
+		})
+	end,
 }

@@ -35,7 +35,6 @@
  (#set! injection.language "lua")
  (#set! injection.combined))
 
-
 ((text) @injection.content
  (#set! injection.language "toml")
  (#set! injection.combined))

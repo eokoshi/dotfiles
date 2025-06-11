@@ -7,3 +7,5 @@ vim.filetype.add({
 		tmpl = "gotmpl",
 	},
 })
+
+require("statuscol").setup()

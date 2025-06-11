@@ -1,3 +1,6 @@
+-- stylua: ignore
+-- if true then return {} end
+
 local icons = require("stuff.icons")
 return {
 	"folke/which-key.nvim",
@@ -30,6 +33,7 @@ return {
 				{ pattern = "list", icon = icons.whichkey.list, color = "blue" },
 				{ pattern = "chatbot", icon = icons.whichkey.ai, color = "gray" },
 				{ pattern = "markdown", icon = icons.whichkey.markdown, color = "purple" },
+				{ pattern = "debugger", icon = icons.debug.bug, color = "red" },
 			},
 		},
 		win = {

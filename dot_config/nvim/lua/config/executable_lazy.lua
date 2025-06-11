@@ -29,11 +29,12 @@ require("lazy").setup({
 			width = 0.8,
 			height = 0.8,
 		},
-		border = "rounded",
+		border = "none",
 		wrap = false,
 		install = {
 			colorscheme = { "wildcharm" },
 		},
 		icons = require("stuff.icons").lazy,
+		style = "minimal",
 	},
 })

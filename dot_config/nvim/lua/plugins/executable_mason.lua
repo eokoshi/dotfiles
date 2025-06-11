@@ -1,4 +1,6 @@
---@type LazySpec
+-- stylua: ignore
+-- if true then return {} end
+
 return {
 	{
 		"mason-org/mason.nvim",
@@ -9,31 +11,28 @@ return {
 		dependencies = {
 			"mason-org/mason.nvim",
 		},
-		opts_extend = { "ensure_installed" },
 		opts = {
 			-- Make sure to use the names found in `:Mason`
 			ensure_installed = {
-				-- install language servers
+				-- LSP
 				"lua-language-server",
 				"basedpyright",
 				"json-lsp",
 
-				-- install formatters
+				-- Formatters
 				"stylua",
 				"ruff",
 				"marksman",
-
-				-- install debuggers
-				"debugpy",
-
-				-- install any other package
-				"tree-sitter-cli",
 				"jupytext",
+				"air",
+
+				-- DAP
+				"debugpy",
 			},
 			integrations = {
 				["mason-lspconfig"] = true,
 				["mason-null-ls"] = true,
-				["mason-nvim-dap"] = true,
+				["mason-nvim-dap"] = false,
 			},
 		},
 	},

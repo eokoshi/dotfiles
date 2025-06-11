@@ -1,3 +1,6 @@
+-- stylua: ignore
+-- if true then return {} end
+
 return {
 	"folke/snacks.nvim",
 	dependencies = {},
@@ -69,6 +72,34 @@ return {
 		indent = { enabled = true },
 		input = { enabled = true },
 		picker = {
+			layout = function()
+				if vim.o.columns >=140 then
+					return { preset = "default" }
+				else
+					return {
+						layout = {
+							box = "vertical",
+							backdrop = false,
+							width = 0.8,
+							min_width = 90,
+							height = 0.8,
+							min_height = 30,
+							border = "rounded",
+							title = "{title} {live} {flags}",
+							title_pos = "center",
+							{ win = "input", height = 1, border = "bottom" },
+							{ win = "list", border = "none" },
+							{
+								win = "preview",
+								title = "{preview}",
+								height = 0.8,
+								border = "top",
+								wo = { wrap = true, statuscolumn = "%l ", relativenumber = false, foldcolumn = "0" },
+							},
+						},
+					}
+				end
+			end,
 			sources = {
 				explorer = {
 					exclude = { ".gitattributes", "__**__" },

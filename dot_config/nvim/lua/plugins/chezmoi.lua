@@ -1,6 +1,6 @@
-if true then
-	return
-end
+-- stylua: ignore
+if true then return {} end
+
 return {
 	{
 		"xvzc/chezmoi.nvim",

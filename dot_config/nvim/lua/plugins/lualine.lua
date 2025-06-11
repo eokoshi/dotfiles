@@ -1,3 +1,6 @@
+-- stylua: ignore
+-- if true then return {} end
+
 local icons = require("stuff.icons")
 
 local function get_attached_clients()
@@ -154,6 +157,7 @@ return {
 						},
 						filetype_names = {
 							snacks_picker_list = "",
+							["dap-view-term"] = "",
 						},
 						use_mode_colors = true,
 						-- cond = function()

@@ -1,11 +1,11 @@
 -- General Settings
-local general = vim.api.nvim_create_augroup("General", { clear = true })
+local user_general = vim.api.nvim_create_augroup("UserGeneral", { clear = true })
 
 vim.api.nvim_create_autocmd("TextYankPost", {
 	callback = function()
 		vim.hl.on_yank()
 	end,
-	group = general,
+	group = user_general,
 	desc = "Highlight on yank",
 })
 
@@ -14,7 +14,7 @@ vim.api.nvim_create_autocmd("FileType", {
 	callback = function()
 		vim.opt.formatoptions:remove({ "c", "r", "o" })
 	end,
-	group = general,
+	group = user_general,
 	desc = "Disable New Line Comment",
 })
 
@@ -22,7 +22,7 @@ vim.api.nvim_create_autocmd("FocusGained", {
 	callback = function()
 		vim.cmd("checktime")
 	end,
-	group = general,
+	group = user_general,
 	desc = "Update file when there are changes",
 })
 
@@ -30,35 +30,12 @@ vim.api.nvim_create_autocmd("VimResized", {
 	callback = function()
 		vim.cmd("wincmd =")
 	end,
-	group = general,
+	group = user_general,
 	desc = "Equalize Splits",
 })
 
-vim.api.nvim_create_autocmd("VimLeavePre", {
-	callback = function()
-		-- Always save a special session named "last"
-		require("resession").save("last")
-	end,
-	desc = "Save session on exit",
-})
-
-vim.api.nvim_create_autocmd("LspAttach", {
-	group = vim.api.nvim_create_augroup("lsp", { clear = true }),
-	callback = function(args)
-		local client = vim.lsp.get_client_by_id(args.data.client_id)
-		if client:supports_method("textDocument/formatting") then
-			vim.api.nvim_create_autocmd("BufWritePre", {
-				buffer = args.buf,
-				callback = function()
-					vim.lsp.buf.format()
-				end,
-			})
-		end
-	end,
-	desc = "Autoformat on save",
-})
-
 vim.api.nvim_create_autocmd("BufEnter", {
+	group = user_general,
 	callback = function()
 		local bufnr = vim.api.nvim_get_current_buf()
 		if vim.bo[bufnr].buftype == "nofile" then
@@ -70,12 +47,38 @@ vim.api.nvim_create_autocmd("BufEnter", {
 	desc = "Remove colorcolumn in nofile buffers",
 })
 
-vim.api.nvim_create_autocmd("BufAdd", {
-	callback = function()
-		if vim.o.filetype ~= "snacks_dashboard" then
-			require("noice").disable()
-			require("noice").enable()
+-- LSP
+local lsp_af = vim.api.nvim_create_augroup("LspAutoformat", { clear = true })
+
+vim.api.nvim_create_autocmd("LspAttach", {
+	group = lsp_af,
+	callback = function(args)
+		local prior_aucmds = vim.api.nvim_get_autocmds({ group = "LspAutoformat" })
+		if next(prior_aucmds) ~= nil then
+			vim.api.nvim_del_augroup_by_name("LspAutoformat")
+			vim.api.nvim_create_augroup("LspAutoformat", { clear = true })
+		end
+		local client = vim.lsp.get_client_by_id(args.data.client_id)
+		---@diagnostic disable-next-line: need-check-nil
+		if client:supports_method("textDocument/formatting") then
+			vim.api.nvim_create_autocmd("BufWritePre", {
+				buffer = args.buf,
+				callback = function()
+					vim.lsp.buf.format({ async = false })
+				end,
+			})
 		end
 	end,
-	desc = "Reload Noice on bufenter",
+	desc = "Autoformat on save",
+})
+
+
+-- Chezmoi
+local chezmoi = vim.api.nvim_create_augroup("Chezmoi", {clear = true})
+
+vim.api.nvim_create_autocmd("VimLeave"{
+	group = chezmoi,
+	callback = function(args)
+		
+	end
 })

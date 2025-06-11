@@ -62,6 +62,8 @@ map("n", "<C-Up>", function() require("smart-splits").resize_up() end, { desc = 
 map("n", "<C-Down>", function() require("smart-splits").resize_down() end, { desc = "Resize split down" })
 map("n", "<C-Left>", function() require("smart-splits").resize_left() end, { desc = "Resize split left" })
 map("n", "<C-Right>", function() require("smart-splits").resize_right() end, { desc = "Resize split right" })
+map({"n", "i", "s" }, "<C-u>", function() if not require("noice.lsp").scroll(-4) then return "<C-u>" end end, { desc = "Scroll up hover doc"})
+map({"n", "i", "s" }, "<C-d>", function() if not require("noice.lsp").scroll(4) then return "<C-d>" end end, { desc = "Scroll down hover doc"})
 
 -- Find
 map("n", "<Leader>f", "", { desc = "Find" })

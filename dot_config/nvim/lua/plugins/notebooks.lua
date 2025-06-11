@@ -1,3 +1,6 @@
+-- stylua: ignore
+-- if true then return {} end
+
 -- Provide a command to create a blank new Python notebook
 -- note: the metadata is needed for Jupytext to understand how to parse the notebook.
 -- if you use another language than Python, you should change it in the template.

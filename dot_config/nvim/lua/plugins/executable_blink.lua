@@ -1,3 +1,6 @@
+-- stylua: ignore
+-- if true then return {} end
+
 local function has_words_before()
 	local line, col = (unpack or table.unpack)(vim.api.nvim_win_get_cursor(0))
 	return col ~= 0 and vim.api.nvim_buf_get_lines(0, line - 1, line, true)[1]:sub(col, col):match("%s") == nil
@@ -22,8 +25,7 @@ local function get_kind_icon(CTX)
 						end
 					end
 				elseif ctx.item.source_name == "Path" then
-					ctx.kind_icon, ctx.kind_hl =
-						mini_icons.get(ctx.kind == "Folder" and "directory" or "file", ctx.label)
+					ctx.kind_icon, ctx.kind_hl = mini_icons.get(ctx.kind == "Folder" and "directory" or "file", ctx.label)
 				elseif ctx.item.source_name == "Snippets" then
 					ctx.kind_icon, ctx.kind_hl = mini_icons.get("lsp", "snippet")
 				end
@@ -63,8 +65,7 @@ local function get_kind_icon(CTX)
 				if ctx.item.kind == kinds.Color then
 					local doc = vim.tbl_get(ctx, "item", "documentation")
 					if doc then
-						local color_item = highlight_colors_avail
-							and highlight_colors.format(doc, { kind = kinds[kinds.Color] })
+						local color_item = highlight_colors_avail and highlight_colors.format(doc, { kind = kinds[kinds.Color] })
 						if color_item and color_item.abbr_hl_group then
 							if color_item.abbr then
 								ctx.kind_icon = color_item.abbr

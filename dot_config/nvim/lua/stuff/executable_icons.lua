@@ -50,6 +50,7 @@ return {
 		markdown = "",
 	},
 	debug = {
+		bug = "",
 		breakpoint = "",
 		conditional = "",
 		logpoint = "",

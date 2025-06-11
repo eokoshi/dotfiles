@@ -1,7 +1,6 @@
 --stylua: ignore
-if true then return {} end -- uncomment to activate
+if true then return {} end
 
----@type LazySpec
 return {
 	"nvim-neo-tree/neo-tree.nvim",
 	branch = "v3.x",

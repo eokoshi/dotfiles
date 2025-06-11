@@ -1,3 +1,6 @@
+-- stylua: ignore
+-- if true then return {} end
+
 return {
 	{
 		"folke/lazydev.nvim",
@@ -5,7 +8,7 @@ return {
 		opts = {},
 	},
 	{
-		"saghen/blink.cmp",
+		"Saghen/blink.cmp",
 		opts_extend = { "sources.default", "sources.providers" },
 		opts = {
 			sources = {
