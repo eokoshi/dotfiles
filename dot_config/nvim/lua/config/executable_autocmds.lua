@@ -74,11 +74,11 @@ vim.api.nvim_create_autocmd("LspAttach", {
 
 
 -- Chezmoi
-local chezmoi = vim.api.nvim_create_augroup("Chezmoi", {clear = true})
-
-vim.api.nvim_create_autocmd("VimLeave"{
-	group = chezmoi,
-	callback = function(args)
-		
-	end
-})
+-- local chezmoi = vim.api.nvim_create_augroup("Chezmoi", {clear = true})
+--
+-- vim.api.nvim_create_autocmd("VimLeave"{
+-- 	group = chezmoi,
+-- 	callback = function(args)
+-- 		print("hello")		
+-- 	end
+-- })
