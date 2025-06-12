@@ -28,6 +28,8 @@ return {
 
 				-- DAP
 				"debugpy",
+
+				"tree-sitter-cli",
 			},
 			integrations = {
 				["mason-lspconfig"] = true,
