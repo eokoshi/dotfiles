@@ -1,4 +1,3 @@
--- stylua: ignore
 -- if true then return {} end
 
 -- Provide a command to create a blank new Python notebook

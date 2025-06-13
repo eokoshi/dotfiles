@@ -1,4 +1,3 @@
--- stylua: ignore
 -- if true then return {} end
 
 return {
@@ -11,5 +10,5 @@ return {
 		vim.g.undotree_TreeVertShape = "┃"
 		vim.g.undotree_TreeSplitShape = "━┛"
 		vim.g.undotree_TreeReturnShape = "━┓"
-	end
+	end,
 }

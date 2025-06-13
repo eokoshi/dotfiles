@@ -18,6 +18,8 @@ import argparse
 
 from logzero import logger
 
+import tqdm
+
 
 def log(function):
     """Handy logging decorator."""

@@ -1,4 +1,3 @@
--- stylua: ignore
 -- if true then return {} end
 
 local dap_ft = { "python" }
