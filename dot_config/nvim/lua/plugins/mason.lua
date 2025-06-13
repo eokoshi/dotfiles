@@ -28,6 +28,7 @@ return {
 				-- DAP
 				"debugpy",
 
+				-- Other
 				"tree-sitter-cli",
 			},
 			integrations = {
