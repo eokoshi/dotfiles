@@ -23,7 +23,7 @@ fi
 DIFF_OUTPUT=$(git diff --staged)
 
 # Create JSON payload using jq to properly escape everything
-PROMPT="$DIFF_OUTPUT Write a git commit message for this diff output in the form of a bulleted list. For each individual file in the diff output, summarize the changes in one line. In the commit message, do not describe contents of the file, simply describe the changes in as few words as possible. IN THE COMMIT MESSAGE, DO NOT USE MARKDOWN FORMATTING, DO NOT USE ASTERISKS * OR BACKTICKS. Here is an example of a good commit message \n- [init.lua] changed option1 from true to false\n- [options.lua] updated options:\n\t- option2 0 -> 3\n\t- option3 'right' -> 'left'\n- [mappings.lua] added mapping for <C-f> to call vim.print() /no_think"
+PROMPT="<diff> $DIFF_OUTPUT <\diff> <instructions> Write a git commit message for this diff output in the form of a bulleted list. For each individual file in the diff output, summarize the changes in one line. In the commit message, do not describe contents of the file, simply describe the changes in as few words as possible. IN THE COMMIT MESSAGE, DO NOT USE MARKDOWN FORMATTING, DO NOT USE ASTERISKS * OR BACKTICKS. Do not include any other text other than the bulleted list! Here is an example of a good commit message <\instructions> <example> \n- [init.lua] changed option1 from true to false\n- [options.lua] updated options:\n\t- option2 0 -> 3\n\t- option3 'right' -> 'left'\n- [mappings.lua] added mapping for <C-f> to call vim.print() <\example> /no_think"
 PAYLOAD=$(jq -n --arg prompt "$PROMPT" '{
 	"model": "qwen3:latest",
 	"messages": [{"role":"system","content":"/no_think"},{ "role": "user", "content": $prompt }],
