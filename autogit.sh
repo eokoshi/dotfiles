@@ -23,12 +23,13 @@ fi
 DIFF_OUTPUT=$(git diff --staged)
 
 # Create JSON payload using jq to properly escape everything
-PROMPT="$DIFF_OUTPUT Write a git commit message for this diff output in the form of a bulleted list, with one line per file (summarize changes in one line). DO NOT USE MARKDOWN FORMATTING, DO NOT USE ASTERISKS * OR BACKTICKS. BEGIN EACH NEWLINE WITH - /no_think"
+PROMPT="$DIFF_OUTPUT Write a git commit message for this diff output in the form of a bulleted list. For each individual file in the diff output, summarize the changes in one line. In the commit message, do not describe contents of the file, simply describe the changes in as few words as possible. IN THE COMMIT MESSAGE, DO NOT USE MARKDOWN FORMATTING, DO NOT USE ASTERISKS * OR BACKTICKS. Here is an example of a good commit message \n- [init.lua] changed option1 from true to false\n- [options.lua] updated options:\n\t- option2 0 -> 3\n\t- option3 'right' -> 'left'\n- [mappings.lua] added mapping for <C-f> to call vim.print() /no_think"
 PAYLOAD=$(jq -n --arg prompt "$PROMPT" '{
 	"model": "qwen3:latest",
-	"messages": [{"role":"system","content":"DO NOT USE MARKDOWN FORMATTING (NO backticks ` or asterisks *)"},{ "role": "user", "content": $prompt }],
+	"messages": [{"role":"system","content":"/no_think"},{ "role": "user", "content": $prompt }],
 	"stream": false,
 	"params": { 
+		"max_tokens":1000,
 		"num_ctx": 131072
 	}
 }')
