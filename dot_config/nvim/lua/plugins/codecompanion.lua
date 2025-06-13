@@ -29,7 +29,7 @@ return {
 		},
 		opts = {
 			system_prompt = function()
-				return [[\no_think
+				return [[/no_think
 - Use Markdown formatting in your answers.
 - Include the programming language name at the start of the Markdown code blocks.
 - Avoid including line numbers in code blocks.
@@ -40,7 +40,7 @@ return {
 - WHEN REFERENCING CODE, DO NOT OUTPUT THE ENTIRE SECTION, RATHER PRINT THE FIRST FEW LINES, then ... on a new line, then the final few lines
 - ANSWER CONCISELY, WITHOUT ADDING TOO MUCH BACKGROUND INFORMATION UNLESS THE USER REQUESTS IT
 - GIVE MULTIPLE POSSIBLE SOLUTIONS TO THE ISSUE IF THE USER IS ASKING FOR TROUBLESHOOTING HELP
-\no_think]]
+/no_think]]
 			end,
 		},
 		strategies = {

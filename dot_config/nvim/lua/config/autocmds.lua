@@ -60,30 +60,41 @@ vim.api.nvim_create_autocmd("LspAttach", {
 		-- end
 		local client = vim.lsp.get_client_by_id(args.data.client_id)
 		---@diagnostic disable-next-line: need-check-nil
-		if client.name ~= "lua_ls" and client:supports_method("textDocument/formatting") then
+		if client:supports_method("textDocument/formatting") then
 			vim.api.nvim_create_autocmd("BufWritePre", {
 				buffer = args.buf,
 				callback = function()
-					vim.lsp.buf.format({ async = false })
+					vim.lsp.buf.format()
 				end,
 			})
 		end
 	end,
+	once = true,
 	desc = "Autoformat on save",
 })
 
 -- Chezmoi
 local chezmoi = vim.api.nvim_create_augroup("Chezmoi", { clear = true })
 
-vim.api.nvim_create_autocmd("VimLeave", {
+vim.api.nvim_create_autocmd("BufWritePost", {
 	group = chezmoi,
 	callback = function(args)
-		local Job = require("plenary.job")
-		---@diagnostic disable-next-line: missing-fields
-		Job:new({
-			command = "chezmoi",
-			args = { "apply" },
-			cwd = "~",
-		}):start()
+		if string.match(args.match, ".*%.local/share/chezmoi/.*") ~= nil then
+			local Job = require("plenary.job")
+			---@diagnostic disable-next-line: missing-fields
+			Job:new({
+				command = "chezmoi",
+				args = { "apply" },
+				cwd = "~",
+				on_stderr = function(error, _, _)
+					if error ~= nil then
+						vim.notify("Apply failed.\n\nRun chezmoi apply from command line.", vim.log.levels.ERROR)
+					end
+				end,
+			}):start()
+		else
+			return true -- delete autocmd if not in chezmoi file
+		end
 	end,
+	desc = "Apply changes in chezmoi files to local files (chezmoi source dir -> destination)",
 })

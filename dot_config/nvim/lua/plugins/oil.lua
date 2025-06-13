@@ -1,25 +1,23 @@
--- stylua: ignore
 -- if true then return {} end
 
 return {
-	'stevearc/oil.nvim',
+	"stevearc/oil.nvim",
 	dependencies = {
-		{ "echasnovski/mini.icons", opts = {} }
+		{ "echasnovski/mini.icons", opts = {} },
 	},
 	lazy = false,
 	---@module 'oil'
 	---@type oil.SetupOpts
 	opts = {
 		columns = {
+			{ "mtime", highlight = "Comment" },
+			{ "size", highlight = "Ignore" },
 			"icon",
-			"size",
-			"mtime",
-			"atime",
 		},
 		delete_to_trash = true,
 		watch_for_changes = true,
 		keymaps = {
-			["g?"] = { "actions.show_help", mode = "n" },
+			["?"] = { "actions.show_help", mode = "n" },
 			["<CR>"] = "actions.select",
 			["<C-s>"] = { "actions.select", opts = { vertical = true } },
 			["<C-b>"] = { "actions.select", opts = { horizontal = true } },
@@ -33,11 +31,44 @@ return {
 			["gy"] = "actions.yank_entry",
 			["g."] = { "actions.toggle_hidden", mode = "n" },
 			["g\\"] = { "actions.toggle_trash", mode = "n" },
+			["q"] = { "actions.close", mode = "n" },
 		},
 		use_default_keymaps = false,
 		view_options = {
 			show_hidden = true,
+			is_always_hidden = function(name, bufnr)
+				local m = name:match("^__")
+				return m ~= nil
+			end,
 			case_insensitive = true,
-		}
+		},
+		git = {
+			-- Return true to automatically git add/mv/rm files
+			add = function(path)
+				return true
+			end,
+			mv = function(src_path, dest_path)
+				return true
+			end,
+			rm = function(path)
+				return true
+			end,
+		},
+		win_options = {
+			cursorcolumn = false,
+			colorcolumn = "",
+			statuscolumn = " %l ",
+			numberwidth = 2,
+			relativenumber = false,
+		},
+		float = {
+			max_height = 0.8,
+			max_width = 0.8,
+			border = "rounded",
+			win_options = {
+				winhighlight = "Normal:NormalFloat,FloatBorder:FloatBorder",
+			},
+			title_pos = "center",
+		},
 	},
 }

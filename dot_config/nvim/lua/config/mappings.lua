@@ -34,7 +34,7 @@ map("n", "<Leader>:", function() Snacks.picker.command_history() end, { desc = "
 map("n", "<Leader><space>", function() Snacks.picker.smart() end, { desc = "Smart search" })
 
 -- System clipboard
-map({ "n", "v" }, "<A-S-V>", "<C-v>", { desc = "Visual block mode" })
+map({ "n", "v" }, "<M-v>", "<C-v>", { desc = "Visual block mode" })
 map({ "n" }, "<C-c>", '"+yy', { desc = "Copy line to system clipboard" })
 map({ "v" }, "<C-c>", '"+y', { desc = "Copy selection to system clipboard" })
 map({ "n", "v" }, "<C-v>", '"+p', { desc = "Paste system clipboard" })
@@ -62,8 +62,8 @@ map("n", "<C-Up>", function() require("smart-splits").resize_up() end, { desc = 
 map("n", "<C-Down>", function() require("smart-splits").resize_down() end, { desc = "Resize split down" })
 map("n", "<C-Left>", function() require("smart-splits").resize_left() end, { desc = "Resize split left" })
 map("n", "<C-Right>", function() require("smart-splits").resize_right() end, { desc = "Resize split right" })
-map({"n", "s"}, "<Leader>lj", function() require("noice.lsp").scroll(4) end, { desc = "Scroll hover down" })
-map({"n", "s"}, "<Leader>lk", function() require("noice.lsp").scroll(-4) end, { desc = "Scroll hover up" })
+map({"n", "i", "s"}, "<C-n>", function() require("noice.lsp").scroll(4) end, { desc = "Scroll hover down" })
+map({"n", "i", "s"}, "<C-p>", function() require("noice.lsp").scroll(-4) end, { desc = "Scroll hover up" })
 
 -- Find
 map("n", "<Leader>f", "", { desc = "Find" })
@@ -84,6 +84,7 @@ map("n", "<Leader>fj", function() Snacks.picker.jumps() end, { desc = "jumps" })
 map("n", "<Leader>fl", function() Snacks.picker.loclist() end, { desc = "location list" })
 map("n", "<Leader>fm", function() Snacks.picker.marks() end, { desc = "marks" })
 map("n", "<Leader>fM", function() Snacks.picker.man() end, { desc = "Man pages" })
+map("n", "<Leader>fo", function() require("oil").toggle_float() end, { desc = "Oil explorer" })
 map("n", "<Leader>fp", function() Snacks.picker.projects() end, { desc = "projects" })
 map("n", "<Leader>fq", function() Snacks.picker.qflist() end, { desc = "quickfix list" })
 map("n", "<Leader>fr", function() Snacks.picker.recent() end, { desc = "recent" })
@@ -97,6 +98,7 @@ map("n", "<Leader>f<CR>", function() Snacks.picker.resume() end, { desc = "Resum
 map("n", "<Leader>b", "", { desc = "Buffers" })
 map("n", "<Leader>bD", function() functions.DOS_to_Unix() end, { desc = "DOS to Unix" })
 map("n", "<Leader>bc", function() Snacks.bufdelete.other() end, { desc = "Close all other bufs" })
+map("n", "<Leader>bf", function() vim.lsp.buf.format() end, { desc = "format buffer" })
 toggles.autosave():map("<Leader>ba")
 
 -- UI
@@ -156,6 +158,10 @@ map("n", "gI", function() Snacks.picker.lsp_implementations() end, { desc = "Go 
 map("n", "gp", function() Snacks.picker.lsp_type_definitions() end, { desc = "Go to ty[p]e definition" })
 map("n", "gco", "o<Esc>Vcx<Esc><Cmd>normal gcc<CR>fxa<BS>", { desc = "Add comment below" })
 map("n", "gcO", "O<Esc>Vcx<Esc><Cmd>normal gcc<CR>fxa<BS>", { desc = "Add comment above" })
+map("n", "<Leader>lt", "", {desc = "Trouble"})
+map("n", "<Leader>ltd", "<CMD>Trouble diagnostics toggle focus=true filter.buf=0<CR>", {desc = "diagnostics list"})
+map("n", "<Leader>ltD", "<CMD>Trouble diagnostics toggle<CR>", {desc = "workspace diagnostics list"})
+map("n", "<Leader>lts", "<CMD>Trouble symbols toggle pinned=true win.relative=editor win.position=right<CR>", {desc = "symbols"})
 
 -- Debugging
 map("n", "<Leader>d", "", { desc = "Debugger" })
@@ -203,7 +209,7 @@ map("n", "<Leader>pm", "<CMD>Mason<CR>", { desc = "Mason" })
 map("n", "<Leader>pc", function() vim.fn.chdir(os.getenv("HOME").."/.local/share/chezmoi") Snacks.explorer.open() end, { desc = "cd config" })
 map("n", "<Leader>pa", function() vim.ui.input({ prompt = "Edit plugin spec" }, function(input)
 		local file = vim.fn.stdpath("config") .. "/lua/plugins/" .. input .. ".lua"
-		vim.notify("Editing " .. file)
+		vim.notify("Editing " .. file, "info")
 		vim.cmd("e " .. file)
 	end) end, { desc = "add plugin" })
 

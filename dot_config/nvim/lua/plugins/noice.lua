@@ -1,4 +1,3 @@
--- stylua: ignore
 -- if true then return {} end
 
 return {
@@ -13,13 +12,16 @@ return {
 	opts = {
 		presets = {
 			bottom_search = true,
+			lsp_doc_border = true,
 			command_palette = true,
-			lsp_doc_border = true, -- add a border to hover docs and signature help
 		},
 		views = {
 			split = {
 				enter = false,
-				size = "30%",
+				size = "auto",
+			},
+			popup = {
+				size = "auto",
 			},
 		},
 		routes = {
@@ -43,7 +45,7 @@ return {
 					kind = "lua_print",
 					find = "[nvim-treesitter]",
 				},
-				view = 	"mini",
+				view = "mini",
 			},
 			{ -- send long messages to view
 				filter = {
@@ -56,17 +58,24 @@ return {
 				filter = {
 					event = "msg_show",
 					min_height = 5,
-					cmdline = true
+					cmdline = true,
 				},
-				view = "popup"
+				view = "popup",
 			},
 		},
 		lsp = {
 			override = {
 				["vim.lsp.util.stylize_markdown"] = false,
 				["cmp.entry.get_documentation"] = false,
-			}
-		}
+			},
+		},
+		cmdline = {
+			enabled = true,
+			view = "cmdline_popup",
+		},
+		popupmenu = {
+			enabled = true,
+		},
 	},
 	config = function(_, opts)
 		require("noice").setup(opts)

@@ -1,14 +1,13 @@
 -- if true then return {} end
 
-local dap_ft = { "python" }
-
 return {
 	{
 		"jay-babu/mason-nvim-dap.nvim",
-		ft = dap_ft,
+		lazy = true,
 		dependencies = {
 			"mason-org/mason.nvim",
 			"mfussenegger/nvim-dap",
+			"igorlfs/nvim-dap-view",
 		},
 		config = function()
 			require("mason").setup()
@@ -19,7 +18,7 @@ return {
 	},
 	{
 		"igorlfs/nvim-dap-view",
-		ft = dap_ft,
+		optional = true,
 		---@module 'dap-view'
 		---@type dapview.Config
 		opts = {

@@ -1,4 +1,3 @@
--- stylua: ignore
 -- if true then return {} end
 
 local function has_words_before()
@@ -92,15 +91,13 @@ return {
 					module = "blink.cmp.sources.cmdline",
 					-- Disable shell commands on windows, since they cause neovim to hang
 					enabled = function()
-						return vim.fn.has("win32") == 0
-							or vim.fn.getcmdtype() ~= ":"
-							or not vim.fn.getcmdline():match("^[%%0-9,'<>%-]*!")
+						return vim.fn.has("win32") == 0 or vim.fn.getcmdtype() ~= ":" or not vim.fn.getcmdline():match("^[%%0-9,'<>%-]*!")
 					end,
 				},
 			},
 		},
 		cmdline = {
-			enabled = true,
+			enabled = true, -- set to false if you want noice popupmenu (or wait for noice to get blink compatibility)
 			sources = function()
 				local type = vim.fn.getcmdtype()
 				if
@@ -124,12 +121,10 @@ return {
 			["<C-Space>"] = { "show", "show_documentation", "hide_documentation" },
 			["<Up>"] = { "select_prev", "fallback" },
 			["<Down>"] = { "select_next", "fallback" },
-			["<C-N>"] = { "select_next", "show" },
-			["<C-P>"] = { "select_prev", "show" },
-			["<C-J>"] = { "select_next", "fallback" },
-			["<C-K>"] = { "select_prev", "fallback" },
-			["<C-U>"] = { "scroll_documentation_up", "fallback" },
-			["<C-D>"] = { "scroll_documentation_down", "fallback" },
+			["<C-j>"] = { "select_next", "fallback" },
+			["<C-k>"] = { "select_prev", "fallback" },
+			["<C-p>"] = { "scroll_documentation_up", "fallback" },
+			["<C-n>"] = { "scroll_documentation_down", "fallback" },
 			["<C-e>"] = { "hide", "fallback" },
 			["<CR>"] = { "accept", "fallback" },
 			["<Tab>"] = {

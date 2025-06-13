@@ -1,4 +1,3 @@
--- stylua: ignore
 -- if true then return {} end
 
 return {
@@ -19,7 +18,7 @@ return {
 						key = "e",
 						desc = "File Explorer",
 						action = function()
-							Snacks.explorer()
+							require("oil").open_float()
 						end,
 					},
 					{ icon = " ", key = "f", desc = "Find File", action = ":lua Snacks.dashboard.pick('files')" },
@@ -35,8 +34,8 @@ return {
 						key = "c",
 						desc = "Config",
 						action = function()
-							vim.fn.chdir(os.getenv("HOME").."/.local/share/chezmoi")
-							Snacks.explorer.open()
+							local dir = os.getenv("HOME") .. "/.local/share/chezmoi"
+							require("oil").open_float(dir)
 						end,
 					},
 					{
@@ -73,7 +72,7 @@ return {
 		input = { enabled = true },
 		picker = {
 			layout = function()
-				if vim.o.columns >=140 then
+				if vim.o.columns >= 140 then
 					return { preset = "default" }
 				else
 					return {
@@ -88,7 +87,7 @@ return {
 							title = "{title} {live} {flags}",
 							title_pos = "center",
 							{ win = "input", height = 1, border = "bottom" },
-							{ win = "list", border = "none" },
+							{ win = "list", border = "bottom" },
 							{
 								win = "preview",
 								title = "{preview}",
@@ -120,6 +119,7 @@ return {
 					relativenumber = false,
 					numberwidth = 2,
 					statuscolumn = "%l %s",
+					winhighlight = "Normal:Normal,FloatBorder:SnacksPickerBorder,FloatTitle:SnacksPickerTitle",
 				},
 				relative = "editor",
 			},
