@@ -78,6 +78,7 @@ local chezmoi = vim.api.nvim_create_augroup("Chezmoi", { clear = true })
 
 vim.api.nvim_create_autocmd("BufWritePost", {
 	group = chezmoi,
+	pattern = "*/.local/share/chezmoi/*",
 	callback = function(args)
 		if string.match(args.match, ".*%.local/share/chezmoi/.*") ~= nil then
 			local Job = require("plenary.job")
@@ -97,8 +98,6 @@ vim.api.nvim_create_autocmd("BufWritePost", {
 					end
 				end,
 			}):start()
-		else
-			return true -- delete autocmd if not in chezmoi file
 		end
 	end,
 	desc = "Apply changes in chezmoi files to local files (chezmoi source dir -> destination)",

@@ -61,7 +61,7 @@ default_sql_output = "auto"
 auto_instantiate = false
 
 [experimental]
-rtc_v2 = true
+rtc_v2 = false
 
 [keymap]
 preset = "vim"

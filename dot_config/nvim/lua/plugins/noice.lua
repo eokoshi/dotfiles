@@ -68,7 +68,6 @@ return {
 		},
 		lsp = {
 			override = {
-				["vim.lsp.util.stylize_markdown"] = false,
 				["cmp.entry.get_documentation"] = false,
 			},
 		},
