@@ -10,13 +10,16 @@ return {
 	dependencies = {
 		"rafamadriz/friendly-snippets",
 	},
-	version = "1.*", -- make sure to always set version to v1 even on development
+	version = "1.3.1",
 	event = { "InsertEnter", "CmdlineEnter" },
 	opts_extend = { "sources.default", "sources.providers" },
 	---@module 'blink.cmp'
 	---@type blink.cmp.Config
 	opts = {
 		completion = {
+			keyword = {
+				range = "full",
+			},
 			trigger = {
 				show_in_snippet = false,
 				show_on_blocked_trigger_characters = function()
@@ -72,7 +75,7 @@ return {
 		},
 		signature = { enabled = false },
 		sources = {
-			default = { "lsp", "path", "snippets", "buffer", "lazydev" },
+			default = { "lsp", "path", "snippets", "lazydev" },
 			providers = {
 				path = {
 					opts = {
@@ -95,6 +98,9 @@ return {
 					end,
 				},
 			},
+			min_keyword_length = function()
+				return vim.bo.filetype == "markdown" and 2 or 0
+			end,
 		},
 		cmdline = {
 			enabled = true, -- set to false if you want noice popupmenu (or wait for noice to get blink compatibility)
