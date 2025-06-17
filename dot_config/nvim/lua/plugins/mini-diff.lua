@@ -4,6 +4,7 @@ local icons = require("stuff.icons")
 return {
 	"echasnovski/mini.diff",
 	version = false,
+	event = "VeryLazy",
 	opts = {
 		view = {
 			style = "sign",

@@ -5,8 +5,7 @@ return {
 		"MeanderingProgrammer/render-markdown.nvim",
 		dependencies = {
 			"echasnovski/mini.icons",
-		}, -- if you use standalone mini plugins
-		version = "v8.4.0",
+		},
 		ft = {
 			"markdown",
 			"ipynb",
@@ -34,11 +33,11 @@ return {
 			code = {
 				sign = false,
 			},
-			completions = {
-				blink = {
-					enabled = true,
-				},
-			},
+			-- completions = {
+			-- 	lsp = {
+			-- 		enabled = true,
+			-- 	},
+			-- },
 			latex = { enabled = false },
 			win_options = {
 				conceallevel = {

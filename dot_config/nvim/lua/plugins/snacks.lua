@@ -2,7 +2,9 @@
 
 return {
 	"folke/snacks.nvim",
-	dependencies = {},
+	dependencies = {
+		"MaximilianLloyd/ascii.nvim",
+	},
 	priority = 1000,
 	lazy = false,
 	---@type snacks.Config
@@ -70,6 +72,12 @@ return {
 		explorer = { enabled = true },
 		indent = { enabled = true },
 		input = { enabled = true },
+		lazygit = {
+			---@diagnostic disable-next-line: missing-fields
+			theme = {
+				selectedLineBgColor = { bg = "ColorColumn" },
+			},
+		},
 		picker = {
 			layout = function()
 				if vim.o.columns >= 140 then

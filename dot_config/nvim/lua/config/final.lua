@@ -8,5 +8,3 @@ vim.filetype.add({
 		age = "age",
 	},
 })
-
-require("statuscol").setup()

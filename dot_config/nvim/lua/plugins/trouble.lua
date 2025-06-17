@@ -33,7 +33,7 @@ return {
 		},
 	},
 	{
-		"nvim-lualine/lualine.nvim",
+		"eokoshi/lualine.nvim",
 		opts = function(_, opts)
 			local trouble = require("trouble")
 			local symbols = trouble.statusline({

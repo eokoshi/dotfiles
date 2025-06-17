@@ -16,6 +16,7 @@ vim.opt.fillchars = {
 	eob = " ",
 }
 vim.o.findfunc = "fd"
+vim.o.foldcolumn = "1"
 vim.o.foldmethod = "expr"
 vim.o.foldexpr = "v:lua.vim.treesitter.foldexpr()"
 vim.api.nvim_create_autocmd("LspAttach", {
@@ -28,6 +29,7 @@ vim.api.nvim_create_autocmd("LspAttach", {
 	end,
 })
 vim.o.foldlevelstart = 99
+vim.o.foldtext = vim.lsp.foldtext()
 vim.o.formatoptions = "lnjq"
 vim.o.grepformat = "%f:%l:%c:%m"
 vim.o.grepprg = "rg --vimgrep"
@@ -41,8 +43,11 @@ vim.o.laststatus = 3 -- global statusline
 vim.o.linebreak = true -- Wrap lines at convenient points
 vim.o.list = false -- Show some invisible characters (tabs...
 vim.o.mouse = "a" -- Enable mouse mode
+vim.o.number = true
+vim.o.numberwidth = 2
 vim.o.pumblend = 10 -- Popup blend
 vim.o.pumheight = 10 -- Maximum number of entries in a popup
+vim.o.relativenumber = true
 vim.o.ruler = false -- Disable the default ruler
 vim.o.scrolloff = 10 -- Lines of context
 vim.opt.sessionoptions = { "buffers", "curdir", "tabpages", "winsize", "help", "globals", "skiprtp", "folds" }
@@ -50,6 +55,7 @@ vim.o.shiftround = true -- Round indent
 vim.o.shiftwidth = 4 -- Size of an indent
 vim.o.shortmess = "aoOsIcCF"
 vim.o.showmode = false -- Dont show mode since we have a statusline
+vim.o.signcolumn = "yes" -- Always show the signcolumn, otherwise it would shift the text each time
 vim.o.sidescrolloff = 8 -- Columns of context
 vim.o.smartcase = true -- Don't ignore case with capitals
 vim.o.smartindent = true -- Insert indents automatically

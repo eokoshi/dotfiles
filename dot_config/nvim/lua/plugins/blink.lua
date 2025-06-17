@@ -5,7 +5,6 @@ return {
 	dependencies = {
 		"rafamadriz/friendly-snippets",
 	},
-	-- version = "1.3.1",
 	version = "*",
 	event = { "InsertEnter", "CmdlineEnter" },
 	opts_extend = { "sources.default" },
@@ -71,7 +70,7 @@ return {
 		},
 		signature = { enabled = false },
 		sources = {
-			default = { "lsp", "path", "snippets", "buffer" },
+			default = { "lsp", "path", "snippets" },
 			providers = {
 				path = {
 					opts = {
@@ -88,9 +87,6 @@ return {
 					end,
 				},
 			},
-			min_keyword_length = function()
-				return vim.bo.filetype == "markdown" and 2 or 0
-			end,
 		},
 		cmdline = {
 			enabled = true, -- set to false if you want noice popupmenu (or wait for noice to get blink compatibility)

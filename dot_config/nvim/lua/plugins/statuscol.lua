@@ -3,16 +3,8 @@
 return {
 	{
 		"luukvbaal/statuscol.nvim",
-		event = "VeryLazy",
-		init = function()
-			vim.opt.number = true
-			vim.opt.relativenumber = true
-			vim.opt.numberwidth = 2
-			vim.opt.signcolumn = "yes" -- Always show the signcolumn, otherwise it would shift the text each time
-			vim.opt.foldcolumn = "1"
-			vim.opt.foldlevelstart = 99
-			vim.opt.foldtext = vim.lsp.foldtext()
-		end,
+		lazy = false,
+		priority = 1000,
 		opts = function()
 			local builtin = require("statuscol.builtin")
 			return {
