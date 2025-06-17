@@ -1,4 +1,8 @@
+{{ if eq .chezmoi.hostname "eeftop" "office" }}
 -- if true then return {} end
+{{ else }}
+if true then return {} end
+{{ end }}
 
 return {
 	"obsidian-nvim/obsidian.nvim",
@@ -14,8 +18,6 @@ return {
 		"BufReadPre /mnt/c/Users/pathology/Documents/Obsidian/*.md",
 		"BufNewFile /mnt/c/Users/pathology/Documents/Obsidian/*.md",
 	},
-{{ else }}
-	enabled = false,
 {{ end }}
 	dependencies = {
 		"nvim-lua/plenary.nvim",

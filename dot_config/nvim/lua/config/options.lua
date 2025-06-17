@@ -1,13 +1,13 @@
 local icons = require("stuff.icons")
 
-vim.opt.autowrite = true -- Enable auto write
-vim.opt.clipboard = "unnamedplus" -- Sync with system clipboard
-vim.opt.colorcolumn = "+1"
-vim.opt.completeopt = "menu,menuone,noselect"
-vim.opt.conceallevel = 2 -- Hide * markup for bold and italic, but not markers with substitutions
-vim.opt.confirm = true -- Confirm to save changes before exiting modified buffer
-vim.opt.cursorline = true -- Enable highlighting of the current line
-vim.opt.expandtab = false -- Use spaces instead of tabs
+vim.o.autowrite = true -- Enable auto write
+vim.o.clipboard = "unnamedplus" -- Sync with system clipboard
+vim.o.colorcolumn = "+1"
+vim.o.completeopt = "menu,menuone,noselect"
+vim.o.conceallevel = 2 -- Hide * markup for bold and italic, but not markers with substitutions
+vim.o.confirm = true -- Confirm to save changes before exiting modified buffer
+vim.o.cursorline = true -- Enable highlighting of the current line
+vim.o.expandtab = false -- Use spaces instead of tabs
 vim.opt.fillchars = {
 	foldopen = icons.folds.foldopen,
 	foldclose = icons.folds.foldclose,
@@ -15,11 +15,9 @@ vim.opt.fillchars = {
 	foldsep = icons.folds.foldsep,
 	eob = " ",
 }
-vim.opt.findfunc = "fd"
+vim.o.findfunc = "fd"
 vim.o.foldmethod = "expr"
--- Default to treesitter folding
 vim.o.foldexpr = "v:lua.vim.treesitter.foldexpr()"
--- Prefer LSP folding if client supports it
 vim.api.nvim_create_autocmd("LspAttach", {
 	callback = function(args)
 		local client = vim.lsp.get_client_by_id(args.data.client_id)
@@ -29,50 +27,50 @@ vim.api.nvim_create_autocmd("LspAttach", {
 		end
 	end,
 })
-vim.opt.formatoptions = "lnjq"
-vim.opt.grepformat = "%f:%l:%c:%m"
-vim.opt.grepprg = "rg --vimgrep"
-vim.opt.hlsearch = true
-vim.opt.ignorecase = true -- Ignore case
-vim.opt.incsearch = true
-vim.opt.inccommand = "nosplit" -- preview incremental substitute
-vim.opt.incsearch = true
-vim.opt.jumpoptions = "view"
-vim.opt.laststatus = 3 -- global statusline
-vim.opt.linebreak = true -- Wrap lines at convenient points
-vim.opt.list = false -- Show some invisible characters (tabs...
-vim.opt.mouse = "a" -- Enable mouse mode
-vim.opt.pumblend = 10 -- Popup blend
-vim.opt.pumheight = 10 -- Maximum number of entries in a popup
-vim.opt.ruler = false -- Disable the default ruler
-vim.opt.scrolloff = 10 -- Lines of context
+vim.o.formatoptions = "lnjq"
+vim.o.grepformat = "%f:%l:%c:%m"
+vim.o.grepprg = "rg --vimgrep"
+vim.o.hlsearch = true
+vim.o.ignorecase = true -- Ignore case
+vim.o.incsearch = true
+vim.o.inccommand = "nosplit" -- preview incremental substitute
+vim.o.incsearch = true
+vim.o.jumpoptions = "view"
+vim.o.laststatus = 3 -- global statusline
+vim.o.linebreak = true -- Wrap lines at convenient points
+vim.o.list = false -- Show some invisible characters (tabs...
+vim.o.mouse = "a" -- Enable mouse mode
+vim.o.pumblend = 10 -- Popup blend
+vim.o.pumheight = 10 -- Maximum number of entries in a popup
+vim.o.ruler = false -- Disable the default ruler
+vim.o.scrolloff = 10 -- Lines of context
 vim.opt.sessionoptions = { "buffers", "curdir", "tabpages", "winsize", "help", "globals", "skiprtp", "folds" }
-vim.opt.shiftround = true -- Round indent
-vim.opt.shiftwidth = 4 -- Size of an indent
-vim.opt.shortmess = "aoOsIcCF"
-vim.opt.showmode = false -- Dont show mode since we have a statusline
-vim.opt.sidescrolloff = 8 -- Columns of context
-vim.opt.smartcase = true -- Don't ignore case with capitals
-vim.opt.smartindent = true -- Insert indents automatically
-vim.opt.smoothscroll = true
-vim.opt.softtabstop = 0
-vim.opt.spelllang = { "en" }
-vim.opt.splitbelow = true -- Put new windows below current
-vim.opt.splitkeep = "screen"
-vim.opt.splitright = true -- Put new windows right of current
-vim.opt.swapfile = true
-vim.opt.tabstop = 4 -- Number of spaces tabs count for
-vim.opt.termguicolors = true -- True color support
-vim.opt.textwidth = 98
-vim.opt.timeoutlen = 300 -- Lower than default (1000) to quickly trigger which-key
-vim.opt.undofile = true
-vim.opt.undolevels = 10000
-vim.opt.updatetime = 200 -- Save swap file and trigger CursorHold
-vim.opt.virtualedit = "block" -- Allow cursor to move where there is no text in visual block mode
-vim.opt.wildmode = "longest:full,full" -- Command-line completion mode
-vim.opt.winborder = "solid"
-vim.opt.winminwidth = 20 -- Minimum window width
-vim.opt.wrap = false -- Disable line wrap
+vim.o.shiftround = true -- Round indent
+vim.o.shiftwidth = 4 -- Size of an indent
+vim.o.shortmess = "aoOsIcCF"
+vim.o.showmode = false -- Dont show mode since we have a statusline
+vim.o.sidescrolloff = 8 -- Columns of context
+vim.o.smartcase = true -- Don't ignore case with capitals
+vim.o.smartindent = true -- Insert indents automatically
+vim.o.smoothscroll = true
+vim.o.softtabstop = 0
+vim.o.spelllang = "en"
+vim.o.splitbelow = true -- Put new windows below current
+vim.o.splitkeep = "screen"
+vim.o.splitright = true -- Put new windows right of current
+vim.o.swapfile = true
+vim.o.tabstop = 4 -- Number of spaces tabs count for
+vim.o.termguicolors = true -- True color support
+vim.o.textwidth = 98
+vim.o.timeoutlen = 300 -- Lower than default (1000) to quickly trigger which-key
+vim.o.undofile = true
+vim.o.undolevels = 10000
+vim.o.updatetime = 200 -- Save swap file and trigger CursorHold
+vim.o.virtualedit = "block" -- Allow cursor to move where there is no text in visual block mode
+vim.o.wildmode = "longest:full,full" -- Command-line completion mode
+vim.o.winborder = "solid"
+vim.o.winminwidth = 20 -- Minimum window width
+vim.o.wrap = false -- Disable line wrap
 
 -- diagnostic options
 vim.diagnostic.config({

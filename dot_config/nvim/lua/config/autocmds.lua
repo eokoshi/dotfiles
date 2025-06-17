@@ -86,6 +86,11 @@ vim.api.nvim_create_autocmd("BufWritePost", {
 				command = "chezmoi",
 				args = { "apply" },
 				cwd = "~",
+				on_stdout = function(_, data, _)
+					if data ~= nil then
+						vim.notify("Apply failed.\n\nRun chezmoi apply from command line.", vim.log.levels.ERROR)
+					end
+				end,
 				on_stderr = function(_, data, _)
 					if data ~= nil then
 						vim.notify("Apply failed.\n\nRun chezmoi apply from command line.", vim.log.levels.ERROR)
