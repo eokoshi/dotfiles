@@ -27,6 +27,7 @@ vim.api.nvim_create_autocmd("LspAttach", {
 		end
 	end,
 })
+vim.o.foldlevelstart = 99
 vim.o.formatoptions = "lnjq"
 vim.o.grepformat = "%f:%l:%c:%m"
 vim.o.grepprg = "rg --vimgrep"

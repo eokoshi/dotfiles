@@ -1,18 +1,14 @@
 -- if true then return {} end
 
-local function has_words_before()
-	local line, col = (unpack or table.unpack)(vim.api.nvim_win_get_cursor(0))
-	return col ~= 0 and vim.api.nvim_buf_get_lines(0, line - 1, line, true)[1]:sub(col, col):match("%s") == nil
-end
-
 return {
-	"Saghen/blink.cmp",
+	"saghen/blink.cmp",
 	dependencies = {
 		"rafamadriz/friendly-snippets",
 	},
-	version = "1.3.1",
+	-- version = "1.3.1",
+	version = "*",
 	event = { "InsertEnter", "CmdlineEnter" },
-	opts_extend = { "sources.default", "sources.providers" },
+	opts_extend = { "sources.default" },
 	---@module 'blink.cmp'
 	---@type blink.cmp.Config
 	opts = {
@@ -75,7 +71,7 @@ return {
 		},
 		signature = { enabled = false },
 		sources = {
-			default = { "lsp", "path", "snippets", "lazydev" },
+			default = { "lsp", "path", "snippets", "buffer" },
 			providers = {
 				path = {
 					opts = {
@@ -83,12 +79,6 @@ return {
 							return vim.fn.getcwd()
 						end,
 					},
-				},
-				lazydev = {
-					name = "LazyDev",
-					module = "lazydev.integrations.blink",
-					-- make lazydev completions top priority (see `:h blink.cmp`)
-					score_offset = 100,
 				},
 				cmdline = {
 					module = "blink.cmp.sources.cmdline",
@@ -136,21 +126,11 @@ return {
 			["<Tab>"] = {
 				"select_next",
 				"snippet_forward",
-				function(cmp)
-					if has_words_before() or vim.api.nvim_get_mode().mode == "c" then
-						return cmp.show()
-					end
-				end,
 				"fallback",
 			},
 			["<S-Tab>"] = {
 				"select_prev",
 				"snippet_backward",
-				function(cmp)
-					if vim.api.nvim_get_mode().mode == "c" then
-						return cmp.show()
-					end
-				end,
 				"fallback",
 			},
 		},
