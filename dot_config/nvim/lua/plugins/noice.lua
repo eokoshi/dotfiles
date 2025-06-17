@@ -5,6 +5,8 @@ return {
 	"Kayzels/noice.nvim",
 	branch = "fix-scrollbar",
 	commit = "43c79b8",
+
+	-- "folke/noice.nvim",
 	dependencies = {
 		"MunifTanjim/nui.nvim",
 	},
@@ -13,7 +15,7 @@ return {
 		presets = {
 			bottom_search = true,
 			lsp_doc_border = true,
-			command_palette = true,
+			-- command_palette = true, -- does not work with blink cmdline completions
 		},
 		views = {
 			split = {
@@ -51,6 +53,7 @@ return {
 				filter = {
 					event = "msg_show",
 					min_height = 20,
+					cmdline = false,
 				},
 				view = "split",
 			},
