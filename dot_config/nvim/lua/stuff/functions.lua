@@ -10,7 +10,7 @@ function M.ToggleBufferAutoSave()
 	if current then
 		vim.b[key] = false
 		vim.cmd("autocmd! AutoSaveBuffer" .. bufnr)
-		vim.notify("AutoSave disabled for buffer " .. bufnr, vim.log.levels.INFO)
+		-- vim.notify("AutoSave disabled for buffer " .. bufnr, vim.log.levels.INFO)
 	else
 		vim.b[key] = true
 		local group = vim.api.nvim_create_augroup("AutoSaveBuffer" .. bufnr, { clear = true })
@@ -23,7 +23,7 @@ function M.ToggleBufferAutoSave()
 				end
 			end,
 		})
-		vim.notify("AutoSave enabled for buffer " .. bufnr, vim.log.levels.INFO)
+		-- vim.notify("AutoSave enabled for buffer " .. bufnr, vim.log.levels.INFO)
 	end
 end
 
