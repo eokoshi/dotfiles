@@ -25,11 +25,6 @@ return {
 				settings = {
 					basedpyright = {
 						disableOrganizeImports = true,
-						analysis = {
-							diagnosticSeverityOverrides = {
-								reportUnusedCallResule = "none"
-							}
-						}
 					},
 				},
 			})
