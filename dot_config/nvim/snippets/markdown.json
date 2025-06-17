@@ -1,4 +1,9 @@
 {
+	"checkbox": {
+		"prefix": "chk",
+		"body": "- [ ] $0",
+		"description": "empty checkbox"
+	},
 	"[array]": {
 		"prefix": "BBM",
 		"body": "\\left[ \\begin{array}\n\t${0:${TM_SELECTED_TEXT}}\n\\end{array} \\right]",

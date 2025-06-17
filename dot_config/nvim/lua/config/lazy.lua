@@ -19,10 +19,8 @@ require("lazy").setup({
 	spec = {
 		{ import = "plugins" },
 	},
-	checker = { enabled = true },
-	change_detection = {
-		enabled = false,
-	},
+	checker = { enabled = false },
+	change_detection = { enabled = false, },
 	ui = {
 		title = " 󰒲 lazy.nvim ",
 		size = {
