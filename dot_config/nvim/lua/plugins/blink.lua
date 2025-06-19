@@ -70,7 +70,7 @@ return {
 		},
 		signature = { enabled = false },
 		sources = {
-			default = { "lsp", "path", "snippets" },
+			default = { "lsp", "path", "buffer", "snippets" },
 			providers = {
 				path = {
 					opts = {

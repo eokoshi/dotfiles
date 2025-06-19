@@ -1,4 +1,11 @@
 {
+	"__len__": {
+		"prefix": ".len",
+		"body": [
+			".__len__()$0"
+		],
+		"description": "call len without having to surround the arg with parens"
+	},
 	"import matplotlib": {
 		"prefix": "plt",
 		"body": [
@@ -31,7 +38,7 @@
 			"#!/usr/bin/env python",
 			"# -*- coding: utf-8 -*-",
 			"#region Header",
-			"'${1:Enter Title}; ${2:Description}'",
+			"'Description: ${1:Description}'",
 			"__author__ = 'Ethan N. Okoshi'",
 			"__date__ = '$CURRENT_YEAR-$CURRENT_MONTH-$CURRENT_DATE'",
 			"__email__ = 'ethanokoshi+code <at> gmail <dot> com'",

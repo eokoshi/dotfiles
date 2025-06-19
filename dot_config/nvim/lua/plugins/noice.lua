@@ -35,6 +35,7 @@ return {
 						{ find = "; after #%d+" },
 						{ find = "; before #%d+" },
 						{ find = "%d+ lines" },
+						{ find = "%d+ more lines" },
 						{ find = "%d+ fewer" },
 						{ find = "is deprecated" },
 					},
