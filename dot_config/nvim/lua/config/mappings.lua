@@ -88,6 +88,7 @@ map("n", "<Leader>fo", function() require("oil").toggle_float() end, { desc = "O
 map("n", "<Leader>fp", function() Snacks.picker.projects() end, { desc = "projects" })
 map("n", "<Leader>fq", function() Snacks.picker.qflist() end, { desc = "quickfix list" })
 map("n", "<Leader>fr", function() Snacks.picker.recent() end, { desc = "recent" })
+map("n", "<Leader>fs", function() Snacks.scratch.select() end, { desc = "find scratch buffers" })
 map("n", "<Leader>fu", function() Snacks.picker.undo() end, { desc = "undo" })
 map("n", "<Leader>fw", function() Snacks.picker.grep({ cmd = "rg" }) end, { desc = "word" })
 map("n", "<Leader>fW", function() Snacks.picker.grep({ cmd = "rg", hidden = true, ignored = true }) end, { desc = "Word in all files" })
@@ -99,6 +100,7 @@ map("n", "<Leader>b", "", { desc = "Buffers" })
 map("n", "<Leader>bD", function() functions.DOS_to_Unix() end, { desc = "DOS to Unix" })
 map("n", "<Leader>bc", function() Snacks.bufdelete.other() end, { desc = "Close all other bufs" })
 map("n", "<Leader>bf", function() vim.lsp.buf.format() end, { desc = "format buffer" })
+map("n", "<Leader>bs", function() Snacks.scratch() end, { desc = "scratch buffer" })
 toggles.autosave():map("<Leader>ba")
 
 -- UI
@@ -257,14 +259,6 @@ vim.api.nvim_create_autocmd("BufReadPost", {
 	end,
 })
 
--- Lua keymaps
-vim.api.nvim_create_autocmd("BufReadPost", {
-	pattern = "*.lua",
-	callback = function()
-		map("n", "<Leader>lx", function() Snacks.scratch() end, { desc = "scratch buffer" })
-		map("n", "<Leader>lX", function() Snacks.scratch.select() end, { desc = "select scratch buffer" })
-	end,
-})
 
 -- Extras/Fun stuff
 map("n", "<Leader>x", "", { desc = "Extras" })
