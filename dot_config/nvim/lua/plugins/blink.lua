@@ -20,8 +20,6 @@ return {
 				show_on_blocked_trigger_characters = function()
 					if vim.bo.filetype == "markdown" then
 						return { " ", "\n", "\t", ".", "/", "(", "[" }
-					elseif vim.bo.filetype == "oil" then
-						return { " ", "\n", "\t", ".", "/", "(", "[" }
 					end
 					return { " ", "\n", "\t" }
 				end,

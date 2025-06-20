@@ -3,7 +3,6 @@
 return {
 	{
 		"jay-babu/mason-nvim-dap.nvim",
-		lazy = true,
 		dependencies = {
 			"mason-org/mason.nvim",
 			"mfussenegger/nvim-dap",
@@ -18,7 +17,6 @@ return {
 	},
 	{
 		"igorlfs/nvim-dap-view",
-		optional = true,
 		---@module 'dap-view'
 		---@type dapview.Config
 		opts = {
