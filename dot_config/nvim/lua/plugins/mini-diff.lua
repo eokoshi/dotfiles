@@ -8,6 +8,7 @@ return {
 	opts = {
 		view = {
 			style = "sign",
+			priority = 1,
 			signs = {
 				add = icons.git.gitbar,
 				change = icons.git.gitbar,

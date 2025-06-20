@@ -149,7 +149,7 @@ return {
 				lualine_a = {
 					{
 						"buffers",
-						hide_filename_extension = true,
+						-- hide_filename_extension = true,
 						symbols = {
 							alternate_file = "",
 							modified = " " .. icons.lualine.modified,
