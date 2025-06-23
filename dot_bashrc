@@ -165,7 +165,7 @@ export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 
 export EDITOR=nvim
-export PATH="$PATH:/opt/nvim/bin"
+export PATH="/opt/nvim/bin:$HOME/.local/bin:$PATH"
 
 export TS_IP="$(hostname -I | awk '{print $2}')"
 export IP="$(hostname -I | awk '{print $1}')"
