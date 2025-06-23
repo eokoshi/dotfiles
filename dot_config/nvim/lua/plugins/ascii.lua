@@ -2,7 +2,6 @@
 
 return {
 	"MaximilianLloyd/ascii.nvim",
-	optional = true,
 	dependencies = {
 		"MunifTanjim/nui.nvim",
 	},

@@ -16,7 +16,7 @@ sh -c "$(curl -fsLS get.chezmoi.io)" -- -b $HOME/.local/bin
 chezmoi init --apply eokoshi
 
 ## apt packages
-sudo apt-get -y --ignore-missing install ripgrep fd-find python3-venv npm direnv
+sudo apt-get -y --ignore-missing install ripgrep fd-find python3-venv npm cbonsai
 ln -s $(which fdfind) ~/.local/bin/fd
 
 ## uv
