@@ -161,7 +161,7 @@ fi
 # export -f show_virtual_env
 # PS1='$(show_virtual_env)'$PS1
 
-export EDITOR=nvim-clean
+export EDITOR=nvim
 export PATH="$PATH:/opt/nvim/bin"
 
 export NVM_DIR="$HOME/.nvm"

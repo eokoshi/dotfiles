@@ -16,9 +16,9 @@ gui:
   showRootItemInFileTree: false
   switchTabsWithPanelJumpKeys: true
 os:
-  edit: nvim-clean -- {{filename}}
-  editAtLine: nvim-clean +{{line}} -- {{filename}}
-  editAtLineAndWait: nvim-clean +{{line}} -- {{filename}}
+  edit: nvim -- {{filename}}
+  editAtLine: nvim +{{line}} -- {{filename}}
+  editAtLineAndWait: nvim +{{line}} -- {{filename}}
   openDirInEditor: nvim -- {{dir}}
 disableStartupPopups: true
 promptToReturnFromSubprocess: false
