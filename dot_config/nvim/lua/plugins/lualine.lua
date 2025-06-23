@@ -13,7 +13,7 @@ local function get_attached_clients()
 
 	-- add client
 	for _, client in pairs(buf_clients) do
-		if client.name ~= "copilot" and client.name ~= "null-ls" then
+		if client.name ~= "copilot" and client.name ~= "null-ls" and client.name ~= "render-markdown" then
 			table.insert(buf_client_names, client.name)
 		end
 	end

@@ -34,7 +34,7 @@ return {
 				sign = false,
 			},
 			-- completions = {
-			-- 	lsp = {
+			-- 	blink = {
 			-- 		enabled = true,
 			-- 	},
 			-- },
