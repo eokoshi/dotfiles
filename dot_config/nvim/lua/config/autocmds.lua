@@ -47,35 +47,8 @@ vim.api.nvim_create_autocmd("BufEnter", {
 	desc = "Remove colorcolumn in nofile buffers",
 })
 
--- LSP
-local lsp_af = vim.api.nvim_create_augroup("LspAutoformat", { clear = true })
-
-vim.api.nvim_create_autocmd("LspAttach", {
-	group = lsp_af,
-	callback = function(args)
-		-- local prior_aucmds = vim.api.nvim_get_autocmds({ group = "LspAutoformat" })
-		-- if next(prior_aucmds) ~= nil then
-		-- 	vim.api.nvim_del_augroup_by_name("LspAutoformat")
-		-- 	vim.api.nvim_create_augroup("LspAutoformat", { clear = true })
-		-- end
-		local client = vim.lsp.get_client_by_id(args.data.client_id)
-		---@diagnostic disable-next-line: need-check-nil
-		if client:supports_method("textDocument/formatting") then
-			vim.api.nvim_create_autocmd("BufWritePre", {
-				buffer = args.buf,
-				callback = function()
-					vim.lsp.buf.format()
-				end,
-			})
-		end
-	end,
-	once = true,
-	desc = "Autoformat on save",
-})
-
 -- Chezmoi
 local chezmoi = vim.api.nvim_create_augroup("Chezmoi", { clear = true })
-
 vim.api.nvim_create_autocmd("BufWritePost", {
 	group = chezmoi,
 	pattern = "*/.local/share/chezmoi/*",

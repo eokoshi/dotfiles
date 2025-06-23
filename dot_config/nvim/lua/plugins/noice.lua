@@ -53,7 +53,7 @@ return {
 			{ -- send long messages to view
 				filter = {
 					event = "msg_show",
-					min_height = 20,
+					min_height = 10,
 					cmdline = false,
 				},
 				view = "split",

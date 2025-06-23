@@ -15,10 +15,9 @@ __email__ = "test@example.org"
 __status__ = "Development"
 
 import argparse
+import os
 
 from logzero import logger
-
-import tqdm
 
 
 def log(function):
