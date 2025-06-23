@@ -129,7 +129,7 @@ Snacks.toggle.dim():map("<leader>uD")
 -- Git
 map("n", "<Leader>g", "", { desc = "Git" })
 map("n", "<Leader>gb", function() Snacks.picker.git_branches() end, { desc = "git branches" })
-map({ "n", "v" }, "<Leader>gB", function() Snacks.gitbrowse() end, { desc = "git browse" })
+map({ "n", "v" }, "<Leader>gB", function() Snacks.git.blame_line() end, { desc = "git blame line" })
 map("n", "<Leader>gd", function() Snacks.picker.git_diff() end, { desc = "git diff (hunks)" })
 map("n", "<Leader>gf", function() Snacks.picker.git_log_file() end, { desc = "git log file" })
 map("n", "<Leader>gg", function() Snacks.lazygit() end, { desc = "lazygit" })

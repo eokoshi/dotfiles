@@ -94,10 +94,11 @@ return {
 					{
 						"diff",
 						symbols = {
-							added = icons.git.added,
-							modified = icons.git.modified,
-							removed = icons.git.removed,
+							added = icons.git.added .. " ",
+							modified = icons.git.modified .. " ",
+							removed = icons.git.removed .. " ",
 						},
+						padding = 1,
 						source = function()
 							local gitsigns = vim.b.gitsigns_status_dict
 							if gitsigns then

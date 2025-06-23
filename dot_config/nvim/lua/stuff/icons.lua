@@ -17,9 +17,9 @@ return {
 		lsp = "",
 	},
 	git = {
-		added = "",
-		modified = "",
-		removed = "",
+		added = "",
+		modified = "",
+		removed = "",
 		gitbar = "┃",
 		col_delete = "_",
 	},
