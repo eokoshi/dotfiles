@@ -26,8 +26,8 @@ return {
 					{ icon = " ", key = "f", desc = "Find File", action = ":lua Snacks.dashboard.pick('files')" },
 					{
 						icon = " ",
-						key = "g",
-						desc = "Find Text",
+						key = "w",
+						desc = "Find Word",
 						action = ":lua Snacks.dashboard.pick('live_grep')",
 					},
 					{ icon = " ", key = "r", desc = "Recents", action = ":lua Snacks.dashboard.pick('oldfiles')" },

@@ -38,6 +38,7 @@ return {
 						{ find = "%d+ more lines" },
 						{ find = "%d+ fewer" },
 						{ find = "is deprecated" },
+						{ find = "Hunk %d+ of %d+" },
 					},
 				},
 				view = "mini",

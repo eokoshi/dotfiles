@@ -9,8 +9,7 @@ return {
 			{ "nvim-treesitter/nvim-treesitter-textobjects", lazy = true },
 			"mason-org/mason.nvim",
 		},
-		event = "VeryLazy",
-		lazy = vim.fn.argc(-1) == 0, -- load treesitter immediately when opening a file from the cmdline
+		lazy = false,
 		cmd = {
 			"TSBufDisable",
 			"TSBufEnable",

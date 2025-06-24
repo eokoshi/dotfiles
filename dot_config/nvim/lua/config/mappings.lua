@@ -64,6 +64,8 @@ map("n", "<C-Left>", function() require("smart-splits").resize_left() end, { des
 map("n", "<C-Right>", function() require("smart-splits").resize_right() end, { desc = "Resize split right" })
 map({"n", "i", "s"}, "<C-n>", function() require("noice.lsp").scroll(4) end, { desc = "Scroll hover down" })
 map({"n", "i", "s"}, "<C-p>", function() require("noice.lsp").scroll(-4) end, { desc = "Scroll hover up" })
+map('n', ']c', function() if vim.wo.diff then vim.cmd.normal({']c', bang = true}) else require("gitsigns").nav_hunk('next') end end, { desc = "Next hunk"})
+map('n', '[c', function() if vim.wo.diff then vim.cmd.normal({'[c', bang = true}) else require("gitsigns").nav_hunk('prev') end end, { desc = "Prev hunk"})
 
 -- Find
 map("n", "<Leader>f", "", { desc = "Find" })
@@ -127,6 +129,7 @@ Snacks.toggle.indent():map("<leader>ug")
 Snacks.toggle.dim():map("<leader>uD")
 
 -- Git
+local gitsigns = require("gitsigns")
 map("n", "<Leader>g", "", { desc = "Git" })
 map("n", "<Leader>gb", function() Snacks.picker.git_branches() end, { desc = "git branches" })
 map({ "n", "v" }, "<Leader>gB", function() Snacks.git.blame_line() end, { desc = "git blame line" })
@@ -134,10 +137,14 @@ map("n", "<Leader>gd", function() Snacks.picker.git_diff() end, { desc = "git di
 map("n", "<Leader>gf", function() Snacks.picker.git_log_file() end, { desc = "git log file" })
 map("n", "<Leader>gg", function() Snacks.lazygit() end, { desc = "lazygit" })
 map("n", "<Leader>gl", function() Snacks.picker.git_log() end, { desc = "git log" })
-map("n", "<Leader>gL", function() Snacks.picker.git_log_line() end, { desc = "git log line" })
-map("n", "<Leader>gs", function() Snacks.picker.git_status() end, { desc = "git status" })
-map("n", "<Leader>gS", function() Snacks.picker.git_stash() end, { desc = "git Stash" })
-map("n", "<Leader>gt", "<CMD>lua MiniDiff.toggle_overlay()<CR>", { desc = "toggle mini.diff overlay" })
+map("n", "<Leader>gs", gitsigns.stage_hunk, { desc = "stage buffer" })
+map("n", "<Leader>gr", gitsigns.reset_hunk, { desc = "reset buffer" })
+map('v', '<leader>gs', function() gitsigns.stage_hunk({ vim.fn.line('.'), vim.fn.line('v') }) end, {desc = "stage hunk"})
+map('v', '<leader>gr', function() gitsigns.reset_hunk({ vim.fn.line('.'), vim.fn.line('v') }) end, {desc = "reset hunk"})
+map("n", "<Leader>gS", gitsigns.stage_buffer, { desc = "stage buffer" })
+map("n", "<Leader>gR", gitsigns.reset_buffer, { desc = "reset buffer" })
+map("n", "<Leader>gt", function() Snacks.picker.git_status() end, { desc = "git s[t]atus" })
+map({'o', 'x'}, 'ih', gitsigns.select_hunk, { desc = "inside hunk"})
 
 -- Language Tools
 map("n", "<Leader>l", "", { desc = "Language Tools" })
