@@ -98,7 +98,6 @@ return {
 							modified = icons.git.modified .. " ",
 							removed = icons.git.removed .. " ",
 						},
-						padding = 1,
 						source = function()
 							local gitsigns = vim.b.gitsigns_status_dict
 							if gitsigns then
@@ -109,6 +108,12 @@ return {
 								}
 							end
 						end,
+						diff_color = {
+							-- Same color values as the general color option can be used here.
+							added = "GitSignsStagedAdd", -- Changes the diff's added color
+							modified = "GitSignsStagedChange", -- Changes the diff's modified color
+							removed = "GitSignsStagedDelete", -- Changes the diff's removed color you
+						},
 					},
 					"diagnostics",
 					{
