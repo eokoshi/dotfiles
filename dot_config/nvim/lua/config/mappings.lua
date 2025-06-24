@@ -56,8 +56,6 @@ map({ "i", "c" }, "<C-l>", "<C-o>a", { desc = "Move one char right" })
 map({ "i", "c" }, "<C-h>", "<C-o>h", { desc = "Move one char left" })
 map("i", "<S-Tab>", "<C-d>", { desc = "Unindent 1 level" })
 map("n", "J", "mzJ`z", { desc = "Shift J without moving cursor", noremap = false })
-map({ "n", "t" }, "]]", function() Snacks.words.jump(vim.v.count1) end, { desc = "Next Reference" })
-map({ "n", "t" }, "[[", function() Snacks.words.jump(-vim.v.count1) end, { desc = "Prev Reference" })
 map("n", "<C-Up>", function() require("smart-splits").resize_up() end, { desc = "Resize split up" })
 map("n", "<C-Down>", function() require("smart-splits").resize_down() end, { desc = "Resize split down" })
 map("n", "<C-Left>", function() require("smart-splits").resize_left() end, { desc = "Resize split left" })
@@ -145,6 +143,7 @@ map("n", "<Leader>gS", gitsigns.stage_buffer, { desc = "stage buffer" })
 map("n", "<Leader>gR", gitsigns.reset_buffer, { desc = "reset buffer" })
 map("n", "<Leader>gt", function() Snacks.picker.git_status() end, { desc = "git s[t]atus" })
 map({'o', 'x'}, 'ih', gitsigns.select_hunk, { desc = "inside hunk"})
+map({'o', 'x'}, 'ah', gitsigns.select_hunk, { desc = "around hunk"})
 
 -- Language Tools
 map("n", "<Leader>l", "", { desc = "Language Tools" })
@@ -235,9 +234,9 @@ vim.cmd([[cab cc CodeCompanion]])
 vim.keymap.del("i", "<Tab>")
 
 -- Diff keymaps
-vim.api.nvim_create_autocmd("BufReadPost", {
+vim.api.nvim_create_autocmd("WinEnter", {
 	callback = function()
-		if vim.wo[0].diff then
+		if vim.wo.diff then
 			map({ "n", "v" }, "<Leader>dfo", "<CMD>diffget<CR>", { desc = "Get the text from the other buffer to this one" })
 			map({ "n", "v" }, "<Leader>dfp", "<CMD>diffput<CR>", { desc = "Put the text from this buffer to the other" })
 		end
@@ -248,7 +247,7 @@ vim.api.nvim_create_autocmd("BufReadPost", {
 vim.api.nvim_create_autocmd("BufReadPost", {
 	pattern = "*.py",
 	callback = function()
-		map("n", "<Leader>fi", "/import<CR>", { desc = "Jump to imports" })
+		map("n", "<Leader>fi", "/import<CR>", { desc = "Jump to imports", buffer = true})
 	end,
 })
 
@@ -256,12 +255,12 @@ vim.api.nvim_create_autocmd("BufReadPost", {
 vim.api.nvim_create_autocmd("BufReadPost", {
 	pattern = "*.md",
 	callback = function()
-		map("n", "<Leader>m", "", { desc = "Markdown" })
-		map("n", "<Leader>mm", "<CMD>lua require('nabla').popup({border = 'solid'})<CR>", { desc = "Show math popup" })
-		map("n", "<Leader>mt", "<CMD>ObsidianToday<CR>", { desc = "today's note" })
-		map("n", "<Leader>my", "<CMD>ObsidianYesterday<CR>", { desc = "yesterday's note" })
-		map("n", "<Leader>mf", "<CMD>Obsidian dailies -48 0<CR>", { desc = "find daily notes" })
-		map("n", "<Leader>mn", "<CMD>ObsidianNewFromTemplate<CR>", { desc = "new from template" })
+		map("n", "<Leader>m", "", { desc = "Markdown", buffer = true})
+		map("n", "<Leader>mm", "<CMD>lua require('nabla').popup({border = 'solid'})<CR>", { desc = "Show math popup", buffer = true})
+		map("n", "<Leader>mt", "<CMD>ObsidianToday<CR>", { desc = "today's note", buffer = true})
+		map("n", "<Leader>my", "<CMD>ObsidianYesterday<CR>", { desc = "yesterday's note", buffer = true})
+		map("n", "<Leader>mf", "<CMD>Obsidian dailies -48 0<CR>", { desc = "find daily notes", buffer = true})
+		map("n", "<Leader>mn", "<CMD>ObsidianNewFromTemplate<CR>", { desc = "new from template", buffer = true})
 		toggles.math_virt():map("<Leader>um")
 	end,
 })
