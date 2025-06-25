@@ -1,0 +1,15 @@
+{
+	"plugin": {
+		"prefix": "plug",
+		"body": [
+			"-- if true then return {} end",
+			"",
+			"return {",
+			"    {",
+			"        '$0'",
+			"    }",
+			"}"
+		],
+		"description": "new plugin file boilerplate"
+	}
+}
