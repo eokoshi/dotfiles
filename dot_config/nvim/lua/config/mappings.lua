@@ -28,7 +28,7 @@ map("n", "<Leader>q", "<CMD>q<CR>", { desc = "Quit window" })
 map("n", "<Leader>Q", "<CMD>qa<CR>", { desc = "Quit nvim" })
 map("n", "<Leader>R", function() Snacks.rename.rename_file() end, { desc = "Rename file" })
 map("n", "<Leader>U", "<CMD>UndotreeToggle<CR>", { desc = "Open Undotree" })
-map("n", "<Leader>w", "<CMD>w<CR>", { desc = "Save buffer" })
+map("n", "<Leader>w", "<CMD>w ++p<CR>", { desc = "Save buffer" })
 map("n", "<Leader>.", "<CMD>cd %:h<CR>", { desc = "cd here" })
 map("n", "<Leader>:", function() Snacks.picker.command_history() end, { desc = "Command history" })
 map("n", "<Leader><space>", function() Snacks.picker.smart() end, { desc = "Smart search" })
@@ -170,6 +170,16 @@ map("n", "<Leader>lt", "", {desc = "Trouble"})
 map("n", "<Leader>ltd", "<CMD>Trouble diagnostics toggle focus=true filter.buf=0<CR>", {desc = "diagnostics list"})
 map("n", "<Leader>ltD", "<CMD>Trouble diagnostics toggle<CR>", {desc = "workspace diagnostics list"})
 map("n", "<Leader>lts", "<CMD>Trouble symbols toggle pinned=true win.relative=editor win.position=right<CR>", {desc = "symbols"})
+
+-- Run code
+map("n", "<Leader>r", "", {desc = "Run Code"})
+map("n", "<Leader>rc", "<CMD>SnipClose<CR>", {desc = "Run line"})
+map("n", "<Leader>rl", "<CMD>SnipRun<CR>", {desc = "Run line"})
+map("n", "<Leader>rf", "<CMD>%SnipRun<CR>", {desc = "Run file"})
+map("n", "<Leader>rr", "vip:SnipRun<CR><ESC>", {desc = "Run scope"})
+map("n", "<Leader>rR", "<CMD>SnipReset<CR>", {desc = "Reset REPL"})
+map("v", "<CR>", ":SnipRun<CR>", {desc = "Run selection"})
+
 
 -- Debugging
 map("n", "<Leader>d", "", { desc = "Debugger" })

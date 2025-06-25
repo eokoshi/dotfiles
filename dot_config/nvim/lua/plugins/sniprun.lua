@@ -6,17 +6,11 @@ return {
 		branch = "master",
 		build = "bash install.sh 1",
 		opts = {
-			selected_interpreters = {
-				"Python3_fifo",
+			selected_interpreters = { "Python3_fifo" },
+			repl_enable = { "Python3_fifo" },
+			display = {
+				"VirtualLine",
 			},
-			repl_enable = {
-				"Python3_fifo",
-			},
-			-- interpreter_options = {
-			-- 	Python3_fifo = {
-			-- 		venv = { ".venv" },
-			-- 	},
-			-- },
 		},
 		init = function()
 			vim.api.nvim_create_autocmd("BufReadPost", {
