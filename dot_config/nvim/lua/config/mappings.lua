@@ -216,6 +216,7 @@ map("n", "<Leader>pi", "<CMD>Lazy<CR>", { desc = "Lazy" })
 map("n", "<Leader>pm", "<CMD>Mason<CR>", { desc = "Mason" })
 map("n", "<Leader>pc", function() vim.fn.chdir(os.getenv("HOME").."/.local/share/chezmoi") Snacks.explorer.open() end, { desc = "cd config" })
 map("n", "<Leader>pa", function() vim.ui.input({ prompt = "Edit plugin spec" }, function(input)
+		assert(input ~= nil)
 		local file = vim.fn.stdpath("config") .. "/lua/plugins/" .. input .. ".lua"
 		vim.notify("Editing " .. file, "info")
 		vim.cmd("e " .. file)
