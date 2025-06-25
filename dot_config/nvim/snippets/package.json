@@ -3,16 +3,28 @@
 	"contributes": {
 		"snippets": [
 			{
-				"language": [ "python" ],
+				"language": [
+					"python"
+				],
 				"path": "./python.json"
 			},
 			{
-				"language": [ "markdown" ],
+				"language": [
+					"markdown"
+				],
 				"path": "./markdown.json"
 			},
 			{
-				"language": [ "shellscript" ],
-				"path": "./shellscript.json"
+				"language": [
+					"shell"
+				],
+				"path": "./shell.json"
+			},
+			{
+				"language": [
+					"lua"
+				],
+				"path": "./lua.json"
 			}
 		]
 	}
