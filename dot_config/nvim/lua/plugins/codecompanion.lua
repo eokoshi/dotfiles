@@ -51,6 +51,7 @@ return {
 					prompt_decorator = function(message, adapter, context)
 						return string.format([[<prompt>%s</prompt>\no_think]], message)
 					end,
+					completion_provider = "blink",
 				},
 			},
 			inline = {

@@ -216,10 +216,11 @@ map("n", "<Leader>pi", "<CMD>Lazy<CR>", { desc = "Lazy" })
 map("n", "<Leader>pm", "<CMD>Mason<CR>", { desc = "Mason" })
 map("n", "<Leader>pc", function() vim.fn.chdir(os.getenv("HOME").."/.local/share/chezmoi") Snacks.explorer.open() end, { desc = "cd config" })
 map("n", "<Leader>pa", function() vim.ui.input({ prompt = "Edit plugin spec" }, function(input)
-		assert(input ~= nil)
+	if input ~= nil then
 		local file = vim.fn.stdpath("config") .. "/lua/plugins/" .. input .. ".lua"
 		vim.notify("Editing " .. file, "info")
 		vim.cmd("e " .. file)
+	end
 	end) end, { desc = "add plugin" })
 
 
@@ -227,7 +228,7 @@ map("n", "<Leader>pa", function() vim.ui.input({ prompt = "Edit plugin spec" }, 
 map({"n", "v"}, "<Leader>a", "", { desc = "Chatbot" })
 map({"n", "v"}, "<Leader>aa", "<CMD>CodeCompanionActions<CR>", { desc = "actions" })
 map({ "n", "v" }, "<Leader>at", "<CMD>CodeCompanionChat Toggle<CR>", { desc = "toggle chat window" })
-map({ "n", "v" }, "<Leader>ai", function() vim.ui.input({ prompt = "Inline Assistant"}, function(input) vim.cmd("CodeCompanion " .. input) end) end, { desc = "toggle chat window" })
+map({ "n", "v" }, "<Leader>ai", function() vim.ui.input({ prompt = "Inline Assistant"}, function(input) if input ~= nil then vim.cmd("CodeCompanion " .. input) end end) end, { desc = "inline assist" })
 map("v", "ga", "<CMD>CodeCompanionChat Add<CR>", { desc = "add visual selection to chat" })
 vim.cmd([[cab cc CodeCompanion]])
 

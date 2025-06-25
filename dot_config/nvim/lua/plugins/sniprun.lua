@@ -18,5 +18,12 @@ return {
 			-- 	},
 			-- },
 		},
+		init = function()
+			vim.api.nvim_create_autocmd("BufReadPost", {
+				group = vim.api.nvim_create_augroup("SnipRun", { clear = true }),
+				pattern = "python",
+				command = "SnipRun",
+			})
+		end,
 	},
 }
