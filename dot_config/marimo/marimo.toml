@@ -29,7 +29,7 @@ follow_symlink = false
 browser = "default"
 
 [display]
-theme = "dark"
+theme = "light"
 cell_output = "below"
 default_width = "medium"
 code_editor_font_size = 12
@@ -59,9 +59,6 @@ watcher_on_save = "lazy"
 auto_reload = "autorun"
 default_sql_output = "auto"
 auto_instantiate = false
-
-[experimental]
-rtc_v2 = false
 
 [keymap]
 preset = "vim"
