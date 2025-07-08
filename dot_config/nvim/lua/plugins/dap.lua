@@ -20,7 +20,8 @@ return {
 								type = "python", -- the type here established the link to the adapter definition: `dap.adapters.python`
 								request = "launch",
 								program = "${file}", -- This configuration will launch the current file if used.
-								python = venv_path and ((vim.fn.has("win32") == 1 and venv_path .. "/Scripts/python") or venv_path .. "/bin/python")
+								python = venv_path
+										and ((vim.fn.has("win32") == 1 and venv_path .. "/Scripts/python") or venv_path .. "/bin/python")
 									or nil,
 								console = "integratedTerminal",
 								cwd = "${workspaceFolder}",
@@ -82,7 +83,11 @@ return {
 					vim.api.nvim_win_hide(state.term_winnr)
 				else
 					if vim.o.columns >= 140 then
-						state.term_winnr = vim.api.nvim_open_win(state.term_bufnrs[state.current_session_id], false, { split = "right", width = 40 })
+						state.term_winnr = vim.api.nvim_open_win(
+							state.term_bufnrs[state.current_session_id],
+							false,
+							{ win = vim.api.nvim_list_wins()[1], split = "right", width = 40 }
+						)
 					else
 						state.term_winnr = vim.api.nvim_open_win(
 							state.term_bufnrs[state.current_session_id],
