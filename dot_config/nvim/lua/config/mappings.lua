@@ -95,12 +95,13 @@ map("n", "<Leader>fW", function() Snacks.picker.grep({ cmd = "rg", hidden = true
 map("n", "<Leader>fz", function() Snacks.picker.files({ cwd = vim.fn.stdpath("config") }) end, { desc = "local config files" })
 map("n", "<Leader>f<CR>", function() Snacks.picker.resume() end, { desc = "Resume last search" })
 
--- Buffer
+-- Buffers
 map("n", "<Leader>b", "", { desc = "Buffers" })
 map("n", "<Leader>bD", function() functions.DOS_to_Unix() end, { desc = "DOS to Unix" })
 map("n", "<Leader>bc", function() Snacks.bufdelete.other() end, { desc = "Close all other bufs" })
 map("n", "<Leader>bf", function() vim.lsp.buf.format() end, { desc = "format buffer" })
 map("n", "<Leader>bs", function() Snacks.scratch() end, { desc = "scratch buffer" })
+map("n", "<Leader>bt", "<CMD>TodoTrouble<CR>", {desc = "Todo List"})
 toggles.autosave():map("<Leader>ba")
 
 -- UI
@@ -170,6 +171,7 @@ map("n", "<Leader>lt", "", {desc = "Trouble"})
 map("n", "<Leader>ltd", "<CMD>Trouble diagnostics toggle focus=true filter.buf=0<CR>", {desc = "diagnostics list"})
 map("n", "<Leader>ltD", "<CMD>Trouble diagnostics toggle<CR>", {desc = "workspace diagnostics list"})
 map("n", "<Leader>lts", "<CMD>Trouble symbols toggle pinned=true win.relative=editor win.position=right<CR>", {desc = "symbols"})
+map("n", "<Leader>ltt", "<CMD>TodoTrouble<CR>", {desc = "Todo List"})
 
 -- Run code
 map("n", "<Leader>r", "", {desc = "Run Code"})
