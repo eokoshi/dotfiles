@@ -175,7 +175,7 @@ map("n", "<Leader>ltt", "<CMD>TodoTrouble<CR>", {desc = "Todo List"})
 
 -- Run code
 map("n", "<Leader>r", "", {desc = "Run Code"})
-map("n", "<Leader>rc", "<CMD>SnipClose<CR>", {desc = "Run line"})
+map("n", "<Leader>rc", "<CMD>SnipClose<CR>", {desc = "Close REPL"})
 map("n", "<Leader>rl", "<CMD>SnipRun<CR>", {desc = "Run line"})
 map("n", "<Leader>rf", "<CMD>%SnipRun<CR>", {desc = "Run file"})
 map("n", "<Leader>rr", "vip:SnipRun<CR><ESC>", {desc = "Run scope"})
