@@ -194,7 +194,7 @@ __mkps1_user_prompt() {
 
 __mkps1() {
     # local ps1="\n$(__mkps1_box_top)$(__mkps1_debian_chroot)$(__mkps1_exitcode)$(__mkps1_username)$(__mkps1_atmark)$(__mkps1_hostname) $(__mkps1_workdir) $(__mkps1_git) $(__mkps1_venv)\n$(__mkps1_box_bottom)$(__mkps1_user_prompt)";
-    local ps1="\n$(__mkps1_box_top)$(__mkps1_hostname)  $(__mkps1_debian_chroot)$(__mkps1_workdir) $(__mkps1_git) $(__mkps1_venv)  $(__mkps1_exitcode)\n$(__mkps1_box_bottom)$(__mkps1_user_prompt) ";
+    local ps1="\n$(__mkps1_box_top)$(__mkps1_hostname) $(__mkps1_debian_chroot)$(__mkps1_workdir) $(__mkps1_git) $(__mkps1_venv)  $(__mkps1_exitcode)\n$(__mkps1_box_bottom)$(__mkps1_user_prompt) ";
     echo "$ps1";
 }
 
