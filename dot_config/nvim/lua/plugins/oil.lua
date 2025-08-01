@@ -54,7 +54,7 @@ return {
 			max_width = 0.8,
 			border = "rounded",
 			win_options = {
-				winhighlight = "Normal:NormalFloat,FloatBorder:FloatBorder",
+				winhighlight = "Normal:NormalFloat,FloatBorder:FloatBorder,Visual:FloatShadow",
 			},
 			title_pos = "center",
 		},
