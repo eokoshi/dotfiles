@@ -33,7 +33,7 @@ map("n", "<Leader>.", "<CMD>cd %:h<CR>", { desc = "cd here" })
 map("n", "<Leader>:", function() Snacks.picker.command_history() end, { desc = "Command history" })
 map("n", "<Leader><space>", function() Snacks.picker.smart() end, { desc = "Smart search" })
 map({ "n", "v" }, "c", "\"ac", { desc = "Do not yank text on change" })
-map({ "n", "t", "i" }, "<F7>", function() Snacks.terminal.toggle("/bin/bash", { win = {wo = {statuscolumn = " "}, position = "float", backdrop=100, border = "rounded", height = 0.6}, auto_close=true}) end, { desc = "toggle terminal" })
+map({ "n", "t", "i" }, "<F7>", function() Snacks.terminal.toggle("/bin/bash", { win = {wo = {statuscolumn = " "}, position = "float", backdrop=100, border = "rounded", height = 0.9}, auto_close=true}) end, { desc = "toggle terminal" })
 
 -- System clipboard
 map({ "n", "v" }, "<M-v>", "<C-v>", { desc = "Visual block mode" })
