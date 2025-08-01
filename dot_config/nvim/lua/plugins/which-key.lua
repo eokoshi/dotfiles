@@ -33,6 +33,7 @@ return {
 				{ pattern = "chatbot", icon = icons.basic.ai, color = "gray" },
 				{ pattern = "markdown", icon = icons.basic.markdown, color = "purple" },
 				{ pattern = "debugger", icon = icons.debug.bug, color = "red" },
+				{ pattern = "trouble", icon = icons.debug.bug, color = "red" },
 			},
 		},
 		win = {

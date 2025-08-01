@@ -32,6 +32,8 @@ map("n", "<Leader>w", "<CMD>w<CR>", { desc = "Save buffer" })
 map("n", "<Leader>.", "<CMD>cd %:h<CR>", { desc = "cd here" })
 map("n", "<Leader>:", function() Snacks.picker.command_history() end, { desc = "Command history" })
 map("n", "<Leader><space>", function() Snacks.picker.smart() end, { desc = "Smart search" })
+map({ "n", "v" }, "c", "\"ac", { desc = "Do not yank text on change" })
+map({ "n", "t", "i" }, "<F7>", function() Snacks.terminal.toggle("/bin/bash", { win = {wo = {statuscolumn = " "}, position = "float", backdrop=100, border = "rounded", height = 0.6}, auto_close=true}) end, { desc = "toggle terminal" })
 
 -- System clipboard
 map({ "n", "v" }, "<M-v>", "<C-v>", { desc = "Visual block mode" })
@@ -167,11 +169,13 @@ map("n", "gI", function() Snacks.picker.lsp_implementations() end, { desc = "Go 
 map("n", "gp", function() Snacks.picker.lsp_type_definitions() end, { desc = "Go to ty[p]e definition" })
 map("n", "gco", "o<Esc>Vcx<Esc><Cmd>normal gcc<CR>fxa<BS>", { desc = "Add comment below" })
 map("n", "gcO", "O<Esc>Vcx<Esc><Cmd>normal gcc<CR>fxa<BS>", { desc = "Add comment above" })
-map("n", "<Leader>lt", "", {desc = "Trouble"})
-map("n", "<Leader>ltd", "<CMD>Trouble diagnostics toggle focus=true filter.buf=0<CR>", {desc = "diagnostics list"})
-map("n", "<Leader>ltD", "<CMD>Trouble diagnostics toggle<CR>", {desc = "workspace diagnostics list"})
-map("n", "<Leader>lts", "<CMD>Trouble symbols toggle pinned=true win.relative=editor win.position=right<CR>", {desc = "symbols"})
-map("n", "<Leader>ltt", "<CMD>TodoTrouble<CR>", {desc = "Todo List"})
+
+-- Trouble
+map("n", "<Leader>t", "", {desc = "Trouble"})
+map("n", "<Leader>td", "<CMD>Trouble diagnostics toggle focus=true filter.buf=0<CR>", {desc = "diagnostics list"})
+map("n", "<Leader>tD", "<CMD>Trouble diagnostics toggle<CR>", {desc = "workspace diagnostics list"})
+map("n", "<Leader>ts", "<CMD>Trouble symbols toggle pinned=true win.relative=editor win.position=right<CR>", {desc = "symbols"})
+map("n", "<Leader>tt", "<CMD>TodoTrouble<CR>", {desc = "Todo List"})
 
 -- Run code
 map("n", "<Leader>r", "", {desc = "Run Code"})
@@ -214,13 +218,6 @@ map("n", "<F21>", function() vim.ui.input({ prompt = "Condition: " }, function(c
 map("n", "<Leader>dC", function() vim.ui.input({ prompt = "Condition: " }, function(condition) if condition then require("dap").set_breakpoint(condition) end end) end, {desc = "Conditional Breakpoint (S-F9)" })
 map("n", "<Leader>dE", function() vim.ui.input({ prompt = "Expression: " }, function(expr) if expr then require("dapui").eval(expr, { enter = true }) end end) end, {desc = "Evaluate Input"})
 
--- Terminal
-map("n", "<Leader>t", "", { desc = "Terminal" })
-map("n", "<Leader>tv", function() Snacks.terminal.get("/bin/bash", { win = {wo = {statuscolumn = " "}, position = "bottom", border = "hpad", height = 12}, auto_close=true}) end, { desc = "bottom terminal" })
-map("n", "<Leader>th", function() Snacks.terminal.get("/bin/bash", { win = {wo = {statuscolumn = " "}, position = "right"}, auto_close=true}) end, { desc = "right terminal" })
-map("n", "<Leader>tf", function() Snacks.terminal.get("/bin/bash", { win = {wo = {statuscolumn = " "}, position = "float", border = "rounded", backdrop = 100}, auto_close = true }) end, { desc = "floating terminal" })
-map("n", "<Leader>tt", function() Snacks.terminal.toggle("/bin/bash", { win = {wo = {statuscolumn = " "}, position = "bottom", border = "hpad", height = 12}, auto_close=true}) end, { desc = "toggle terminal" })
-map({ "n", "t", "i" }, "<F7>", function() Snacks.terminal.toggle("/bin/bash", { win = {wo = {statuscolumn = " "}, position = "bottom", border = "hpad", height = 12}, auto_close=true}) end, { desc = "toggle terminal" })
 
 -- Package/Plugin Management
 map("n", "<Leader>p", "", { desc = "Packages" })

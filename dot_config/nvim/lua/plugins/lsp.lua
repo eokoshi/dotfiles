@@ -25,9 +25,12 @@ return {
 				settings = {
 					basedpyright = {
 						disableOrganizeImports = true,
-						-- analysis = {
-						-- 	ignore = { "*" }, -- use ruff for linting
-						-- },
+						analysis = {
+							autoSearchPaths = true,
+							useLibraryCodeForTypes = true,
+							diagnosticMode = "openFilesOnly",
+							ignore = { "*" }, -- use ruff for linting
+						},
 					},
 				},
 			})
@@ -40,7 +43,7 @@ return {
 					settings = {
 						lineLength = 100,
 						lint = {
-							enable = false,
+							enable = true,
 						},
 						fixAll = false,
 					},

@@ -109,6 +109,7 @@ __mkps1_hostname() {
 __mkps1_workdir() {
     local lsep=$'\ue0ba';
     local rsep=$'\ue0b0';
+	local diricon='';
     local fg=7;
     local bg=4;
     local textcolor="\[\e[0;38;5;${fg};48;5;${bg}m\]";
@@ -121,7 +122,7 @@ __mkps1_workdir() {
 
     # use top one for the powerline style, bottom one for simple colored text
     # echo "$sepcolor$lsep$textcolor \w $reset$sepcolor2$rsep"
-    echo "$textcolor2\w$reset"
+    echo "$textcolor2$diricon \w$reset"
 }
 
 # For Git PS1
@@ -166,33 +167,34 @@ __mkps1_venv() {
 
 
 __mkps1_box_top() {
-    local top='\[\e[38;5;10m\]';
+    local top='\[\e[38;5;242m\]';
     local reset='\[\e[00m\]';
 
-    echo "$top╭$reset";
+    echo "$top╭╴$reset";
 }
 
 __mkps1_box_bottom() {
-    local bottom='\[\e[38;5;10m\]';
+    local bottom='\[\e[0;38;5;242m\]';
     local reset='\[\e[00m\]';
 
-    echo "$bottom╰$reset";
+    echo "$bottom╰╴$reset";
 }
 
 
 __mkps1_user_prompt() {
-    local icon=$'\ueab6'
-    local icon=$'\u3009'
+    local tall_chevron=$'\u3009';
+    local small_chevron=$'\ueab6 ';
+	local box_icon='';
     local textcolor='\[\e[1;38;5;13m\]';
     local reset='\[\e[00m\]';
     local input='\[\e[0;97m\]'
     
-    echo "$textcolor$icon$reset";
+    echo "$textcolor$box_icon$reset";
 }
 
 __mkps1() {
     # local ps1="\n$(__mkps1_box_top)$(__mkps1_debian_chroot)$(__mkps1_exitcode)$(__mkps1_username)$(__mkps1_atmark)$(__mkps1_hostname) $(__mkps1_workdir) $(__mkps1_git) $(__mkps1_venv)\n$(__mkps1_box_bottom)$(__mkps1_user_prompt)";
-    local ps1="\n$(__mkps1_debian_chroot)$(__mkps1_workdir) $(__mkps1_git) $(__mkps1_venv)  $(__mkps1_exitcode)\n$(__mkps1_hostname) $(__mkps1_user_prompt)";
+    local ps1="\n$(__mkps1_box_top)$(__mkps1_hostname)  $(__mkps1_debian_chroot)$(__mkps1_workdir) $(__mkps1_git) $(__mkps1_venv)  $(__mkps1_exitcode)\n$(__mkps1_box_bottom)$(__mkps1_user_prompt) ";
     echo "$ps1";
 }
 
