@@ -130,6 +130,8 @@ if ! shopt -oq posix; then
   fi
 fi
 
+	
+
 # source profile.d
 if [ -d /etc/profile.d ]; then
   for i in /etc/profile.d/*.sh; do
@@ -159,6 +161,9 @@ fi
 # }
 # export -f show_virtual_env
 # PS1='$(show_virtual_env)'$PS1
+
+completions_dir="$HOME/.config/bash/completions"
+[ -s "$completions_dir/chezmoi" ] && \. "$completions_dir/chezmoi"
 
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
