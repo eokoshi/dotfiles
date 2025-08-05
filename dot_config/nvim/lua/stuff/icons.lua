@@ -50,6 +50,7 @@ return {
 		ai = "󱚡",
 		markdown = "",
 		chezmoi = "󱊹",
+		popup = "",
 	},
 	debug = {
 		bug = "",

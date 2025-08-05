@@ -34,6 +34,7 @@ return {
 				{ pattern = "markdown", icon = icons.basic.markdown, color = "purple" },
 				{ pattern = "debugger", icon = icons.debug.bug, color = "red" },
 				{ pattern = "trouble", icon = icons.debug.bug, color = "red" },
+				{ pattern = "overlook", icon = icons.basic.popup, color = "blue" },
 			},
 		},
 		win = {

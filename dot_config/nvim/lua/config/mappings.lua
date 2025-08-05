@@ -21,7 +21,7 @@ vim.g.maplocalleader = " "
 
 -- Basic operations
 map("n", "<Leader>c", function() Snacks.bufdelete() end, { desc = "Close buffer" })
-map("n", "<Leader>e", "<CMD>Neotree toggle<CR>", { desc = "File explorer" })
+map("n", "<Leader>e", "<CMD>Neotree toggle left<CR>", { desc = "File explorer" })
 map("n", "<Leader>n", function() functions.notifications_picker() end, { desc = "Notification history" })
 map("n", "<Leader>H", function() Snacks.dashboard() end, { desc = "Home" })
 map("n", "<Leader>q", "<CMD>q<CR>", { desc = "Quit window" })
@@ -165,6 +165,18 @@ map("n", "gI", function() Snacks.picker.lsp_implementations() end, { desc = "Go 
 map("n", "gp", function() Snacks.picker.lsp_type_definitions() end, { desc = "Go to ty[p]e definition" })
 map("n", "gco", "o<Esc>Vcx<Esc><Cmd>normal gcc<CR>fxa<BS>", { desc = "Add comment below" })
 map("n", "gcO", "O<Esc>Vcx<Esc><Cmd>normal gcc<CR>fxa<BS>", { desc = "Add comment above" })
+
+-- overlook.nvim
+map("n", "<Leader>o", "", {desc = "Overlook"})
+map("n", "<leader>od", require("overlook.api").peek_definition, { desc = "Peek definition" })
+map("n", "<leader>op", require("overlook.api").peek_cursor, { desc = "Peek cursor" })
+map("n", "<leader>ou", require("overlook.api").restore_popup, { desc = "Restore last popup" })
+map("n", "<leader>oU", require("overlook.api").restore_all_popups, { desc = "Restore all popups" })
+map("n", "<leader>oc", require("overlook.api").close_all, { desc = "Close all popups" })
+map("n", "<leader>os", require("overlook.api").open_in_split, { desc = "Open popup in split" })
+map("n", "<leader>ov", require("overlook.api").open_in_vsplit, { desc = "Open popup in vsplit" })
+map("n", "<leader>ot", require("overlook.api").open_in_tab, { desc = "Open popup in tab" })
+map("n", "<leader>oo", require("overlook.api").open_in_original_window, { desc = "Open popup in current window" })
 
 -- Trouble
 map("n", "<Leader>t", "", {desc = "Trouble"})
