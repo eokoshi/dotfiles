@@ -21,7 +21,7 @@ vim.g.maplocalleader = " "
 
 -- Basic operations
 map("n", "<Leader>c", function() Snacks.bufdelete() end, { desc = "Close buffer" })
-map("n", "<Leader>e", function() Snacks.explorer() end, { desc = "File explorer" })
+map("n", "<Leader>e", "<CMD>Neotree toggle<CR>", { desc = "File explorer" })
 map("n", "<Leader>n", function() functions.notifications_picker() end, { desc = "Notification history" })
 map("n", "<Leader>H", function() Snacks.dashboard() end, { desc = "Home" })
 map("n", "<Leader>q", "<CMD>q<CR>", { desc = "Quit window" })
@@ -58,10 +58,6 @@ map({ "i", "c" }, "<C-l>", "<C-o>a", { desc = "Move one char right" })
 map({ "i", "c" }, "<C-h>", "<C-o>h", { desc = "Move one char left" })
 map("i", "<S-Tab>", "<C-d>", { desc = "Unindent 1 level" })
 map("n", "J", "mzJ`z", { desc = "Shift J without moving cursor", noremap = false })
-map("n", "<C-Up>", function() require("smart-splits").resize_up() end, { desc = "Resize split up" })
-map("n", "<C-Down>", function() require("smart-splits").resize_down() end, { desc = "Resize split down" })
-map("n", "<C-Left>", function() require("smart-splits").resize_left() end, { desc = "Resize split left" })
-map("n", "<C-Right>", function() require("smart-splits").resize_right() end, { desc = "Resize split right" })
 map({"n", "i", "s"}, "<C-n>", function() require("noice.lsp").scroll(4) end, { desc = "Scroll hover down" })
 map({"n", "i", "s"}, "<C-p>", function() require("noice.lsp").scroll(-4) end, { desc = "Scroll hover up" })
 map('n', ']c', function() if vim.wo.diff then vim.cmd.normal({']c', bang = true}) else require("gitsigns").nav_hunk('next') end end, { desc = "Next hunk"})
@@ -81,7 +77,7 @@ map("n", "<Leader>fH", function() Snacks.picker.highlights() end, { desc = "High
 map("n", "<Leader>ff", function() Snacks.picker.files() end, { desc = "files" })
 map("n", "<Leader>fF", function() Snacks.picker.files({ hidden = true, ignored = true, cmd = "fd" }) end, { desc = "all files" })
 map("n", "<Leader>fg", function() Snacks.picker.git_files() end, { desc = "git files" })
-map("n", "<Leader>fk", function() Snacks.picker.keymaps({layout = {preset = "vertical"}}) end, { desc = "keymaps" })
+map("n", "<Leader>fk", function() Snacks.picker.keymaps() end, { desc = "keymaps" })
 map("n", "<Leader>fj", function() Snacks.picker.jumps() end, { desc = "jumps" })
 map("n", "<Leader>fl", function() Snacks.picker.loclist() end, { desc = "location list" })
 map("n", "<Leader>fm", function() Snacks.picker.marks() end, { desc = "marks" })
@@ -223,7 +219,7 @@ map("n", "<Leader>dE", function() vim.ui.input({ prompt = "Expression: " }, func
 map("n", "<Leader>p", "", { desc = "Packages" })
 map("n", "<Leader>pi", "<CMD>Lazy<CR>", { desc = "Lazy" })
 map("n", "<Leader>pm", "<CMD>Mason<CR>", { desc = "Mason" })
-map("n", "<Leader>pc", function() vim.fn.chdir(os.getenv("HOME").."/.local/share/chezmoi") Snacks.explorer.open() end, { desc = "cd config" })
+map("n", "<Leader>pc", function() require("neo-tree.command").execute({ dir=os.getenv("HOME").."/.local/share/chezmoi" }) end, { desc = "cd config" })
 map("n", "<Leader>pa", function() vim.ui.input({ prompt = "Edit plugin spec" }, function(input)
 	if input ~= nil then
 		local file = vim.fn.stdpath("config") .. "/lua/plugins/" .. input .. ".lua"

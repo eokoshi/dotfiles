@@ -1,4 +1,4 @@
-if true then return {} end
+-- if true then return {} end
 
 return {
 	"nvim-neo-tree/neo-tree.nvim",
@@ -14,14 +14,13 @@ return {
 		sources = {
 			"filesystem",
 			"buffers",
-			"document_symbols",
+			-- "document_symbols",
 		},
 		filesystem = {
 			filtered_items = {
 				visible = true,
 				never_show_by_pattern = {
-					"**/__pycache__",
-					"**/__marimo__",
+					"**/__**__",
 				},
 			},
 			follow_current_file = {
@@ -35,7 +34,17 @@ return {
 			sources = {
 				{ source = "filesystem" },
 				{ source = "buffers" },
-				{ source = "document_symbols" },
+				-- { source = "document_symbols" },
+			},
+		},
+		window = {
+			mappings = {
+				["<space>"] = "none",
+				["l"] = "open",
+				["h"] = "close_node",
+				["L"] = "focus_preview",
+				["<C-n>"] = { "scroll_preview", config = { direction = 10 } },
+				["<C-p>"] = { "scroll_preview", config = { direction = -10 } },
 			},
 		},
 	},
