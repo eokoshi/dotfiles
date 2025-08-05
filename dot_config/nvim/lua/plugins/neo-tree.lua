@@ -26,6 +26,7 @@ return {
 			follow_current_file = {
 				enabled = true,
 			},
+			hijack_netrw_behavior = "open_current",
 		},
 		source_selector = {
 			truncation_character = "…",

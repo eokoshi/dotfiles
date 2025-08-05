@@ -20,7 +20,7 @@ return {
 						key = "e",
 						desc = "File Explorer",
 						action = function()
-							require("oil").open_float()
+							require("neo-tree.command").execute({ position = "float" })
 						end,
 					},
 					{ icon = " ", key = "f", desc = "Find File", action = ":lua Snacks.dashboard.pick('files')" },
@@ -37,7 +37,7 @@ return {
 						desc = "Config",
 						action = function()
 							local dir = os.getenv("HOME") .. "/.local/share/chezmoi"
-							require("oil").open_float(dir)
+							require("neo-tree.command").execute({ position = "float", dir = dir })
 						end,
 					},
 					{
