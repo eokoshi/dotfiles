@@ -23,6 +23,9 @@ ln -s $(which fdfind) ~/.local/bin/fd
 curl -LsSf https://astral.sh/uv/install.sh | sh
 uv python install
 
+## zoxide
+curl -sSfL https://raw.githubusercontent.com/ajeetdsouza/zoxide/main/install.sh | sh
+
 ## neovim (for x86 64 architecture)
 sudo rm -rf /opt/nvim
 sudo mkdir /opt/nvim
