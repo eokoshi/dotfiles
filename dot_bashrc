@@ -175,4 +175,4 @@ export PATH="/opt/nvim/bin:$HOME/.local/bin:$PATH"
 export TS_IP="$(tailscale ip -4)"
 export IP="$(hostname -I | awk '{print $1}')"
 
-eval $(zoxide init bash)
+eval "$(zoxide init bash)"
