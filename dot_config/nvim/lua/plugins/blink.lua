@@ -12,7 +12,7 @@ return {
 	---@type blink.cmp.Config
 	opts = {
 		enabled = function()
-			return vim.tbl_contains({ "lua", "markdown", "python", "json", "codecompanion" }, vim.bo.filetype)
+			return vim.tbl_contains({ "lua", "markdown", "python", "json", "codecompanion", "html", "javascript", "css" }, vim.bo.filetype)
 		end,
 		completion = {
 			keyword = {
