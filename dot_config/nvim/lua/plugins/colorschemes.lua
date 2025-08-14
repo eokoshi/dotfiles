@@ -70,4 +70,20 @@ return {
 		"sainnhe/sonokai",
 		lazy = true,
 	},
+	{
+		"mcauley-penney/techbase.nvim",
+		lazy = true,
+		opts = {
+			italic_comments = false,
+			transparent = false,
+			plugin_support = {
+				blink = true,
+				gitsigns = true,
+				lazy = true,
+				lualine = true,
+				mason = true,
+			},
+			hl_overrides = {},
+		},
+	},
 }

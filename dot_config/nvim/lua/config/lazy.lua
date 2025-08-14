@@ -20,7 +20,7 @@ require("lazy").setup({
 		{ import = "plugins" },
 	},
 	checker = { enabled = false },
-	change_detection = { enabled = false, },
+	change_detection = { enabled = false },
 	ui = {
 		title = " 󰒲 lazy.nvim ",
 		size = {
@@ -34,5 +34,8 @@ require("lazy").setup({
 		},
 		icons = require("stuff.icons").lazy,
 		style = "minimal",
+	},
+	git = {
+		timeout = 300,
 	},
 })
