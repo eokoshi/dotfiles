@@ -9,7 +9,7 @@ return {
 				autohide = true,
 			},
 			search = {
-				enabled = true,
+				-- enabled = true,
 			},
 		},
 		label = {
