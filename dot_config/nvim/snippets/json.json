@@ -2,14 +2,14 @@
 	"dapconfig": {
 		"prefix": "dap",
 		"body": [
-			"\"name\": \"test\",",
+			"\"name\": \"$1\",",
 			"\"type\": \"python\",",
 			"\"request\": \"launch\",",
 			"\"program\": \"\\${file\\}\",",
 			"\"console\": \"integratedTerminal\",",
 			"\"python\": \"\\${workspaceFolder\\}/.venv/bin/python\",",
-			"\"cwd\": \"\\${workspaceFolder\\}\"",
-			"\"args\": [],"
+			"\"cwd\": \"\\${workspaceFolder\\}\",",
+			"\"args\": []"
 		],
 		"description": "insert default test dap config"
 	}
