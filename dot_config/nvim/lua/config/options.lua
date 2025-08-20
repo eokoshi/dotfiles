@@ -8,7 +8,6 @@ vim.o.conceallevel = 2 -- Hide * markup for bold and italic, but not markers wit
 vim.o.confirm = true -- Confirm to save changes before exiting modified buffer
 vim.o.cursorline = true -- Enable highlighting of the current line
 vim.o.expandtab = false -- Use spaces instead of tabs when true
-vim.o.equalalways = false
 vim.opt.fillchars = {
 	foldopen = icons.folds.foldopen,
 	foldclose = icons.folds.foldclose,
@@ -84,7 +83,7 @@ vim.o.wrap = false -- Disable line wrap
 vim.diagnostic.config({
 	virtual_text = true,
 	float = {
-		border = "rounded",
+		border = "single",
 		source = true,
 	},
 	signs = {
