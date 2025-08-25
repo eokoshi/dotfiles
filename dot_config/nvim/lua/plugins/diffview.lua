@@ -1,5 +1,8 @@
 return {
 	"sindrets/diffview.nvim",
-	lazy = "VeryLazy",
-	opts = {},
+	opts = {
+		keymaps = {
+			disable_defaults = true,
+		},
+	},
 }
