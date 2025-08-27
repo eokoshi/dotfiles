@@ -44,7 +44,18 @@ return {
 						icon = " ",
 						key = "s",
 						desc = "Restore Session",
-						action = ":lua require('resession').load('last')",
+						action = function()
+							local function get_session_name()
+								local name = vim.fn.getcwd()
+								local branch = vim.trim(vim.fn.system("git branch --show-current"))
+								if vim.v.shell_error == 0 then
+									return name .. branch
+								else
+									return name
+								end
+							end
+							require("resession").load(get_session_name(), { dir = "dirsession", silence_errors = true })
+						end,
 					},
 					{ icon = " ", key = "q", desc = "Quit", action = ":qa" },
 				},

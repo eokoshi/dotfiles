@@ -16,7 +16,7 @@ return {
 						local venv_path = os.getenv("VIRTUAL_ENV") or os.getenv("CONDA_PREFIX")
 						config.configurations = {
 							{
-								name = "Launch file",
+								name = "Default: No Args",
 								type = "python", -- the type here established the link to the adapter definition: `dap.adapters.python`
 								request = "launch",
 								program = "${file}", -- This configuration will launch the current file if used.
