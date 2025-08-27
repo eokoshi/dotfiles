@@ -58,44 +58,44 @@ return {
 				},
 			},
 		},
-		init = function()
-			local dap, dv = require("dap"), require("dap-view")
-			dap.listeners.before.attach["dap-view-config"] = function()
-				dv.open()
-				require("dap-view.term.init").hide_term_buf_win()
-				dv.jump_to_view("scopes")
-			end
-			dap.listeners.before.launch["dap-view-config"] = function()
-				dv.open()
-				require("dap-view.term.init").hide_term_buf_win()
-				dv.jump_to_view("scopes")
-			end
-			dap.listeners.before.event_terminated["dap-view-config"] = function()
-				dv.close(true)
-			end
-			dap.listeners.before.event_exited["dap-view-config"] = function()
-				dv.close(true)
-			end
-			vim.keymap.set("n", "<Leader>dt", function()
-				local state = require("dap-view.state")
-				if pcall(vim.api.nvim_win_get_position, state.term_winnr) then
-					vim.api.nvim_win_hide(state.term_winnr)
-				else
-					if vim.o.columns >= 140 then
-						state.term_winnr = vim.api.nvim_open_win(
-							state.term_bufnrs[state.current_session_id],
-							false,
-							{ win = vim.api.nvim_list_wins()[1], split = "right", width = 40 }
-						)
-					else
-						state.term_winnr = vim.api.nvim_open_win(
-							state.term_bufnrs[state.current_session_id],
-							false,
-							{ win = state.winnr, split = "above", height = 20 }
-						)
-					end
-				end
-			end, { desc = "Toggle console", remap = false, silent = true })
-		end,
+		-- init = function()
+		-- 	local dap, dv = require("dap"), require("dap-view")
+		-- 	dap.listeners.before.attach["dap-view-config"] = function()
+		-- 		dv.open()
+		-- 		require("dap-view.term.init").hide_term_buf_win()
+		-- 		dv.jump_to_view("scopes")
+		-- 	end
+		-- 	dap.listeners.before.launch["dap-view-config"] = function()
+		-- 		dv.open()
+		-- 		require("dap-view.term.init").hide_term_buf_win()
+		-- 		dv.jump_to_view("scopes")
+		-- 	end
+		-- 	dap.listeners.before.event_terminated["dap-view-config"] = function()
+		-- 		dv.close(true)
+		-- 	end
+		-- 	dap.listeners.before.event_exited["dap-view-config"] = function()
+		-- 		dv.close(true)
+		-- 	end
+		-- 	vim.keymap.set("n", "<Leader>dt", function()
+		-- 		local state = require("dap-view.state")
+		-- 		if pcall(vim.api.nvim_win_get_position, state.term_winnr) then
+		-- 			vim.api.nvim_win_hide(state.term_winnr)
+		-- 		else
+		-- 			if vim.o.columns >= 140 then
+		-- 				state.term_winnr = vim.api.nvim_open_win(
+		-- 					state.term_bufnrs[state.current_session_id],
+		-- 					false,
+		-- 					{ win = vim.api.nvim_list_wins()[1], split = "right", width = 40 }
+		-- 				)
+		-- 			else
+		-- 				state.term_winnr = vim.api.nvim_open_win(
+		-- 					state.term_bufnrs[state.current_session_id],
+		-- 					false,
+		-- 					{ win = state.winnr, split = "above", height = 20 }
+		-- 				)
+		-- 			end
+		-- 		end
+		-- 	end, { desc = "Toggle console", remap = false, silent = true })
+		-- end,
 	},
 }
