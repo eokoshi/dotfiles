@@ -13,7 +13,7 @@ gui:
       - ⠏
       - ⠋
     rate: 50
-  showRootItemInFileTree: false
+  showRootItemInFileTree: true
   switchTabsWithPanelJumpKeys: true
 os:
   edit: nvim -- {{filename}}
