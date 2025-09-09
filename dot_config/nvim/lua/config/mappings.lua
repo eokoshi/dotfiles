@@ -65,6 +65,7 @@ map({"n", "i", "s"}, "<C-p>", function() require("noice.lsp").scroll(-4) end, { 
 map('n', ']c', function() if vim.wo.diff then vim.cmd.normal({']c', bang = true}) else require("gitsigns").nav_hunk('next') end end, { desc = "Next hunk"})
 ---@diagnostic disable-next-line: param-type-mismatch
 map('n', '[c', function() if vim.wo.diff then vim.cmd.normal({'[c', bang = true}) else require("gitsigns").nav_hunk('prev') end end, { desc = "Prev hunk"})
+map("n", "<BS>", "<C-^>", {desc="Switch to prev file"})
 
 -- Find
 map("n", "<Leader>f", "", { desc = "Find" })
