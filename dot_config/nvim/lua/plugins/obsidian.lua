@@ -1,31 +1,22 @@
-{{ if eq .chezmoi.hostname "eeftop" "office" }}
--- if true then return {} end
-{{ else }}
-if true then return {} end
-{{ end }}
+if true then
+	return {}
+end
 
 return {
 	"obsidian-nvim/obsidian.nvim",
-	version = "*", 
+	version = "*",
 	lazy = true,
-{{ if eq .chezmoi.hostname "eeftop" }}
 	event = {
-		"BufReadPre /mnt/c/Users/ethan/Documents/Obsidian/*.md",
-		"BufNewFile /mnt/c/Users/ethan/Documents/Obsidian/*.md",
+		"BufReadPre ~/Documents/Obsidian/*.md",
+		"BufNewFile ~/Documents/Obsidian/*.md",
 	},
-{{ else if eq .chezmoi.hostname "office" }}
-	event = {
-		"BufReadPre /mnt/c/Users/pathology/Documents/Obsidian/*.md",
-		"BufNewFile /mnt/c/Users/pathology/Documents/Obsidian/*.md",
-	},
-{{ end }}
 	dependencies = {
 		"nvim-lua/plenary.nvim",
 	},
 	opts = {
 		daily_notes = {
 			folder = "Daily Notes",
-			template = "Templates/dailynote.md"
+			template = "Templates/dailynote.md",
 		},
 		completion = {
 			blink = true,
@@ -88,4 +79,3 @@ return {
 		end,
 	},
 }
-

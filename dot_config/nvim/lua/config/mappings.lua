@@ -61,7 +61,9 @@ map("i", "<S-Tab>", "<C-d>", { desc = "Unindent 1 level" })
 map("n", "J", "mzJ`z", { desc = "Shift J without moving cursor", noremap = false })
 map({"n", "i", "s"}, "<C-n>", function() require("noice.lsp").scroll(4) end, { desc = "Scroll hover down" })
 map({"n", "i", "s"}, "<C-p>", function() require("noice.lsp").scroll(-4) end, { desc = "Scroll hover up" })
+---@diagnostic disable-next-line: param-type-mismatch
 map('n', ']c', function() if vim.wo.diff then vim.cmd.normal({']c', bang = true}) else require("gitsigns").nav_hunk('next') end end, { desc = "Next hunk"})
+---@diagnostic disable-next-line: param-type-mismatch
 map('n', '[c', function() if vim.wo.diff then vim.cmd.normal({'[c', bang = true}) else require("gitsigns").nav_hunk('prev') end end, { desc = "Prev hunk"})
 
 -- Find
