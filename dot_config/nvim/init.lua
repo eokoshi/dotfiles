@@ -10,5 +10,7 @@ require("config.options")
 require("config.autocmds")
 require("config.lazy")
 require("config.mappings")
-require("config.colors")
+require("config.highlights")
 require("config.final")
+
+vim.cmd.colorscheme("gruvbox-material")

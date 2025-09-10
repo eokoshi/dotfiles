@@ -108,7 +108,7 @@ toggles.autosave():map("<Leader>ba")
 
 -- UI
 map("n", "<Leader>u", "", { desc = "UI" })
-map("n", "<Leader>ui", function() Snacks.picker.icons() end, { desc = "icons" })
+map("n", "<Leader>ui", function() functions.pick_icons() end, { desc = "icons" })
 map("n", "<Leader>uc", function() Snacks.picker.colorschemes() end, { desc = "search colorschemes" })
 map("n", "<Leader>uz", function() Snacks.zen.zoom() end, { desc = "zoom pane" })
 map("n", "<Leader>uZ", function() Snacks.zen() end, { desc = "Zen mode" })

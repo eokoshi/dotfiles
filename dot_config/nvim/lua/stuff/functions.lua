@@ -91,4 +91,40 @@ function M.pick_chezmoi()
 	})
 end
 
+function M.pick_icons()
+	local Snacks = require("snacks")
+	---@diagnostic disable-next-line: missing-parameter
+	local snacks_data = require("snacks.picker.source.icons").icons({})
+
+	local file = "unicode_chars.json"
+	local fd = assert(io.open(file, "r"))
+	local data = fd:read("*a")
+	fd:close()
+	data = vim.json.decode(data)
+
+	local result = {} ---@type snacks.picker.Icon[]
+	for desc, info in pairs(data) do
+		table.insert(result, {
+			category = info.code,
+			icon = info.char,
+			name = desc,
+			source = "unicode",
+		})
+	end
+	for _, icon in ipairs(result) do
+		icon.text = Snacks.picker.util.text(icon, { "source", "category", "name" })
+		icon.data = icon.icon
+	end
+	---@diagnostic disable-next-line: param-type-mismatch
+	for _, v in ipairs(snacks_data) do
+		table.insert(result, v)
+	end
+	Snacks.picker.pick({
+		items = result,
+		layout = { preset = "vscode" },
+		confirm = "put",
+		format = "icon",
+	})
+end
+
 return M
