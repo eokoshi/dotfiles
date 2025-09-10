@@ -92,11 +92,10 @@ function M.pick_chezmoi()
 end
 
 function M.pick_icons()
-	local Snacks = require("snacks")
 	---@diagnostic disable-next-line: missing-parameter
 	local snacks_data = require("snacks.picker.source.icons").icons({})
 
-	local file = "unicode_chars.json"
+	local file = vim.fn.stdpath("config") .. "/unicode_chars.json"
 	local fd = assert(io.open(file, "r"))
 	local data = fd:read("*a")
 	fd:close()
