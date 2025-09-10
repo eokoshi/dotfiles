@@ -3,7 +3,7 @@
 local icons = require("stuff.icons")
 
 return {
-	"echasnovski/mini.icons",
+	"nvim-mini/mini.icons",
 	lazy = true,
 	opts = {
 		file = {

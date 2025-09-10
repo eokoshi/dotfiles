@@ -4,7 +4,7 @@ return {
 	{
 		"MeanderingProgrammer/render-markdown.nvim",
 		dependencies = {
-			"echasnovski/mini.icons",
+			"nvim-mini/mini.icons",
 		},
 		ft = {
 			"markdown",

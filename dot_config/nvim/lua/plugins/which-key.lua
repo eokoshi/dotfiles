@@ -4,7 +4,7 @@ local icons = require("stuff.icons")
 return {
 	"folke/which-key.nvim",
 	dependencies = {
-		"echasnovski/mini.icons",
+		"nvim-mini/mini.icons",
 	},
 	event = "VeryLazy",
 	opts = {

@@ -3,7 +3,7 @@
 return {
 	"stevearc/oil.nvim",
 	dependencies = {
-		{ "echasnovski/mini.icons", opts = {} },
+		{ "nvim-mini/mini.icons", opts = {} },
 	},
 	lazy = false,
 	---@module 'oil'
