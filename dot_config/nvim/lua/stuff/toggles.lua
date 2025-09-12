@@ -57,7 +57,7 @@ function M.math_virt(opts)
 		set = function()
 			require("nabla").toggle_virt({ autogen = "true", silent = "true" })
 		end,
-	})
+	}, opts)
 end
 
 return M

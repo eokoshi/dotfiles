@@ -116,6 +116,7 @@ map("n", "<Leader>un", function() Snacks.notifier.hide() end, { desc = "dismiss 
 map("n", "<Leader>uN", function() require("noice").disable() require("noice").enable() end, { desc = "reload Noice" })
 toggles.virtual_text():map("<Leader>uv")
 toggles.virtual_lines():map("<Leader>uV")
+toggles.math_virt():map("<Leader>um")
 Snacks.toggle.option("spell", { name = "spellcheck" }):map("<leader>us")
 Snacks.toggle.option("wrap", { name = "wrap" }):map("<leader>uw")
 Snacks.toggle.option("relativenumber", { name = "relative number" }):map("<leader>uL")
@@ -284,7 +285,6 @@ vim.api.nvim_create_autocmd("BufReadPost", {
 		map("n", "<Leader>my", "<CMD>Obsidian yesterday<CR>", { desc = "yesterday's note", buffer = true})
 		map("n", "<Leader>mf", "<CMD>Obsidian dailies -48 0<CR>", { desc = "find daily notes", buffer = true})
 		map("n", "<Leader>mn", "<CMD>Obsidian new_from_template<CR>", { desc = "new from template", buffer = true})
-		toggles.math_virt():map("<Leader>um")
 	end,
 })
 
