@@ -42,7 +42,6 @@ map({ "n" }, "<C-c>", '"+yy', { desc = "Copy line to system clipboard" })
 map({ "v" }, "<C-c>", '"+y', { desc = "Copy selection to system clipboard" })
 map({ "n", "v" }, "<C-v>", '"+p', { desc = "Paste system clipboard" })
 map({ "i", "c" }, "<C-v>", '<ESC>"+pa', { desc = "Paste system clipboard" })
-map("n", "<C-a>", "<CMD>%y+<CR><CR>", { desc = "Copy whole file to clipboard" })
 
 -- Movement
 map("n", "<C-u>", "<C-u>zz", { desc = "Jump up half page" })
@@ -99,6 +98,7 @@ map("n", "<Leader>f<CR>", function() Snacks.picker.resume() end, { desc = "Resum
 
 -- Buffers
 map("n", "<Leader>b", "", { desc = "Buffers" })
+map("n", "<Leader>bA", "<CMD>%y+<CR><CR>", { desc = "Copy whole buffer to clipboard" })
 map("n", "<Leader>bD", function() functions.DOS_to_Unix() end, { desc = "DOS to Unix" })
 map("n", "<Leader>bc", function() Snacks.bufdelete.other() end, { desc = "Close all other bufs" })
 map("n", "<Leader>bf", function() vim.lsp.buf.format() end, { desc = "format buffer" })
