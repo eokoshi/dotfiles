@@ -7,6 +7,7 @@ vim.opt.completeopt = { "menu", "menuone", "noselect" }
 vim.o.conceallevel = 2 -- Hide * markup for bold and italic, but not markers with substitutions
 vim.o.confirm = true -- Confirm to save changes before exiting modified buffer
 vim.o.cursorline = true -- Enable highlighting of the current line
+vim.opt.diffopt = { "algorithm:minimal", "closeoff", "filler", "hiddenoff", "linematch:60" }
 vim.o.expandtab = false -- Use spaces instead of tabs when true
 vim.opt.fillchars = {
 	foldopen = icons.folds.foldopen,
