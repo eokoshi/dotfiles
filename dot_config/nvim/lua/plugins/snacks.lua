@@ -148,8 +148,11 @@ return {
 	},
 	init = function()
 		local Snacks = require("snacks")
+		local group = vim.api.nvim_create_augroup("Snacks", { clear = true })
+
 		vim.api.nvim_create_autocmd("User", {
 			pattern = "VeryLazy",
+			group = group,
 			callback = function()
 				-- Setup some globals for debugging (lazy-loaded)
 				_G.dd = function(...)
@@ -161,5 +164,21 @@ return {
 				vim.print = _G.dd -- Override print to use snacks for `:=` command
 			end,
 		})
+
+		-- 	-- Show dashboard when all buffers are closed
+		-- 	vim.api.nvim_create_autocmd("BufDelete", {
+		-- 		group = group,
+		-- 		pattern = "*",
+		-- 		callback = function()
+		-- 			local bufs = vim.tbl_filter(function(buf)
+		-- 				return vim.api.nvim_buf_is_loaded(buf) and vim.bo[buf].buflisted
+		-- 			end, vim.api.nvim_list_bufs())
+		-- 			if #bufs == 1 then
+		-- 				-- close extra splits and open dashboard
+		-- 				vim.cmd("only")
+		-- 				Snacks.dashboard.open()
+		-- 			end
+		-- 		end,
+		-- 	})
 	end,
 }

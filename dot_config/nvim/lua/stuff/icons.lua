@@ -12,7 +12,7 @@ return {
 	lualine = {
 		modified = "",
 		readonly = "",
-		unnamed = "",
+		unnamed = " ",
 		newfile = "",
 		lsp = "",
 	},
