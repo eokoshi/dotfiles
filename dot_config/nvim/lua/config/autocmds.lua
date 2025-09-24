@@ -77,10 +77,12 @@ vim.api.nvim_create_autocmd("BufWritePost", {
 })
 
 -- Highlights
-vim.api.nvim_create_augroup("highlights", {})
+local hl = vim.api.nvim_create_augroup("highlights", { clear = true })
 vim.api.nvim_create_autocmd({ "ColorScheme" }, {
+	group = hl,
 	pattern = "*",
 	callback = function()
 		require("config.highlights")
 	end,
+	desc = "Update custom highlight settings on colorscheme change",
 })
