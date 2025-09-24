@@ -1,18 +1,7 @@
 local Snacks = require("snacks")
 local functions = require("stuff.functions")
 local toggles = require("stuff.toggles")
-
-local function map(mode, lhs, rhs, opts)
-	-- set default value if not specify
-	if opts.noremap == "" then
-		opts.noremap = true
-	end
-	if opts.silent == "" then
-		opts.silent = true
-	end
-
-	vim.keymap.set(mode, lhs, rhs, opts)
-end
+local map = functions.map
 
 vim.g.mapleader = " "
 vim.g.maplocalleader = " "
@@ -255,39 +244,6 @@ vim.cmd([[cab cc CodeCompanion]])
 
 -- Blink completion
 vim.keymap.del("i", "<Tab>")
-
--- Diff keymaps
-vim.api.nvim_create_autocmd("WinEnter", {
-	callback = function()
-		if vim.wo.diff then
-			map({ "n", "v" }, "<Leader>gdo", "<CMD>diffget<CR>", { desc = "Get the text from the other buffer to this one" })
-			map({ "n", "v" }, "<Leader>gdp", "<CMD>diffput<CR>", { desc = "Put the text from this buffer to the other" })
-		end
-	end,
-})
-
--- Python keymaps
-vim.api.nvim_create_autocmd("BufReadPost", {
-	pattern = "*.py",
-	callback = function()
-		map("n", "<Leader>fi", "/import<CR>", { desc = "Jump to imports", buffer = true})
-		map("v", "gd", ":norm ysaw'f=r:A,<CR>gv<Plug>(nvim-surround-visual-line)}iargs = <ESC>va{o^", {desc="Convert lines to dict", buffer =true})
-	end,
-})
-
--- Markdown keymaps
-vim.api.nvim_create_autocmd("BufReadPost", {
-	pattern = "*.md",
-	callback = function()
-		map("n", "<Leader>m", "", { desc = "Markdown", buffer = true})
-		map("n", "<Leader>mm", "<CMD>lua require('nabla').popup({border = 'solid'})<CR>", { desc = "Show math popup", buffer = true})
-		map("n", "<Leader>mt", "<CMD>Obsidian today<CR>", { desc = "today's note", buffer = true})
-		map("n", "<Leader>my", "<CMD>Obsidian yesterday<CR>", { desc = "yesterday's note", buffer = true})
-		map("n", "<Leader>mf", "<CMD>Obsidian dailies -48 0<CR>", { desc = "find daily notes", buffer = true})
-		map("n", "<Leader>mn", "<CMD>Obsidian new_from_template<CR>", { desc = "new from template", buffer = true})
-	end,
-})
-
 
 -- Extras/Fun stuff
 map("n", "<Leader>x", "", { desc = "Extras" })

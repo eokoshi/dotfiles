@@ -9,12 +9,20 @@
           - [Header 6](#header-6)
 <!--toc:end-->
 
+# H1
+## H2
+### H3
+#### H4
+##### H5
+###### H6
+
+
 ## Header 2
 
 - This is a test
 - point 2
-    - Item3
-        - point 4
+  - Item3
+    - point 4
 
 $$ \begin{bmatrix} 6&8&9 \\ 2&3&2 \end{bmatrix} $$
 

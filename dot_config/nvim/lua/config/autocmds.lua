@@ -75,14 +75,3 @@ vim.api.nvim_create_autocmd("BufWritePost", {
 	end,
 	desc = "Apply changes in chezmoi files to local files (chezmoi source dir -> destination)",
 })
-
--- Highlights
-local hl = vim.api.nvim_create_augroup("highlights", { clear = true })
-vim.api.nvim_create_autocmd({ "ColorScheme" }, {
-	group = hl,
-	pattern = "*",
-	callback = function()
-		require("config.highlights")
-	end,
-	desc = "Update custom highlight settings on colorscheme change",
-})

@@ -1,5 +1,18 @@
 local M = {}
 
+-- Set keymaps
+function M.map(mode, lhs, rhs, opts)
+	-- set default value if not specify
+	if opts.noremap == "" then
+		opts.noremap = true
+	end
+	if opts.silent == "" then
+		opts.silent = true
+	end
+
+	vim.keymap.set(mode, lhs, rhs, opts)
+end
+
 -- Toggle autosave for current buffer
 function M.ToggleBufferAutoSave()
 	local bufnr = vim.api.nvim_get_current_buf()
