@@ -1,5 +1,3 @@
--- if true then return {} end
-
 return {
 	{
 		"jay-babu/mason-nvim-dap.nvim",

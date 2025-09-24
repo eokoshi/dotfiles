@@ -1,5 +1,3 @@
---if true then return {} end
-
 return {
 	{
 		"jbyuki/nabla.nvim",

@@ -1,5 +1,3 @@
--- if true then return {} end
-
 -- if having annoying clipboard behavior, it might be this plugin
 return {
 	"aserowy/tmux.nvim",

@@ -1,5 +1,3 @@
--- if true then return {} end
-
 local icons = require("stuff.icons")
 
 local function get_attached_clients()
