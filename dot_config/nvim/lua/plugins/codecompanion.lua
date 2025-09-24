@@ -13,7 +13,7 @@ return {
 		map({ "n", "x" }, "<Leader>aa", "<CMD>CodeCompanionActions<CR>", { desc = "actions" })
 		map({ "n", "x" }, "<Leader>at", "<CMD>CodeCompanionChat Toggle<CR>", { desc = "toggle chat window" })
 		map({ "n", "x" }, "<Leader>ai", ":CodeCompanion ", { desc = "inline assist" })
-		map("x", "ga", "<CMD>CodeCompanionChat Add<CR>", { desc = "add visual selection to chat" })
+		map("x", "ac", "<CMD>CodeCompanionChat Add<CR>", { desc = "add visual selection to chat" })
 	end,
 	opts = {
 		display = {
