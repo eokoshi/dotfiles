@@ -2,9 +2,7 @@
 
 return {
 	"folke/snacks.nvim",
-	dependencies = {
-		"MaximilianLloyd/ascii.nvim",
-	},
+	dependencies = {},
 	priority = 1000,
 	lazy = false,
 	---@type snacks.Config
@@ -12,7 +10,7 @@ return {
 		bigfile = { enabled = true },
 		dashboard = {
 			preset = {
-				header = table.concat(require("ascii").art.animals.cats.boxy, "\n"),
+				header = require("stuff.ascii").cat,
 				keys = {
 					{ icon = " ", key = "n", desc = "New File", action = ":ene | startinsert" },
 					{
