@@ -22,12 +22,6 @@
 			},
 			{
 				"language": [
-					"shell"
-				],
-				"path": "./shell.json"
-			},
-			{
-				"language": [
 					"lua"
 				],
 				"path": "./lua.json"
