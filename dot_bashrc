@@ -110,7 +110,7 @@ alias cl="clear"
 alias csvlens="csvlens --colorful"
 
 marimo-serve() {
-    uv run marimo edit --headless --watch --host "$(tailscale ip -4)"
+    uv run marimo edit --headless --watch --host "$(tailscale ip -4)" --no-token
 }
 
 if [ -f ~/.bash_aliases ]; then
