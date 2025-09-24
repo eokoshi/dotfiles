@@ -56,7 +56,7 @@ map('n', '[c', function() if vim.wo.diff then vim.cmd.normal({'[c', bang = true}
 map("n", "<BS>", "<C-^>", {desc="Switch to prev file"})
 
 -- Find
-map("n", "<Leader>f", "", { desc = "Find" })
+map({ "n", "x" }, "<Leader>f", "", { desc = "Find" })
 map("n", "<Leader>fa", function() functions.pick_chezmoi() end, { desc = "config files (chezmoi)" })
 map("n", "<Leader>fb", function() Snacks.picker.buffers() end, { desc = "buffers" })
 map("n", "<Leader>fB", function() Snacks.picker.grep_buffers() end, { desc = "grep in open Buffers" })
@@ -121,9 +121,9 @@ Snacks.toggle.dim():map("<leader>uD")
 
 -- Git
 local gitsigns = require("gitsigns")
-map("n", "<Leader>g", "", { desc = "Git" })
+map({ "n", "x" }, "<Leader>g", "", { desc = "Git" })
 map("n", "<Leader>gb", function() Snacks.picker.git_branches() end, { desc = "git branches" })
-map({ "n", "v" }, "<Leader>gB", function() Snacks.git.blame_line() end, { desc = "git blame line" })
+map({ "n", "x" }, "<Leader>gB", function() Snacks.git.blame_line() end, { desc = "git blame line" })
 map("n", "<Leader>gd", "<CMD>DiffviewOpen<CR>", { desc = "DiffView Open" })
 map("n", "<Leader>gc", "<CMD>DiffviewClose<CR>", { desc = "DiffView Close" })
 map("n", "<Leader>gf", function() Snacks.picker.git_log_file() end, { desc = "git log file" })
@@ -138,7 +138,7 @@ map({'o', 'x'}, 'ih', gitsigns.select_hunk, { desc = "inside hunk"})
 map({'o', 'x'}, 'ah', gitsigns.select_hunk, { desc = "around hunk"})
 
 -- Language Tools
-map("n", "<Leader>l", "", { desc = "Language Tools" })
+map({ "n", "x" }, "<Leader>l", "", { desc = "Language Tools" })
 map({ "n", "x" }, "<Leader>la", function() vim.lsp.buf.code_action() end, { desc = "LSP code actions" })
 map("n", "<Leader>ld", function() vim.diagnostic.open_float() end, { desc = "hover diagnostics" })
 map("n", "<Leader>lf", function() vim.lsp.buf.format() end, { desc = "format buffer" })
@@ -187,7 +187,6 @@ map("n", "<Leader>rr", "vip:SnipRun<CR><ESC>", {desc = "Run scope"})
 map("n", "<Leader>rR", "<CMD>SnipReset<CR>", {desc = "Reset REPL"})
 map("v", "<CR>", ":SnipRun<CR>", {desc = "Run selection"})
 
-
 -- Debugging
 map("n", "<Leader>d", "", { desc = "Debugger" })
 map("n", "<F5>", function() require("dap").continue() end, { desc = "Debugger: Start" })
@@ -201,7 +200,6 @@ map("n", "<F23>", function() require("dap").step_out() end, { desc = "Debugger: 
 map("n", "<Leader>db", function() require("dap").toggle_breakpoint() end, {desc = "Toggle Breakpoint (F9)" })
 map("n", "<Leader>dB", function() require("dap").clear_breakpoints() end, {desc = "Clear Breakpoints" })
 map("n", "<Leader>dc", function() require("dap").continue() end, {desc = "Start/Continue (F5)" })
--- map("v", "<Leader>dE", function() require("dapui").eval() end, {desc = "Evaluate Input" })
 map("n", "<Leader>dh", function() require("dap.ui.widgets").hover() end, {desc = "Debugger Hover" })
 map("n", "<Leader>di", function() require("dap").step_into() end, {desc = "Step Into (F11)" })
 map("n", "<Leader>dj", "<CMD>e $PWD/.vscode/launch.json<CR><CMD>w ++p<CR>", {desc = "Open workspace DAP config" })
@@ -213,11 +211,12 @@ map("n", "<Leader>dQ", function() require("dap").terminate() end, {desc = "Termi
 map("n", "<Leader>dr", function() require("dap").restart_frame() end, {desc = "Restart (C-F5)" })
 map("n", "<Leader>dR", function() require("dap").repl.toggle() end, { desc = "Toggle REPL" })
 map("n", "<Leader>ds", function() require("dap").run_to_cursor() end, {desc = "Run To Cursor" })
--- map("n", "<Leader>du", function() require("dapui").toggle() end, {desc = "Toggle Debugger UI" })
-map("n", "<Leader>du", function() require("dap-view").toggle(true) end, {desc = "Toggle Debugger UI" })
 map("n", "<F21>", function() vim.ui.input({ prompt = "Condition: " }, function(condition) if condition then require("dap").set_breakpoint(condition) end end) end, { desc = "Debugger: Conditional Breakpoint" }) -- Shift+F9
 map("n", "<Leader>dC", function() vim.ui.input({ prompt = "Condition: " }, function(condition) if condition then require("dap").set_breakpoint(condition) end end) end, {desc = "Conditional Breakpoint (S-F9)" })
+-- map("v", "<Leader>dE", function() require("dapui").eval() end, {desc = "Evaluate Input" })
+-- map("n", "<Leader>du", function() require("dapui").toggle() end, {desc = "Toggle Debugger UI" })
 map("n", "<Leader>dE", function() vim.ui.input({ prompt = "Expression: " }, function(expr) if expr then require("dapui").eval(expr, { enter = true }) end end) end, {desc = "Evaluate Input"})
+map("n", "<Leader>du", function() require("dap-view").toggle(true) end, {desc = "Toggle Debugger UI" })
 
 
 -- Package/Plugin Management
@@ -232,15 +231,6 @@ map("n", "<Leader>pa", function() vim.ui.input({ prompt = "Edit plugin spec" }, 
 		vim.cmd("e " .. file)
 	end
 	end) end, { desc = "add plugin" })
-
-
--- LLM chatbot
-map({"n", "v"}, "<Leader>a", "", { desc = "Chatbot" })
-map({"n", "v"}, "<Leader>aa", "<CMD>CodeCompanionActions<CR>", { desc = "actions" })
-map({ "n", "v" }, "<Leader>at", "<CMD>CodeCompanionChat Toggle<CR>", { desc = "toggle chat window" })
-map({ "n", "v" }, "<Leader>ai", function() vim.ui.input({ prompt = "Inline Assistant"}, function(input) if input ~= nil then vim.cmd("CodeCompanion " .. input) end end) end, { desc = "inline assist" })
-map("v", "ga", "<CMD>CodeCompanionChat Add<CR>", { desc = "add visual selection to chat" })
-vim.cmd([[cab cc CodeCompanion]])
 
 -- Blink completion
 vim.keymap.del("i", "<Tab>")

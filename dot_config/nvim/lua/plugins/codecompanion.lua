@@ -7,6 +7,14 @@ return {
 	},
 	cmd = { "CodeCompanion", "CodeCompanionChat", "CodeCompanionCmd", "CodeCompanionActions" },
 	version = "v14.13.0",
+	init = function()
+		local map = require("stuff.functions").map
+		map({ "n", "x" }, "<Leader>a", "", { desc = "Chatbot" })
+		map({ "n", "x" }, "<Leader>aa", "<CMD>CodeCompanionActions<CR>", { desc = "actions" })
+		map({ "n", "x" }, "<Leader>at", "<CMD>CodeCompanionChat Toggle<CR>", { desc = "toggle chat window" })
+		map({ "n", "x" }, "<Leader>ai", ":CodeCompanion ", { desc = "inline assist" })
+		map("x", "ga", "<CMD>CodeCompanionChat Add<CR>", { desc = "add visual selection to chat" })
+	end,
 	opts = {
 		display = {
 			chat = {
@@ -76,6 +84,7 @@ return {
 						},
 						num_ctx = {
 							default = 16384,
+							keep_alive = "60m",
 						},
 					},
 				})
@@ -95,6 +104,7 @@ return {
 						},
 						num_ctx = {
 							default = 40000,
+							keep_alive = "60m",
 						},
 					},
 				})
@@ -114,6 +124,7 @@ return {
 						},
 						num_ctx = {
 							default = 16384,
+							keep_alive = "60m",
 						},
 					},
 				})
@@ -133,6 +144,7 @@ return {
 						},
 						num_ctx = {
 							default = 32768,
+							keep_alive = "60m",
 						},
 					},
 				})
