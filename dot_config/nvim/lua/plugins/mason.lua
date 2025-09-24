@@ -17,6 +17,7 @@ return {
 				"lua-language-server",
 				"basedpyright",
 				"json-lsp",
+				"bashls",
 
 				-- Formatters
 				"stylua",
@@ -31,11 +32,14 @@ return {
 				-- Other
 				"tree-sitter-cli",
 			},
-			integrations = {
-				["mason-lspconfig"] = true,
-				["mason-null-ls"] = true,
-				["mason-nvim-dap"] = false,
-			},
 		},
+	},
+	{
+		"mason-org/mason-lspconfig.nvim",
+		dependencies = {
+			"mason-org/mason.nvim",
+			"neovim/nvim-lspconfig",
+		},
+		opts = {},
 	},
 }
