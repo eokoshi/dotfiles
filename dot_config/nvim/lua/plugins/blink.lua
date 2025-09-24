@@ -4,6 +4,10 @@ return {
 	"saghen/blink.cmp",
 	dependencies = {
 		"rafamadriz/friendly-snippets",
+		{
+			"mikavilpas/blink-ripgrep.nvim",
+			version = "*", -- use the latest stable version
+		},
 	},
 	version = "*",
 	event = { "InsertEnter", "CmdlineEnter" },
@@ -11,12 +15,6 @@ return {
 	---@module 'blink.cmp'
 	---@type blink.cmp.Config
 	opts = {
-		enabled = function()
-			return vim.tbl_contains(
-				{ "lua", "markdown", "python", "json", "codecompanion", "html", "javascript", "css", "bash", "sh" },
-				vim.bo.filetype
-			)
-		end,
 		completion = {
 			keyword = {
 				range = "full",
@@ -59,7 +57,34 @@ return {
 								return ctx.source_name
 							end,
 							highlight = function(ctx)
-								return ctx.kind_hl
+								if ctx.source_name == "rg" then
+									return "BlinkCmpKindKeyword"
+								else
+									return ctx.kind_hl
+								end
+							end,
+						},
+						kind_icon = {
+							text = function(ctx)
+								if ctx.source_name == "rg" then
+									local kind_icon = ""
+									return kind_icon
+								else
+									local kind_icon, _, _ = require("mini.icons").get("lsp", ctx.kind)
+									return kind_icon
+								end
+							end,
+							-- (optional) use highlights from mini.icons
+							highlight = function(ctx)
+								local _, hl, _ = require("mini.icons").get("lsp", ctx.kind)
+								return hl
+							end,
+						},
+						kind = {
+							-- (optional) use highlights from mini.icons
+							highlight = function(ctx)
+								local _, hl, _ = require("mini.icons").get("lsp", ctx.kind)
+								return hl
 							end,
 						},
 					},
@@ -73,10 +98,31 @@ return {
 					winhighlight = "Normal:NormalFloat,FloatBorder:FloatBorder,CursorLine:PmenuSel,Search:None",
 				},
 			},
+			-- ghost_text = {
+			-- 	enabled = true,
+			-- },
 		},
 		signature = { enabled = false },
 		sources = {
-			default = { "lsp", "path", "buffer", "snippets" },
+			default = function()
+				local success, node = pcall(vim.treesitter.get_node)
+				if
+					success
+					and node
+					and vim.tbl_contains({
+						"comment",
+						"line_comment",
+						"block_comment",
+						"string",
+					}, node:type())
+				then
+					return { "buffer", "path", "ripgrep" }
+				elseif vim.bo.filetype == "lua" then
+					return { "lazydev", "lsp", "buffer", "snippets", "ripgrep" }
+				else
+					return { "lsp", "buffer", "snippets", "ripgrep" }
+				end
+			end,
 			providers = {
 				path = {
 					opts = {
@@ -85,34 +131,42 @@ return {
 						end,
 					},
 				},
-				cmdline = {
-					module = "blink.cmp.sources.cmdline",
-					-- Disable shell commands on windows, since they cause neovim to hang
-					enabled = function()
-						return vim.fn.has("win32") == 0 or vim.fn.getcmdtype() ~= ":" or not vim.fn.getcmdline():match("^[%%0-9,'<>%-]*!")
+				ripgrep = {
+					module = "blink-ripgrep",
+					name = "rg",
+					---@module "blink-ripgrep"
+					---@type blink-ripgrep.Options
+					opts = {
+						prefix_min_len = 3,
+						backend = {
+							use = "gitgrep-or-ripgrep",
+						},
+					},
+					score_offset = -1,
+					async = true,
+					should_show_items = function(ctx)
+						return ctx.trigger.initial_kind ~= "trigger_character"
 					end,
+				},
+				lazydev = {
+					name = "LazyDev",
+					module = "lazydev.integrations.blink",
+					score_offset = 100, -- show at a higher priority than lsp
 				},
 			},
 		},
 		cmdline = {
-			enabled = true, -- set to false if you want noice popupmenu (or wait for noice to get blink compatibility)
-			sources = function()
-				local type = vim.fn.getcmdtype()
-				if
-					vim.fn.getcmdline():match("^[%%0-9,'<>%-]*!")
-					or vim.fn.getcmdline():match("^[%%0-9,'<>%-]*term")
-					or vim.fn.getcmdline():match("^[%%0-9,'<>%-]*terminal")
-				then
-					return {}
-				elseif type == "/" or type == "?" then
-					return { "buffer" }
-				elseif type == ":" or type == "@" then
-					return { "cmdline" }
-				end
-				return {}
-			end,
+			keymap = {
+				preset = "inherit",
+				["<CR>"] = { "accept_and_enter", "fallback" },
+			},
 			completion = {
-				ghost_text = { enabled = false },
+				menu = { auto_show = true },
+				list = {
+					selection = {
+						preselect = false,
+					},
+				},
 			},
 		},
 		keymap = {
