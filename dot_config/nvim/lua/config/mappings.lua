@@ -65,7 +65,6 @@ map("n", "<Leader>fC", function() Snacks.picker.commands() end, { desc = "Comman
 map("n", "<Leader>fd", function() Snacks.picker.diagnostics() end, { desc = "diagnostics" })
 map("n", "<Leader>fD", function() Snacks.picker.diagnostics_buffer() end, { desc = "buffer Diagnostics" })
 map("n", "<Leader>fH", function() Snacks.picker.highlights() end, { desc = "Highlights" })
-map("n", "ff", function() require("fff").find_files() end, { desc = "FFFind files" })
 map("n", "<Leader>ff", function() Snacks.picker.files() end, { desc = "files" })
 map("n", "<Leader>fF", function() Snacks.picker.files({ hidden = true, ignored = true, cmd = "fd" }) end, { desc = "all files" })
 map("n", "<Leader>fk", function() Snacks.picker.keymaps() end, { desc = "keymaps" })

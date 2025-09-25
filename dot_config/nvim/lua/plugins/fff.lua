@@ -1,5 +1,8 @@
 return {
 	"dmtrKovalenko/fff.nvim",
+	dependencies = {
+		"Saghen/blink.cmp",
+	},
 	build = function()
 		require("fff.download").download_or_build_binary()
 	end,
@@ -14,11 +17,22 @@ return {
 			preview_scroll_down = "<C-n>",
 		},
 		hl = {
+			normal = "NormalFloat",
 			active_file = "ColorColumn",
+			title = "FloatTitle",
 		},
 		debug = {
 			enabled = true, -- we expect your collaboration at least during the beta
-			show_scores = true, -- to help us optimize the scoring system, feel free to share your scores!
+			show_scores = true,
+		},
+	},
+	keys = {
+		{
+			"ff", -- try it if you didn't it is a banger keybinding for a picker
+			function()
+				require("fff").find_files()
+			end,
+			desc = "FFFind files",
 		},
 	},
 }
