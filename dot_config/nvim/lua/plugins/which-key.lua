@@ -6,6 +6,10 @@ return {
 	},
 	event = "VeryLazy",
 	opts = {
+		sort = {"order", "group", "alphanum", "mod", "case"},
+		expand = 1,
+		preset = "helix",
+		show_help = false,
 		icons = {
 			separator = "",
 			group = "",

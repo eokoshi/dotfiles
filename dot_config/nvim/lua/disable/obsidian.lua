@@ -1,11 +1,7 @@
 return {
 	"obsidian-nvim/obsidian.nvim",
 	version = "*",
-	lazy = true,
-	event = {
-		"BufReadPre ~/Documents/Obsidian/*.md",
-		"BufNewFile ~/Documents/Obsidian/*.md",
-	},
+	event = "VeryLazy",
 	dependencies = {
 		"nvim-lua/plenary.nvim",
 	},

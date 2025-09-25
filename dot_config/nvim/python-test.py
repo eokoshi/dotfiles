@@ -14,6 +14,10 @@ __maintainer__ = "First Last"
 __email__ = "test@example.org"
 __status__ = "Development"
 
+x = 4 + 8
+print("hello")
+print("Testing")
+
 import argparse
 import os
 
