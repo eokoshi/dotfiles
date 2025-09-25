@@ -63,14 +63,14 @@ return {
 			options = {
 				theme = "auto",
 				component_separators = "",
-				section_separators = { left = "", right = "" },
+				section_separators = { left = icons.lualine.rsep, right = icons.lualine.lsep },
 				globalstatus = true,
 				disabled_filetypes = {
 					statusline = { "snacks_dashboard", "undotree" },
 				},
 			},
 			sections = {
-				lualine_a = { { "mode", separator = { left = "" }, right_padding = 2 } },
+				lualine_a = { { "mode", separator = { left = icons.lualine.lsep }, right_padding = 2 } },
 				lualine_b = { "branch" },
 				lualine_c = {
 					{
@@ -135,40 +135,41 @@ return {
 					"hostname",
 				},
 				lualine_z = {
-					{
-						"location",
-						padding = 1,
-						separator = { right = "" },
-						cond = function()
-							if vim.o.filetype == "codecompanion" then
-								return false
-							else
-								return true
-							end
-						end,
-					},
+					-- {
+					-- 	"location",
+					-- 	padding = 1,
+					-- 	separator = { right = "" },
+					-- 	cond = function()
+					-- 		if vim.o.filetype == "codecompanion" then
+					-- 			return false
+					-- 		else
+					-- 			return true
+					-- 		end
+					-- 	end,
+					-- },
 				},
 			},
 			tabline = {
 				lualine_a = {
 					{
 						"buffers",
-						-- hide_filename_extension = true,
+						mode = 4,
+						hide_filename_extension = true,
 						symbols = {
-							alternate_file = "",
+							alternate_file = icons.lualine.alternate .. " ",
 							modified = " " .. icons.lualine.modified,
 						},
 						filetype_names = {
-							snacks_picker_list = "",
-							["dap-view-term"] = "",
+							snacks_picker_list = icons.filetype.snacks_picker_list,
+							["dap-view-term"] = icons.debug.bug,
 						},
 						use_mode_colors = true,
 						-- cond = function()
-						-- if vim.fn.expand("%") == "" then
-						-- 	return false
-						-- else
-						-- 	return true
-						-- end
+						-- 	if vim.fn.expand("%") == "" then
+						-- 		return false
+						-- 	else
+						-- 		return true
+						-- 	end
 						-- end,
 					},
 				},
@@ -176,7 +177,11 @@ return {
 				lualine_c = {},
 				lualine_x = {},
 				lualine_y = {
-					{ "progress" },
+					{
+						"tabs",
+						use_mode_colors = true,
+						show_modified_status = false,
+					},
 				},
 				lualine_z = {},
 			},

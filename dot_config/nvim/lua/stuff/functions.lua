@@ -48,9 +48,10 @@ function M.DOS_to_Unix()
 	vim.cmd("%s/\r//geI")
 	vim.cmd("set ff?")
 end
-
 function M.notifications_picker()
 	require("snacks").picker.notifications({
+		confirm = { "yank", "close" },
+		focus = "list",
 		layout = {
 			layout = {
 				box = "vertical",

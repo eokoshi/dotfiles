@@ -7,7 +7,7 @@ vim.opt.completeopt = { "menu", "menuone", "noselect" }
 vim.o.conceallevel = 2 -- Hide * markup for bold and italic, but not markers with substitutions
 vim.o.confirm = true -- Confirm to save changes before exiting modified buffer
 vim.o.cursorline = true -- Enable highlighting of the current line
-vim.opt.diffopt = { "algorithm:minimal", "closeoff", "filler", "hiddenoff", "linematch:60" }
+vim.opt.diffopt = { "internal", "closeoff", "filler", "hiddenoff", "linematch:60" }
 vim.o.expandtab = false -- Use spaces instead of tabs when true
 vim.opt.fillchars = {
 	foldopen = icons.folds.foldopen,
@@ -18,14 +18,15 @@ vim.opt.fillchars = {
 }
 vim.o.findfunc = "fd"
 vim.o.foldcolumn = "1"
-vim.o.foldmethod = "expr"
-vim.o.foldexpr = "v:lua.vim.treesitter.foldexpr()"
+vim.o.foldmethod = "indent"
+-- vim.o.foldexpr = "v:lua.vim.treesitter.foldexpr()"
 vim.api.nvim_create_autocmd("LspAttach", {
 	callback = function(args)
 		local client = assert(vim.lsp.get_client_by_id(args.data.client_id))
 		if client:supports_method("textDocument/foldingRange") then
-			local win = vim.api.nvim_get_current_win()
-			vim.wo[win][0].foldexpr = "v:lua.vim.lsp.foldexpr()"
+			local buf = vim.api.nvim_get_current_buf()
+			vim.bo[buf].foldmethod = "expr"
+			vim.bo[buf].foldexpr = "v:lua.vim.lsp.foldexpr()"
 		end
 	end,
 })

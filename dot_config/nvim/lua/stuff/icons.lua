@@ -10,11 +10,14 @@ return {
 		info_neg = "",
 	},
 	lualine = {
+		alternate = "↩",
 		modified = "",
 		readonly = "",
 		unnamed = " ",
 		newfile = "",
 		lsp = "",
+		lsep = "",
+		rsep = "",
 	},
 	git = {
 		added = "",
@@ -85,5 +88,6 @@ return {
 		bash = "",
 		sh = "",
 		age = "󰌋",
+		snacks_picker_list = "󰺲",
 	},
 }

@@ -8,12 +8,15 @@ return {
 		},
 		keymaps = {
 			view = {
-				{ "n", "<Leader>Q", "<CMD>DiffviewClose<CR>", { desc = "Close DiffView" } },
+				{ "n", "<Leader>q", "<CMD>DiffviewClose<CR>", { desc = "Close DiffView" } },
 				{ "n", "<Leader>c", "", { desc = "Conflicts" } },
 			},
 			file_panel = {
-				{ "n", "<Leader>Q", "<CMD>DiffviewClose<CR>", { desc = "Close DiffView" } },
+				{ "n", "<Leader>q", "<CMD>DiffviewClose<CR>", { desc = "Close DiffView" } },
 			},
 		},
 	},
+	init = function()
+		require("stuff.functions").map("n", "<Leader>gh", "<CMD>DiffviewFileHistory<CR>", { desc = "File History" })
+	end,
 }

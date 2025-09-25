@@ -35,5 +35,9 @@ return {
 				test = { "Linkage", "Identifier", "#FF00FF" },
 			},
 		},
+		init = function()
+			local map = require("stuff.functions").map
+			map("n", "<Leader>T", "<CMD>TodoTrouble<CR>", { desc = "Todo List" })
+		end,
 	},
 }

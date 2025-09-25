@@ -114,7 +114,7 @@ return {
 						"string",
 					}, node:type())
 				then
-					return { "buffer", "path", "ripgrep" }
+					return { "lsp", "buffer", "path", "ripgrep" }
 				elseif vim.bo.filetype == "lua" then
 					return { "lazydev", "lsp", "buffer", "snippets", "ripgrep" }
 				else
@@ -128,6 +128,9 @@ return {
 							return vim.fn.getcwd()
 						end,
 					},
+				},
+				lsp = {
+					score_offset = 10,
 				},
 				ripgrep = {
 					module = "blink-ripgrep",

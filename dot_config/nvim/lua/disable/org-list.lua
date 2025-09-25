@@ -1,7 +1,3 @@
-if true then
-	return {}
-end
-
 return {
 	"hamidi-dev/org-list.nvim",
 	dependencies = {

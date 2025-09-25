@@ -9,21 +9,20 @@ vim.g.maplocalleader = " "
 -- stylua: ignore start
 
 -- Basic operations
-map("n", "<Leader>c", function() Snacks.bufdelete() end, { desc = "Close buffer" })
 map("n", "<Leader>e", "<CMD>Neotree toggle left<CR>", { desc = "File explorer" })
 map("n", "<Leader>n", "<CMD>NoNeckPain<CR>", { desc = "NoNeckPain" })
-map("n", "<Leader>N", function() functions.notifications_picker() end, { desc = "Notification history" })
-map("n", "<Leader>H", function() Snacks.dashboard() end, { desc = "Home" })
 map("n", "<Leader>q", "<CMD>q<CR>", { desc = "Quit window" })
 map("n", "<Leader>Q", "<CMD>qa<CR>", { desc = "Quit nvim" })
-map("n", "<Leader>R", function() Snacks.rename.rename_file() end, { desc = "Rename file" })
-map("n", "<Leader>U", "<CMD>UndotreeToggle<CR>", { desc = "Open Undotree" })
 map("n", "<Leader>w", "<CMD>w<CR>", { desc = "Save buffer" })
 map("n", "<Leader>.", "<CMD>cd %:h<CR>", { desc = "cd here" })
+map("n", "<Leader>N", function() functions.notifications_picker() end, { desc = "Notification history" })
+map("n", "<Leader>c", function() Snacks.bufdelete() end, { desc = "Close buffer" })
+map("n", "<Leader>H", function() Snacks.dashboard() end, { desc = "Home" })
+map("n", "<Leader>R", function() Snacks.rename.rename_file() end, { desc = "Rename file" })
 map("n", "<Leader>:", function() Snacks.picker.command_history() end, { desc = "Command history" })
-map("n", "<Leader><space>", function() Snacks.picker.smart() end, { desc = "Smart search" })
-map({ "n", "v" }, "c", "\"ac", { desc = "Do not yank text on change" })
+map("n", "<Leader><space>", "<ESC>", { desc = ""})
 map({ "n", "t", "i" }, "<F7>", function() Snacks.terminal.toggle("/bin/bash", { win = {wo = {statuscolumn = " "}, position = "float", backdrop=100, border = "rounded", height = 0.9}, auto_close=true}) end, { desc = "toggle terminal" })
+map({ "n", "v" }, "c", "\"ac", { desc = "Do not yank text on change" })
 
 -- System clipboard
 map({ "n", "v" }, "<M-v>", "<C-v>", { desc = "Visual block mode" })
@@ -49,17 +48,12 @@ map("i", "<S-Tab>", "<C-d>", { desc = "Unindent 1 level" })
 map("n", "J", "mzJ`z", { desc = "Shift J without moving cursor", noremap = false })
 map({"n", "i", "s"}, "<C-n>", function() require("noice.lsp").scroll(4) end, { desc = "Scroll hover down" })
 map({"n", "i", "s"}, "<C-p>", function() require("noice.lsp").scroll(-4) end, { desc = "Scroll hover up" })
----@diagnostic disable-next-line: param-type-mismatch
-map('n', ']c', function() if vim.wo.diff then vim.cmd.normal({']c', bang = true}) else require("gitsigns").nav_hunk('next') end end, { desc = "Next hunk"})
----@diagnostic disable-next-line: param-type-mismatch
-map('n', '[c', function() if vim.wo.diff then vim.cmd.normal({'[c', bang = true}) else require("gitsigns").nav_hunk('prev') end end, { desc = "Prev hunk"})
 map("n", "<BS>", "<C-^>", {desc="Switch to prev file"})
 
 -- Find
 map({ "n", "x" }, "<Leader>f", "", { desc = "Find" })
 map("n", "<Leader>fa", function() functions.pick_chezmoi() end, { desc = "config files (chezmoi)" })
 map("n", "<Leader>fb", function() Snacks.picker.buffers() end, { desc = "buffers" })
-map("n", "<Leader>fB", function() Snacks.picker.grep_buffers() end, { desc = "grep in open Buffers" })
 map({ "n", "x" }, "<Leader>fc", function() Snacks.picker.grep_word() end, { desc = "grep current selection" })
 map("n", "<Leader>fC", function() Snacks.picker.commands() end, { desc = "Commands" })
 map("n", "<Leader>fd", function() Snacks.picker.diagnostics() end, { desc = "diagnostics" })
@@ -68,7 +62,6 @@ map("n", "<Leader>fh", function() Snacks.picker.help() end, { desc = "help pages
 map("n", "<Leader>fH", function() Snacks.picker.highlights() end, { desc = "Highlights" })
 map("n", "<Leader>ff", function() Snacks.picker.files() end, { desc = "files" })
 map("n", "<Leader>fF", function() Snacks.picker.files({ hidden = true, ignored = true, cmd = "fd" }) end, { desc = "all files" })
-map("n", "<Leader>fg", function() Snacks.picker.git_files() end, { desc = "git files" })
 map("n", "<Leader>fk", function() Snacks.picker.keymaps() end, { desc = "keymaps" })
 map("n", "<Leader>fj", function() Snacks.picker.jumps() end, { desc = "jumps" })
 map("n", "<Leader>fl", function() Snacks.picker.loclist() end, { desc = "location list" })
@@ -83,16 +76,15 @@ map("n", "<Leader>fu", function() Snacks.picker.undo() end, { desc = "undo" })
 map("n", "<Leader>fw", function() Snacks.picker.grep({ cmd = "rg" }) end, { desc = "word" })
 map("n", "<Leader>fW", function() Snacks.picker.grep({ cmd = "rg", hidden = true, ignored = true }) end, { desc = "Word in all files" })
 map("n", "<Leader>fz", function() Snacks.picker.files({ cwd = vim.fn.stdpath("config") }) end, { desc = "local config files" })
-map("n", "<Leader>f<CR>", function() Snacks.picker.resume() end, { desc = "Resume last search" })
+map("n", "<Leader>f<space>", function() Snacks.picker.resume() end, { desc = "Resume last search" })
 
 -- Buffers
 map("n", "<Leader>b", "", { desc = "Buffers" })
 map("n", "<Leader>bA", "<CMD>%y+<CR><CR>", { desc = "Copy whole buffer to clipboard" })
 map("n", "<Leader>bD", function() functions.DOS_to_Unix() end, { desc = "DOS to Unix" })
-map("n", "<Leader>bc", function() Snacks.bufdelete.other() end, { desc = "Close all other bufs" })
 map("n", "<Leader>bf", function() vim.lsp.buf.format() end, { desc = "format buffer" })
+map("n", "<Leader>bc", function() Snacks.bufdelete.other() end, { desc = "Close all other bufs" })
 map("n", "<Leader>bs", function() Snacks.scratch() end, { desc = "scratch buffer" })
-map("n", "<Leader>bt", "<CMD>TodoTrouble<CR>", {desc = "Todo List"})
 toggles.autosave():map("<Leader>ba")
 
 -- UI
@@ -120,22 +112,10 @@ Snacks.toggle.indent():map("<leader>ug")
 Snacks.toggle.dim():map("<leader>uD")
 
 -- Git
-local gitsigns = require("gitsigns")
 map({ "n", "x" }, "<Leader>g", "", { desc = "Git" })
 map("n", "<Leader>gb", function() Snacks.picker.git_branches() end, { desc = "git branches" })
-map({ "n", "x" }, "<Leader>gB", function() Snacks.git.blame_line() end, { desc = "git blame line" })
-map("n", "<Leader>gd", "<CMD>DiffviewOpen<CR>", { desc = "DiffView Open" })
-map("n", "<Leader>gc", "<CMD>DiffviewClose<CR>", { desc = "DiffView Close" })
-map("n", "<Leader>gf", function() Snacks.picker.git_log_file() end, { desc = "git log file" })
+map("n", "<Leader>gl", function() Snacks.picker.git_log_file() end, { desc = "git log file" })
 map("n", "<Leader>gg", function() Snacks.lazygit() end, { desc = "lazygit" })
-map("n", "<Leader>gs", gitsigns.stage_hunk, { desc = "stage hunk" })
-map("n", "<Leader>gr", gitsigns.reset_hunk, { desc = "reset hunk" })
-map('v', '<leader>gs', function() gitsigns.stage_hunk({ vim.fn.line('.'), vim.fn.line('v') }) end, {desc = "stage hunk"})
-map('v', '<leader>gr', function() gitsigns.reset_hunk({ vim.fn.line('.'), vim.fn.line('v') }) end, {desc = "reset hunk"})
-map("n", "<Leader>gS", gitsigns.stage_buffer, { desc = "stage buffer" })
-map("n", "<Leader>gR", gitsigns.reset_buffer, { desc = "reset buffer" })
-map({'o', 'x'}, 'ih', gitsigns.select_hunk, { desc = "inside hunk"})
-map({'o', 'x'}, 'ah', gitsigns.select_hunk, { desc = "around hunk"})
 
 -- Language Tools
 map({ "n", "x" }, "<Leader>l", "", { desc = "Language Tools" })
@@ -158,33 +138,6 @@ map("n", "gp", function() Snacks.picker.lsp_type_definitions() end, { desc = "Go
 map("n", "gco", "o<Esc>Vcx<Esc><Cmd>normal gcc<CR>fxa<BS>", { desc = "Add comment below" })
 map("n", "gcO", "O<Esc>Vcx<Esc><Cmd>normal gcc<CR>fxa<BS>", { desc = "Add comment above" })
 
--- overlook.nvim
-map("n", "<Leader>o", "", {desc = "Overlook"})
-map("n", "<leader>od", require("overlook.api").peek_definition, { desc = "Peek definition" })
-map("n", "<leader>op", require("overlook.api").peek_cursor, { desc = "Peek cursor" })
-map("n", "<leader>ou", require("overlook.api").restore_popup, { desc = "Restore last popup" })
-map("n", "<leader>oU", require("overlook.api").restore_all_popups, { desc = "Restore all popups" })
-map("n", "<leader>oc", require("overlook.api").close_all, { desc = "Close all popups" })
-map("n", "<leader>os", require("overlook.api").open_in_split, { desc = "Open popup in split" })
-map("n", "<leader>ov", require("overlook.api").open_in_vsplit, { desc = "Open popup in vsplit" })
-map("n", "<leader>ot", require("overlook.api").open_in_tab, { desc = "Open popup in tab" })
-map("n", "<leader>oo", require("overlook.api").open_in_original_window, { desc = "Open popup in current window" })
-
--- Trouble
-map("n", "<Leader>t", "", {desc = "Trouble"})
-map("n", "<Leader>td", "<CMD>Trouble diagnostics toggle focus=true filter.buf=0<CR>", {desc = "diagnostics list"})
-map("n", "<Leader>tD", "<CMD>Trouble diagnostics toggle<CR>", {desc = "workspace diagnostics list"})
-map("n", "<Leader>ts", "<CMD>Trouble symbols toggle pinned=true win.relative=editor win.position=right<CR>", {desc = "symbols"})
-map("n", "<Leader>tt", "<CMD>TodoTrouble<CR>", {desc = "Todo List"})
-
--- Run code
-map("n", "<Leader>r", "", {desc = "Run Code"})
-map("n", "<Leader>rc", "<CMD>SnipClose<CR>", {desc = "Close REPL"})
-map("n", "<Leader>rl", "<CMD>SnipRun<CR>", {desc = "Run line"})
-map("n", "<Leader>rf", "<CMD>%SnipRun<CR>", {desc = "Run file"})
-map("n", "<Leader>rr", "vip:SnipRun<CR><ESC>", {desc = "Run scope"})
-map("n", "<Leader>rR", "<CMD>SnipReset<CR>", {desc = "Reset REPL"})
-map("v", "<CR>", ":SnipRun<CR>", {desc = "Run selection"})
 
 -- Debugging
 map("n", "<Leader>d", "", { desc = "Debugger" })
@@ -222,7 +175,8 @@ map("n", "<Leader>du", function() require("dap-view").toggle(true) end, {desc = 
 map("n", "<Leader>p", "", { desc = "Packages" })
 map("n", "<Leader>pi", "<CMD>Lazy<CR>", { desc = "Lazy" })
 map("n", "<Leader>pm", "<CMD>Mason<CR>", { desc = "Mason" })
-map("n", "<Leader>pc", function() require("neo-tree.command").execute({ dir=os.getenv("HOME").."/.local/share/chezmoi" }) end, { desc = "cd config" })
+map("n", "<Leader>pz", function() require("neo-tree.command").execute({ dir=os.getenv("HOME").."/.local/share/chezmoi" }) end, { desc = "cd chezmoi" })
+map("n", "<Leader>pc", function() require("neo-tree.command").execute({ dir=vim.fn.stdpath("config") }) end, { desc = "cd config" })
 map("n", "<Leader>pa", function() vim.ui.input({ prompt = "Edit plugin spec" }, function(input)
 	if input ~= nil then
 		local file = vim.fn.stdpath("config") .. "/lua/plugins/" .. input .. ".lua"

@@ -1,7 +1,3 @@
-if true then
-	return {}
-end
-
 return {
 	"mbbill/undotree",
 	event = "VeryLazy",
@@ -12,5 +8,6 @@ return {
 		vim.g.undotree_TreeVertShape = "┃"
 		vim.g.undotree_TreeSplitShape = "━┛"
 		vim.g.undotree_TreeReturnShape = "━┓"
+		require("stuff.functions").map("n", "<Leader>U", "<CMD>UndotreeToggle<CR>", { desc = "Open Undotree" })
 	end,
 }
