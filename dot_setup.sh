@@ -1,4 +1,4 @@
-#! /bin/bash
+#!/usr/bin/env bash
 
 # GitHub
 (type -p wget >/dev/null || (sudo apt update && sudo apt-get install wget -y)) \
