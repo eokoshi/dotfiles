@@ -2,6 +2,9 @@ return {
 	"lewis6991/gitsigns.nvim",
 	event = "VeryLazy",
 	opts = {
+		current_line_blame_opts = {
+			delay = 300,
+		},
 		on_attach = function(bufnr)
 			local gitsigns = require("gitsigns")
 			local map = require("stuff.functions").map
@@ -38,7 +41,7 @@ return {
 				gitsigns.blame_line({ full = true })
 			end, { desc = "Blame line", buffer = bufnr })
 			map("n", "<leader>gX", gitsigns.blame, { desc = "Blame", buffer = bufnr })
-			map("n", "<leader>gd", gitsigns.diffthis, { desc = "Diff", buffer = bufnr })
+			map("n", "<leader>gd", gitsigns.diffthis, { desc = "Diff file", buffer = bufnr })
 			map("n", "<leader>gq", gitsigns.setqflist, { desc = "Quickfix file changes", buffer = bufnr })
 			map("n", "<leader>gQ", function()
 				gitsigns.setqflist("all")

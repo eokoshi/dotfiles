@@ -38,22 +38,4 @@ return {
 			map("n", "<Leader>tt", "<CMD>TodoTrouble<CR>", { desc = "Todo List" })
 		end,
 	},
-	{
-		"eokoshi/lualine.nvim",
-		opts = function(_, opts)
-			local trouble = require("trouble")
-			local symbols = trouble.statusline({
-				mode = "lsp_document_symbols",
-				groups = {},
-				title = false,
-				filter = { range = true },
-				format = "{kind_icon}{symbol.name:BufferInactiveSign}",
-				hl_group = "lualine_x_normal",
-			})
-			table.insert(opts.tabline.lualine_x, {
-				symbols.get,
-				cond = symbols.has,
-			})
-		end,
-	},
 }

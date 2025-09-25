@@ -18,15 +18,14 @@ vim.opt.fillchars = {
 }
 vim.o.findfunc = "fd"
 vim.o.foldcolumn = "1"
-vim.o.foldmethod = "indent"
--- vim.o.foldexpr = "v:lua.vim.treesitter.foldexpr()"
+vim.o.foldmethod = "expr"
+vim.o.foldexpr = "v:lua.vim.treesitter.foldexpr()"
 vim.api.nvim_create_autocmd("LspAttach", {
 	callback = function(args)
 		local client = assert(vim.lsp.get_client_by_id(args.data.client_id))
 		if client:supports_method("textDocument/foldingRange") then
-			local buf = vim.api.nvim_get_current_buf()
-			vim.bo[buf].foldmethod = "expr"
-			vim.bo[buf].foldexpr = "v:lua.vim.lsp.foldexpr()"
+			local win = vim.api.nvim_get_current_win()
+			vim.wo[win][0].foldexpr = "v:lua.vim.lsp.foldexpr()"
 		end
 	end,
 })
@@ -64,8 +63,8 @@ vim.o.smartindent = false -- Insert indents automatically (messes with python tr
 vim.o.smoothscroll = true
 vim.o.softtabstop = 0
 vim.o.spelllang = "en"
-vim.o.splitbelow = true -- Put new windows below current
 vim.o.splitkeep = "screen"
+vim.o.splitbelow = true -- Put new windows below current
 vim.o.splitright = true -- Put new windows right of current
 vim.o.swapfile = true
 vim.o.tabstop = 4 -- Number of spaces tabs count for
