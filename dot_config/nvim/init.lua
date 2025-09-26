@@ -1,11 +1,6 @@
 vim.g.mapleader = " "
 vim.g.maplocalleader = "\\"
 
-if vim.g.neovide then
-	-- Put anything you want to happen only in Neovide here
-	require("config.neovide")
-end
-
 require("config.options")
 require("config.autocmds")
 require("config.lazy")
@@ -13,4 +8,9 @@ require("config.mappings")
 require("config.highlights")
 require("config.final")
 
-vim.cmd.colorscheme("gruvbox-material")
+if vim.fn.has("win32") == 1 then
+	require("config.neovide")
+	vim.cmd.colorscheme("onelight")
+else
+	vim.cmd.colorscheme("gruvbox-material")
+end

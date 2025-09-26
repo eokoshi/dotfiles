@@ -52,10 +52,10 @@ map("n", "<BS>", "<C-^>", { desc = "Switch to prev file" })
 
 -- Find
 map({ "n", "x" }, "<Leader>f", "", { desc = "Find" })
-map("n", "<Leader>fa", function() functions.pick_chezmoi() end, { desc = "config files (chezmoi)" })
+map("n", "<Leader>fa", function() functions.pick_config() end, { desc = "config" })
+map("n", "<Leader>fz", function() Snacks.picker.files({ cwd = vim.fn.stdpath("config") }) end, { desc = "local config" })
 map("n", "<Leader>fo", function() require("oil").toggle_float() end, { desc = "Oil explorer" })
 map("n", "<Leader>fb", function() Snacks.picker.buffers() end, { desc = "buffers" })
-map({ "n", "x" }, "<Leader>fc", function() Snacks.picker.grep_word() end, { desc = "grep current selection" })
 map("n", "<Leader>fC", function() Snacks.picker.commands() end, { desc = "Commands" })
 map("n", "<Leader>fd", function() Snacks.picker.diagnostics() end, { desc = "diagnostics" })
 map("n", "<Leader>fD", function() Snacks.picker.diagnostics_buffer() end, { desc = "buffer Diagnostics" })
@@ -73,12 +73,10 @@ map("n", "<Leader>fr", function() Snacks.picker.recent() end, { desc = "recent" 
 map("n", "<Leader>fs", function() Snacks.scratch.select() end, { desc = "find scratch buffers" })
 map("n", "<Leader>fu", function() Snacks.picker.undo() end, { desc = "undo" })
 map("n", "<Leader>fw", function() Snacks.picker.grep({ cmd = "rg" }) end, { desc = "word" })
-map("n", "<Leader>fW", function() Snacks.picker.grep({ cmd = "rg", hidden = true, ignored = true }) end,
-	{ desc = "Word in all files" })
-map("n", "<Leader>fz", function() Snacks.picker.files({ cwd = vim.fn.stdpath("config") }) end,
-	{ desc = "local config files" })
+map("n", "<Leader>fW", function() Snacks.picker.grep({ cmd = "rg", hidden = true, ignored = true }) end, { desc = "Word in all files" })
 map("n", "<Leader>f<space>", function() Snacks.picker.resume() end, { desc = "Resume last search" })
 map("n", "<Leader>fh", function() functions.pick_help() end, { desc = "help pages" })
+map({ "n", "x" }, "<Leader>f*", function() Snacks.picker.grep_word() end, { desc = "grep current selection" })
 
 -- Buffers
 map("n", "<Leader>b", "", { desc = "Buffers" })

@@ -1,5 +1,5 @@
-return {
-	{
+if vim.fn.has("linux") == 1 then
+	return {
 		"michaelb/sniprun",
 		branch = "master",
 		build = "bash install.sh 1",
@@ -25,5 +25,7 @@ return {
 			map("n", "<Leader>rR", "<CMD>SnipReset<CR>", { desc = "Reset REPL" })
 			map("v", "<CR>", ":SnipRun<CR>", { desc = "Run selection" })
 		end,
-	},
-}
+	}
+else
+	return {}
+end

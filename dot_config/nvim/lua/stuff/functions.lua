@@ -94,15 +94,19 @@ function M.notifications_picker()
 	})
 end
 
-function M.pick_chezmoi()
-	Snacks.picker.files({
-		hidden = true,
-		ignored = true,
-		follow = true,
-		dirs = {
-			os.getenv("HOME") .. "/.local/share/chezmoi",
-		},
-	})
+function M.pick_config()
+	if vim.fn.has("win32") == 1 then
+		Snacks.picker.files({ cwd = vim.fn.stdpath("config") })
+	else
+		Snacks.picker.files({
+			hidden = true,
+			ignored = true,
+			follow = true,
+			dirs = {
+				os.getenv("HOME") .. "/.local/share/chezmoi",
+			},
+		})
+	end
 end
 
 function M.pick_icons()

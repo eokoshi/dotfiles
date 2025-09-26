@@ -37,13 +37,14 @@ return {
 						key = "c",
 						desc = "Config",
 						action = function()
-							if vim.fn.has("win32") then
-								local dir = vim.fn.stdpath("config")
+							local dir
+							if vim.fn.has("win32") == 1 then
+								dir = vim.fn.stdpath("config")
 							else
-								local dir = os.getenv("HOME") .. "/.local/share/chezmoi"
+								dir = os.getenv("HOME") .. "/.local/share/chezmoi"
 							end
 							vim.cmd("cd", dir)
-							require("neo-tree.command").execute({ position = "float", dir = dir })
+							require("neo-tree.command").execute({})
 						end,
 					},
 					{

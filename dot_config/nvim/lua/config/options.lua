@@ -81,7 +81,7 @@ vim.o.winminwidth = 20 -- Minimum window width
 vim.o.wrap = false -- Disable line wrap
 
 -- System features
-if vim.fn.has("win32") then
+if vim.fn.has("win32") == 1 then
 	vim.o.shell = "~/scoop/shims/pwsh.exe"
 	vim.o.shellcmdflag =
 		"-NoLogo -NoProfile -ExecutionPolicy RemoteSigned -Command [Console]::InputEncoding=[Console]::OutputEncoding=[System.Text.Encoding]::UTF8;"

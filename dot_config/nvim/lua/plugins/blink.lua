@@ -9,7 +9,6 @@ return {
 	},
 	version = "*",
 	event = { "InsertEnter", "CmdlineEnter" },
-	opts_extend = { "sources.default" },
 	---@module 'blink.cmp'
 	---@type blink.cmp.Config
 	opts = {
@@ -112,6 +111,8 @@ return {
 						"line_comment",
 						"block_comment",
 						"string",
+						"word",
+						"raw_string",
 					}, node:type())
 				then
 					return { "lsp", "buffer", "path", "ripgrep" }
