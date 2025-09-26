@@ -53,10 +53,7 @@ vim.api.nvim_create_autocmd("LspAttach", {
 	group = lsp,
 	callback = function(args)
 		local client = assert(vim.lsp.get_client_by_id(args.data.client_id))
-		if
-			not client:supports_method("textDocument/willSaveWaitUntil")
-			and client:supports_method("textDocument/formatting")
-		then
+		if not client:supports_method("textDocument/willSaveWaitUntil") and client:supports_method("textDocument/formatting") then
 			vim.api.nvim_create_autocmd("BufWritePre", {
 				group = lsp,
 				buffer = args.buf,
@@ -99,7 +96,7 @@ vim.api.nvim_create_autocmd("BufWritePost", {
 })
 
 -- Syncing Config with Windows
-local winsync = vim.api.nvim_create_augroup("WindowsSync")
+local winsync = vim.api.nvim_create_augroup("WindowsSync", { clear = true })
 
 -- edit config in chezmoi dir, which syncs with local conf, which then updates the nvim conf repo
 vim.api.nvim_create_autocmd("VimLeavePre", {

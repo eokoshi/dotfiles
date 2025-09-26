@@ -22,4 +22,3 @@ os:
   openDirInEditor: nvim -- {{dir}}
 disableStartupPopups: true
 promptToReturnFromSubprocess: false
-notARepository: quit
