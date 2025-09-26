@@ -53,7 +53,10 @@ vim.api.nvim_create_autocmd("LspAttach", {
 	group = lsp,
 	callback = function(args)
 		local client = assert(vim.lsp.get_client_by_id(args.data.client_id))
-		if not client:supports_method("textDocument/willSaveWaitUntil") and client:supports_method("textDocument/formatting") then
+		if
+			not client:supports_method("textDocument/willSaveWaitUntil")
+			and client:supports_method("textDocument/formatting")
+		then
 			vim.api.nvim_create_autocmd("BufWritePre", {
 				group = lsp,
 				buffer = args.buf,
@@ -93,4 +96,76 @@ vim.api.nvim_create_autocmd("BufWritePost", {
 		end
 	end,
 	desc = "Apply changes in chezmoi files to local files (chezmoi source dir -> destination)",
+})
+
+-- Syncing Config with Windows
+local winsync = vim.api.nvim_create_augroup("WindowsSync")
+
+-- edit config in chezmoi dir, which syncs with local conf, which then updates the nvim conf repo
+vim.api.nvim_create_autocmd("VimLeavePre", {
+	group = chezmoi,
+	pattern = "*/.local/share/chezmoi/*",
+	callback = function(args)
+		if string.match(args.match, ".*%.local/share/chezmoi/.*") ~= nil then
+			local syscmd = function(cmd, silent)
+				silent = silent or false
+				vim.system(cmd, {
+					cwd = vim.fn.stdpath("config"),
+					stdout = function(_, data)
+						if data ~= nil and silent ~= false then
+							vim.notify(data, vim.log.levels.INFO)
+						end
+					end,
+					stderr = function(_, data)
+						if data ~= nil then
+							vim.notify(data, vim.log.levels.ERROR)
+						end
+					end,
+					text = true,
+				}):wait()
+			end
+			syscmd({ "git", "add", "*" }, true)
+			syscmd({ "git", "commit", "-m", "autocommit" }, true)
+			local on_exit = function(_) end
+			vim.system({ "git", "push" }, {
+				cwd = vim.fn.stdpath("config"),
+				stdout = function(_, data)
+					if data ~= nil then
+						vim.notify(data, vim.log.levels.INFO)
+					end
+				end,
+				stderr = function(_, data)
+					if data ~= nil then
+						vim.notify(data, vim.log.levels.ERROR)
+					end
+				end,
+				text = true,
+				on_exit,
+			})
+		end
+	end,
+})
+
+-- on windows machine, git pull config at every exit
+vim.api.nvim_create_autocmd("VimLeavePre", {
+	group = winsync,
+	pattern = "*",
+	callback = function(args)
+		local on_exit = function(_) end
+		vim.system({ "git", "pull" }, {
+			cwd = vim.fn.stdpath("config"),
+			stdout = function(_, data)
+				if data ~= nil then
+					vim.notify(data, vim.log.levels.INFO)
+				end
+			end,
+			stderr = function(_, data)
+				if data ~= nil then
+					vim.notify(data, vim.log.levels.ERROR)
+				end
+			end,
+			text = true,
+			on_exit,
+		})
+	end,
 })

@@ -96,7 +96,7 @@ end
 
 function M.pick_config()
 	if vim.fn.has("win32") == 1 then
-		Snacks.picker.files({ cwd = vim.fn.stdpath("config") })
+		vim.notify("Do not mess with config from Windows, edit in chezmoi dir on linux", vim.log.levels.ERROR)
 	else
 		Snacks.picker.files({
 			hidden = true,

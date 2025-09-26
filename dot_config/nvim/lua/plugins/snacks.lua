@@ -30,7 +30,12 @@ return {
 						end,
 					},
 					{ icon = " ", key = "f", desc = "Find File", action = ":lua Snacks.dashboard.pick('files')" },
-					{ icon = " ", key = "w", desc = "Find Word", action = ":lua Snacks.dashboard.pick('live_grep')" },
+					{
+						icon = " ",
+						key = "w",
+						desc = "Find Word",
+						action = ":lua Snacks.dashboard.pick('live_grep')",
+					},
 					{ icon = " ", key = "r", desc = "Recents", action = ":lua Snacks.dashboard.pick('oldfiles')" },
 					{
 						icon = " ",
@@ -39,12 +44,15 @@ return {
 						action = function()
 							local dir
 							if vim.fn.has("win32") == 1 then
-								dir = vim.fn.stdpath("config")
+								vim.notify(
+									"Do not mess with config from Windows, edit in chezmoi dir on linux",
+									vim.log.levels.ERROR
+								)
 							else
 								dir = os.getenv("HOME") .. "/.local/share/chezmoi"
+								vim.cmd("cd " .. dir)
+								require("neo-tree.command").execute({ position = "float" })
 							end
-							vim.cmd("cd", dir)
-							require("neo-tree.command").execute({})
 						end,
 					},
 					{
@@ -94,7 +102,7 @@ return {
 		lazygit = {
 			---@diagnostic disable-next-line: missing-fields
 			theme = {
-				selectedLineBgColor = { bg = "ColorColumn" },
+				selectedLineBgColor = { bg = "Visual" },
 			},
 		},
 		picker = {

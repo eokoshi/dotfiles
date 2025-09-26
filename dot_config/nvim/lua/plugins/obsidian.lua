@@ -2,7 +2,7 @@ if vim.fn.has("win32") == 1 then
 	return {
 		"obsidian-nvim/obsidian.nvim",
 		version = "*",
-		event = "VeryLazy",
+		ft = "markdown",
 		dependencies = {
 			"nvim-lua/plenary.nvim",
 		},
@@ -25,11 +25,20 @@ if vim.fn.has("win32") == 1 then
 			attachments = {
 				img_folder = "Images",
 			},
+			footer = {
+				enabled = false,
+			},
+			statusline = {
+				enabled = false,
+			},
 			workspaces = {
 				{
 					name = "personal",
 					path = "~/Documents/Obsidian",
 				},
+			},
+			checkbox = {
+				order = { " ", "x" },
 			},
 			templates = {
 				folder = "Templates",
@@ -64,6 +73,7 @@ if vim.fn.has("win32") == 1 then
 		init = function()
 			local map = require("stuff.functions").map
 			map("n", "<Leader>m", "", { desc = "Markdown" })
+			map("n", "<Leader>mt", "<CMD>Obsidian today<CR>", { desc = "today's note" })
 			map("n", "<Leader>my", "<CMD>Obsidian yesterday<CR>", { desc = "yesterday's note" })
 			map("n", "<Leader>mf", "<CMD>Obsidian dailies -48 0<CR>", { desc = "find daily notes" })
 			map("n", "<Leader>mn", "<CMD>Obsidian new_from_template<CR>", { desc = "new from template" })
