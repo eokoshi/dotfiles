@@ -3,27 +3,22 @@ local icons = require("stuff.icons")
 return {
 	{
 		"nvim-mini/mini.operators",
-		event = "VeryLazy",
+		event = "BufEnter",
 		opts = {},
 	},
 	{
 		"nvim-mini/mini.align",
-		event = "VeryLazy",
+		event = "BufEnter",
 		opts = {},
 	},
 	{
 		"nvim-mini/mini.bracketed",
-		event = "VeryLazy",
+		event = "BufEnter",
 		opts = {
 			comment = { suffix = "" },
 			file = { suffix = "e", options = {} },
 			indent = { suffix = "j", options = {} },
 		},
-	},
-	{
-		"nvim-mini/mini.pairs",
-		event = "VeryLazy",
-		opts = {},
 	},
 	{
 		"nvim-mini/mini.icons",
