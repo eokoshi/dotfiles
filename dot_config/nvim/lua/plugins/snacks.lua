@@ -6,6 +6,16 @@ return {
 	---@type snacks.Config
 	opts = {
 		bigfile = { enabled = true },
+		terminal = {
+			win = {
+				wo = { statuscolumn = " " },
+				position = "float",
+				backdrop = 100,
+				border = "rounded",
+				height = 0.9,
+			},
+			auto_close = true,
+		},
 		dashboard = {
 			preset = {
 				header = require("stuff.ascii").cat,
@@ -20,19 +30,19 @@ return {
 						end,
 					},
 					{ icon = " ", key = "f", desc = "Find File", action = ":lua Snacks.dashboard.pick('files')" },
-					{
-						icon = " ",
-						key = "w",
-						desc = "Find Word",
-						action = ":lua Snacks.dashboard.pick('live_grep')",
-					},
+					{ icon = " ", key = "w", desc = "Find Word", action = ":lua Snacks.dashboard.pick('live_grep')" },
 					{ icon = " ", key = "r", desc = "Recents", action = ":lua Snacks.dashboard.pick('oldfiles')" },
 					{
-						icon = " ",
+						icon = " ",
 						key = "c",
 						desc = "Config",
 						action = function()
-							local dir = os.getenv("HOME") .. "/.local/share/chezmoi"
+							if vim.fn.has("win32") then
+								local dir = vim.fn.stdpath("config")
+							else
+								local dir = os.getenv("HOME") .. "/.local/share/chezmoi"
+							end
+							vim.cmd("cd", dir)
 							require("neo-tree.command").execute({ position = "float", dir = dir })
 						end,
 					},
@@ -123,6 +133,7 @@ return {
 					ignored = true,
 					follow = true,
 				},
+				help = {},
 			},
 			win = {
 				input = {

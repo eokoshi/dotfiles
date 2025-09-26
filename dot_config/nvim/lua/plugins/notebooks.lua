@@ -42,7 +42,7 @@ local function new_notebook(filename)
 		file:close()
 		vim.cmd("edit " .. path)
 	else
-		vim.ui.notify("Error: Could not open new notebook file for writing.")
+		vim.notify("Could not open new notebook file for writing", vim.log.levels.ERROR)
 	end
 end
 

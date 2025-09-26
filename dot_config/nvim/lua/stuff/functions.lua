@@ -140,4 +140,14 @@ function M.pick_icons()
 	})
 end
 
+function M.pick_help()
+	local cols = vim.o.columns
+	local lines = vim.o.lines
+	if (cols / lines > 3) and (cols > 180) then
+		return Snacks.picker.help({ confirm = "vsplit" })
+	else
+		return Snacks.picker.help()
+	end
+end
+
 return M

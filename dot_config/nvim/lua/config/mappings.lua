@@ -22,12 +22,7 @@ map("n", "<Leader>R", function() Snacks.rename.rename_file() end, { desc = "Rena
 map("n", "<Leader>:", function() Snacks.picker.command_history() end, { desc = "Command history" })
 map("n", "<Leader><space>", "<ESC>", { desc = "" })
 map({ "n", "v" }, "c", "\"ac", { desc = "Do not yank text on change" })
-map({ "n", "t", "i" }, "<F7>",
-	function()
-		Snacks.terminal.toggle("/bin/bash",
-			{ win = { wo = { statuscolumn = " " }, position = "float", backdrop = 100, border = "rounded", height = 0.9 }, auto_close = true })
-	end,
-	{ desc = "toggle terminal" })
+map({ "n", "t", "i" }, "<F7>", function() Snacks.terminal.toggle() end, { desc = "toggle terminal" })
 
 -- System clipboard
 map({ "n", "v" }, "<M-v>", "<C-v>", { desc = "Visual block mode" })
@@ -83,15 +78,7 @@ map("n", "<Leader>fW", function() Snacks.picker.grep({ cmd = "rg", hidden = true
 map("n", "<Leader>fz", function() Snacks.picker.files({ cwd = vim.fn.stdpath("config") }) end,
 	{ desc = "local config files" })
 map("n", "<Leader>f<space>", function() Snacks.picker.resume() end, { desc = "Resume last search" })
-map("n", "<Leader>fh", function()
-	local cols = vim.o.columns
-	local lines = vim.o.lines
-	if (cols / lines > 3) and (cols > 180) then
-		Snacks.picker.help({confirm = "vsplit"})
-	else
-		Snacks.picker.help()
-	end
-end, { desc = "help pages" })
+map("n", "<Leader>fh", function() functions.pick_help() end, { desc = "help pages" })
 
 -- Buffers
 map("n", "<Leader>b", "", { desc = "Buffers" })
