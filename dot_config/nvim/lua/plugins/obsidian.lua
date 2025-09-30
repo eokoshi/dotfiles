@@ -11,10 +11,6 @@ if vim.fn.has("win32") == 1 then
 				folder = "Daily Notes",
 				template = "Templates/dailynote.md",
 			},
-			completion = {
-				blink = true,
-				nvim_cmp = false,
-			},
 			new_notes_subdir = "current_dir",
 			picker = {
 				name = "snacks.pick",
