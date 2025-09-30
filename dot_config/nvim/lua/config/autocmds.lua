@@ -53,7 +53,10 @@ vim.api.nvim_create_autocmd("LspAttach", {
 	group = lsp,
 	callback = function(args)
 		local client = assert(vim.lsp.get_client_by_id(args.data.client_id))
-		if not client:supports_method("textDocument/willSaveWaitUntil") and client:supports_method("textDocument/formatting") then
+		if
+			not client:supports_method("textDocument/willSaveWaitUntil")
+			and client:supports_method("textDocument/formatting")
+		then
 			vim.api.nvim_create_autocmd("BufWritePre", {
 				group = lsp,
 				buffer = args.buf,
@@ -148,21 +151,23 @@ vim.api.nvim_create_autocmd("VimLeavePre", {
 	group = winsync,
 	pattern = "*",
 	callback = function(args)
-		local on_exit = function(_) end
-		vim.system({ "git", "pull" }, {
-			cwd = vim.fn.stdpath("config"),
-			stdout = function(_, data)
-				if data ~= nil then
-					vim.notify(data, vim.log.levels.INFO)
-				end
-			end,
-			stderr = function(_, data)
-				if data ~= nil then
-					vim.notify(data, vim.log.levels.ERROR)
-				end
-			end,
-			text = true,
-			on_exit,
-		})
+		if vim.fn.has("win32") == 1 then
+			local on_exit = function(_) end
+			vim.system({ "git", "pull" }, {
+				cwd = vim.fn.stdpath("config"),
+				stdout = function(_, data)
+					if data ~= nil then
+						vim.notify(data, vim.log.levels.INFO)
+					end
+				end,
+				stderr = function(_, data)
+					if data ~= nil then
+						vim.notify(data, vim.log.levels.ERROR)
+					end
+				end,
+				text = true,
+				on_exit,
+			})
+		end
 	end,
 })

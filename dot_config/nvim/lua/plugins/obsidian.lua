@@ -2,7 +2,7 @@ if vim.fn.has("win32") == 1 then
 	return {
 		"obsidian-nvim/obsidian.nvim",
 		version = "*",
-		ft = "markdown",
+		event = "VeryLazy",
 		dependencies = {
 			"nvim-lua/plenary.nvim",
 		},
@@ -77,6 +77,7 @@ if vim.fn.has("win32") == 1 then
 			map("n", "<Leader>my", "<CMD>Obsidian yesterday<CR>", { desc = "yesterday's note" })
 			map("n", "<Leader>mf", "<CMD>Obsidian dailies -48 0<CR>", { desc = "find daily notes" })
 			map("n", "<Leader>mn", "<CMD>Obsidian new_from_template<CR>", { desc = "new from template" })
+			map("n", "<leader>mo", "<CMD>cd ~/Documents/Obsidian<CR>", { desc = "cd vault" })
 		end,
 	}
 else
