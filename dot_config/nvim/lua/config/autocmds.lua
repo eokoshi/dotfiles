@@ -140,6 +140,7 @@ vim.api.nvim_create_autocmd("VimLeavePre", {
 					end
 				end,
 				text = true,
+				stdin = true,
 				on_exit,
 			})
 		end

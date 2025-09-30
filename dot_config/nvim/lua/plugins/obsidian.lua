@@ -13,7 +13,7 @@ if vim.fn.has("win32") == 1 then
 			},
 			new_notes_subdir = "current_dir",
 			completion = {
-				blink = false,
+				blink = true,
 			},
 			picker = {
 				name = "snacks.pick",
