@@ -2,3 +2,4 @@ key.txt.age
 .config/nvim/lazy-lock.json
 .config/btop/btop.log
 .config/nvim/.git
+.config/nvim/.gitignore
