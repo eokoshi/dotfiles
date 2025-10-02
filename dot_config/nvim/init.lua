@@ -9,8 +9,8 @@ require("config.highlights")
 require("config.final")
 
 if vim.fn.has("win32") == 1 then
-	require("config.neovide")
 	vim.cmd.colorscheme("onelight")
+	require("config.neovide")
 else
 	vim.cmd.colorscheme("gruvbox-material")
 end
