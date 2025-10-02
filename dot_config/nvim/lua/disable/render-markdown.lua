@@ -12,9 +12,6 @@ return {
 		---@module 'render-markdown'
 		---@type render.md.UserConfig
 		opts = {
-			-- heading = {
-			-- 	position = "inline",
-			-- },
 			heading = {
 				sign = false,
 				position = "inline",
@@ -28,14 +25,8 @@ return {
 				-- icons = { "󰎤 ", "󰎧 ", "󰎪 ", "󰎭 ", "󰎱 ", "󰎳 " },
 				icons = { "󰉫 ", "󰉬 ", "󰉭 ", "󰉮 ", "󰉯 ", "󰉰 " },
 			},
-			code = {
-				sign = false,
-			},
-			-- completions = {
-			-- 	blink = {
-			-- 		enabled = true,
-			-- 	},
-			-- },
+			code = { sign = false },
+			checkbox = { enabled= false },
 			latex = { enabled = false },
 			win_options = {
 				conceallevel = {

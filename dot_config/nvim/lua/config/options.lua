@@ -69,7 +69,6 @@ vim.o.splitright = true -- Put new windows right of current
 vim.o.swapfile = true
 vim.o.tabstop = 4 -- Number of spaces tabs count for
 vim.o.termguicolors = true -- True color support
-vim.o.textwidth = 98
 vim.o.timeoutlen = 300 -- Lower than default (1000) to quickly trigger which-key
 vim.o.undofile = true
 vim.o.undolevels = 10000
