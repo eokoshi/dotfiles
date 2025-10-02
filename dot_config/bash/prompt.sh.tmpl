@@ -9,10 +9,15 @@
 
 
 
-__mkps1_debian_chroot() {
+__mkps1_chroot() {
     # This string is intentionally single-quoted:
     # It will be evaluated when $PS1 is evaluated to generate the prompt each time.
-    echo '${debian_chroot:+($debian_chroot)}';
+	{{- if eq .chezmoi.osRelease.idLike "debian" }}
+    echo '${debian_chroot:+[$debian_chroot]} ';
+	{{- else if eq .chezmoi.osRelease.idLike "arch" }}
+    echo '${arch-chroot:+[$arch-chroot]} ';
+	{{- else }}
+	{{- end }}
 }
 
 __mkps1_exitcode() {
@@ -41,50 +46,6 @@ __mkps1_time() {
     echo "$sepcolor$l_arrow$textcolor \t $reset$sepcolor$r_arrow$reset";
 }
 
-__mkps1_username() {
-    {{ if eq .chezmoi.hostname "eeftop" }}
-    local textcolor='\[\e[3;38;5;9m\]';
-    {{ else if eq .chezmoi.hostname "office" }}
-    local textcolor='\[\e[3;38;5;10m\]';
-    {{ else if eq .chezmoi.hostname "DF1" }}
-    local textcolor='\[\e[3;38;5;11m\]';
-    {{ else if eq .chezmoi.hostname "DF2" }}
-    local textcolor='\[\e[3;38;5;12m\]';
-    {{ else if eq .chezmoi.hostname "blue-starfish" }}
-    local textcolor='\[\e[3;38;5;13m\]';
-    {{ else if eq .chezmoi.hostname "lab" }}
-    local textcolor='\[\e[3;38;5;14m\]';
-    {{ else }}
-    local textcolor='\[\e[3;38;5;34m\]';
-    {{ end }}
-
-    local reset='\[\e[00m\]';
-
-    echo "$textcolor\u$reset";
-}
-
-__mkps1_atmark() {
-    {{ if eq .chezmoi.hostname "eeftop" }}
-    local textcolor='\[\e[3;38;5;10m\]';
-    {{ else if eq .chezmoi.hostname "office" }}
-    local textcolor='\[\e[3;38;5;11m\]';
-    {{ else if eq .chezmoi.hostname "DF1" }}
-    local textcolor='\[\e[3;38;5;12m\]';
-    {{ else if eq .chezmoi.hostname "DF2" }}
-    local textcolor='\[\e[3;38;5;13m\]';
-    {{ else if eq .chezmoi.hostname "blue-starfish" }}
-    local textcolor='\[\e[3;38;5;14m\]';
-    {{ else if eq .chezmoi.hostname "lab" }}
-    local textcolor='\[\e[3;38;5;9m\]';
-    {{ else }}
-    local textcolor='\[\e[3;38;5;36m\]';
-    {{ end }}
-    local reset='\[\e[00m\]';
-    local icon=$'\ue27f'
-    
-    echo "$textcolor@$reset";
-}
-
 __mkps1_hostname() {
     {{ if eq .chezmoi.hostname "eeftop" }}
     local textcolor='\[\e[3;38;5;14m\]';
@@ -98,6 +59,8 @@ __mkps1_hostname() {
     local textcolor='\[\e[3;38;5;123m\]';
     {{ else if eq .chezmoi.hostname "lab" }}
     local textcolor='\[\e[3;38;5;208m\]';
+    {{ else if eq .chezmoi.hostname "eefix" }}
+    local textcolor='\[\e[3;38;5;99m\]';
     {{ else }}
     local textcolor='\[\e[3;38;5;38m\]';
     {{ end }}
@@ -114,7 +77,7 @@ __mkps1_workdir() {
     local bg=4;
     local textcolor="\[\e[0;38;5;${fg};48;5;${bg}m\]";
     local sepcolor="\[\e[38;5;${bg}m\]";
-    # match this value with git bg below
+    # match this value with git bg below when using seps
     local sepcolor2="\[\e[38;5;${bg};48;5;235m\]";
 
     local textcolor2="\[\e[0;38;5;69m\]";
@@ -167,17 +130,25 @@ __mkps1_venv() {
 
 
 __mkps1_box_top() {
-    local top='\[\e[38;5;242m\]';
+    local color='\[\e[38;5;242m\]';
     local reset='\[\e[00m\]';
+	local curve='╭╴'
+	local box='┌╴'
+	local box_heavy='┏╸'
+	local double='╔═ '
 
-    echo "$top╭╴$reset";
+    echo "$color$box$reset";
 }
 
 __mkps1_box_bottom() {
-    local bottom='\[\e[0;38;5;242m\]';
+    local color='\[\e[0;38;5;242m\]';
     local reset='\[\e[00m\]';
+	local curve='╰╴'
+	local box='└╴'
+	local box_heavy='┗╸'
+	local double='╚═ '
 
-    echo "$bottom╰╴$reset";
+    echo "$color$box$reset";
 }
 
 
@@ -192,13 +163,17 @@ __mkps1_user_prompt() {
     echo "$textcolor$box_icon$reset";
 }
 
-__mkps1() {
-    # local ps1="\n$(__mkps1_box_top)$(__mkps1_debian_chroot)$(__mkps1_exitcode)$(__mkps1_username)$(__mkps1_atmark)$(__mkps1_hostname) $(__mkps1_workdir) $(__mkps1_git) $(__mkps1_venv)\n$(__mkps1_box_bottom)$(__mkps1_user_prompt)";
-    local ps1="\n$(__mkps1_box_top)$(__mkps1_hostname) $(__mkps1_debian_chroot)$(__mkps1_workdir) $(__mkps1_git) $(__mkps1_venv)  $(__mkps1_exitcode)\n$(__mkps1_box_bottom)$(__mkps1_user_prompt) ";
-    echo "$ps1";
+check_chezmoi_nvim() {
+    local color='\[\e[0;38;5;9m\]';
+    local reset='\[\e[00m\]';
+	local icon='';
+
+	if [[ -n chdiffnvim ]]; then
+		echo "$color$icon$reset"
+	fi
 }
 
-# To test, for example, print output before changes and after changes
-# and see if the diff is correct.
-# Uncomment for testing:
-# echo "$(__mkps1)";
+__mkps1() {
+    local ps1="\n$(__mkps1_box_top)$(__mkps1_hostname) $(__mkps1_chroot)$(__mkps1_workdir) $(__mkps1_git) $(check_chezmoi_nvim) $(__mkps1_venv)  $(__mkps1_exitcode)\n$(__mkps1_box_bottom)$(__mkps1_user_prompt) ";
+    echo "$ps1";
+}
