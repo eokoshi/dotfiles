@@ -113,6 +113,10 @@ marimo-serve() {
     uv run marimo edit --headless --watch --host "$(tailscale ip -4)" --no-token
 }
 
+chdiffnvim() {
+	diff -bur ~/.local/share/chezmoi/dot_config/nvim ~/.config/nvim -x=".git*"
+}
+
 if [ -f ~/.bash_aliases ]; then
     . ~/.bash_aliases
 fi
