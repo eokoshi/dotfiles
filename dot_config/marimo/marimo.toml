@@ -14,7 +14,7 @@ enable_pylint = false
 enable_mypy = false
 
 [formatting]
-line_length = 94
+line_length = 80
 
 [completion]
 copilot = false
