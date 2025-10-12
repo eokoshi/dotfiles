@@ -7,8 +7,6 @@
 # Different functions generate different parts (segments) of the PS1 prompt.
 # Each function should leave the colors in a clean state (e.g. call reset if they changed any colors).
 
-
-
 __mkps1_chroot() {
     # This string is intentionally single-quoted:
     # It will be evaluated when $PS1 is evaluated to generate the prompt each time.
@@ -168,7 +166,7 @@ check_chezmoi_nvim() {
     local reset='\[\e[00m\]';
 	local icon='';
 
-	if [[ -n chdiffnvim ]]; then
+	if ! chdiffnvim >/dev/null 2>&1; then
 		echo "$color$icon$reset"
 	fi
 }

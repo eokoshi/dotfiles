@@ -8,6 +8,8 @@ return {
 		vim.g.undotree_TreeVertShape = "┃"
 		vim.g.undotree_TreeSplitShape = "━┛"
 		vim.g.undotree_TreeReturnShape = "━┓"
-		require("stuff.functions").map("n", "<Leader>U", "<CMD>UndotreeToggle<CR>", { desc = "Open Undotree" })
+
+		local map = require("stuff.functions").map
+		map("n", "<Leader>U", "<CMD>UndotreeToggle<CR>", { desc = "Open Undotree" })
 	end,
 }

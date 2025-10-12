@@ -6,8 +6,8 @@ vim.opt_local.shiftwidth = 2
 vim.opt_local.tabstop = 2
 
 -- Markdown keymaps
-local map = require("stuff.functions").map
 local toggles = require("stuff.toggles")
+local map = require("stuff.functions").map
 map("n", "<Leader>m", "", { desc = "Markdown", buffer = true })
 map(
 	"n",

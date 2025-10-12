@@ -7,4 +7,8 @@ return {
 		-- 	skipEnteringNoNeckPainBuffer = true,
 		-- },
 	},
+	init = function()
+		local map = require("stuff.functions").map
+		map("n", "<Leader>n", "<CMD>NoNeckPain<CR>", { desc = "NoNeckPain" })
+	end,
 }

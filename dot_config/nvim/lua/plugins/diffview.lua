@@ -28,8 +28,9 @@ return {
 		},
 	},
 	init = function()
-		require("stuff.functions").map("n", "<Leader>gh", "<CMD>DiffviewFileHistory %<CR>", { desc = "File revision history" })
-		require("stuff.functions").map("n", "<Leader>gH", "<CMD>DiffviewFileHistory<CR>", { desc = "Repo revision history" })
-		require("stuff.functions").map("n", "<Leader>gD", "<CMD>DiffviewOpen<CR>", { desc = "Diff Repo" })
+		local map = require("stuff.functions").map
+		map("n", "<Leader>gh", "<CMD>DiffviewFileHistory %<CR>", { desc = "File revision history" })
+		map("n", "<Leader>gH", "<CMD>DiffviewFileHistory<CR>", { desc = "Repo revision history" })
+		map("n", "<Leader>gD", "<CMD>DiffviewOpen<CR>", { desc = "Diff Repo" })
 	end,
 }

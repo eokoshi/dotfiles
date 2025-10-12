@@ -14,7 +14,7 @@ vim.opt.fillchars = {
 	foldclose = icons.folds.foldclose,
 	fold = icons.folds.foldline_fill,
 	foldsep = icons.folds.foldsep,
-	foldinner = " ",
+	-- foldinner = " ",
 	eob = " ",
 }
 vim.o.findfunc = "fd"
