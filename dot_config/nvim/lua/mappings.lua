@@ -1,28 +1,15 @@
-local Snacks = require("snacks")
 local functions = require("stuff.functions")
-local toggles = require("stuff.toggles")
 local map = functions.map
 
-vim.g.mapleader = " "
-vim.g.maplocalleader = " "
-
 -- stylua: ignore start
-
 -- Basic operations
-map("n", "<Leader>e", "<CMD>Neotree toggle left<CR>", { desc = "File explorer" })
-map("n", "<Leader>n", "<CMD>NoNeckPain<CR>", { desc = "NoNeckPain" })
 map("n", "<Leader>q", "<CMD>q<CR>", { desc = "Quit window" })
 map("n", "<Leader>Q", "<CMD>qa<CR>", { desc = "Quit nvim" })
 map("n", "<Leader>w", "<CMD>w<CR>", { desc = "Save buffer" })
 map("n", "<Leader>.", "<CMD>cd %:h<CR>", { desc = "cd here" })
-map("n", "<Leader>N", function() functions.notifications_picker() end, { desc = "Notification history" })
-map("n", "<Leader>c", function() Snacks.bufdelete() end, { desc = "Close buffer" })
-map("n", "<Leader>H", function() Snacks.dashboard() end, { desc = "Home" })
-map("n", "<Leader>R", function() Snacks.rename.rename_file() end, { desc = "Rename file" })
-map("n", "<Leader>:", function() Snacks.picker.command_history() end, { desc = "Command history" })
+
 map("n", "<Leader><space>", "<ESC>", { desc = "" })
 map({ "n", "v" }, "c", "\"ac", { desc = "Do not yank text on change" })
-map({ "n", "t", "i" }, "<F7>", function() Snacks.terminal.toggle() end, { desc = "toggle terminal" })
 
 -- System clipboard
 map({ "n", "v" }, "<C-q>", "<C-q>", { desc = "Visual block mode" })
@@ -46,83 +33,18 @@ map({ "i", "c" }, "<C-l>", "<C-o>a", { desc = "Move one char right" })
 map({ "i", "c" }, "<C-h>", "<C-o>h", { desc = "Move one char left" })
 map("i", "<S-Tab>", "<C-d>", { desc = "Unindent 1 level" })
 map("n", "J", "mzJ`z", { desc = "Shift J without moving cursor", noremap = false })
-map({ "n", "i", "s" }, "<C-n>", function() require("noice.lsp").scroll(4) end, { desc = "Scroll hover down" })
-map({ "n", "i", "s" }, "<C-p>", function() require("noice.lsp").scroll(-4) end, { desc = "Scroll hover up" })
 map("n", "<BS>", "<C-^>", { desc = "Switch to prev file" })
 
 -- Find
-map({ "n", "x" }, "<Leader>f", "", { desc = "Find" })
-map("n", "<Leader>fa", function() functions.pick_config() end, { desc = "config" })
-map("n", "<Leader>fz", function() Snacks.picker.files({ cwd = vim.fn.stdpath("config") }) end, { desc = "local config" })
-map("n", "<Leader>fo", function() require("oil").toggle_float() end, { desc = "Oil explorer" })
-map("n", "<Leader>fb", function() Snacks.picker.buffers() end, { desc = "buffers" })
-map("n", "<Leader>fC", function() Snacks.picker.commands() end, { desc = "Commands" })
-map("n", "<Leader>fd", function() Snacks.picker.diagnostics() end, { desc = "diagnostics" })
-map("n", "<Leader>fD", function() Snacks.picker.diagnostics_buffer() end, { desc = "buffer Diagnostics" })
-map("n", "<Leader>fH", function() Snacks.picker.highlights() end, { desc = "Highlights" })
-map("n", "<Leader>ff", function() Snacks.picker.files() end, { desc = "files" })
-map("n", "<Leader>fF", function() Snacks.picker.files({ hidden = true, ignored = true, cmd = "fd" }) end, { desc = "all files" })
-map("n", "<Leader>fk", function() Snacks.picker.keymaps() end, { desc = "keymaps" })
-map("n", "<Leader>fj", function() Snacks.picker.jumps() end, { desc = "jumps" })
-map("n", "<Leader>fl", function() Snacks.picker.loclist() end, { desc = "location list" })
-map("n", "<Leader>fm", function() Snacks.picker.marks() end, { desc = "marks" })
-map("n", "<Leader>fM", function() Snacks.picker.man() end, { desc = "Man pages" })
-map("n", "<Leader>fp", function() Snacks.picker.projects() end, { desc = "projects" })
-map("n", "<Leader>fq", function() Snacks.picker.qflist() end, { desc = "quickfix list" })
-map("n", "<Leader>fr", function() Snacks.picker.recent() end, { desc = "recent" })
-map("n", "<Leader>fs", function() Snacks.scratch.select() end, { desc = "find scratch buffers" })
-map("n", "<Leader>fu", function() Snacks.picker.undo() end, { desc = "undo" })
-map("n", "<Leader>fw", function() Snacks.picker.grep({ cmd = "rg" }) end, { desc = "word" })
-map("n", "<Leader>fW", function() Snacks.picker.grep({ cmd = "rg", hidden = true, ignored = true }) end, { desc = "Word in all files" })
-map("n", "<Leader>f<space>", function() Snacks.picker.resume() end, { desc = "Resume last search" })
-map("n", "<Leader>fh", function() functions.pick_help() end, { desc = "help pages" })
-map({ "n", "x" }, "<Leader>f*", function() Snacks.picker.grep_word() end, { desc = "grep current selection" })
+
 
 -- Buffers
-map("n", "<Leader>b", "", { desc = "Buffers" })
 map("n", "<Leader>bA", "<CMD>%y+<CR><CR>", { desc = "Copy whole buffer to clipboard" })
 map("n", "<Leader>bD", function() functions.DOS_to_Unix() end, { desc = "DOS to Unix" })
 map("n", "<Leader>bf", function() vim.lsp.buf.format() end, { desc = "format buffer" })
-map("n", "<Leader>bc", function() Snacks.bufdelete.other() end, { desc = "Close all other bufs" })
-map("n", "<Leader>bs", function() Snacks.scratch() end, { desc = "scratch buffer" })
-toggles.autosave():map("<Leader>ba")
 
--- UI
-map("n", "<Leader>u", "", { desc = "UI" })
-map("n", "<Leader>ui", function() functions.pick_icons() end, { desc = "icons" })
-map("n", "<Leader>uc", function() Snacks.picker.colorschemes() end, { desc = "search colorschemes" })
-map("n", "<Leader>uz", function() Snacks.zen.zoom() end, { desc = "zoom pane" })
-map("n", "<Leader>uZ", function() Snacks.zen() end, { desc = "Zen mode" })
-map("n", "<Leader>un", function() Snacks.notifier.hide() end, { desc = "dismiss all notifications" })
-map("n", "<Leader>uN", function()
-	require("noice").disable()
-	require("noice").enable()
-end, { desc = "reload Noice" })
-toggles.virtual_text():map("<Leader>uv")
-toggles.virtual_lines():map("<Leader>uV")
-toggles.math_virt():map("<Leader>um")
-Snacks.toggle.option("spell", { name = "spellcheck" }):map("<leader>us")
-Snacks.toggle.option("wrap", { name = "wrap" }):map("<leader>uw")
-Snacks.toggle.option("relativenumber", { name = "relative number" }):map("<leader>uL")
-Snacks.toggle.option("hlsearch", { name = "hlsearch" }):map("<Leader>uh")
-Snacks.toggle.option("conceallevel", { off = 0, on = vim.o.conceallevel > 0 and vim.o.conceallevel or 2 }):map(
-	"<leader>uC")
-Snacks.toggle.option("background", { off = "light", on = "dark", name = "dark background" }):map("<leader>ub")
-Snacks.toggle.diagnostics():map("<leader>ud")
-Snacks.toggle.line_number():map("<leader>ul")
-Snacks.toggle.treesitter():map("<leader>uT")
-Snacks.toggle.inlay_hints():map("<leader>uI")
-Snacks.toggle.indent():map("<leader>ug")
-Snacks.toggle.dim():map("<leader>uD")
-
--- Git
-map({ "n", "x" }, "<Leader>g", "", { desc = "Git" })
-map("n", "<Leader>gb", function() Snacks.picker.git_branches() end, { desc = "git branches" })
-map("n", "<Leader>gl", function() Snacks.picker.git_log_file() end, { desc = "git log file" })
-map("n", "<Leader>gg", function() Snacks.lazygit() end, { desc = "lazygit" })
 
 -- Language Tools
-map({ "n", "x" }, "<Leader>l", "", { desc = "Language Tools" })
 map({ "n", "x" }, "<Leader>la", function() vim.lsp.buf.code_action() end, { desc = "LSP code actions" })
 map("n", "<Leader>ld", function() vim.diagnostic.open_float() end, { desc = "hover diagnostics" })
 map("n", "<Leader>lf", function() vim.lsp.buf.format() end, { desc = "format buffer" })
@@ -132,19 +54,11 @@ map("n", "<Leader>lL", function() vim.lsp.codelens.refresh() end, { desc = "code
 map("n", "<Leader>li", "<CMD>LspInfo<CR>", { desc = "LSP info" })
 map("n", "<Leader>lI", "<CMD>NullLsInfo<CR>", { desc = "Null-ls info" })
 map("n", "<Leader>lr", function() vim.lsp.buf.rename() end, { desc = "rename symbol" })
-map("n", "<Leader>lR", function() Snacks.picker.lsp_references() end, { nowait = true, desc = "references" })
-map("n", "<Leader>ls", function() Snacks.picker.lsp_symbols() end, { desc = "LSP symbols" })
-map("n", "<Leader>lS", function() Snacks.picker.lsp_workspace_symbols() end, { desc = "LSP workspace Symbols" })
-map("n", "gd", function() Snacks.picker.lsp_definitions() end, { desc = "Goto definition" })
-map("n", "gD", function() Snacks.picker.lsp_declarations() end, { desc = "Goto Declaration" })
-map("n", "gI", function() Snacks.picker.lsp_implementations() end, { desc = "Go to Implementation" })
-map("n", "gp", function() Snacks.picker.lsp_type_definitions() end, { desc = "Go to ty[p]e definition" })
 map("n", "gco", "o<Esc>Vcx<Esc><Cmd>normal gcc<CR>fxa<BS>", { desc = "Add comment below" })
 map("n", "gcO", "O<Esc>Vcx<Esc><Cmd>normal gcc<CR>fxa<BS>", { desc = "Add comment above" })
 
 
 -- Debugging
-map("n", "<Leader>d", "", { desc = "Debugger" })
 map("n", "<F5>", function() require("dap").continue() end, { desc = "Debugger: Start" })
 map("n", "<F17>", function() require("dap").terminate() end, { desc = "Debugger: Stop" })        -- Shift+F5
 map("n", "<F29>", function() require("dap").restart_frame() end, { desc = "Debugger: Restart" }) -- Control+F5
@@ -191,7 +105,6 @@ map("n", "<Leader>du", function() require("dap-view").toggle(true) end, { desc =
 
 
 -- Package/Plugin Management
-map("n", "<Leader>p", "", { desc = "Packages" })
 map("n", "<Leader>pi", "<CMD>Lazy<CR>", { desc = "Lazy" })
 map("n", "<Leader>pm", "<CMD>Mason<CR>", { desc = "Mason" })
 map("n", "<Leader>pz",
@@ -215,17 +128,3 @@ vim.keymap.del("i", "<Tab>")
 -- Extras/Fun stuff
 map("n", "<Leader>x", "", { desc = "Extras" })
 map("n", "<Leader>xa", function() require("ascii").preview() end, { desc = "Ascii art picker" })
-map("n", "<Leader>xN", function()
-	Snacks.win({
-		file = vim.api.nvim_get_runtime_file("doc/news.txt", false)[1],
-		width = 90,
-		height = 0.6,
-		wo = {
-			spell = false,
-			wrap = false,
-			signcolumn = "yes",
-			statuscolumn = " ",
-			conceallevel = 3,
-		},
-	})
-end, { desc = "Neovim News" })

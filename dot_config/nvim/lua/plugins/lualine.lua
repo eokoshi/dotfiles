@@ -2,9 +2,6 @@ local icons = require("stuff.icons")
 
 return {
 	"nvim-lualine/lualine.nvim",
-	dependencies = {
-		"folke/trouble.nvim",
-	},
 	lazy = false,
 	opts = function()
 		local codecompanion = require("lualine.component"):extend()
@@ -51,14 +48,14 @@ return {
 			end
 		end
 
-		local trouble = require("trouble").statusline({
-			mode = "lsp_document_symbols",
-			groups = {},
-			title = false,
-			filter = { range = true },
-			format = "{kind_icon}{symbol.name:BufferInactiveSign}",
-			hl_group = "lualine_x_normal",
-		})
+		-- local trouble = require("trouble").statusline({
+		-- 	mode = "lsp_document_symbols",
+		-- 	groups = {},
+		-- 	title = false,
+		-- 	filter = { range = true },
+		-- 	format = "{kind_icon}{symbol.name:BufferInactiveSign}",
+		-- 	hl_group = "lualine_x_normal",
+		-- })
 
 		return {
 			options = {

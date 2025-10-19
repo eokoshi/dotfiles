@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 
+{{- if eq .chezmoi.osRelease.id "ubuntu" }}
 # GitHub
 (type -p wget >/dev/null || (sudo apt update && sudo apt-get install wget -y)) \
 	&& sudo mkdir -p -m 755 /etc/apt/keyrings \
@@ -26,12 +27,21 @@ uv python install
 ## zoxide
 curl -sSfL https://raw.githubusercontent.com/ajeetdsouza/zoxide/main/install.sh | sh
 
-## neovim (for x86 64 architecture)
+## nvim
+{{- if eq .chezmoi.arch "amd64"}}
 sudo rm -rf /opt/nvim
 sudo mkdir /opt/nvim
 curl -LO https://github.com/neovim/neovim/releases/latest/download/nvim-linux-x86_64.tar.gz
 sudo tar -C /opt/nvim -xzf nvim-linux-x86_64.tar.gz --strip-components=1
 rm -f nvim-linux-x86_64.tar.gz
+{{- end}}
+{{- if eq .chezmoi.arch "arm64"}}
+sudo rm -rf /opt/nvim
+sudo mkdir /opt/nvim
+curl -LO https://github.com/neovim/neovim/releases/latest/download/nvim-linux-arm64.tar.gz
+sudo tar -C /opt/nvim -xzf nvim-linux-arm64.tar.gz --strip-components=1
+rm -f nvim-linux-arm64.tar.gz
+{{- end}}
 
 ## lazygit
 LAZYGIT_VERSION=$(curl -s "https://api.github.com/repos/jesseduffield/lazygit/releases/latest" | \grep -Po '"tag_name": *"v\K[^"]*')
@@ -40,3 +50,10 @@ tar xf lazygit.tar.gz lazygit
 sudo install lazygit -D -t /usr/local/bin/
 sudo rm -rf lazygit
 sudo rm lazygit.tar.gz
+{{- end }}
+
+{{- if eq .chezmoi.osRelease.id "arch" }}
+
+# TODO: how much to set up manually vs here?
+
+{{- end}}

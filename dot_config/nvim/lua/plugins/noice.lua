@@ -1,10 +1,5 @@
 return {
-	-- scrollbar issue
-	"Kayzels/noice.nvim",
-	branch = "fix-scrollbar",
-	commit = "43c79b8",
-
-	-- "folke/noice.nvim",
+	"folke/noice.nvim",
 	dependencies = {
 		"MunifTanjim/nui.nvim",
 	},
@@ -79,19 +74,13 @@ return {
 			enabled = true,
 		},
 	},
-	config = function(_, opts)
-		require("noice").setup(opts)
-
-		-- lualine position errors
-		local NoiceUser = vim.api.nvim_create_augroup("NoiceUser", { clear = true })
-		vim.api.nvim_create_autocmd("BufEnter", {
-			group = NoiceUser,
-			callback = function()
-				if vim.o.filetype ~= "snacks_dashboard" and vim.o.buftype ~= "nofile" then
-					require("noice").setup(opts)
-				end
-			end,
-			desc = "Reload Noice",
-		})
+	init = function()
+		local map = require("stuff.functions").map
+		map({ "n", "i", "s" }, "<C-n>", function()
+			require("noice.lsp").scroll(4)
+		end, { desc = "Scroll hover down" })
+		map({ "n", "i", "s" }, "<C-p>", function()
+			require("noice.lsp").scroll(-4)
+		end, { desc = "Scroll hover up" })
 	end,
 }

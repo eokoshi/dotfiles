@@ -13,6 +13,11 @@ return {
 		map("n", "<leader>os", require("overlook.api").open_in_split, { desc = "Open popup in split" })
 		map("n", "<leader>ov", require("overlook.api").open_in_vsplit, { desc = "Open popup in vsplit" })
 		map("n", "<leader>ot", require("overlook.api").open_in_tab, { desc = "Open popup in tab" })
-		map("n", "<leader>oo", require("overlook.api").open_in_original_window, { desc = "Open popup in current window" })
+		map(
+			"n",
+			"<leader>oo",
+			require("overlook.api").open_in_original_window,
+			{ desc = "Open popup in current window" }
+		)
 	end,
 }

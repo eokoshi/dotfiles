@@ -48,7 +48,12 @@ return {
 			end, { desc = "Quickfix all changes", buffer = bufnr })
 
 			-- Toggles
-			map("n", "<leader>gc", gitsigns.toggle_current_line_blame, { desc = "Toggle line blame virt text", buffer = bufnr })
+			map(
+				"n",
+				"<leader>gc",
+				gitsigns.toggle_current_line_blame,
+				{ desc = "Toggle line blame virt text", buffer = bufnr }
+			)
 			map("n", "<leader>gw", gitsigns.toggle_word_diff, { desc = "Toggle word diff", buffer = bufnr })
 
 			-- Text object

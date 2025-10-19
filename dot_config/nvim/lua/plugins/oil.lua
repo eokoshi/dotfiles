@@ -58,4 +58,10 @@ return {
 			title_pos = "center",
 		},
 	},
+	init = function()
+		local map = require("stuff.functions").map
+		map("n", "<Leader>fo", function()
+			require("oil").toggle_float()
+		end, { desc = "Oil explorer" })
+	end,
 }

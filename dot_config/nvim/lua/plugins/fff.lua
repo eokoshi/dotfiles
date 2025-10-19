@@ -1,7 +1,7 @@
 return {
 	"dmtrKovalenko/fff.nvim",
 	dependencies = {
-		"Saghen/blink.cmp",
+		"saghen/blink.cmp",
 	},
 	build = function()
 		require("fff.download").download_or_build_binary()

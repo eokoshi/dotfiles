@@ -6,10 +6,19 @@ return {
 	},
 	event = "VeryLazy",
 	opts = {
-		sort = {"order", "group", "alphanum", "mod", "case"},
+		sort = { "order", "group", "alphanum", "mod", "case" },
 		expand = 1,
 		preset = "helix",
 		show_help = false,
+		spec = {
+			{ "<Leader>f", mode = { "n", "x" }, group = "Find" },
+			{ "<Leader>g", mode = { "n", "x" }, group = "Git" },
+			{ "<Leader>l", mode = { "n", "x" }, group = "Language Tools" },
+			{ "<Leader>b", mode = "n", group = "Buffers" },
+			{ "<Leader>u", mode = "n", group = "UI" },
+			{ "<Leader>d", mode = "n", group = "Debugger" },
+			{ "<Leader>p", mode = "n", group = "Packages" },
+		},
 		icons = {
 			separator = "",
 			group = "",

@@ -47,4 +47,8 @@ return {
 			},
 		},
 	},
+	init = function ()
+		local map = require("stuff.functions").map
+		map("n", "<Leader>e", "<CMD>Neotree toggle left<CR>", { desc = "File explorer" })
+	end
 }

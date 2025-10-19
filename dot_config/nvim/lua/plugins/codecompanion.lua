@@ -5,14 +5,6 @@ return {
 	},
 	cmd = { "CodeCompanion", "CodeCompanionChat", "CodeCompanionCmd", "CodeCompanionActions" },
 	version = "v14.13.0",
-	init = function()
-		local map = require("stuff.functions").map
-		map({ "n", "x" }, "<Leader>a", "", { desc = "Chatbot" })
-		map({ "n", "x" }, "<Leader>aa", "<CMD>CodeCompanionActions<CR>", { desc = "actions" })
-		map({ "n", "x" }, "<Leader>at", "<CMD>CodeCompanionChat Toggle<CR>", { desc = "toggle chat window" })
-		map({ "n", "x" }, "<Leader>ai", ":CodeCompanion ", { desc = "inline assist" })
-		map("x", "ac", "<CMD>CodeCompanionChat Add<CR>", { desc = "add visual selection to chat" })
-	end,
 	opts = {
 		display = {
 			chat = {
@@ -161,4 +153,12 @@ return {
 		index = 1,
 		description = "Send",
 	},
+	init = function()
+		local map = require("stuff.functions").map
+		map({ "n", "x" }, "<Leader>a", "", { desc = "Chatbot" })
+		map({ "n", "x" }, "<Leader>aa", "<CMD>CodeCompanionActions<CR>", { desc = "actions" })
+		map({ "n", "x" }, "<Leader>at", "<CMD>CodeCompanionChat Toggle<CR>", { desc = "toggle chat window" })
+		map({ "n", "x" }, "<Leader>ai", ":CodeCompanion ", { desc = "inline assist" })
+		map("x", "ac", "<CMD>CodeCompanionChat Add<CR>", { desc = "add visual selection to chat" })
+	end,
 }
