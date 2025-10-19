@@ -25,7 +25,7 @@ map({ "n", "v" }, "c", "\"ac", { desc = "Do not yank text on change" })
 map({ "n", "t", "i" }, "<F7>", function() Snacks.terminal.toggle() end, { desc = "toggle terminal" })
 
 -- System clipboard
-map({ "n", "v" }, "<M-v>", "<C-v>", { desc = "Visual block mode" })
+map({ "n", "v" }, "<C-q>", "<C-q>", { desc = "Visual block mode" })
 map({ "n" }, "<C-c>", '"+yy', { desc = "Copy line to system clipboard" })
 map({ "v" }, "<C-c>", '"+y', { desc = "Copy selection to system clipboard" })
 map({ "n", "v" }, "<C-v>", '"+p', { desc = "Paste system clipboard" })
