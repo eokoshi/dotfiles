@@ -12,9 +12,8 @@ __mkps1_chroot() {
     # It will be evaluated when $PS1 is evaluated to generate the prompt each time.
 	{{- if eq .chezmoi.osRelease.id "ubuntu" }}
     echo '${debian_chroot:+[$debian_chroot]} ';
-	{{- else if eq .chezmoi.osRelease.id "arch" }}
-    echo '${arch-chroot:+[$arch-chroot]} ';
 	{{- else }}
+	echo ""
 	{{- end }}
 }
 
