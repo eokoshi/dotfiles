@@ -18,12 +18,11 @@ return {
 				"basedpyright",
 				"json-lsp",
 				"bashls",
+				"marksman",
 
 				-- Formatters
 				"stylua",
 				"ruff",
-				"marksman",
-				"jupytext",
 				"air",
 
 				-- DAP
@@ -31,6 +30,7 @@ return {
 
 				-- Other
 				"tree-sitter-cli",
+				"jupytext",
 			},
 		},
 	},
