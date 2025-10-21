@@ -74,7 +74,7 @@ marimo-serve() {
 }
 
 chdiffnvim() {
-	diff -bur ~/.local/share/chezmoi/dot_config/nvim/ ~/.config/nvim/ -x ".git*" -x "*stylua*" -x "lazy-lock.json"
+	diff -bur --color=always ~/.local/share/chezmoi/dot_config/nvim/ ~/.config/nvim/ -x ".git*" -x "*stylua*" -x "lazy-lock.json"
 }
 
 if [ -f ~/.bash_aliases ]; then
