@@ -19,6 +19,7 @@ return {
 			{ "<Leader>d", mode = "n", group = "Debugger" },
 			{ "<Leader>p", mode = "n", group = "Packages" },
 			{ "<Leader>x", mode = "n", group = "Extras" },
+			{ "<Leader>m", mode = "n", group = "Markdown" },
 		},
 		icons = {
 			separator = "",

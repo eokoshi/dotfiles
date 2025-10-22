@@ -71,12 +71,42 @@ if vim.fn.has("win32") == 1 then
 		},
 		init = function()
 			local map = require("stuff.functions").map
-			map("n", "<Leader>m", "", { desc = "Markdown" })
 			map("n", "<Leader>mt", "<CMD>Obsidian today<CR>", { desc = "today's note" })
 			map("n", "<Leader>my", "<CMD>Obsidian yesterday<CR>", { desc = "yesterday's note" })
 			map("n", "<Leader>mf", "<CMD>Obsidian dailies -48 0<CR>", { desc = "find daily notes" })
 			map("n", "<Leader>mn", "<CMD>Obsidian new_from_template<CR>", { desc = "new from template" })
 			map("n", "<leader>mo", "<CMD>cd ~/Documents/Obsidian<CR>", { desc = "cd vault" })
+
+			vim.api.nvim_create_autocmd("User", {
+				pattern = "ObsidianNoteEnter",
+				callback = function(ev)
+					local function has_markdown_folding()
+						if vim.wo.foldmethod == "expr" and vim.wo.foldexpr == "v:lua.vim.treesitter.foldexpr()" then
+							return true
+						elseif vim.g.markdown_folding == 1 then
+							return true
+						elseif vim.wo.foldmethod == "expr" and vim.wo.foldexpr == "MarkdownFold()" then
+							return true
+						end
+						return false
+					end
+					vim.keymap.set("n", "<CR>", function()
+						local M = require("obsidian.api")
+						if M.cursor_link() then
+							return "<cmd>Obsidian follow_link<cr>"
+						elseif M.cursor_tag() then
+							return "<cmd>Obsidian tags<cr>"
+						elseif M.cursor_heading() and has_markdown_folding() then
+							return "za"
+						else
+							return "<CR>"
+						end
+					end, {
+						buffer = ev.buf,
+						desc = "smart action",
+					})
+				end,
+			})
 		end,
 	}
 else
