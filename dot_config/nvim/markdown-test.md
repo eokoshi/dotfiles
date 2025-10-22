@@ -48,6 +48,7 @@ $$ \begin{bmatrix} 6&8&9 \\ 2&3&2 \end{bmatrix} $$
 
 $$ \Sigma_{3} $$
 
+
 | Column1 | Column2 | Column3 | Column4 | Column5 |
 | --------------- | --------------- | --------------- | --------------- | --------------- |
 | Item1.1 | Item2.1 | Item3.1 | Item4.1 | Item5.1 |
@@ -90,6 +91,8 @@ git diff
     * [ ] howdydody @priority(high)
     * [ ] howdydody
   * [ ] howdydody
+* [ ] item 2
+* [ ] item3
 
 
 ##### Header 5

@@ -37,7 +37,7 @@ if vim.fn.has("win32") == 1 then
 				},
 			},
 			checkbox = {
-				order = { " ", "x" },
+				enabled = false,
 			},
 			templates = {
 				folder = "Templates",

@@ -19,6 +19,21 @@ return {
 					text = "-",
 				},
 			},
+			tables = {
+				parts = {
+					top = { "╭", "─", "╮", "┬" },
+					header = { "│", "│", "│" },
+					separator = { "├", "─", "┤", "┼" },
+					row = { "│", "│", "│" },
+					bottom = { "╰", "─", "╯", "┴" },
+
+					overlap = { "┝", "━", "┥", "┿" },
+
+					align_left = "╼",
+					align_right = "╾",
+					align_center = { "╴", "╶" },
+				},
+			},
 		},
 		markdown_inline = {
 			checkboxes = {

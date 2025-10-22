@@ -1,9 +1,6 @@
 return {
 	{
 		"MeanderingProgrammer/render-markdown.nvim",
-		dependencies = {
-			"nvim-mini/mini.icons",
-		},
 		ft = {
 			"markdown",
 			"ipynb",
@@ -26,7 +23,7 @@ return {
 				icons = { "󰉫 ", "󰉬 ", "󰉭 ", "󰉮 ", "󰉯 ", "󰉰 " },
 			},
 			code = { sign = false },
-			checkbox = { enabled= false },
+			checkbox = { enabled = false },
 			latex = { enabled = false },
 			win_options = {
 				conceallevel = {
