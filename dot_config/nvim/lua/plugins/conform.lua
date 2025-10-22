@@ -15,7 +15,11 @@ return {
 	init = function()
 		local map = require("stuff.functions").map
 		local conform = require("conform")
+		map("n", "<Leader>lc", "<CMD>ConformInfo<CR>")
 		map("n", "<Leader>bf", function()
+			conform.format()
+		end, { desc = "format buffer" })
+		map("n", "<Leader>lf", function()
 			conform.format()
 		end, { desc = "format buffer" })
 		vim.o.formatexpr = "v:lua.require'conform'.formatexpr()"
