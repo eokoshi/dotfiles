@@ -5,11 +5,8 @@ return {
 	end,
 	init_options = {
 		settings = {
+			configurationPreference = "filesystemFirst",
 			lineLength = 100,
-			lint = {
-				enable = true,
-			},
-			fixAll = false,
 		},
 	},
 }

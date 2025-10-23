@@ -83,3 +83,82 @@ if __name__ == "__main__":
 
     MYARGS = PARSER.parse_args()
     main(MYARGS)
+
+import bingbong  # noqa: INP001
+import bingbong
+import sys
+import sys
+
+bingbong.feet()
+
+
+# Syntax Errors
+def function_with_syntax_error(:  # Missing closing parenthesis for function definition
+    print("This function has a syntax error")
+
+
+if True:
+    print("This is fine")
+
+# Name Errors
+undefined_variable = some_undefined_name + 5
+
+
+def another_function():
+    print(non_existent_variable)
+
+
+# Type Errors
+result = "hello" + 5
+length = len(123)
+
+
+# Index Errors
+my_list = [1, 2, 3]
+print(my_list[5])
+
+my_string = "abc"
+print(my_string[3])
+
+
+# Attribute Errors
+class MyClass:
+    def __init__(self):
+        self.value = 10
+
+
+obj = MyClass()
+print(obj.non_existent_attribute)
+
+# ZeroDivisionError
+numerator = 10
+denominator = 0
+division_result = numerator / denominator
+
+# FileNotFoundError
+with open("non_existent_file.txt", "r") as f:
+    content = f.read()
+
+
+# Indentation Error (will cause a SyntaxError during parsing)
+def indented_error_function():
+    print("This is correctly indented")
+    print("This line has an incorrect indentation")  # Incorrect indentation
+
+
+# Logical Error (no error raised, but incorrect behavior)
+def calculate_average(numbers):
+    total = 0
+    for num in numbers:
+        total += num
+    return total / len(numbers) - 1  # Incorrect calculation for average
+
+
+# Example of calling a function with a syntax error (will not execute)
+# function_with_syntax_error()
+
+# Example of calling a function with a NameError
+# another_function()
+
+# Example of calling the function with a logical error
+# print(calculate_average([1, 2, 3]))

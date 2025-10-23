@@ -4,7 +4,9 @@ return {
 		basedpyright = {
 			disableOrganizeImports = true,
 			analysis = {
-				ignore = { "*" }, -- use ruff for linting
+				autoImportCompletions = true,
+				autoSearchPaths = true,
+				-- ignore = { "*" }, -- use ruff for linting
 			},
 		},
 	},

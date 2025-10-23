@@ -25,7 +25,7 @@ return {
 	opts = {
 		formatters_by_ft = {
 			lua = { "stylua" },
-			python = { "ruff" },
+			python = { "ruff_format" },
 			r = { "air" },
 		},
 		default_format_opts = {
