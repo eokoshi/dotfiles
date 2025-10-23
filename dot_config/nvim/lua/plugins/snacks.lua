@@ -1,6 +1,6 @@
 return {
 	"folke/snacks.nvim",
-	dependencies = {},
+	commit = "c958a6a37908c2ba564658dd9170f9f7bc62df5b",
 	priority = 1000,
 	lazy = false,
 	---@type snacks.Config
@@ -16,6 +16,7 @@ return {
 			},
 			auto_close = true,
 		},
+		explorer = { enabled = false },
 		dashboard = {
 			preset = {
 				header = require("stuff.ascii").cat,
@@ -95,7 +96,6 @@ return {
 				},
 			},
 		},
-		explorer = { enabled = false },
 		image = { enabled = true, math = { enabled = false } },
 		indent = { enabled = true },
 		input = { enabled = true },
@@ -230,8 +230,7 @@ return {
 	init = function()
 		local Snacks = require("snacks")
 		local group = vim.api.nvim_create_augroup("Snacks", { clear = true })
-		local functions = require("stuff.functions")
-		local map = functions.map
+		local map = require("stuff.functions").map
 
 		vim.api.nvim_create_autocmd("User", {
 			pattern = "VeryLazy",
@@ -264,7 +263,18 @@ return {
 			Snacks.terminal.toggle()
 		end, { desc = "toggle terminal" })
 		map("n", "<Leader>fa", function()
-			functions.pick_config()
+			if vim.fn.has("win32") == 1 then
+				vim.notify("Do not mess with config from Windows, edit in chezmoi dir on linux", vim.log.levels.ERROR)
+			else
+				Snacks.picker.files({
+					hidden = true,
+					ignored = true,
+					follow = true,
+					dirs = {
+						os.getenv("HOME") .. "/.local/share/chezmoi",
+					},
+				})
+			end
 		end, { desc = "config" })
 		map("n", "<Leader>fz", function()
 			Snacks.picker.files({ cwd = vim.fn.stdpath("config") })
@@ -330,7 +340,13 @@ return {
 			Snacks.picker.resume()
 		end, { desc = "Resume last search" })
 		map("n", "<Leader>fh", function()
-			functions.pick_help()
+			local cols = vim.o.columns
+			local lines = vim.o.lines
+			if (cols / lines > 3) and (cols > 180) then
+				return Snacks.picker.help({ confirm = "vsplit" })
+			else
+				return Snacks.picker.help()
+			end
 		end, { desc = "help pages" })
 		map({ "n", "x" }, "<Leader>f*", function()
 			Snacks.picker.grep_word()
@@ -417,10 +433,83 @@ return {
 		toggles.virtual_lines():map("<Leader>uV")
 		toggles.math_virt():map("<Leader>um")
 		map("n", "<Leader>ui", function()
-			functions.pick_icons()
+			---@diagnostic disable-next-line: missing-parameter
+			local snacks_data = require("snacks.picker.source.icons").icons({})
+
+			local file = vim.fn.stdpath("config") .. "/unicode_chars.json"
+			local fd = assert(io.open(file, "r"))
+			local data = fd:read("*a")
+			fd:close()
+			data = vim.json.decode(data)
+
+			local result = {} ---@type snacks.picker.Icon[]
+			for desc, info in pairs(data) do
+				table.insert(result, {
+					category = info.code,
+					icon = info.char,
+					name = desc,
+					source = "unicode",
+				})
+			end
+			for _, icon in ipairs(result) do
+				icon.text = Snacks.picker.util.text(icon, { "source", "category", "name" })
+				icon.data = icon.icon
+			end
+			---@diagnostic disable-next-line: param-type-mismatch
+			for _, v in ipairs(snacks_data) do
+				table.insert(result, v)
+			end
+			Snacks.picker.pick({
+				items = result,
+				layout = { preset = "vscode" },
+				confirm = "put",
+				format = "icon",
+			})
 		end, { desc = "icons" })
 		map("n", "<Leader>N", function()
-			functions.notifications_picker()
+			require("snacks").picker.notifications({
+				confirm = { "yank", "close" },
+				focus = "list",
+				layout = {
+					layout = {
+						box = "vertical",
+						backdrop = false,
+						width = 0.8,
+						min_width = 90,
+						height = 0.8,
+						min_height = 30,
+						border = "rounded",
+						title = "{title} {live} {flags}",
+						title_pos = "center",
+						{ win = "input", height = 1, border = "bottom" },
+						{ win = "list", border = "none" },
+						{
+							win = "preview",
+							title = "{preview}",
+							height = 0.8,
+							border = "top",
+							wo = { wrap = true, statuscolumn = "%l ", relativenumber = false, foldcolumn = "0" },
+						},
+					},
+				},
+				win = {
+					input = {
+						keys = {
+							["<C-Space>"] = { "cycle_win", mode = { "i", "n" } },
+						},
+					},
+					list = {
+						keys = {
+							["<C-Space>"] = { "cycle_win", mode = { "i", "n" } },
+						},
+					},
+					preview = {
+						keys = {
+							["<C-Space>"] = { "cycle_win", mode = { "i", "n" } },
+						},
+					},
+				},
+			})
 		end, { desc = "Notification history" })
 	end,
 }
