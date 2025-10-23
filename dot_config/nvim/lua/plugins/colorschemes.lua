@@ -84,4 +84,12 @@ return {
 			hl_overrides = {},
 		},
 	},
+	{
+		"gbprod/nord.nvim",
+		lazy = true,
+	},
+	{
+		"rose-pine/neovim",
+		name = "rose-pine",
+	},
 }
