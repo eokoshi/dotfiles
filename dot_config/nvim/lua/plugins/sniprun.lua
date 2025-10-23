@@ -21,7 +21,8 @@ if vim.fn.has("linux") == 1 then
 			map("n", "<Leader>rc", "<CMD>SnipClose<CR>", { desc = "Close REPL" })
 			map("n", "<Leader>rl", "<CMD>SnipRun<CR>", { desc = "Run line" })
 			map("n", "<Leader>rf", "<CMD>%SnipRun<CR>", { desc = "Run file" })
-			map("n", "<Leader>rr", "vip:SnipRun<CR><ESC>", { desc = "Run scope" })
+			map("n", "<Leader>rr", "vip:SnipRun<CR><ESC>", { desc = "Run ip" })
+			map("n", "<Leader>rs", "vii:SnipRun<CR><ESC>", { desc = "Run ii (scope)" })
 			map("n", "<Leader>rR", "<CMD>SnipReset<CR>", { desc = "Reset REPL" })
 			map("v", "<CR>", ":SnipRun<CR>", { desc = "Run selection" })
 		end,

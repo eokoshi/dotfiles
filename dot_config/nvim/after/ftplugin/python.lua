@@ -7,3 +7,4 @@ map(
 	":norm ysaw'f=r:A,<CR>gv<Plug>(nvim-surround-visual-line)}iargs = <ESC>va{o^",
 	{ desc = "Convert lines to dict", buffer = true }
 )
+map("n", "<CR>", "<CMD>SnipRun<CR>", { desc = "Run line" })
