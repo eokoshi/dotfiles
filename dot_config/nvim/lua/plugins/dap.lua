@@ -34,6 +34,7 @@ return {
 			local dap = require("dap")
 			dap.defaults.fallback.stepping_granularity = "line"
 			dap.defaults.fallback.auto_continue_if_many_stopped = false
+			local map = require("stuff.functions").map
 			map("n", "<F5>", function()
 				require("dap").continue()
 			end, { desc = "Debugger: Start" })

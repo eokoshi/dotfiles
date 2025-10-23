@@ -44,25 +44,27 @@ if vim.fn.has("win32") == 1 then
 			},
 			-- Customize the frontmatter data.
 			---@return table
-			note_frontmatter_func = function(note)
-				-- Add the title of the note as an alias.
-				if note.title then
-					note:add_alias(note.title)
-				end
-				note:add_field("date", os.date("%Y-%m-%d"))
-
-				local out = { aliases = note.aliases, date = note.date, tags = note.tags }
-
-				-- `note.metadata` contains any manually added fields in the frontmatter.
-				-- So here we just make sure those fields are kept in the frontmatter.
-				if note.metadata ~= nil and not vim.tbl_isempty(note.metadata) then
-					for k, v in pairs(note.metadata) do
-						out[k] = v
+			frontmatter = {
+				func = function(note)
+					-- Add the title of the note as an alias.
+					if note.title then
+						note:add_alias(note.title)
 					end
-				end
+					note:add_field("date", os.date("%Y-%m-%d"))
 
-				return out
-			end,
+					local out = { aliases = note.aliases, date = note.date, tags = note.tags }
+
+					-- `note.metadata` contains any manually added fields in the frontmatter.
+					-- So here we just make sure those fields are kept in the frontmatter.
+					if note.metadata ~= nil and not vim.tbl_isempty(note.metadata) then
+						for k, v in pairs(note.metadata) do
+							out[k] = v
+						end
+					end
+
+					return out
+				end,
+			},
 			---@param url string
 			follow_url_func = function(url)
 				vim.ui.open(url) -- need Neovim 0.10.0+
@@ -79,30 +81,21 @@ if vim.fn.has("win32") == 1 then
 
 			vim.api.nvim_create_autocmd("User", {
 				pattern = "ObsidianNoteEnter",
-				callback = function(ev)
-					local function has_markdown_folding()
-						if vim.wo.foldmethod == "expr" and vim.wo.foldexpr == "v:lua.vim.treesitter.foldexpr()" then
-							return true
-						elseif vim.g.markdown_folding == 1 then
-							return true
-						elseif vim.wo.foldmethod == "expr" and vim.wo.foldexpr == "MarkdownFold()" then
-							return true
-						end
-						return false
-					end
+				callback = function()
 					vim.keymap.set("n", "<CR>", function()
 						local M = require("obsidian.api")
 						if M.cursor_link() then
 							return "<cmd>Obsidian follow_link<cr>"
 						elseif M.cursor_tag() then
 							return "<cmd>Obsidian tags<cr>"
-						elseif M.cursor_heading() and has_markdown_folding() then
+						elseif M.cursor_heading() then
 							return "za"
 						else
-							return "<CR>"
+							return "<cmd>Checkmate toggle<cr>"
 						end
 					end, {
-						buffer = ev.buf,
+						expr = true,
+						buffer = true,
 						desc = "smart action",
 					})
 				end,

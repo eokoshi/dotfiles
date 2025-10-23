@@ -66,7 +66,7 @@ return {
 	},
 	init = function()
 		local map = require("stuff.functions").map
-		map({ "n" }, "<CR>", "<cmd>Checkmate toggle<CR>", { desc = "Toggle todo item" })
+		map({ "n", "v" }, "<leader>mc", "", { desc = "Checkmate" })
 		map({ "n", "v" }, "<leader>mct", "<cmd>Checkmate toggle<CR>", { desc = "Toggle todo item" })
 		map(
 			{ "n", "v" },
