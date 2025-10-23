@@ -44,7 +44,7 @@ require("lazy").setup({
 	git = {
 		timeout = 300,
 	},
-	rocks = {enabled = false}
+	rocks = { enabled = false },
 })
 
 require("mappings")
