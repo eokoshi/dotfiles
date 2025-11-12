@@ -91,7 +91,7 @@ if vim.fn.has("win32") == 1 then
 						elseif M.cursor_heading() then
 							return "za"
 						else
-							return "<cmd>Checkmate toggle<cr>"
+							return "<cmd>Checkmate metadata toggle done<cr>"
 						end
 					end, {
 						expr = true,
