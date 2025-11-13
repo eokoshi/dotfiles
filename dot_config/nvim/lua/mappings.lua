@@ -10,6 +10,7 @@ map("n", "<Leader>.", "<CMD>cd %:h<CR>", { desc = "cd here" })
 
 map("n", "<Leader><space>", "<ESC>", { desc = "" })
 map({ "n", "v" }, "c", "\"ac", { desc = "Do not yank text on change" })
+map("n", "yae", "<CMD>%y+<CR><CR>", { desc = "everything" })
 
 -- System clipboard
 map({ "n", "v" }, "<C-q>", "<C-q>", { desc = "Visual block mode" })
