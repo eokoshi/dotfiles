@@ -1,3 +1,3 @@
 vim.lsp.config("html", {
-	filetypes = { "html", "htmldjango" },
+	filetypes = { "html", "templ", "htmldjango" },
 })
