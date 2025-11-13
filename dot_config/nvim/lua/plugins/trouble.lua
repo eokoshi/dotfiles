@@ -45,6 +45,8 @@ return {
 				"<CMD>Trouble symbols toggle pinned=true win.relative=editor win.position=right<CR>",
 				{ desc = "symbols" }
 			)
+			map("n", "<Leader>tl", "<CMD>Trouble loclist<CR>", { desc = "loclist" })
+			map("n", "<Leader>tq", "<CMD>Trouble qflist<CR>", { desc = "quickfix list" })
 			map("n", "<Leader>tt", "<CMD>TodoTrouble<CR>", { desc = "Todo List" })
 		end,
 	},

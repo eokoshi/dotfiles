@@ -7,10 +7,10 @@ map("n", "<Leader>q", "<CMD>q<CR>", { desc = "Quit window" })
 map("n", "<Leader>Q", "<CMD>qa<CR>", { desc = "Quit nvim" })
 map("n", "<Leader>w", "<CMD>w<CR>", { desc = "Save buffer" })
 map("n", "<Leader>.", "<CMD>cd %:h<CR>", { desc = "cd here" })
-
 map("n", "<Leader><space>", "<ESC>", { desc = "" })
 map({ "n", "v" }, "c", "\"ac", { desc = "Do not yank text on change" })
 map("n", "yae", "<CMD>%y+<CR><CR>", { desc = "everything" })
+map("t", "<ESC>", "<C-\\><C-n>", {desc="Escape terminal mode"})
 
 -- System clipboard
 map({ "n", "v" }, "<C-q>", "<C-q>", { desc = "Visual block mode" })
