@@ -27,6 +27,7 @@ return {
 			lua = { "stylua" },
 			python = { "ruff_format" },
 			r = { "air" },
+			htmldjango = { "djlint" },
 		},
 		default_format_opts = {
 			lsp_format = "fallback",
