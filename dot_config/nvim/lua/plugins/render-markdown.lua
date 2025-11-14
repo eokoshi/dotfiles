@@ -22,7 +22,15 @@ return {
 				-- icons = { "󰎤 ", "󰎧 ", "󰎪 ", "󰎭 ", "󰎱 ", "󰎳 " },
 				icons = { "󰉫 ", "󰉬 ", "󰉭 ", "󰉮 ", "󰉯 ", "󰉰 " },
 			},
-			code = { sign = false },
+			code = {
+				sign = false,
+				position = "right",
+				width = "block",
+				right_pad = 1,
+				min_width = 84,
+				border = "thick",
+				language_right = "█",
+			},
 			checkbox = { enabled = false },
 			latex = { enabled = false },
 			win_options = {

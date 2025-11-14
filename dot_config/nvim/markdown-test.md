@@ -66,7 +66,6 @@ import numpy as np
 a = np.array([1,2,3,4])
 
 a.shape
-
 ```
 
 ---
@@ -79,20 +78,28 @@ git diff
 ```
 
 
+```markdown
+hello
+```
+
+
 #### Header 4
 
 * [ ] TODO
   * [x] buy chicken @done(10/02/25 16:13)
   * [ ] be happy
     * [ ] learn stuff @started(10/02/25 16:57)
-  * [ ] howdydody long text long text long text long text long text long text long text long text
+  * [x] howdydody long text long text long text long text long text long text long text long text
   long text long text long text long text long text long text long text long text 
   * [ ] howdydody
-    * [ ] howdydody @priority(high)
-    * [ ] howdydody
-  * [ ] howdydody
-* [ ] item 2
-* [ ] item3
+    - [ ] howdydody @priority(high)
+    - [ ] howdydody
+  - [ ] howdydody
+- [ ] item 2
+- [ ] item3
+- [ ] checkbox
+
+- [ ] bada
 
 
 ##### Header 5

@@ -1,10 +1,15 @@
+---@diagnostic disable: missing-fields
 return {
 	"OXY2DEV/markview.nvim",
 	lazy = false,
+	---@module "markview"
+	---@type markview.config
 	opts = {
 		preview = {
-			modes = { "v", "V", "n", "no", "c", "t" },
 			icon_provider = "mini",
+			hybrid_modes = { "n", "no", "c", "t" },
+			enable_hybrid_mode = true,
+			linewise_hybrid_mode = true,
 		},
 		markdown = {
 			headings = {
@@ -26,9 +31,7 @@ return {
 					separator = { "├", "─", "┤", "┼" },
 					row = { "│", "│", "│" },
 					bottom = { "╰", "─", "╯", "┴" },
-
 					overlap = { "┝", "━", "┥", "┿" },
-
 					align_left = "╼",
 					align_right = "╾",
 					align_center = { "╴", "╶" },
