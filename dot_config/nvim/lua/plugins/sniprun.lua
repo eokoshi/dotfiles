@@ -1,4 +1,20 @@
 if vim.fn.has("linux") == 1 then
+	vim.api.nvim_create_autocmd("FileType", {
+		group = vim.api.nvim_create_augroup("SnipRun", { clear = true }),
+		pattern = { "python" },
+		callback = function()
+			local map = require("stuff.functions").map
+			map("n", "<Leader>r", "", { desc = "Run Code", buffer = true })
+			map("n", "<CR>", "<CMD>SnipRun<CR>", { desc = "Run line", buffer = true })
+			map("v", "<CR>", ":SnipRun<CR>", { desc = "Run selection", buffer = true })
+			map("n", "<Leader>rc", "<CMD>SnipClose<CR>", { desc = "Close REPL", buffer = true })
+			map("n", "<Leader>rl", "<CMD>SnipRun<CR>", { desc = "Run line", buffer = true })
+			map("n", "<Leader>rf", "<CMD>%SnipRun<CR>", { desc = "Run file", buffer = true })
+			map("n", "<Leader>rr", "vip:SnipRun<CR><ESC>", { desc = "Run ip", buffer = true })
+			map("n", "<Leader>rs", "vii:SnipRun<CR><ESC>", { desc = "Run ii (scope)", buffer = true })
+			map("n", "<Leader>rR", "<CMD>SnipReset<CR>", { desc = "Reset REPL", buffer = true })
+		end,
+	})
 	return {
 		"michaelb/sniprun",
 		branch = "master",
@@ -10,22 +26,6 @@ if vim.fn.has("linux") == 1 then
 				"VirtualLine",
 			},
 		},
-		init = function()
-			vim.api.nvim_create_autocmd("BufReadPost", {
-				group = vim.api.nvim_create_augroup("SnipRun", { clear = true }),
-				pattern = "python",
-				command = "SnipRun",
-			})
-			local map = require("stuff.functions").map
-			map("n", "<Leader>r", "", { desc = "Run Code" })
-			map("n", "<Leader>rc", "<CMD>SnipClose<CR>", { desc = "Close REPL" })
-			map("n", "<Leader>rl", "<CMD>SnipRun<CR>", { desc = "Run line" })
-			map("n", "<Leader>rf", "<CMD>%SnipRun<CR>", { desc = "Run file" })
-			map("n", "<Leader>rr", "vip:SnipRun<CR><ESC>", { desc = "Run ip" })
-			map("n", "<Leader>rs", "vii:SnipRun<CR><ESC>", { desc = "Run ii (scope)" })
-			map("n", "<Leader>rR", "<CMD>SnipReset<CR>", { desc = "Reset REPL" })
-			map("v", "<CR>", ":SnipRun<CR>", { desc = "Run selection" })
-		end,
 	}
 else
 	return {}
