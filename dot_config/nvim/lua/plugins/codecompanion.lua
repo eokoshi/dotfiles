@@ -4,7 +4,6 @@ return {
 		"nvim-lua/plenary.nvim",
 	},
 	cmd = { "CodeCompanion", "CodeCompanionChat", "CodeCompanionCmd", "CodeCompanionActions" },
-	-- version = "v14.13.0",
 	opts = {
 		display = {
 			chat = {
@@ -26,27 +25,46 @@ return {
 		},
 		strategies = {
 			chat = {
-				adapter = "gptoss",
-				opts = {
-					completion_provider = "blink",
-				},
+				adapter = "llamacpp",
 			},
 			inline = {
-				adapter = "gptoss",
+				adapter = "llamacpp",
 			},
 			cmd = {
-				adapter = "gptoss",
+				adapter = "llamacpp",
 			},
 		},
 		adapters = {
 			http = {
-				gptoss = function()
+				llamacpp = function()
 					return require("codecompanion.adapters").extend("openai", {
-						name = "gptoss",
+						name = "llamacpp",
 						url = "http://100.92.126.115:8000/v1/chat/completions",
 						schema = {
 							model = {
 								default = "/models/gpt-oss-20b/gpt-oss-20b-mxfp4.gguf",
+							},
+						},
+					})
+				end,
+				ollama_office = function()
+					return require("codecompanion.adapters").extend("ollama", {
+						name = "ollama_office",
+						env = {
+							url = "http://100.113.130.46:11434",
+						},
+						headers = {
+							["Content-Type"] = "application/json",
+						},
+						schema = {
+							model = {
+								default = "qwen3:latest",
+							},
+							num_ctx = {
+								default = 16384,
+							},
+							keep_alive = {
+								default = "60m",
 							},
 						},
 					})

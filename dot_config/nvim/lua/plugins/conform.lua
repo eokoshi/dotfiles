@@ -28,6 +28,7 @@ return {
 			python = { "ruff_format" },
 			r = { "air" },
 			htmldjango = { "djlint" },
+			yaml = { "prettier" },
 		},
 		default_format_opts = {
 			lsp_format = "fallback",
