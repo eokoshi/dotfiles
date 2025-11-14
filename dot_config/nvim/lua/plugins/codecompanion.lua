@@ -4,7 +4,7 @@ return {
 		"nvim-lua/plenary.nvim",
 	},
 	cmd = { "CodeCompanion", "CodeCompanionChat", "CodeCompanionCmd", "CodeCompanionActions" },
-	version = "v14.13.0",
+	-- version = "v14.13.0",
 	opts = {
 		display = {
 			chat = {
@@ -25,30 +25,14 @@ return {
 				opts = { "filler", "closeoff", "algorithm:minimal", "followwrap", "linematch:120" },
 				provider = "default", -- default|mini_diff
 			},
-		},
-		opts = {
-			system_prompt = function()
-				return [[/no_think
-- Use Markdown formatting in your answers.
-- Include the programming language name at the start of the Markdown code blocks.
-- Avoid including line numbers in code blocks.
-- Avoid wrapping the whole response in triple backticks.
-- Use '\n' only when you want a literal backslash followed by a character 'n'.
-- Output the code in a single code block, being careful to only return relevant code.
-- WHEN MODIFYING CODE TO SUGGEST CHANGES, GENERATE THE SMALLEST RELEVANT CODE BLOCK POSSIBLE, DO NOT OUTPUT THE ENTIRE SCRIPT
-- WHEN REFERENCING CODE, DO NOT OUTPUT THE ENTIRE SECTION, RATHER PRINT THE FIRST FEW LINES, then ... on a new line, then the final few lines
-- ANSWER CONCISELY, WITHOUT ADDING TOO MUCH BACKGROUND INFORMATION UNLESS THE USER REQUESTS IT
-- GIVE MULTIPLE POSSIBLE SOLUTIONS TO THE ISSUE IF THE USER IS ASKING FOR TROUBLESHOOTING HELP
-/no_think]]
-			end,
+			action_palette = {
+				provider = "default",
+			},
 		},
 		strategies = {
 			chat = {
 				adapter = "qwen3",
 				opts = {
-					prompt_decorator = function(message, adapter, context)
-						return string.format([[<prompt>%s</prompt>\no_think]], message)
-					end,
 					completion_provider = "blink",
 				},
 			},
@@ -60,87 +44,88 @@ return {
 			},
 		},
 		adapters = {
-			deepseek = function()
-				return require("codecompanion.adapters").extend("ollama", {
-					env = {
-						url = "http://100.113.130.46:11434",
-					},
-					headers = {
-						["Content-Type"] = "application/json",
-					},
-					schema = {
-						model = {
-							default = "deepseek-r1:latest",
+			http = {
+				deepseek = function()
+					return require("codecompanion.adapters").extend("ollama", {
+						env = {
+							url = "http://100.113.130.46:11434",
 						},
-						num_ctx = {
-							default = 16384,
-							keep_alive = "60m",
+						headers = {
+							["Content-Type"] = "application/json",
 						},
-					},
-				})
-			end,
-			qwen3 = function()
-				return require("codecompanion.adapters").extend("ollama", {
-					name = "qwen3",
-					env = {
-						url = "http://100.113.130.46:11434",
-					},
-					headers = {
-						["Content-Type"] = "application/json",
-					},
-					schema = {
-						model = {
-							default = "qwen3:latest",
+						schema = {
+							model = {
+								default = "deepseek-r1:latest",
+							},
+							num_ctx = {
+								default = 16384,
+							},
 						},
-						num_ctx = {
-							default = 40000,
-							keep_alive = "60m",
+					})
+				end,
+				qwen3 = function()
+					return require("codecompanion.adapters").extend("ollama", {
+						name = "qwen3",
+						env = {
+							url = "http://100.113.130.46:11434",
 						},
-					},
-				})
-			end,
-			qwen_coder = function()
-				return require("codecompanion.adapters").extend("ollama", {
-					name = "qwen3",
-					env = {
-						url = "http://100.113.130.46:11434",
-					},
-					headers = {
-						["Content-Type"] = "application/json",
-					},
-					schema = {
-						model = {
-							default = "hf.co/bartowski/Qwen2.5.1-Coder-7B-Instruct-GGUF:Q6_K_L",
+						headers = {
+							["Content-Type"] = "application/json",
 						},
-						num_ctx = {
-							default = 16384,
-							keep_alive = "60m",
+						schema = {
+							model = {
+								default = "qwen3:latest",
+							},
+							num_ctx = {
+								default = 40000,
+							},
+							keep_alive = {
+								default = "60m",
+							},
+							think = {
+								default = false,
+							},
 						},
-					},
-				})
-			end,
-			gemma3 = function()
-				return require("codecompanion.adapters").extend("ollama", {
-					name = "gemma3",
-					env = {
-						url = "http://100.113.130.46:11434",
-					},
-					headers = {
-						["Content-Type"] = "application/json",
-					},
-					schema = {
-						model = {
-							default = "gemma3:latest",
+					})
+				end,
+				qwen_coder = function()
+					return require("codecompanion.adapters").extend("ollama", {
+						name = "qwen3",
+						env = {
+							url = "http://100.113.130.46:11434",
 						},
-						num_ctx = {
-							default = 32768,
-							keep_alive = "60m",
+						headers = {
+							["Content-Type"] = "application/json",
 						},
-					},
-				})
-			end,
-			opts = {
-				show_defaults = false,
+						schema = {
+							model = {
+								default = "hf.co/bartowski/Qwen2.5.1-Coder-7B-Instruct-GGUF:Q6_K_L",
+							},
+							num_ctx = {
+								default = 16384,
+							},
+						},
+					})
+				end,
+				gemma3 = function()
+					return require("codecompanion.adapters").extend("ollama", {
+						name = "gemma3",
+						env = {
+							url = "http://100.113.130.46:11434",
+						},
+						headers = {
+							["Content-Type"] = "application/json",
+						},
+						schema = {
+							model = {
+								default = "gemma3:latest",
+							},
+							num_ctx = {
+								default = 32768,
+							},
+						},
+					})
+				end,
 			},
 		},
 	},

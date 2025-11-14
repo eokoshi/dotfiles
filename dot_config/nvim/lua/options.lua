@@ -76,7 +76,7 @@ vim.o.undolevels = 10000
 vim.o.updatetime = 200 -- Save swap file and trigger CursorHold
 vim.o.virtualedit = "block" -- Allow cursor to move where there is no text in visual block mode
 vim.o.wildmode = "longest:full,full" -- Command-line completion mode
-vim.o.winborder = "solid"
+vim.o.winborder = "rounded"
 vim.o.winminwidth = 20 -- Minimum window width
 vim.o.wrap = false -- Disable line wrap
 
