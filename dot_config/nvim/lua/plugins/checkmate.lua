@@ -55,10 +55,10 @@ return {
 				end,
 				key = "<leader>mcd",
 				on_add = function(todo_item)
-					require("checkmate").set_todo_item(todo_item, "checked")
+					require("checkmate").set_todo_state(todo_item, "checked")
 				end,
 				on_remove = function(todo_item)
-					require("checkmate").set_todo_item(todo_item, "unchecked")
+					require("checkmate").set_todo_state(todo_item, "unchecked")
 				end,
 				sort_order = 30,
 			},
