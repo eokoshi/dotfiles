@@ -118,7 +118,7 @@ export TS_IP="$(tailscale ip -4)"
 {{- if eq .chezmoi.osRelease.id "ubuntu" }}
 export IP="$(hostname -I | awk '{print $1}')"
 export EDITOR="/opt/nvim/bin/nvim"
-export PATH="/opt/nvim/bin:$HOME/.local/bin:$PATH"
+export PATH="/opt/nvim/bin:$HOME/.local/bin:$HOME/.cargo/bin:$PATH"
 {{- else if eq .chezmoi.osRelease.id "arch" }}
 if [ -z "$WAYLAND_DISPLAY" ] && [ -n "$XDG_VTNR" ] && [ "$XDG_VTNR" -eq 1 ] ; then
     exec sway
