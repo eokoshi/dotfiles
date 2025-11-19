@@ -25,18 +25,29 @@ return {
 		},
 		strategies = {
 			chat = {
-				adapter = "llamacpp",
+				adapter = "llamacpp_df2",
 			},
 			inline = {
-				adapter = "llamacpp",
+				adapter = "llamacpp_df2",
 			},
 			cmd = {
-				adapter = "llamacpp",
+				adapter = "llamacpp_df2",
 			},
 		},
 		adapters = {
 			http = {
-				llamacpp = function()
+				llamacpp_df2 = function()
+					return require("codecompanion.adapters").extend("openai", {
+						name = "llamacpp",
+						url = "http://100.106.205.69:8000/v1/chat/completions",
+						schema = {
+							model = {
+								default = "/models/gpt-oss-120b/gpt-oss-120b-mxfp4-00001-of-00003.gguf",
+							},
+						},
+					})
+				end,
+				llamacpp_bs = function()
 					return require("codecompanion.adapters").extend("openai", {
 						name = "llamacpp",
 						url = "http://100.92.126.115:8000/v1/chat/completions",
