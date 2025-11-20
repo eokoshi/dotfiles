@@ -9,8 +9,15 @@ return {
 			chat = {
 				intro_message = "Chatbot time 󰭹 󰓠 󰚩   . Press ? for options",
 				separator = "---",
-				show_settings = true,
+				-- show_settings = true,
 				start_in_insert_mode = false,
+				icons = {
+					buffer_watch = " ",
+				},
+				window = {
+					layout = "horizontal",
+					height = 0.45,
+				},
 			},
 			diff = {
 				provider_opts = {
@@ -25,17 +32,34 @@ return {
 		},
 		strategies = {
 			chat = {
-				adapter = "llamacpp_df2",
+				adapter = "gpt_oss_120b",
+				variables = {
+					["buffer"] = {
+						opts = {
+							default_params = "watch",
+						},
+					},
+				},
+				tools = {
+					["insert_edit_into_file"] = {
+						opts = {
+							requires_approval = true,
+						},
+					},
+				},
 			},
 			inline = {
-				adapter = "llamacpp_df2",
+				adapter = "gpt_oss_120b",
 			},
 			cmd = {
-				adapter = "llamacpp_df2",
+				adapter = "gpt_oss_120b",
 			},
 		},
 		adapters = {
 			http = {
+				opts = {
+					show_defaults = false,
+				},
 				llamacpp_df2 = function()
 					return require("codecompanion.adapters").extend("openai", {
 						name = "llamacpp",
@@ -80,6 +104,25 @@ return {
 						},
 					})
 				end,
+				gpt_oss_120b = function()
+					return require("codecompanion.adapters").extend("ollama", {
+						name = "ollama_DF2_gptoss120",
+						env = {
+							url = "http://100.106.205.69:11434",
+						},
+						headers = {
+							["Content-Type"] = "application/json",
+						},
+						schema = {
+							model = {
+								default = "gpt-oss:120b",
+							},
+							keep_alive = {
+								default = "15m",
+							},
+						},
+					})
+				end,
 				tavily = function()
 					return require("codecompanion.adapters").extend("tavily", {
 						env = {
@@ -87,6 +130,11 @@ return {
 						},
 					})
 				end,
+			},
+			acp = {
+				opts = {
+					show_defaults = false,
+				},
 			},
 		},
 	},
