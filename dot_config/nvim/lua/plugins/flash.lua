@@ -22,8 +22,9 @@ return {
 	},
 	-- stylua: ignore 
 	keys = {
-		{ "+",     mode = { "n", "x", "o" }, function() require("flash").jump() end,              desc = "Flash" },
-		{ "H",     mode = { "n", "x", "o" }, function() require("flash").treesitter() end,        desc = "Flash Treesitter" },
-		{ "r",     mode = "o",               function() require("flash").remote() end,            desc = "Remote Flash" },
+		{ "+",     mode = { "n", "x", "o" }, function() require("flash").jump() end,               desc = "Flash" },
+		{ "H",     mode = { "n", "x", "o" }, function() require("flash").treesitter() end,         desc = "Flash treesitter" },
+		{ "L",     mode = { "n", "x", "o" }, function() require("flash").treesitter_search() end,  desc = "Flash treesitter search" },
+		{ "r",     mode = "o",               function() require("flash").remote() end,             desc = "Remote Flash" },
 	},
 }
