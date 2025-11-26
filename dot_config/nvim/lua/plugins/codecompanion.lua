@@ -32,7 +32,7 @@ return {
 		},
 		strategies = {
 			chat = {
-				adapter = "gpt_oss_120b",
+				adapter = "gptoss120b_ol_df2",
 				variables = {
 					["buffer"] = {
 						opts = {
@@ -49,10 +49,10 @@ return {
 				},
 			},
 			inline = {
-				adapter = "gpt_oss_120b",
+				adapter = "qwen3vl_ol_df2",
 			},
 			cmd = {
-				adapter = "gpt_oss_120b",
+				adapter = "gptoss120b_ol_df2",
 			},
 		},
 		adapters = {
@@ -60,7 +60,45 @@ return {
 				opts = {
 					show_defaults = false,
 				},
-				llamacpp_df2 = function()
+				gptoss120b_ol_df2 = function()
+					return require("codecompanion.adapters").extend("ollama", {
+						name = "gptoss120b_ol_df2",
+						env = {
+							url = "http://100.106.205.69:11434",
+						},
+						headers = {
+							["Content-Type"] = "application/json",
+						},
+						schema = {
+							model = {
+								default = "gpt-oss:120b",
+							},
+							keep_alive = {
+								default = "15m",
+							},
+						},
+					})
+				end,
+				qwen3vl_ol_df2 = function()
+					return require("codecompanion.adapters").extend("ollama", {
+						name = "qwen3vl_ol_df2",
+						env = {
+							url = "http://100.106.205.69:11434",
+						},
+						headers = {
+							["Content-Type"] = "application/json",
+						},
+						schema = {
+							model = {
+								default = "qwen3-vl:32b",
+							},
+							keep_alive = {
+								default = "15m",
+							},
+						},
+					})
+				end,
+				gptoss120b_lc_df2 = function()
 					return require("codecompanion.adapters").extend("openai", {
 						name = "llamacpp",
 						url = "http://100.106.205.69:8000/v1/chat/completions",
@@ -71,7 +109,7 @@ return {
 						},
 					})
 				end,
-				llamacpp_bs = function()
+				gptoss20b_lc_bs = function()
 					return require("codecompanion.adapters").extend("openai", {
 						name = "llamacpp",
 						url = "http://100.92.126.115:8000/v1/chat/completions",
@@ -82,7 +120,7 @@ return {
 						},
 					})
 				end,
-				ollama_office = function()
+				qwen3_ol_office = function()
 					return require("codecompanion.adapters").extend("ollama", {
 						name = "ollama_office",
 						env = {
@@ -100,25 +138,6 @@ return {
 							},
 							keep_alive = {
 								default = "60m",
-							},
-						},
-					})
-				end,
-				gpt_oss_120b = function()
-					return require("codecompanion.adapters").extend("ollama", {
-						name = "ollama_DF2_gptoss120",
-						env = {
-							url = "http://100.106.205.69:11434",
-						},
-						headers = {
-							["Content-Type"] = "application/json",
-						},
-						schema = {
-							model = {
-								default = "gpt-oss:120b",
-							},
-							keep_alive = {
-								default = "15m",
 							},
 						},
 					})
