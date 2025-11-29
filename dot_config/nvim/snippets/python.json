@@ -1,4 +1,12 @@
 {
+	"@dataclass": {
+		"prefix": "dcl",
+		"body": [
+			"@dataclass",
+			"class $0:"
+		],
+		"description": "dataclass decorator"
+	},
 	"__len__": {
 		"prefix": ".len",
 		"body": [

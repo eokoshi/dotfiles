@@ -29,6 +29,7 @@ return {
 			r = { "air" },
 			htmldjango = { "djlint" },
 			yaml = { "prettier" },
+			toml = { "pyproject-fmt" },
 		},
 		default_format_opts = {
 			lsp_format = "fallback",
