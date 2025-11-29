@@ -30,6 +30,7 @@ return {
 			htmldjango = { "djlint" },
 			yaml = { "prettier" },
 			toml = { "pyproject-fmt" },
+			json = { "fixjson" },
 		},
 		default_format_opts = {
 			lsp_format = "fallback",

@@ -16,14 +16,14 @@ return {
 				-- LSP
 				"lua-language-server",
 				"basedpyright",
-				"json-lsp",
 				"bashls",
 				"marksman",
 
 				-- Formatters
 				"stylua",
 				"ruff",
-				"air",
+				"prettier",
+				"fixjson",
 
 				-- DAP
 				"debugpy",
