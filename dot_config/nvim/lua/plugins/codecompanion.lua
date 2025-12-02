@@ -1,5 +1,6 @@
 return {
 	"olimorris/codecompanion.nvim",
+	version = "17.33.0",
 	dependencies = {
 		"nvim-lua/plenary.nvim",
 	},
@@ -41,9 +42,14 @@ return {
 					},
 				},
 				tools = {
-					["insert_edit_into_file"] = {
-						opts = {
-							requires_approval = true,
+					opts = {
+						auto_submit_errors = true,
+						auto_submit_success = true,
+						default_tools = {
+							"file_search",
+							"grep_search",
+							"web_search",
+							"read_file",
 						},
 					},
 				},
