@@ -1,11 +1,11 @@
 local icons = require("stuff.icons")
 
 return {
-	{
-		"nvim-mini/mini.operators",
-		event = "BufEnter",
-		opts = {},
-	},
+	-- {
+	-- 	"nvim-mini/mini.operators",
+	-- 	event = "BufEnter",
+	-- 	opts = {},
+	-- },
 	{
 		"nvim-mini/mini.align",
 		event = "BufEnter",

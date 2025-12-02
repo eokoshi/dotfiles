@@ -23,5 +23,6 @@ return {
 	init = function()
 		local map = require("stuff.functions").map
 		map("n", "<leader>bb", "<CMD>BufferLinePick<CR>", { desc = "Pick buffer" })
+		map("n", "<leader>bx", "<CMD>BufferLinePickClose<CR>", { desc = "Pick buffer to close" })
 	end,
 }

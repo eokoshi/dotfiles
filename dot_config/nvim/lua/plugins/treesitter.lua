@@ -5,6 +5,13 @@ return {
 		main = "nvim-treesitter.configs",
 		dependencies = {
 			{ "nvim-treesitter/nvim-treesitter-textobjects", lazy = true },
+			{
+				"nvim-treesitter/nvim-treesitter-context",
+				lazy = true,
+				opts = {
+					multiwindow = true,
+				},
+			},
 			"mason-org/mason.nvim",
 		},
 		lazy = false,
@@ -98,6 +105,7 @@ return {
 						["]k"] = { query = "@block.outer", desc = "Next block start" },
 						["]f"] = { query = "@function.outer", desc = "Next function start" },
 						["]a"] = { query = "@parameter.inner", desc = "Next argument start" },
+						["]i"] = { query = "@import.outer", desc = "Next import start" },
 					},
 					goto_next_end = {
 						["]K"] = { query = "@block.outer", desc = "Next block end" },
@@ -108,6 +116,7 @@ return {
 						["[k"] = { query = "@block.outer", desc = "Previous block start" },
 						["[f"] = { query = "@function.outer", desc = "Previous function start" },
 						["[a"] = { query = "@parameter.inner", desc = "Previous argument start" },
+						["[i"] = { query = "@import.outer", desc = "Previous import start" },
 					},
 					goto_previous_end = {
 						["[K"] = { query = "@block.outer", desc = "Previous block end" },

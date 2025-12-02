@@ -9,7 +9,8 @@ map("n", "<Leader>w", "<CMD>w<CR>", { desc = "Save buffer" })
 map("n", "<Leader>.", "<CMD>cd %:h<CR>", { desc = "cd here" })
 map("n", "<Leader><space>", "<ESC>", { desc = "" })
 map({ "n", "v" }, "c", "\"ac", { desc = "Do not yank text on change" })
-map("n", "yae", "<CMD>%y+<CR><CR>", { desc = "everything" })
+map("n", "yA", "<CMD>%y+<CR><CR>", { desc = "yank file" })
+map("n", "dA", "<CMD>%d<CR>", { desc = "delete file" })
 map("t", "<ESC>", "<C-\\><C-n>", {desc="Escape terminal mode"})
 
 -- System clipboard
