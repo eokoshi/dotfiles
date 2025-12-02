@@ -102,24 +102,10 @@ return {
 		signature = { enabled = false },
 		sources = {
 			default = function()
-				local success, node = pcall(vim.treesitter.get_node)
-				if
-					success
-					and node
-					and vim.tbl_contains({
-						"comment",
-						"line_comment",
-						"block_comment",
-						"string",
-						"word",
-						"raw_string",
-					}, node:type())
-				then
-					return { "lsp", "buffer", "path", "ripgrep" }
-				elseif vim.bo.filetype == "lua" then
+				if vim.bo.filetype == "lua" then
 					return { "lazydev", "lsp", "buffer", "snippets", "ripgrep" }
 				else
-					return { "lsp", "buffer", "snippets", "ripgrep" }
+					return { "path", "lsp", "buffer", "snippets", "ripgrep" }
 				end
 			end,
 			providers = {

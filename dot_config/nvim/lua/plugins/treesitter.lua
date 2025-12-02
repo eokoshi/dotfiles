@@ -10,6 +10,7 @@ return {
 				lazy = true,
 				opts = {
 					multiwindow = true,
+					multiline_threshold = 2,
 				},
 			},
 			"mason-org/mason.nvim",
@@ -92,8 +93,8 @@ return {
 						["i?"] = { query = "@conditional.inner", desc = "inside conditional" },
 						["af"] = { query = "@function.outer", desc = "around function " },
 						["if"] = { query = "@function.inner", desc = "inside function " },
-						["ao"] = { query = "@loop.outer", desc = "around loop" },
-						["io"] = { query = "@loop.inner", desc = "inside loop" },
+						["al"] = { query = "@loop.outer", desc = "around loop" },
+						["il"] = { query = "@loop.inner", desc = "inside loop" },
 						["aa"] = { query = "@parameter.outer", desc = "around argument" },
 						["ia"] = { query = "@parameter.inner", desc = "inside argument" },
 					},
