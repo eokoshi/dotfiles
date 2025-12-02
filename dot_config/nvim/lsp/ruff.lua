@@ -6,7 +6,7 @@ return {
 	init_options = {
 		settings = {
 			configurationPreference = "filesystemFirst",
-			lineLength = 100,
+			lineLength = 120,
 		},
 	},
 }
