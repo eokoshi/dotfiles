@@ -1,54 +1,103 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
-
-"""Module documentation goes here."""
-
-from __future__ import print_function
-
-__author__ = "First Last"
-__copyright__ = "Copyright 2018, First Last"
-__credits__ = ["C D", "A B"]
-__license__ = "Apache 2.0"
-__version__ = "1.0.1"
-__maintainer__ = "First Last"
-__email__ = "test@example.org"
-__status__ = "Development"
-
-x = 4 + 8
-print("hello")
-print("Testing")
-
-import argparse
-import os
-
-from logzero import logger
+#region Header
+'''Description: Description'''
+__author__ = 'Ethan N. Okoshi'
+__date__ = '2025-12-03'
+__email__ = ' ethan <at> nagasaki-u.ac.jp '
+#endregion
 
 
-def log(function):
-    """Handy logging decorator."""
+import numbers
+from typing import Optional
 
-    def inner(*args, **kwargs):
-        """Innter method."""
-        logger.debug(function)
-        function(*args, **kwargs)
+import numpy as np
+import torch
+import torch.nn as nn
+from PIL import Image
+from skimage import color
+from torchvision.transforms.v2 import Transform
+from torchvision.transforms.v2 import functional as F
 
-    return inner
+
+class HEDJitter1:
+    """Randomly perturbe the HED color space value an RGB image.
+    First, it disentangled the hematoxylin and eosin color channels by color deconvolution method using a fixed matrix.
+    Second, it perturbed the hematoxylin, eosin and DAB stains independently.
+    Third, it transformed the resulting stains into regular RGB color space.
+    Args:
+        theta (float): How much to jitter HED color space,
+         alpha is chosen from a uniform distribution [1-theta, 1+theta]
+         betti is chosen from a uniform distribution [-theta, theta]
+         the jitter formula is $s' = \alpha * s + \betti$
+    """
+
+    def __init__(self, theta=0.0):  # HED_light: theta=0.05; HED_strong: theta=0.2
+        assert isinstance(theta, numbers.Number), f"{theta} theta should be a single number."
+        self.theta = theta
+        self.alpha = np.random.uniform(1 - theta, 1 + theta, (1, 3))
+        self.betti = np.random.uniform(-theta, theta, (1, 3))
+
+    @staticmethod
+    def adjust_HED(img, alpha, betti):
+        img = np.array(img)
+
+        s = np.reshape(color.rgb2hed(img), (-1, 3))
+        ns = alpha * s + betti  # perturbations on HED color space
+        nimg = color.hed2rgb(np.reshape(ns, img.shape))
+
+        imin = nimg.min()
+        imax = nimg.max()
+        rsimg = (255 * (nimg - imin) / (imax - imin)).astype(
+            "uint8"
+        )  # rescale to [0,255]
+        # transfer to PIL image
+        return Image.fromarray(rsimg)
+
+    def __call__(self, img):
+        return self.adjust_HED(img, self.alpha, self.betti)
+
+    def __repr__(self):
+        format_string = self.__class__.__name__ + "("
+        format_string += f"theta={self.theta}"
+        format_string += f",alpha={self.alpha}"
+        format_string += f",betti={self.betti}"
+        return format_string
 
 
-class Greeter:
-    """Example function with types documented in the docstring."""
+class HEDJitter(nn.Module):
+    def __init__(
+        self,
+        alpha: float = 0.05,
+        beta: float = 0.05,
+    ):
+        super().__init__()
+        self.alpha: tuple[float, float] = (1 - alpha, 1 + alpha)
+        self.beta: tuple[float, float] = (-beta, beta)
 
-    def __init__(self):
-        self.message = "Hello world!"
+    @staticmethod
+    def _generate_value(left: float, right: float) -> float:
+        return torch.empty(1).uniform_(left, right).item()
 
-    def set_message(self, message: str):
-        """Function description."""
-        self.message = message
+    def forward(self, image: torch.Tensor):
+        # get alpha and beta for H&E channels
+        alpha_H = self._generate_value(self.alpha[0], self.alpha[1])
+        alpha_E = self._generate_value(self.alpha[0], self.alpha[1])
 
-    @log
-    def print_message(self):
-        """Function description."""
-        print(self.message)
+        beta_H = self._generate_value(self.beta[0], self.beta[1])
+        beta_E = self._generate_value(self.beta[0], self.beta[1])
+
+        # convert to float32
+        orig_dtype = image.dtype
+        image = F.convert_image_dtype(image, torch.float32)
+
+        # jitter channels
+        image = color.rgb2hed(image.permute(1, 2, 0).numpy())  # pyright: ignore[reportAssignmentType]
+        image[..., 0] = image[..., 0] * alpha_H + beta_H
+        image[..., 1] = image[..., 1] * alpha_E + beta_E
+
+        # convert back to rgb tensor
+        image = torch.tensor(color.hed2rgb(image)).permute(2, 0, 1)
+        return F.convert_image_dtype(image, orig_dtype)
 
 
 def main(args: argparse.Namespace):

@@ -135,13 +135,17 @@ return {
 			end,
 			sources = {
 				explorer = {
-					exclude = { ".gitattributes", "__**__" },
+					exclude = { ".gitattributes", "__**__", ".ipynb_checkpoints" },
 					follow_file = true,
 					hidden = true,
 					ignored = true,
 					follow = true,
 				},
-				help = {},
+				colorschemes = {
+					layout = {
+						preset = "dropdown",
+					},
+				},
 			},
 			win = {
 				input = {
