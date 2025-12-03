@@ -25,7 +25,7 @@ return {
 	opts = {
 		formatters_by_ft = {
 			lua = { "stylua" },
-			python = { "ruff_format" },
+			python = { "ruff_fix", "ruff_format" },
 			r = { "air" },
 			htmldjango = { "djlint" },
 			yaml = { "prettier" },
@@ -37,6 +37,12 @@ return {
 		},
 		format_on_save = {
 			timeout_ms = 500,
+		},
+		formatters = {
+			ruff_format = {
+				-- this is very specifically for use with jupytext.nvim
+				append_args = { "--extension", "ipynb:python" },
+			},
 		},
 	},
 	init = function()
