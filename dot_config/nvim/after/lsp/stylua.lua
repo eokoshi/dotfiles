@@ -4,6 +4,6 @@ return {
 		"stylua",
 		"--lsp",
 		"--config-path",
-		"$XDG_CONFIG_HOME/nvim/.stylua.toml",
+		vim.fn.stdpath("config") .. "/.stylua.toml",
 	},
 }
