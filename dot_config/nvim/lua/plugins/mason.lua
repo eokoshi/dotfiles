@@ -24,6 +24,7 @@ return {
 				"ruff",
 				"prettier",
 				"fixjson",
+				"pyproject-fmt",
 
 				-- DAP
 				"debugpy",

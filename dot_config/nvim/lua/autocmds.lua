@@ -77,10 +77,13 @@ vim.api.nvim_create_autocmd("BufWritePost", {
 	group = winsync,
 	pattern = "*/.local/share/chezmoi/*",
 	callback = function()
-		local src = vim.fn.stdpath("config") .. "/"
-		local dst = vim.fn.expand("$HOME/windows/AppData/Local/nvim")
-		local cmd = { "rsync", "-au", "--delete", "--exclude", ".git", "--exclude", "lazy-lock.json", src, dst }
+		local wsl = vim.fn.stdpath("config")
+		local win = vim.fn.expand("$HOME/windows/AppData/Local/nvim")
 
+		-- add new spellings from windows before overwriting everything
+		vim.system({ "rsync", "-rt", win .. "/spell/", wsl .. "spell" }, { text = true }, function(_) end)
+
+		local cmd = { "rsync", "-a", "--delete", "--exclude", ".git", "--exclude", "lazy-lock.json", wsl .. "/", win }
 		vim.system(cmd, {
 			text = true,
 		}, function(completed)
@@ -91,9 +94,6 @@ vim.api.nvim_create_autocmd("BufWritePost", {
 				vim.notify("rsync failed (code " .. code .. ")", vim.log.levels.ERROR)
 			end
 		end)
-
-		-- add new spellings from windows
-		vim.system({ "rsync", "-rt", dst .. "/spell/", src .. "spell" }, { text = true }, function(_) end)
 	end,
 	desc = "Push edited config file to Windows via rsync",
 })
