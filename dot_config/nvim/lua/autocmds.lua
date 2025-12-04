@@ -52,26 +52,20 @@ local chezmoi = vim.api.nvim_create_augroup("Chezmoi", { clear = true })
 vim.api.nvim_create_autocmd("BufWritePost", {
 	group = chezmoi,
 	pattern = "*/.local/share/chezmoi/*",
-	callback = function(args)
-		if string.match(args.match, ".*%.local/share/chezmoi/.*") ~= nil then
-			local Job = require("plenary.job")
-			---@diagnostic disable-next-line: missing-fields
-			Job:new({
-				command = "chezmoi",
-				args = { "apply" },
-				cwd = "~",
-				on_stdout = function(_, data, _)
-					if data ~= nil then
-						vim.notify("Apply failed.\nRun chezmoi apply from command line.", vim.log.levels.ERROR)
-					end
-				end,
-				on_stderr = function(_, data, _)
-					if data ~= nil then
-						vim.notify("Apply failed.\nRun chezmoi apply from command line.", vim.log.levels.ERROR)
-					end
-				end,
-			}):start()
-		end
+	callback = function()
+		vim.system({ "chezmoi", "apply" }, {
+			stdout = function(_, data)
+				if data ~= nil then
+					vim.notify("Apply failed.\nRun chezmoi apply from command line.", vim.log.levels.ERROR)
+				end
+			end,
+			stderr = function(_, data)
+				if data ~= nil then
+					vim.notify("Apply failed.\nRun chezmoi apply from command line.", vim.log.levels.ERROR)
+				end
+			end,
+			text = true,
+		}, function(_) end)
 	end,
 	desc = "Apply changes in chezmoi files to local files (chezmoi source dir -> destination)",
 })
@@ -79,74 +73,27 @@ vim.api.nvim_create_autocmd("BufWritePost", {
 -- Syncing Config with Windows
 local winsync = vim.api.nvim_create_augroup("WindowsSync", { clear = true })
 
--- edit config in chezmoi dir, which syncs with local conf, which then updates the nvim conf repo
-vim.api.nvim_create_autocmd("VimLeavePre", {
-	group = chezmoi,
+vim.api.nvim_create_autocmd("BufWritePost", {
+	group = winsync,
 	pattern = "*/.local/share/chezmoi/*",
-	callback = function(args)
-		if string.match(args.match, ".*%.local/share/chezmoi/.*") ~= nil then
-			local syscmd = function(cmd, silent)
-				silent = silent or false
-				vim.system(cmd, {
-					cwd = vim.fn.stdpath("config"),
-					stdout = function(_, data)
-						if data ~= nil and silent ~= false then
-							vim.notify(data, vim.log.levels.INFO)
-						end
-					end,
-					stderr = function(_, data)
-						if data ~= nil then
-							vim.notify(data, vim.log.levels.ERROR)
-						end
-					end,
-					text = true,
-				}):wait()
-			end
-			syscmd({ "git", "add", "*" }, true)
-			syscmd({ "git", "commit", "-m", "autocommit" }, true)
-			local on_exit = function(_) end
-			vim.system({ "git", "push" }, {
-				cwd = vim.fn.stdpath("config"),
-				stdout = function(_, data)
-					if data ~= nil then
-						vim.notify(data, vim.log.levels.INFO)
-					end
-				end,
-				stderr = function(_, data)
-					if data ~= nil then
-						vim.notify(data, vim.log.levels.ERROR)
-					end
-				end,
-				text = true,
-				stdin = true,
-				on_exit,
-			})
-		end
-	end,
-})
+	callback = function()
+		local src = vim.fn.stdpath("config") .. "/"
+		local dst = vim.fn.expand("$HOME/windows/AppData/Local/nvim")
+		local cmd = { "rsync", "-au", "--delete", "--exclude", ".git", "--exclude", "lazy-lock.json", src, dst }
 
--- on windows machine, git pull config at every exit
-if vim.fn.has("win32") == 1 then
-	vim.api.nvim_create_autocmd("VimLeavePre", {
-		group = winsync,
-		pattern = "*",
-		callback = function(args)
-			local on_exit = function(_) end
-			vim.system({ "git", "pull" }, {
-				cwd = vim.fn.stdpath("config"),
-				stdout = function(_, data)
-					if data ~= nil then
-						vim.notify(data, vim.log.levels.INFO)
-					end
-				end,
-				stderr = function(_, data)
-					if data ~= nil then
-						vim.notify(data, vim.log.levels.ERROR)
-					end
-				end,
-				text = true,
-				on_exit,
-			})
-		end,
-	})
-end
+		vim.system(cmd, {
+			text = true,
+		}, function(completed)
+			local code = completed.code
+			if code == 0 then
+				vim.notify("Config synced to Windows", vim.log.levels.INFO)
+			else
+				vim.notify("rsync failed (code " .. code .. ")", vim.log.levels.ERROR)
+			end
+		end)
+
+		-- add new spellings from windows
+		vim.system({ "rsync", "-rt", dst .. "/spell/", src .. "spell" }, { text = true }, function(_) end)
+	end,
+	desc = "Push edited config file to Windows via rsync",
+})
