@@ -75,11 +75,7 @@ return {
 			},
 			sections = {
 				{ section = "header" },
-				{
-					section = "keys",
-					gap = 1,
-					padding = 2,
-				},
+				{ section = "keys", gap = 1, padding = 2 },
 				{
 					section = "recent_files",
 					icon = " ",
@@ -88,9 +84,7 @@ return {
 					padding = 2,
 					limit = 10,
 				},
-				{
-					section = "startup",
-				},
+				{ section = "startup" },
 			},
 		},
 		image = { enabled = true, math = { enabled = false } },
@@ -213,7 +207,7 @@ return {
 		},
 		notifier = { enabled = true },
 		quickfile = { enabled = true },
-		scope = { enabled = true },
+		scope = { enabled = false },
 		scratch = {
 			win = {
 				wo = {
@@ -226,7 +220,7 @@ return {
 				relative = "editor",
 			},
 		},
-		statuscolumn = { enabled = false },
+		statuscolumn = { enabled = true },
 	},
 	init = function()
 		local Snacks = require("snacks")
@@ -248,21 +242,71 @@ return {
 			end,
 		})
 
-		map("n", "<Leader>c", function()
-			Snacks.bufdelete()
-		end, { desc = "Close buffer" })
-		map("n", "<Leader>H", function()
-			Snacks.dashboard()
-		end, { desc = "Home" })
-		map("n", "<Leader>R", function()
-			Snacks.rename.rename_file()
-		end, { desc = "Rename file" })
-		map("n", "<Leader>:", function()
-			Snacks.picker.command_history()
-		end, { desc = "Command history" })
-		map({ "n", "t", "i" }, "<F7>", function()
-			Snacks.terminal.toggle()
-		end, { desc = "toggle terminal" })
+		-- stylua: ignore start
+		map("n", "<Leader>c", function() Snacks.bufdelete() end, { desc = "Close buffer" })
+		map("n", "<Leader>H", function() Snacks.dashboard() end, { desc = "Home" })
+		map("n", "<Leader>R", function() Snacks.rename.rename_file() end, { desc = "Rename file" })
+		map("n", "<Leader>:", function() Snacks.picker.command_history() end, { desc = "Command history" })
+		map({ "n", "t", "i" }, "<F7>", function() Snacks.terminal.toggle() end, { desc = "toggle terminal" })
+		map("n", "<Leader>fz", function() Snacks.picker.files({ cwd = vim.fn.stdpath("config") }) end, { desc = "local config" })
+		map("n", "<Leader>fb", function() Snacks.picker.buffers() end, { desc = "buffers" })
+		map("n", "<Leader>fC", function() Snacks.picker.commands() end, { desc = "Commands" })
+		map("n", "<Leader>fd", function() Snacks.picker.diagnostics() end, { desc = "diagnostics" })
+		map("n", "<Leader>fD", function() Snacks.picker.diagnostics_buffer() end, { desc = "buffer Diagnostics" })
+		map("n", "<Leader>fH", function() Snacks.picker.highlights() end, { desc = "Highlights" })
+		map("n", "<Leader>ff", function() Snacks.picker.files() end, { desc = "files" })
+		map("n", "<Leader>fF", function() Snacks.picker.files({ hidden = true, ignored = true, cmd = "fd" }) end, { desc = "all files" })
+		map("n", "<Leader>fk", function() Snacks.picker.keymaps() end, { desc = "keymaps" })
+		map("n", "<Leader>fj", function() Snacks.picker.jumps() end, { desc = "jumps" })
+		map("n", "<Leader>fl", function() Snacks.picker.loclist() end, { desc = "location list" })
+		map("n", "<Leader>fm", function() Snacks.picker.marks() end, { desc = "marks" })
+		map("n", "<Leader>fM", function() Snacks.picker.man() end, { desc = "Man pages" })
+		map("n", "<Leader>fp", function() Snacks.picker.projects() end, { desc = "projects" })
+		map("n", "<Leader>fq", function() Snacks.picker.qflist() end, { desc = "quickfix list" })
+		map("n", "<Leader>fr", function() Snacks.picker.recent() end, { desc = "recent" })
+		map("n", "<Leader>fs", function() Snacks.scratch.select() end, { desc = "find scratch buffers" })
+		map("n", "<Leader>fu", function() Snacks.picker.undo() end, { desc = "undo" })
+		map("n", "<Leader>fw", function() Snacks.picker.grep({ cmd = "rg" }) end, { desc = "word" })
+		map("n", "<Leader>fW", function() Snacks.picker.grep({ cmd = "rg", hidden = true, ignored = true }) end, { desc = "Word in all files" })
+		map("n", "<Leader>f<space>", function() Snacks.picker.resume() end, { desc = "Resume last search" })
+		map({ "n", "x" }, "<Leader>f*", function() Snacks.picker.grep_word() end, { desc = "grep current selection" })
+		map("n", "<Leader>bc", function() Snacks.bufdelete.other() end, { desc = "Close all other bufs" })
+		map("n", "<Leader>bs", function() Snacks.scratch() end, { desc = "scratch buffer" })
+		map("n", "<Leader>uc", function() Snacks.picker.colorschemes() end, { desc = "search colorschemes" })
+		map("n", "<Leader>uz", function() Snacks.zen.zoom() end, { desc = "zoom pane" })
+		map("n", "<Leader>uZ", function() Snacks.zen() end, { desc = "Zen mode" })
+		map("n", "<Leader>un", function() Snacks.notifier.hide() end, { desc = "dismiss all notifications" })
+		map("n", "<Leader>gb", function() Snacks.picker.git_branches() end, { desc = "Branches" })
+		map("n", "<Leader>gl", function() Snacks.picker.git_log_file() end, { desc = "Log file" })
+		map("n", "<Leader>gg", function() Snacks.lazygit() end, { desc = "Lazygit" })
+		map("n", "<Leader>lR", function() Snacks.picker.lsp_references() end, { nowait = true, desc = "references" })
+		map("n", "<Leader>ls", function() Snacks.picker.lsp_symbols() end, { desc = "LSP symbols" })
+		map("n", "<Leader>lS", function() Snacks.picker.lsp_workspace_symbols() end, { desc = "LSP workspace Symbols" })
+		map("n", "gd", function() Snacks.picker.lsp_definitions() end, { desc = "Goto definition" })
+		map("n", "gD", function() Snacks.picker.lsp_declarations() end, { desc = "Goto Declaration" })
+		map("n", "gI", function() Snacks.picker.lsp_implementations() end, { desc = "Go to Implementation" })
+		map("n", "gp", function() Snacks.picker.lsp_type_definitions() end, { desc = "Go to ty[p]e definition" })
+
+		local toggles = require("stuff.toggles")
+		toggles.autosave():map("<Leader>ba")
+		toggles.virtual_text():map("<Leader>uv")
+		toggles.virtual_lines():map("<Leader>uV")
+		toggles.math_virt():map("<Leader>um")
+		Snacks.toggle.option("spell", { name = "spellcheck" }):map("<leader>us")
+		Snacks.toggle.option("wrap", { name = "wrap" }):map("<leader>uw")
+		Snacks.toggle.option("relativenumber", { name = "relative number" }):map("<leader>uL")
+		Snacks.toggle.option("hlsearch", { name = "hlsearch" }):map("<Leader>uh")
+		Snacks.toggle.option("conceallevel", { off = 0, on = vim.o.conceallevel > 0 and vim.o.conceallevel or 2 }):map("<leader>uC")
+		Snacks.toggle.option("background", { off = "light", on = "dark", name = "dark background" }):map("<leader>ub")
+		Snacks.toggle.diagnostics():map("<leader>ud")
+		Snacks.toggle.line_number():map("<leader>ul")
+		Snacks.toggle.treesitter():map("<leader>uT")
+		Snacks.toggle.inlay_hints():map("<leader>uI")
+		Snacks.toggle.indent():map("<leader>ug")
+		Snacks.toggle.dim():map("<leader>uD")
+
+		-- stylua: ignore end
+
 		map("n", "<Leader>fa", function()
 			if vim.fn.has("win32") == 1 then
 				vim.notify("Do not mess with config from Windows, edit in chezmoi dir on linux", vim.log.levels.ERROR)
@@ -277,69 +321,7 @@ return {
 				})
 			end
 		end, { desc = "config" })
-		map("n", "<Leader>fz", function()
-			Snacks.picker.files({ cwd = vim.fn.stdpath("config") })
-		end, { desc = "local config" })
-		map("n", "<Leader>fb", function()
-			Snacks.picker.buffers()
-		end, { desc = "buffers" })
-		map("n", "<Leader>fC", function()
-			Snacks.picker.commands()
-		end, { desc = "Commands" })
-		map("n", "<Leader>fd", function()
-			Snacks.picker.diagnostics()
-		end, { desc = "diagnostics" })
-		map("n", "<Leader>fD", function()
-			Snacks.picker.diagnostics_buffer()
-		end, { desc = "buffer Diagnostics" })
-		map("n", "<Leader>fH", function()
-			Snacks.picker.highlights()
-		end, { desc = "Highlights" })
-		map("n", "<Leader>ff", function()
-			Snacks.picker.files()
-		end, { desc = "files" })
-		map("n", "<Leader>fF", function()
-			Snacks.picker.files({ hidden = true, ignored = true, cmd = "fd" })
-		end, { desc = "all files" })
-		map("n", "<Leader>fk", function()
-			Snacks.picker.keymaps()
-		end, { desc = "keymaps" })
-		map("n", "<Leader>fj", function()
-			Snacks.picker.jumps()
-		end, { desc = "jumps" })
-		map("n", "<Leader>fl", function()
-			Snacks.picker.loclist()
-		end, { desc = "location list" })
-		map("n", "<Leader>fm", function()
-			Snacks.picker.marks()
-		end, { desc = "marks" })
-		map("n", "<Leader>fM", function()
-			Snacks.picker.man()
-		end, { desc = "Man pages" })
-		map("n", "<Leader>fp", function()
-			Snacks.picker.projects()
-		end, { desc = "projects" })
-		map("n", "<Leader>fq", function()
-			Snacks.picker.qflist()
-		end, { desc = "quickfix list" })
-		map("n", "<Leader>fr", function()
-			Snacks.picker.recent()
-		end, { desc = "recent" })
-		map("n", "<Leader>fs", function()
-			Snacks.scratch.select()
-		end, { desc = "find scratch buffers" })
-		map("n", "<Leader>fu", function()
-			Snacks.picker.undo()
-		end, { desc = "undo" })
-		map("n", "<Leader>fw", function()
-			Snacks.picker.grep({ cmd = "rg" })
-		end, { desc = "word" })
-		map("n", "<Leader>fW", function()
-			Snacks.picker.grep({ cmd = "rg", hidden = true, ignored = true })
-		end, { desc = "Word in all files" })
-		map("n", "<Leader>f<space>", function()
-			Snacks.picker.resume()
-		end, { desc = "Resume last search" })
+
 		map("n", "<Leader>fh", function()
 			local cols = vim.o.columns
 			local lines = vim.o.lines
@@ -349,71 +331,7 @@ return {
 				return Snacks.picker.help()
 			end
 		end, { desc = "help pages" })
-		map({ "n", "x" }, "<Leader>f*", function()
-			Snacks.picker.grep_word()
-		end, { desc = "grep current selection" })
-		map("n", "<Leader>bc", function()
-			Snacks.bufdelete.other()
-		end, { desc = "Close all other bufs" })
-		map("n", "<Leader>bs", function()
-			Snacks.scratch()
-		end, { desc = "scratch buffer" })
-		map("n", "<Leader>uc", function()
-			Snacks.picker.colorschemes()
-		end, { desc = "search colorschemes" })
-		map("n", "<Leader>uz", function()
-			Snacks.zen.zoom()
-		end, { desc = "zoom pane" })
-		map("n", "<Leader>uZ", function()
-			Snacks.zen()
-		end, { desc = "Zen mode" })
-		map("n", "<Leader>un", function()
-			Snacks.notifier.hide()
-		end, { desc = "dismiss all notifications" })
-		Snacks.toggle.option("spell", { name = "spellcheck" }):map("<leader>us")
-		Snacks.toggle.option("wrap", { name = "wrap" }):map("<leader>uw")
-		Snacks.toggle.option("relativenumber", { name = "relative number" }):map("<leader>uL")
-		Snacks.toggle.option("hlsearch", { name = "hlsearch" }):map("<Leader>uh")
-		Snacks.toggle
-			.option("conceallevel", { off = 0, on = vim.o.conceallevel > 0 and vim.o.conceallevel or 2 })
-			:map("<leader>uC")
-		Snacks.toggle.option("background", { off = "light", on = "dark", name = "dark background" }):map("<leader>ub")
-		Snacks.toggle.diagnostics():map("<leader>ud")
-		Snacks.toggle.line_number():map("<leader>ul")
-		Snacks.toggle.treesitter():map("<leader>uT")
-		Snacks.toggle.inlay_hints():map("<leader>uI")
-		Snacks.toggle.indent():map("<leader>ug")
-		Snacks.toggle.dim():map("<leader>uD")
-		map("n", "<Leader>gb", function()
-			Snacks.picker.git_branches()
-		end, { desc = "Branches" })
-		map("n", "<Leader>gl", function()
-			Snacks.picker.git_log_file()
-		end, { desc = "Log file" })
-		map("n", "<Leader>gg", function()
-			Snacks.lazygit()
-		end, { desc = "Lazygit" })
-		map("n", "<Leader>lR", function()
-			Snacks.picker.lsp_references()
-		end, { nowait = true, desc = "references" })
-		map("n", "<Leader>ls", function()
-			Snacks.picker.lsp_symbols()
-		end, { desc = "LSP symbols" })
-		map("n", "<Leader>lS", function()
-			Snacks.picker.lsp_workspace_symbols()
-		end, { desc = "LSP workspace Symbols" })
-		map("n", "gd", function()
-			Snacks.picker.lsp_definitions()
-		end, { desc = "Goto definition" })
-		map("n", "gD", function()
-			Snacks.picker.lsp_declarations()
-		end, { desc = "Goto Declaration" })
-		map("n", "gI", function()
-			Snacks.picker.lsp_implementations()
-		end, { desc = "Go to Implementation" })
-		map("n", "gp", function()
-			Snacks.picker.lsp_type_definitions()
-		end, { desc = "Go to ty[p]e definition" })
+
 		map("n", "<Leader>xN", function()
 			Snacks.win({
 				file = vim.api.nvim_get_runtime_file("doc/news.txt", false)[1],
@@ -428,11 +346,7 @@ return {
 				},
 			})
 		end, { desc = "Neovim News" })
-		local toggles = require("stuff.toggles")
-		toggles.autosave():map("<Leader>ba")
-		toggles.virtual_text():map("<Leader>uv")
-		toggles.virtual_lines():map("<Leader>uV")
-		toggles.math_virt():map("<Leader>um")
+
 		map("n", "<Leader>ui", function()
 			---@diagnostic disable-next-line: missing-parameter
 			local snacks_data = require("snacks.picker.source.icons").icons({})
@@ -467,6 +381,7 @@ return {
 				format = "icon",
 			})
 		end, { desc = "icons" })
+
 		map("n", "<Leader>N", function()
 			require("snacks").picker.notifications({
 				confirm = { "yank", "close" },

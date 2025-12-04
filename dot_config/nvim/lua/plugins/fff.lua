@@ -22,7 +22,7 @@ return {
 			title = "FloatTitle",
 		},
 		debug = {
-			enabled = true, -- we expect your collaboration at least during the beta
+			enabled = false,
 			show_scores = true,
 		},
 	},

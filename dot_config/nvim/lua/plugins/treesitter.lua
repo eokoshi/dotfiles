@@ -81,6 +81,7 @@ return {
 					["@loop.inner"] = "V",
 					["@parameter.outer"] = "v",
 					["@parameter.inner"] = "v",
+					["@import.outer"] = "V",
 				},
 			},
 			move = {
@@ -89,6 +90,7 @@ return {
 		},
 		init = function()
 			local map = require("stuff.functions").map
+			-- stylua: ignore start
 
 			-- Select
 			local select = require("nvim-treesitter-textobjects.select").select_textobject
@@ -104,6 +106,8 @@ return {
 			map({ "x", "o" }, "il", function() select("@loop.inner", "textobjects") end, { desc = "inside loop" })
 			map({ "x", "o" }, "aa", function() select("@parameter.outer", "textobjects") end, { desc = "around argument" })
 			map({ "x", "o" }, "ia", function() select("@parameter.inner", "textobjects") end, { desc = "inside argument" })
+			map({ "x", "o" }, "i=", function() select("@assignment.rhs", "textobjects") end, { desc = "assignment rhs" })
+			map({ "x", "o" }, "a=", function() select("@assignment.outer", "textobjects") end, { desc = "around assignment" })
 
 			-- Swap
 			local swap = require("nvim-treesitter-textobjects.swap")
@@ -116,14 +120,14 @@ return {
 
 			-- Move
 			local move = require("nvim-treesitter-textobjects.move")
-			map({ "x", "o", "n" }, "]k", function() move.goto_next("@block.outer", "textobjects") end, { desc = "Next block " })
-			map({ "x", "o", "n" }, "]f", function() move.goto_next("@function.outer", "textobjects") end, { desc = "Next function " })
-			map({ "x", "o", "n" }, "]a", function() move.goto_next_start("@parameter.inner", "textobjects") end, { desc = "Next argument " })
-			map({ "x", "o", "n" }, "]i", function() move.goto_next("@import.outer", "textobjects") end, { desc = "Next import " })
-			map({ "x", "o", "n" }, "[k", function() move.goto_previous("@block.outer", "textobjects") end, { desc = "Previous block " })
-			map({ "x", "o", "n" }, "[f", function() move.goto_previous("@function.outer", "textobjects") end, { desc = "Previous function " })
-			map({ "x", "o", "n" }, "[a", function() move.goto_previous("@parameter.inner", "textobjects") end, { desc = "Previous argument " })
-			map({ "x", "o", "n" }, "[i", function() move.goto_previous("@import.outer", "textobjects") end, { desc = "Previous import " })
+			map({ "x", "o", "n" }, "]k", function() move.goto_next("@block.outer", "textobjects") end, { desc = "Next block" })
+			map({ "x", "o", "n" }, "]f", function() move.goto_next("@function.outer", "textobjects") end, { desc = "Next function" })
+			map({ "x", "o", "n" }, "]a", function() move.goto_next_start("@parameter.inner", "textobjects") end, { desc = "Next argument" })
+			map({ "x", "o", "n" }, "]i", function() move.goto_next_start("@import.outer", "textobjects") end, { desc = "Next import" })
+			map({ "x", "o", "n" }, "[k", function() move.goto_previous("@block.outer", "textobjects") end, { desc = "Previous block" })
+			map({ "x", "o", "n" }, "[f", function() move.goto_previous("@function.outer", "textobjects") end, { desc = "Previous function" })
+			map({ "x", "o", "n" }, "[a", function() move.goto_previous("@parameter.inner", "textobjects") end, { desc = "Previous argument" })
+			map({ "x", "o", "n" }, "[i", function() move.goto_previous("@import.outer", "textobjects") end, { desc = "Previous import" })
 
 			local ts_repeat_move = require("nvim-treesitter-textobjects.repeatable_move")
 			map({ "n", "x", "o" }, ";", ts_repeat_move.repeat_last_move, { desc = "repeat last move" })
@@ -132,6 +136,8 @@ return {
 			map({ "n", "x", "o" }, "F", ts_repeat_move.builtin_F_expr, { expr = true })
 			map({ "n", "x", "o" }, "t", ts_repeat_move.builtin_t_expr, { expr = true })
 			map({ "n", "x", "o" }, "T", ts_repeat_move.builtin_T_expr, { expr = true })
+
+			-- stylua: ignore end
 		end,
 	},
 	{
