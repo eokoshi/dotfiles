@@ -1,47 +1,18 @@
 return {
 	{
 		"nvim-treesitter/nvim-treesitter",
-		branch = "master",
-		main = "nvim-treesitter.configs",
-		dependencies = {
-			{ "nvim-treesitter/nvim-treesitter-textobjects", lazy = true },
-			{
-				"nvim-treesitter/nvim-treesitter-context",
-				lazy = true,
-				opts = {
-					multiwindow = true,
-					multiline_threshold = 2,
-				},
-			},
-			"mason-org/mason.nvim",
-		},
 		lazy = false,
-		cmd = {
-			"TSBufDisable",
-			"TSBufEnable",
-			"TSBufToggle",
-			"TSDisable",
-			"TSEnable",
-			"TSToggle",
-			"TSInstall",
-			"TSInstallInfo",
-			"TSInstallSync",
-			"TSModuleInfo",
-			"TSUninstall",
-			"TSUpdate",
-			"TSUpdateSync",
-		},
+		branch = "main",
 		build = ":TSUpdate",
-		-- load treesitter immediately when opening a file from the cmdline
-		init = function(plugin)
-			-- PERF: add nvim-treesitter queries to the rtp and it's custom query predicates early
-			-- This is needed because a bunch of plugins no longer `require("nvim-treesitter")`, which
-			-- no longer trigger the **nvim-treesitter** module to be loaded in time.
-			-- Luckily, the only things that those plugins need are the custom queries, which we make available
-			-- during startup.
-			require("lazy.core.loader").add_to_rtp(plugin)
-			require("nvim-treesitter.query_predicates")
-		end,
+		dependencies = {
+			"mason-org/mason.nvim",
+			"nvim-treesitter/nvim-treesitter-textobjects",
+			"nvim-treesitter/nvim-treesitter-context",
+		},
+	},
+	{
+		"MeanderingProgrammer/treesitter-modules.nvim",
+		dependencies = { "nvim-treesitter/nvim-treesitter" },
 		opts = {
 			ensure_installed = {
 				"bash",
@@ -77,68 +48,100 @@ return {
 				"yaml",
 			},
 			auto_install = vim.fn.executable("tree-sitter") == 1, -- only enable auto install if `tree-sitter` cli is installed
+			fold = { enable = true },
 			highlight = { enable = true },
-			incremental_selection = { enable = true },
-			indent = { enable = true },
-			textobjects = {
-				select = {
-					enable = true,
-					lookahead = true,
-					keymaps = {
-						["ak"] = { query = "@block.outer", desc = "around block" },
-						["ik"] = { query = "@block.inner", desc = "inside block" },
-						["ac"] = { query = "@class.outer", desc = "around class" },
-						["ic"] = { query = "@class.inner", desc = "inside class" },
-						["a?"] = { query = "@conditional.outer", desc = "around conditional" },
-						["i?"] = { query = "@conditional.inner", desc = "inside conditional" },
-						["af"] = { query = "@function.outer", desc = "around function " },
-						["if"] = { query = "@function.inner", desc = "inside function " },
-						["al"] = { query = "@loop.outer", desc = "around loop" },
-						["il"] = { query = "@loop.inner", desc = "inside loop" },
-						["aa"] = { query = "@parameter.outer", desc = "around argument" },
-						["ia"] = { query = "@parameter.inner", desc = "inside argument" },
-					},
-				},
-				move = {
-					enable = true,
-					set_jumps = true,
-					goto_next_start = {
-						["]k"] = { query = "@block.outer", desc = "Next block start" },
-						["]f"] = { query = "@function.outer", desc = "Next function start" },
-						["]a"] = { query = "@parameter.inner", desc = "Next argument start" },
-						["]i"] = { query = "@import.outer", desc = "Next import start" },
-					},
-					goto_next_end = {
-						["]K"] = { query = "@block.outer", desc = "Next block end" },
-						["]F"] = { query = "@function.outer", desc = "Next function end" },
-						["]A"] = { query = "@parameter.inner", desc = "Next argument end" },
-					},
-					goto_previous_start = {
-						["[k"] = { query = "@block.outer", desc = "Previous block start" },
-						["[f"] = { query = "@function.outer", desc = "Previous function start" },
-						["[a"] = { query = "@parameter.inner", desc = "Previous argument start" },
-						["[i"] = { query = "@import.outer", desc = "Previous import start" },
-					},
-					goto_previous_end = {
-						["[K"] = { query = "@block.outer", desc = "Previous block end" },
-						["[F"] = { query = "@function.outer", desc = "Previous function end" },
-						["[A"] = { query = "@parameter.inner", desc = "Previous argument end" },
-					},
-				},
-				swap = {
-					enable = true,
-					swap_next = {
-						[">k"] = { query = "@block.outer", desc = "Swap next block" },
-						[">f"] = { query = "@function.outer", desc = "Swap next function" },
-						[">a"] = { query = "@parameter.inner", desc = "Swap next argument" },
-					},
-					swap_previous = {
-						["<k"] = { query = "@block.outer", desc = "Swap previous block" },
-						["<f"] = { query = "@function.outer", desc = "Swap previous function" },
-						["<a"] = { query = "@parameter.inner", desc = "Swap previous argument" },
-					},
+			incremental_selection = {
+				enable = true,
+				keymaps = {
+					init_selection = "gnn",
+					node_incremental = "gnn",
+					scope_incremental = "gns",
+					node_decremental = "gnm",
 				},
 			},
+			indent = { enable = true },
+		},
+	},
+	{
+		"nvim-treesitter/nvim-treesitter-textobjects",
+		branch = "main",
+		opts = {
+			select = {
+				lookahead = true,
+				selection_modes = {
+					["@block.outer"] = "V",
+					["@block.inner"] = "V",
+					["@class.outer"] = "V",
+					["@class.inner"] = "V",
+					["@conditional.outer"] = "V",
+					["@conditional.inner"] = "v",
+					["@function.outer"] = "V",
+					["@function.inner"] = "V",
+					["@loop.outer"] = "V",
+					["@loop.inner"] = "V",
+					["@parameter.outer"] = "v",
+					["@parameter.inner"] = "v",
+				},
+			},
+			move = {
+				set_jumps = true,
+			},
+		},
+		init = function()
+			local map = require("stuff.functions").map
+
+			-- Select
+			local select = require("nvim-treesitter-textobjects.select").select_textobject
+			map({ "x", "o" }, "ak", function() select("@block.outer", "textobjects") end, { desc = "around block" })
+			map({ "x", "o" }, "ik", function() select("@block.inner", "textobjects") end, { desc = "inside block" })
+			map({ "x", "o" }, "ac", function() select("@class.outer", "textobjects") end, { desc = "around class" })
+			map({ "x", "o" }, "ic", function() select("@class.inner", "textobjects") end, { desc = "inside class" })
+			map({ "x", "o" }, "a?", function() select("@conditional.outer", "textobjects") end, { desc = "around conditional" })
+			map({ "x", "o" }, "i?", function() select("@conditional.inner", "textobjects") end, { desc = "inside conditional" })
+			map({ "x", "o" }, "af", function() select("@function.outer", "textobjects") end, { desc = "around function " })
+			map({ "x", "o" }, "if", function() select("@function.inner", "textobjects") end, { desc = "inside function " })
+			map({ "x", "o" }, "al", function() select("@loop.outer", "textobjects") end, { desc = "around loop" })
+			map({ "x", "o" }, "il", function() select("@loop.inner", "textobjects") end, { desc = "inside loop" })
+			map({ "x", "o" }, "aa", function() select("@parameter.outer", "textobjects") end, { desc = "around argument" })
+			map({ "x", "o" }, "ia", function() select("@parameter.inner", "textobjects") end, { desc = "inside argument" })
+
+			-- Swap
+			local swap = require("nvim-treesitter-textobjects.swap")
+			map({ "n" }, ">k", function() swap.swap_next("@block.outer", "textobjects") end, { desc = "Swap next block" })
+			map({ "n" }, ">f", function() swap.swap_next("@function.outer", "textobjects") end, { desc = "Swap next function" })
+			map({ "n" }, ">a", function() swap.swap_next("@parameter.inner", "textobjects") end, { desc = "Swap next argument" })
+			map({ "n" }, "<k", function() swap.swap_previous("@block.outer", "textobjects") end, { desc = "Swap previous block" })
+			map({ "n" }, "<f", function() swap.swap_previous("@function.outer", "textobjects") end, { desc = "Swap previous function" })
+			map({ "n" }, "<a", function() swap.swap_previous("@parameter.inner", "textobjects") end, { desc = "Swap previous argument" })
+
+			-- Move
+			local move = require("nvim-treesitter-textobjects.move")
+			map({ "x", "o", "n" }, "]k", function() move.goto_next("@block.outer", "textobjects") end, { desc = "Next block " })
+			map({ "x", "o", "n" }, "]f", function() move.goto_next("@function.outer", "textobjects") end, { desc = "Next function " })
+			map({ "x", "o", "n" }, "]a", function() move.goto_next_start("@parameter.inner", "textobjects") end, { desc = "Next argument " })
+			map({ "x", "o", "n" }, "]i", function() move.goto_next("@import.outer", "textobjects") end, { desc = "Next import " })
+			map({ "x", "o", "n" }, "[k", function() move.goto_previous("@block.outer", "textobjects") end, { desc = "Previous block " })
+			map({ "x", "o", "n" }, "[f", function() move.goto_previous("@function.outer", "textobjects") end, { desc = "Previous function " })
+			map({ "x", "o", "n" }, "[a", function() move.goto_previous("@parameter.inner", "textobjects") end, { desc = "Previous argument " })
+			map({ "x", "o", "n" }, "[i", function() move.goto_previous("@import.outer", "textobjects") end, { desc = "Previous import " })
+
+			local ts_repeat_move = require("nvim-treesitter-textobjects.repeatable_move")
+			map({ "n", "x", "o" }, ";", ts_repeat_move.repeat_last_move, { desc = "repeat last move" })
+			map({ "n", "x", "o" }, ",", ts_repeat_move.repeat_last_move_opposite, { desc = "undo last move" })
+			map({ "n", "x", "o" }, "f", ts_repeat_move.builtin_f_expr, { expr = true })
+			map({ "n", "x", "o" }, "F", ts_repeat_move.builtin_F_expr, { expr = true })
+			map({ "n", "x", "o" }, "t", ts_repeat_move.builtin_t_expr, { expr = true })
+			map({ "n", "x", "o" }, "T", ts_repeat_move.builtin_T_expr, { expr = true })
+		end,
+	},
+	{
+		"nvim-treesitter/nvim-treesitter-context",
+		lazy = true,
+		opts = {
+			multiwindow = true,
+			max_lines = 3,
+			multiline_threshold = 1,
+			mode = "topline",
 		},
 	},
 }

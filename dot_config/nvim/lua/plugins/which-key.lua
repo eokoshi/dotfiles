@@ -20,6 +20,8 @@ return {
 			{ "<Leader>p", mode = "n", group = "Packages" },
 			{ "<Leader>x", mode = "n", group = "Extras" },
 			{ "<Leader>m", mode = "n", group = "Markdown" },
+			{ ">>", mode = "n", desc = "indent line" },
+			{ "<<", mode = "n", desc = "unindent line" },
 		},
 		icons = {
 			separator = "",
