@@ -55,14 +55,14 @@ then
 	sudo rm -rf /opt/nvim
 	sudo mkdir /opt/nvim
 {{- if eq .chezmoi.arch "amd64"}}
-	curl -LO https://github.com/neovim/neovim/releases/latest/download/nvim-linux-x86_64.tar.gz
-	sudo tar -C /opt/nvim -xzf nvim-linux-x86_64.tar.gz --strip-components=1
-	rm -f nvim-linux-x86_64.tar.gz
+	NVIM_SYS="nvim-linux-x86_64"
 {{- else if eq .chezmoi.arch "arm64"}}
-	curl -LO https://github.com/neovim/neovim/releases/latest/download/nvim-linux-arm64.tar.gz
-	sudo tar -C /opt/nvim -xzf nvim-linux-arm64.tar.gz --strip-components=1
-	rm -f nvim-linux-arm64.tar.gz
+	NVIM_SYS="nvim-linux-arm64"
 {{- end}}
+	curl -LO "https://github.com/neovim/neovim/releases/latest/download/${NVIM_SYS}.tar.gz"
+	sudo tar -C /opt/nvim -xzf "${NVIM_SYS}.tar.gz" --strip-components=1
+	rm -f "${NVIM_SYS}.tar.gz"
+	ln -s /opt/nvim/bin/nvim ~/.local/bin/nvim
 fi
 
 echo
@@ -73,17 +73,13 @@ then
 	sudo mkdir /opt/yazi
 {{- if eq .chezmoi.arch "amd64"}}
 	YAZI_SYS = "yazi-x86_64-unknown-linux-gnu"
+{{- else if eq .chezmoi.arch "arm64"}}
+	YAZI_SYS = "yazi-aarch64-unknown-linux-gnu"
+{{- end}}
 	curl -LO "https://github.com/sxyazi/yazi/releases/latest/download/${YAZI_SYS}.zip"
 	sudo unzip "${YAZI_SYS}.zip" -d /opt/yazi/
 	rm -f "${YAZI_SYS}.zip"
-{{- else if eq .chezmoi.arch "arm64"}}
-	curl -LO https://github.com/sxyazi/yazi/releases/latest/download/yazi-aarch64-unknown-linux-gnu.zip
-	unzip yazi-aarch64-unknown-linux-gnu.zip
-	sudo mv yazi-aarch64-unknown-linux-gnu/* /opt/yazi/
-	rm -f yazi-aarch64-unknown-linux-gnu.zip
-	rm -rf yazi-aarch64-unknown-linux-gnu
-	sudo ln -s /opt/yazi/yazi ~/.local/bin/yazi
-{{- end}}
+	ln -s /opt/yazi/yazi ~/.local/bin/yazi
 fi
 
 
