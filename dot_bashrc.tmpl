@@ -123,9 +123,10 @@ function y() {
 	rm -f -- "$tmp"
 }
 
+tailscale status
 export TS_IP="$(tailscale ip -4)"
 export EDITOR="nvim"
-export PATH="$HOME/.local/bin:$HOME/.cargo/bin:$PATH"
+export PATH="$HOME/.local/bin:$HOME/.cargo/bin:$HOME/.local/share/nvim/mason/bin:$PATH"
 {{- if eq .chezmoi.osRelease.id "ubuntu" }}
 export IP="$(hostname -I | awk '{print $1}')"
 {{- else if eq .chezmoi.osRelease.id "arch" }}
