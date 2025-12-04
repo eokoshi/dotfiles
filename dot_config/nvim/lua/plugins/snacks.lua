@@ -25,9 +25,7 @@ return {
 						icon = "󰙅 ",
 						key = "e",
 						desc = "File Explorer",
-						action = function()
-							require("neo-tree.command").execute({ position = "float" })
-						end,
+						action = ":Yazi cwd",
 					},
 					{ icon = " ", key = "f", desc = "Find File", action = ":lua Snacks.dashboard.pick('files')" },
 					{
@@ -44,10 +42,7 @@ return {
 						action = function()
 							local dir
 							if vim.fn.has("win32") == 1 then
-								vim.notify(
-									"Do not mess with config from Windows, edit in chezmoi dir on linux",
-									vim.log.levels.ERROR
-								)
+								vim.notify("Do not mess with config from Windows, edit in chezmoi dir on linux", vim.log.levels.ERROR)
 							else
 								dir = os.getenv("HOME") .. "/.local/share/chezmoi"
 								vim.cmd("cd " .. dir)
@@ -376,9 +371,7 @@ return {
 		Snacks.toggle.option("wrap", { name = "wrap" }):map("<leader>uw")
 		Snacks.toggle.option("relativenumber", { name = "relative number" }):map("<leader>uL")
 		Snacks.toggle.option("hlsearch", { name = "hlsearch" }):map("<Leader>uh")
-		Snacks.toggle
-			.option("conceallevel", { off = 0, on = vim.o.conceallevel > 0 and vim.o.conceallevel or 2 })
-			:map("<leader>uC")
+		Snacks.toggle.option("conceallevel", { off = 0, on = vim.o.conceallevel > 0 and vim.o.conceallevel or 2 }):map("<leader>uC")
 		Snacks.toggle.option("background", { off = "light", on = "dark", name = "dark background" }):map("<leader>ub")
 		Snacks.toggle.diagnostics():map("<leader>ud")
 		Snacks.toggle.line_number():map("<leader>ul")

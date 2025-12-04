@@ -39,6 +39,7 @@ map("n", "<BS>", "<C-^>", { desc = "Switch to prev file" })
 
 -- Buffers
 map("n", "<Leader>bA", "<CMD>%y+<CR><CR>", { desc = "Copy whole buffer to clipboard" })
+map("n", "<Leader>bd", "<CMD>bd<CR>", { desc = "Close buffer and window (:bd)" })
 map("n", "<Leader>bD", function() functions.DOS_to_Unix() end, { desc = "DOS to Unix" })
 map("n", "<Leader>bf", function() vim.lsp.buf.format() end, { desc = "format buffer" })
 
