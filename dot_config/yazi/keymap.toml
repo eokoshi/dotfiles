@@ -18,7 +18,17 @@ on = [ "g", "u" ]
 run = "plugin duckdb -ui"
 desc = "open with duckdb ui"
 
-[[mgs.prepend_keymap]]
+[[mgr.prepend_keymap]]
 on = "q"
-run = "quit"
+run = "quit --no-cwd-file"
 desc = "quit"
+
+[[mgr.prepend_keymap]]
+on = "Q"
+run = "quit"
+desc = "quit and cd"
+
+[[mgr.prepend_keymap]]
+on = "?"
+run = "help"
+desc = "help"

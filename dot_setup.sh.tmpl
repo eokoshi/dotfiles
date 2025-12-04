@@ -39,6 +39,14 @@ then
 	uv python install
 fi
 
+echo
+read -p "Install ipynb tools? [y/n]" -n 1 -r
+if [[ $REPLY =~ ^[Yy]$ ]]
+then
+	curl -LsSf https://astral.sh/uv/install.sh | sh
+	uv python install
+fi
+
 
 echo
 read -p "Install zoxide? [y/n]" -n 1 -r
