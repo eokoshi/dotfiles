@@ -113,10 +113,6 @@ export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 
-
-export TS_IP="$(tailscale ip -4)"
-
-
 eval "$(zoxide init bash --cmd j)"
 
 function y() {
@@ -127,17 +123,14 @@ function y() {
 	rm -f -- "$tmp"
 }
 
+export TS_IP="$(tailscale ip -4)"
+export EDITOR="nvim"
+export PATH="$HOME/.local/bin:$HOME/.cargo/bin:$PATH"
 {{- if eq .chezmoi.osRelease.id "ubuntu" }}
 export IP="$(hostname -I | awk '{print $1}')"
-export EDITOR="/opt/nvim/bin/nvim"
-export PATH="$HOME/.local/bin:$HOME/.cargo/bin:$PATH"
-
 {{- else if eq .chezmoi.osRelease.id "arch" }}
 if [ -z "$WAYLAND_DISPLAY" ] && [ -n "$XDG_VTNR" ] && [ "$XDG_VTNR" -eq 1 ] ; then
     exec sway
 fi
 export IP="$(ip -o -4 addr list wlan0 | awk '{print $4}' | cut -d/ -f1)"
-export EDITOR="nvim"
-export PATH="$HOME/.local/bin:$PATH"
-{{- else }}
 {{- end }}
