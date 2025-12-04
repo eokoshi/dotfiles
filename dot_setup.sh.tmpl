@@ -73,9 +73,9 @@ then
 	sudo rm -rf /opt/yazi
 	sudo mkdir /opt/yazi
 {{- if eq .chezmoi.arch "amd64"}}
-	YAZI_SYS = "yazi-x86_64-unknown-linux-gnu"
+	YAZI_SYS="yazi-x86_64-unknown-linux-gnu"
 {{- else if eq .chezmoi.arch "arm64"}}
-	YAZI_SYS = "yazi-aarch64-unknown-linux-gnu"
+	YAZI_SYS="yazi-aarch64-unknown-linux-gnu"
 {{- end}}
 	curl -LO "https://github.com/sxyazi/yazi/releases/latest/download/${YAZI_SYS}.zip"
 	sudo unzip "${YAZI_SYS}.zip" -d /opt/yazi/
