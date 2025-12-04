@@ -4,6 +4,7 @@ return {
 	opts = {
 		modes = {
 			char = {
+				enabled = false,
 				autohide = true,
 			},
 			search = {

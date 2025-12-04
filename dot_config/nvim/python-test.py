@@ -64,40 +64,40 @@ class HEDJitter1:
         return format_string
 
 
-class HEDJitter(nn.Module):
-    def __init__(
-        self,
-        alpha: float = 0.05,
-        beta: float = 0.05,
-    ):
-        super().__init__()
-        self.alpha: tuple[float, float] = (1 - alpha, 1 + alpha)
-        self.beta: tuple[float, float] = (-beta, beta)
+    class HEDJitter(nn.Module):
+        def __init__(
+            self,
+            alpha: float = 0.05,
+            beta: float = 0.05,
+        ):
+            super().__init__()
+            self.alpha: tuple[float, float] = (1 - alpha, 1 + alpha)
+            self.beta: tuple[float, float] = (-beta, beta)
 
-    @staticmethod
-    def _generate_value(left: float, right: float) -> float:
-        return torch.empty(1).uniform_(left, right).item()
+        @staticmethod
+        def _generate_value(left: float, right: float) -> float:
+            return torch.empty(1).uniform_(left, right).item()
 
-    def forward(self, image: torch.Tensor):
-        # get alpha and beta for H&E channels
-        alpha_H = self._generate_value(self.alpha[0], self.alpha[1])
-        alpha_E = self._generate_value(self.alpha[0], self.alpha[1])
+        def forward(self, image: torch.Tensor):
+            # get alpha and beta for H&E channels
+            alpha_H = self._generate_value(self.alpha[0], self.alpha[1])
+            alpha_E = self._generate_value(self.alpha[0], self.alpha[1])
 
-        beta_H = self._generate_value(self.beta[0], self.beta[1])
-        beta_E = self._generate_value(self.beta[0], self.beta[1])
+            beta_H = self._generate_value(self.beta[0], self.beta[1])
+            beta_E = self._generate_value(self.beta[0], self.beta[1])
 
-        # convert to float32
-        orig_dtype = image.dtype
-        image = F.convert_image_dtype(image, torch.float32)
+            # convert to float32
+            orig_dtype = image.dtype
+            image = F.convert_image_dtype(image, torch.float32)
 
-        # jitter channels
-        image = color.rgb2hed(image.permute(1, 2, 0).numpy())  # pyright: ignore[reportAssignmentType]
-        image[..., 0] = image[..., 0] * alpha_H + beta_H
-        image[..., 1] = image[..., 1] * alpha_E + beta_E
+            # jitter channels
+            image = color.rgb2hed(image.permute(1, 2, 0).numpy())  # pyright: ignore[reportAssignmentType]
+            image[..., 0] = image[..., 0] * alpha_H + beta_H
+            image[..., 1] = image[..., 1] * alpha_E + beta_E
 
-        # convert back to rgb tensor
-        image = torch.tensor(color.hed2rgb(image)).permute(2, 0, 1)
-        return F.convert_image_dtype(image, orig_dtype)
+            # convert back to rgb tensor
+            image = torch.tensor(color.hed2rgb(image)).permute(2, 0, 1)
+            return F.convert_image_dtype(image, orig_dtype)
 
 
 def main(args: argparse.Namespace):

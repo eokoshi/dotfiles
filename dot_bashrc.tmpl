@@ -100,6 +100,7 @@ fi
 
 completions_dir="$HOME/.config/bash/completions"
 [ -s "$completions_dir/chezmoi" ] && \. "$completions_dir/chezmoi"
+[ -s "$completions_dir/trash" ] && \. "$completions_dir/trash"
 
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
