@@ -1,3 +1,8 @@
 [mgr]
 sort_sensitive = false
 show_hidden = true
+
+[plugin]
+prepend_previewers = [
+  { name = "*.ipynb", run = "nbpreview" },
+]
