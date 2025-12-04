@@ -68,14 +68,6 @@ alias ch="chezmoi"
 alias cl="clear"
 alias csvlens="csvlens --colorful"
 
-# some useful functions
-marimo-serve() {
-    uv run marimo edit --headless --watch --host "$(tailscale ip -4)" --no-token
-}
-
-chdiffnvim() {
-	diff -bur --color=always ~/.local/share/chezmoi/dot_config/nvim/ ~/.config/nvim/ -x ".git*" -x "*stylua*" -x "lazy-lock.json"
-}
 
 if [ -f ~/.bash_aliases ]; then
     . ~/.bash_aliases
@@ -123,7 +115,7 @@ function y() {
 	rm -f -- "$tmp"
 }
 
-tailscale status
+tailscale up
 export TS_IP="$(tailscale ip -4)"
 export EDITOR="nvim"
 export PATH="$HOME/.local/bin:$HOME/.cargo/bin:$HOME/.local/share/nvim/mason/bin:$PATH"
@@ -135,3 +127,13 @@ if [ -z "$WAYLAND_DISPLAY" ] && [ -n "$XDG_VTNR" ] && [ "$XDG_VTNR" -eq 1 ] ; th
 fi
 export IP="$(ip -o -4 addr list wlan0 | awk '{print $4}' | cut -d/ -f1)"
 {{- end }}
+
+# some useful functions
+marimo-serve() {
+    uv run marimo edit --headless --watch --host $TS_IP --no-token
+}
+
+chdiffnvim() {
+	diff -bur --color=always ~/.local/share/chezmoi/dot_config/nvim/ ~/.config/nvim/ -x ".git*" -x "*stylua*" -x "lazy-lock.json"
+}
+
