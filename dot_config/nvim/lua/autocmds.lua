@@ -62,12 +62,12 @@ vim.api.nvim_create_autocmd("BufWritePost", {
 				cwd = "~",
 				on_stdout = function(_, data, _)
 					if data ~= nil then
-						vim.notify("Apply failed.\n\nRun chezmoi apply from command line.", vim.log.levels.ERROR)
+						vim.notify("Apply failed.\nRun chezmoi apply from command line.", vim.log.levels.ERROR)
 					end
 				end,
 				on_stderr = function(_, data, _)
 					if data ~= nil then
-						vim.notify("Apply failed.\n\nRun chezmoi apply from command line.", vim.log.levels.ERROR)
+						vim.notify("Apply failed.\nRun chezmoi apply from command line.", vim.log.levels.ERROR)
 					end
 				end,
 			}):start()
@@ -126,11 +126,11 @@ vim.api.nvim_create_autocmd("VimLeavePre", {
 })
 
 -- on windows machine, git pull config at every exit
-vim.api.nvim_create_autocmd("VimLeavePre", {
-	group = winsync,
-	pattern = "*",
-	callback = function(args)
-		if vim.fn.has("win32") == 1 then
+if vim.fn.has("win32") == 1 then
+	vim.api.nvim_create_autocmd("VimLeavePre", {
+		group = winsync,
+		pattern = "*",
+		callback = function(args)
 			local on_exit = function(_) end
 			vim.system({ "git", "pull" }, {
 				cwd = vim.fn.stdpath("config"),
@@ -147,6 +147,6 @@ vim.api.nvim_create_autocmd("VimLeavePre", {
 				text = true,
 				on_exit,
 			})
-		end
-	end,
-})
+		end,
+	})
+end

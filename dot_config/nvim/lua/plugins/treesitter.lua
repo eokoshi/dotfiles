@@ -17,11 +17,15 @@ return {
 			ensure_installed = {
 				"bash",
 				"c",
+				"css",
+				"csv",
 				"diff",
 				"dockerfile",
 				"git_config",
+				"gitignore",
 				"gotmpl",
 				"html",
+				"htmldjango",
 				"javascript",
 				"jsdoc",
 				"json",
@@ -36,10 +40,14 @@ return {
 				"python",
 				"query",
 				"r",
+				"readline",
 				"regex",
+				"scheme",
 				"sql",
 				"ssh_config",
 				"toml",
+				"tmux",
+				"tsv",
 				"tsx",
 				"typescript",
 				"vim",
@@ -77,6 +85,8 @@ return {
 					["@conditional.inner"] = "v",
 					["@function.outer"] = "V",
 					["@function.inner"] = "V",
+					["@call.outer"] = "V",
+					["@call.inner"] = "V",
 					["@loop.outer"] = "V",
 					["@loop.inner"] = "V",
 					["@parameter.outer"] = "v",
@@ -100,8 +110,10 @@ return {
 			map({ "x", "o" }, "ic", function() select("@class.inner", "textobjects") end, { desc = "inside class" })
 			map({ "x", "o" }, "a?", function() select("@conditional.outer", "textobjects") end, { desc = "around conditional" })
 			map({ "x", "o" }, "i?", function() select("@conditional.inner", "textobjects") end, { desc = "inside conditional" })
-			map({ "x", "o" }, "af", function() select("@function.outer", "textobjects") end, { desc = "around function " })
-			map({ "x", "o" }, "if", function() select("@function.inner", "textobjects") end, { desc = "inside function " })
+			map({ "x", "o" }, "af", function() select("@function.outer", "textobjects") end, { desc = "around function" })
+			map({ "x", "o" }, "if", function() select("@function.inner", "textobjects") end, { desc = "inside function" })
+			map({ "x", "o" }, "ax", function() select("@call.outer", "textobjects") end, { desc = "around call" })
+			map({ "x", "o" }, "ix", function() select("@call.inner", "textobjects") end, { desc = "inside call" })
 			map({ "x", "o" }, "al", function() select("@loop.outer", "textobjects") end, { desc = "around loop" })
 			map({ "x", "o" }, "il", function() select("@loop.inner", "textobjects") end, { desc = "inside loop" })
 			map({ "x", "o" }, "aa", function() select("@parameter.outer", "textobjects") end, { desc = "around argument" })

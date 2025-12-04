@@ -100,6 +100,28 @@ if vim.fn.has("win32") == 1 then
 					})
 				end,
 			})
+
+			vim.api.nvim_create_autocmd("User", {
+				pattern = "ObsidianNoteEnter",
+				callback = function()
+					local on_exit = function(_) end
+					vim.system({ "git", "pull" }, {
+						cwd = "~/Documents/Obsidian",
+						stdout = function(_, data)
+							if data ~= nil then
+								vim.notify(data, vim.log.levels.INFO)
+							end
+						end,
+						stderr = function(_, data)
+							if data ~= nil then
+								vim.notify(data, vim.log.levels.ERROR)
+							end
+						end,
+						text = true,
+						on_exit,
+					})
+				end,
+			})
 		end,
 	}
 else
