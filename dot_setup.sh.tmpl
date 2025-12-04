@@ -80,6 +80,7 @@ then
 	curl -LO "https://github.com/sxyazi/yazi/releases/latest/download/${YAZI_SYS}.zip"
 	unzip "${YAZI_SYS}.zip"
 	sudo mv "${YAZI_SYS}"/* /opt/yazi/
+	rm -rf $YAZI_SYS
 	rm -f "${YAZI_SYS}.zip"
 	ln -s --force /opt/yazi/yazi ~/.local/bin/yazi
 fi
