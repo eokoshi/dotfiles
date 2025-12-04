@@ -116,19 +116,6 @@ export NVM_DIR="$HOME/.nvm"
 
 export TS_IP="$(tailscale ip -4)"
 
-{{- if eq .chezmoi.osRelease.id "ubuntu" }}
-export IP="$(hostname -I | awk '{print $1}')"
-export EDITOR="/opt/nvim/bin/nvim"
-export PATH="/opt/nvim/bin:$HOME/.local/bin:$HOME/.cargo/bin:$PATH"
-{{- else if eq .chezmoi.osRelease.id "arch" }}
-if [ -z "$WAYLAND_DISPLAY" ] && [ -n "$XDG_VTNR" ] && [ "$XDG_VTNR" -eq 1 ] ; then
-    exec sway
-fi
-export IP="$(ip -o -4 addr list wlan0 | awk '{print $4}' | cut -d/ -f1)"
-export EDITOR="nvim"
-export PATH="$HOME/.local/bin:$PATH"
-{{- else }}
-{{- end }}
 
 eval "$(zoxide init bash --cmd j)"
 
@@ -139,3 +126,18 @@ function y() {
 	[ -n "$cwd" ] && [ "$cwd" != "$PWD" ] && builtin cd -- "$cwd"
 	rm -f -- "$tmp"
 }
+
+{{- if eq .chezmoi.osRelease.id "ubuntu" }}
+export IP="$(hostname -I | awk '{print $1}')"
+export EDITOR="/opt/nvim/bin/nvim"
+export PATH="$HOME/.local/bin:$HOME/.cargo/bin:$PATH"
+
+{{- else if eq .chezmoi.osRelease.id "arch" }}
+if [ -z "$WAYLAND_DISPLAY" ] && [ -n "$XDG_VTNR" ] && [ "$XDG_VTNR" -eq 1 ] ; then
+    exec sway
+fi
+export IP="$(ip -o -4 addr list wlan0 | awk '{print $4}' | cut -d/ -f1)"
+export EDITOR="nvim"
+export PATH="$HOME/.local/bin:$PATH"
+{{- else }}
+{{- end }}
