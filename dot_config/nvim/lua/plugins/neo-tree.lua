@@ -11,7 +11,7 @@ return {
 	opts = {
 		sources = {
 			"filesystem",
-			"buffers",
+			-- "buffers",
 			-- "document_symbols",
 		},
 		filesystem = {
@@ -24,15 +24,16 @@ return {
 			follow_current_file = {
 				enabled = true,
 			},
-			hijack_netrw_behavior = "open_current",
+			-- hijack_netrw_behavior = "open_current",
+			hijack_netrw_behavior = "disabled",
 		},
 		source_selector = {
 			truncation_character = "…",
-			winbar = true,
+			-- winbar = true,
 			show_scrolled_off_parent_node = true,
 			sources = {
 				{ source = "filesystem" },
-				{ source = "buffers" },
+				-- { source = "buffers" },
 				-- { source = "document_symbols" },
 			},
 		},

@@ -1,5 +1,13 @@
 return {
 	"sindrets/diffview.nvim",
+	keys = {
+		{
+			"<Leader>gD",
+			mode = { "n" },
+			"<CMD>DiffviewOpen<CR>",
+			desc = "Diff Repo",
+		},
+	},
 	opts = {
 		view = {
 			default = {
@@ -27,10 +35,10 @@ return {
 			},
 		},
 	},
-	init = function()
-		local map = require("stuff.functions").map
-		map("n", "<Leader>gh", "<CMD>DiffviewFileHistory %<CR>", { desc = "File revision history" })
-		map("n", "<Leader>gH", "<CMD>DiffviewFileHistory<CR>", { desc = "Repo revision history" })
-		map("n", "<Leader>gD", "<CMD>DiffviewOpen<CR>", { desc = "Diff Repo" })
-	end,
+	-- init = function()
+	-- 	local map = require("stuff.functions").map
+	-- 	map("n", "<Leader>gh", "<CMD>DiffviewFileHistory %<CR>", { desc = "File revision history" })
+	-- 	map("n", "<Leader>gH", "<CMD>DiffviewFileHistory<CR>", { desc = "Repo revision history" })
+	-- 	map("n", "<Leader>gD", "<CMD>DiffviewOpen<CR>", { desc = "Diff Repo" })
+	-- end,
 }
