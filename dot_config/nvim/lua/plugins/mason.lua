@@ -1,3 +1,44 @@
+local installs = {}
+if vim.fn.has("win32") == 1 then
+	installs = {
+		-- LSP
+		"basedpyright",
+		"marksman",
+
+		-- Formatters
+		"ruff",
+		"prettier",
+		"fixjson",
+
+		-- DAP
+
+		-- Other
+		"tree-sitter-cli",
+	}
+else -- linux
+	installs = {
+		-- LSP
+		"lua-language-server",
+		"basedpyright",
+		"bashls",
+		"marksman",
+
+		-- Formatters
+		"stylua",
+		"ruff",
+		"prettier",
+		"fixjson",
+		"pyproject-fmt",
+
+		-- DAP
+		"debugpy",
+
+		-- Other
+		"tree-sitter-cli",
+		"jupytext",
+	}
+end
+
 return {
 	{
 		"mason-org/mason.nvim",
@@ -12,27 +53,7 @@ return {
 		},
 		opts = {
 			-- Make sure to use the names found in `:Mason`
-			ensure_installed = {
-				-- LSP
-				"lua-language-server",
-				"basedpyright",
-				"bashls",
-				"marksman",
-
-				-- Formatters
-				"stylua",
-				"ruff",
-				"prettier",
-				"fixjson",
-				"pyproject-fmt",
-
-				-- DAP
-				"debugpy",
-
-				-- Other
-				"tree-sitter-cli",
-				"jupytext",
-			},
+			ensure_installed = installs,
 		},
 	},
 	{
