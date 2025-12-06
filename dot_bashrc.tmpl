@@ -116,7 +116,6 @@ function y() {
 	rm -f -- "$tmp"
 }
 
-tailscale up
 export TS_IP="$(tailscale ip -4)"
 export EDITOR="nvim"
 export PATH="$HOME/.local/bin:$HOME/.cargo/bin:$HOME/.local/share/nvim/mason/bin:$PATH"
