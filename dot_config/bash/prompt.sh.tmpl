@@ -58,6 +58,8 @@ __mkps1_hostname() {
     local textcolor='\[\e[3;38;5;208m\]';
     {{ else if eq .chezmoi.hostname "eefix" }}
     local textcolor='\[\e[3;38;5;99m\]';
+    {{ else if eq .chezmoi.hostname "DESKTOP-KACLDMD" }}
+    local textcolor='\[\e[3;38;5;219m\]';
     {{ else }}
     local textcolor='\[\e[3;38;5;38m\]';
     {{ end }}
