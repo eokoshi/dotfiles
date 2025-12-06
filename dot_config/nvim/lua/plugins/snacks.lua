@@ -25,7 +25,9 @@ return {
 						icon = "󰙅 ",
 						key = "e",
 						desc = "File Explorer",
-						action = ":Yazi cwd",
+						action = function()
+							require("neo-tree.command").execute({ position = "float" })
+						end,
 					},
 					{ icon = " ", key = "f", desc = "Find File", action = ":lua Snacks.dashboard.pick('files')" },
 					{
