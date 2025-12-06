@@ -65,6 +65,7 @@ vim.o.smartindent = false -- Insert indents automatically (messes with python tr
 vim.o.smoothscroll = true
 vim.o.softtabstop = 0
 vim.o.spelllang = "en_us,medical"
+vim.o.spellcapcheck = ""
 vim.o.splitkeep = "screen"
 vim.o.splitbelow = true -- Put new windows below current
 vim.o.splitright = true -- Put new windows right of current

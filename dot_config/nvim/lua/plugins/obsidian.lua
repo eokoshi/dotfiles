@@ -102,22 +102,25 @@ if vim.fn.has("win32") == 1 then
 			})
 
 			vim.api.nvim_create_autocmd("DirChangedPre", {
-				pattern = vim.fn.expand("$HOME/Documents/Obsidian/*"),
+				pattern = "global",
 				callback = function()
-					vim.system({ "git", "pull" }, {
-						cwd = vim.fn.expand("$HOME/Documents/Obsidian"),
-						text = true,
-						stdout = function(_, data)
-							if data ~= nil then
-								vim.notify(data, vim.log.levels.INFO)
-							end
-						end,
-						stderr = function(_, data)
-							if data ~= nil then
-								vim.notify(data, vim.log.levels.ERROR)
-							end
-						end,
-					}, function(_) end)
+					---@diagnostic disable-next-line: undefined-field
+					if string.match(vim.v.event.directory, "\\Obsidian") then
+						vim.system({ "git", "pull" }, {
+							cwd = vim.fn.expand("$HOME/Documents/Obsidian"),
+							text = true,
+							stdout = function(_, data)
+								if data ~= nil then
+									vim.notify(data, vim.log.levels.INFO)
+								end
+							end,
+							stderr = function(_, data)
+								if data ~= nil then
+									vim.notify(data, vim.log.levels.ERROR)
+								end
+							end,
+						}, function(_) end)
+					end
 				end,
 			})
 		end,
