@@ -1,2 +1,2 @@
 .config/nvim/lsp
-.config/nvim/plugins/oil.nvim
+.config/nvim/lua/plugins/oil.nvim
