@@ -58,7 +58,7 @@ vim.api.nvim_create_autocmd("BufWritePost", {
 		local win = vim.fn.expand("$HOME/windows/AppData/Local/nvim")
 		local ch = vim.fn.expand("$HOME/.local/share/chezmoi/dot_config/nvim")
 
-		if vim.fn.isdirectory(win) then
+		if not vim.fn.isdirectory(win) == 0 then
 			-- add new spellings from windows before overwriting everything
 			vim.system({ "rsync", "-rtu", win .. "/spell/", ch .. "/spell" }, { text = true }, function(_) end)
 		end
@@ -77,7 +77,7 @@ vim.api.nvim_create_autocmd("BufWritePost", {
 			text = true,
 		}, function(_) end)
 
-		if vim.fn.isdirectory(win) and apply:wait().code == 0 then
+		if not vim.fn.isdirectory(win) == 0 and apply:wait().code == 0 then
 			local cmd =
 				{ "rsync", "-a", "--delete", "--exclude", ".git", "--exclude", "lazy-lock.json", wsl .. "/", win }
 			vim.system(cmd, {
