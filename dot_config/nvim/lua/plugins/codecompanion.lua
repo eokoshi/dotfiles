@@ -46,10 +46,10 @@ return {
 						auto_submit_errors = true,
 						auto_submit_success = true,
 						default_tools = {
+							"web_search",
 							"file_search",
 							"grep_search",
-							"web_search",
-							"read_file",
+							-- "read_file",
 						},
 					},
 				},
