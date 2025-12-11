@@ -78,7 +78,7 @@ return {
 					},
 					{
 						"filename",
-						path = 4,
+						path = 1,
 						symbols = {
 							modified = icons.lualine.modified,
 							readonly = icons.lualine.readonly,
@@ -134,21 +134,12 @@ return {
 				},
 				lualine_y = {
 					{ "fileformat", padding = { left = 0, right = 0 } },
-					"hostname",
+					"location",
 				},
 				lualine_z = {
-					-- {
-					-- 	"location",
-					-- 	padding = 1,
-					-- 	separator = { right = "" },
-					-- 	cond = function()
-					-- 		if vim.o.filetype == "codecompanion" then
-					-- 			return false
-					-- 		else
-					-- 			return true
-					-- 		end
-					-- 	end,
-					-- },
+					{
+						"progress",
+					},
 				},
 			},
 			-- tabline = {
