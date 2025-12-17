@@ -2,7 +2,8 @@ local installs = {}
 if vim.fn.has("win32") == 1 then
 	installs = {
 		-- LSP
-		"basedpyright",
+		-- "basedpyright",
+		"ty",
 		"marksman",
 
 		-- Formatters
@@ -19,7 +20,7 @@ else -- linux
 	installs = {
 		-- LSP
 		"lua-language-server",
-		"basedpyright",
+		"ty",
 		"bashls",
 		"marksman",
 
@@ -35,7 +36,6 @@ else -- linux
 
 		-- Other
 		"tree-sitter-cli",
-		"jupytext",
 	}
 end
 
