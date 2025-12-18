@@ -54,6 +54,8 @@ return {
 		markdown = "",
 		chezmoi = "󱊹",
 		popup = "",
+		search = "󰍉",
+		go = "󰜎",
 	},
 	debug = {
 		bug = "",
