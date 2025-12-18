@@ -284,8 +284,8 @@ return {
 		map("n", "<Leader>lR", function() Snacks.picker.lsp_references() end, { nowait = true, desc = "references" })
 		map("n", "<Leader>ls", function() Snacks.picker.lsp_symbols() end, { desc = "LSP symbols" })
 		map("n", "<Leader>lS", function() Snacks.picker.lsp_workspace_symbols() end, { desc = "LSP workspace Symbols" })
-		map("n", "gd", function() Snacks.picker.lsp_definitions() end, { desc = "Goto definition" })
-		map("n", "gD", function() Snacks.picker.lsp_declarations() end, { desc = "Goto Declaration" })
+		map("n", "gd", function() Snacks.picker.lsp_definitions() end, { desc = "Go to definition" })
+		map("n", "gD", function() Snacks.picker.lsp_declarations() end, { desc = "Go to Declaration" })
 		map("n", "gI", function() Snacks.picker.lsp_implementations() end, { desc = "Go to Implementation" })
 		map("n", "gp", function() Snacks.picker.lsp_type_definitions() end, { desc = "Go to ty[p]e definition" })
 
