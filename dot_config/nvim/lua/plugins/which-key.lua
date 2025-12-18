@@ -50,7 +50,8 @@ return {
 				{ pattern = "debugger", icon = icons.debug.bug, color = "red" },
 				{ pattern = "trouble", icon = icons.debug.bug, color = "red" },
 				{ pattern = "overlook", icon = icons.basic.popup, color = "blue" },
-				{ pattern = "noneckpain", icon = icons.basic.buffer, color = "blue" },
+				{ pattern = "noneckpain", icon = "", color = "blue" },
+				{ pattern = "yazi", icon = icons.basic.explorer, color = "cyan" },
 			},
 		},
 		win = {
