@@ -1,6 +1,5 @@
 return {
 	"dmtrKovalenko/fff.nvim",
-	commit = "7fd361a",
 	dependencies = {
 		"saghen/blink.cmp",
 	},
