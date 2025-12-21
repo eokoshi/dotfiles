@@ -40,6 +40,14 @@ map("n", "<Leader>bA", "<CMD>%y+<CR><CR>", { desc = "Copy whole buffer to clipbo
 map("n", "<Leader>bd", "<CMD>bd<CR>", { desc = "Close buffer and window (:bd)" })
 map("n", "<Leader>bD", function() functions.DOS_to_Unix() end, { desc = "DOS to Unix" })
 map("n", "<Leader>bf", function() vim.lsp.buf.format() end, { desc = "format buffer" })
+map("n", "<Leader>bC", function()
+	local cur = vim.b.completion
+	if cur == false then
+		vim.b.completion = true
+	else
+		vim.b.completion = false
+	end
+end, { desc = "toggle completion" })
 
 
 -- LSP
