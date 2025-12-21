@@ -32,18 +32,19 @@ return {
 		init = function()
 			local map = require("stuff.functions").map
 			map("n", "<Leader>t", "", { desc = "Trouble" })
-			map(
-				"n",
-				"<Leader>td",
-				"<CMD>Trouble diagnostics toggle focus=true filter.buf=0<CR>",
-				{ desc = "diagnostics list" }
-			)
-			map("n", "<Leader>tD", "<CMD>Trouble diagnostics toggle<CR>", { desc = "workspace diagnostics list" })
+			map("n", "<Leader>td", "<CMD>Trouble diagnostics toggle filter.buf=0<CR>", { desc = "diagnostics" })
+			map("n", "<Leader>tD", "<CMD>Trouble diagnostics toggle<CR>", { desc = "workspace diagnostics" })
 			map(
 				"n",
 				"<Leader>ts",
-				"<CMD>Trouble symbols toggle pinned=true win.relative=editor win.position=right<CR>",
+				"<CMD>Trouble symbols toggle focus=true pinned=true win.relative=editor<CR>",
 				{ desc = "symbols" }
+			)
+			map(
+				"n",
+				"<Leader>tS",
+				"<CMD>Trouble lsp_document_symbols toggle pinned=true win.relative=editor win.position=right<CR>",
+				{ desc = "all symbols" }
 			)
 			map("n", "<Leader>tl", "<CMD>Trouble loclist<CR>", { desc = "loclist" })
 			map("n", "<Leader>tq", "<CMD>Trouble qflist<CR>", { desc = "quickfix list" })
