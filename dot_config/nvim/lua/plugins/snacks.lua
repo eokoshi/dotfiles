@@ -245,11 +245,9 @@ return {
 		})
 
 		-- stylua: ignore start
-		map("n", "z=", function() Snacks.picker.spelling() end, { desc = "Spelling Suggestions" })
 		map("n", "<Leader>c", function() Snacks.bufdelete() end, { desc = "Close buffer" })
 		map("n", "<Leader>H", function() Snacks.dashboard() end, { desc = "Home" })
 		map("n", "<Leader>R", function() Snacks.rename.rename_file() end, { desc = "Rename file" })
-		map("n", "<Leader>:", function() Snacks.picker.command_history() end, { desc = "Command history" })
 		map({ "n", "t", "i" }, "<F7>", function() Snacks.terminal.toggle() end, { desc = "toggle terminal" })
 		map("n", "<Leader>fz", function() Snacks.picker.files({ cwd = vim.fn.stdpath("config") }) end, { desc = "local config" })
 		map("n", "<Leader>fA", function() Snacks.picker.autocmds() end, {desc = "autocmds"})
@@ -275,6 +273,8 @@ return {
 		map("n", "<Leader>fu", function() Snacks.picker.undo() end, { desc = "undo" })
 		map("n", "<Leader>fw", function() Snacks.picker.grep({ cmd = "rg" }) end, { desc = "word" })
 		map("n", "<Leader>fW", function() Snacks.picker.grep({ cmd = "rg", hidden = true, ignored = true }) end, { desc = "Word in all files" })
+		map("n", "<Leader>f=", function() Snacks.picker.spelling() end, { desc = "Spelling Suggestions" })
+		map("n", "<Leader>f:", function() Snacks.picker.command_history() end, { desc = "Command history" })
 		map("n", "<Leader>f<space>", function() Snacks.picker.resume() end, { desc = "Resume last search" })
 		map({ "n", "x" }, "<Leader>f*", function() Snacks.picker.grep_word() end, { desc = "grep current selection" })
 		map("n", "<Leader>bc", function() Snacks.bufdelete.other() end, { desc = "Close all other bufs" })
