@@ -41,7 +41,7 @@ return {
 				aliases = { "init" },
 				style = { fg = "#9fd6d5" },
 				get_value = function()
-					return tostring(os.date("%Y-%m-%d %H:%M"))
+					return tostring(os.date("%Y%m%d %H:%M"))
 				end,
 				key = "<leader>mcs",
 				sort_order = 20,
@@ -51,9 +51,8 @@ return {
 				aliases = { "completed", "finished" },
 				style = { fg = "#96de7a" },
 				get_value = function()
-					return tostring(os.date("%m/%d/%y %H:%M"))
+					return tostring(os.date("%Y%m%d %H:%M"))
 				end,
-				key = "<leader>mcd",
 				on_add = function(todo_item)
 					require("checkmate").set_todo_state(todo_item, "checked")
 				end,
@@ -61,6 +60,39 @@ return {
 					require("checkmate").set_todo_state(todo_item, "unchecked")
 				end,
 				sort_order = 30,
+			},
+			due = {
+				aliases = { "deadline", "by", "until", "duedate" },
+				key = "<leader>mcd",
+				get_value = function()
+					return tostring(os.date("%Y%m%d", os.time() + (24 * 60 * 60 * 2))) -- +2 days by default
+				end,
+				jump_to_on_insert = "value",
+				select_on_insert = true,
+				style = function(context)
+					local duedate = os.time({
+						year = context.value:sub(1, 4),
+						month = context.value:sub(5, 6),
+						day = context.value:sub(7, 8),
+					})
+					local remaining = os.difftime(os.time(), duedate) / (24 * 60 * 60)
+					if remaining > 0 then -- error
+						return { sp = "red", undercurl = true }
+					elseif remaining > -1 then
+						return { bg = "#ff5555", bold = true }
+					elseif remaining > -7 then
+						return { bg = "#ff6700", bold = true }
+					elseif remaining > -14 then
+						return { bg = "orange" }
+					elseif remaining > -21 then
+						return { bg = "gold" }
+					elseif remaining > -28 then
+						return { bg = "greenyellow" }
+					else
+						return { fg = "green" }
+					end
+				end,
+				sort_order = 15,
 			},
 		},
 	},

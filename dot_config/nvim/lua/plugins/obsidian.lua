@@ -22,7 +22,7 @@ if vim.fn.has("win32") == 1 then
 				enable = false,
 			},
 			attachments = {
-				img_folder = "Images",
+				folder = "Images",
 			},
 			footer = {
 				enabled = false,
@@ -65,17 +65,13 @@ if vim.fn.has("win32") == 1 then
 					return out
 				end,
 			},
-			---@param url string
-			follow_url_func = function(url)
-				vim.ui.open(url) -- need Neovim 0.10.0+
-			end,
 			legacy_commands = false,
 		},
 		init = function()
 			local map = require("stuff.functions").map
 			map("n", "<Leader>mt", "<CMD>Obsidian today<CR>", { desc = "today's note" })
 			map("n", "<Leader>my", "<CMD>Obsidian yesterday<CR>", { desc = "yesterday's note" })
-			map("n", "<Leader>mf", "<CMD>Obsidian dailies -48 0<CR>", { desc = "find daily notes" })
+			map("n", "<Leader>md", "<CMD>Obsidian dailies -48 0<CR>", { desc = "find daily notes" })
 			map("n", "<Leader>mn", "<CMD>Obsidian new_from_template<CR>", { desc = "new from template" })
 			map("n", "<leader>mo", "<CMD>cd ~/Documents/Obsidian<CR>", { desc = "cd vault" })
 
