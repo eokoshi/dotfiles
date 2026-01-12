@@ -4,7 +4,7 @@
 set -ueo pipefail
 
 ## apt packages
-sudo apt-get -y --ignore-missing install ripgrep fd-find python3-venv npm direnv tmux lsd
+sudo apt-get -y --ignore-missing install ripgrep fd-find python3-venv npm direnv tmux lsd unzip
 ln -s --force $(which fdfind) ~/.local/bin/fd
 
 echo ""
