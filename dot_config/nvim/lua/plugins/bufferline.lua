@@ -1,6 +1,6 @@
 return {
 	"akinsho/bufferline.nvim",
-	event = "BufEnter",
+	event = "VeryLazy",
 	version = "*",
 	opts = {
 		options = {

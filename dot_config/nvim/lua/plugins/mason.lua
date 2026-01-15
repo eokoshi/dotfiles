@@ -3,18 +3,18 @@ if vim.fn.has("win32") == 1 then
 	installs = {
 		-- LSP
 		-- "basedpyright",
-		"ty",
+		-- "ty",
 		"marksman",
 
 		-- Formatters
-		"ruff",
+		-- "ruff",
 		"prettier",
 		"fixjson",
 
 		-- DAP
 
 		-- Other
-		"tree-sitter-cli",
+		-- "tree-sitter-cli",
 	}
 else -- linux
 	installs = {

@@ -12,6 +12,7 @@ vim.api.nvim_create_autocmd({ "ColorScheme" }, {
 		set_hl(0, "WhichKeyTitle", { link = "OctoGreenFloat" })
 		set_hl(0, "SniprunVirtualTextOk", { link = "Grey" })
 		set_hl(0, "SniprunVirtualTextErr", { link = "Red" })
+		set_hl(0, "BufferLineFill", { link = "Normal" })
 	end,
 	desc = "Update custom highlight settings on colorscheme change for all colorschemes",
 })
