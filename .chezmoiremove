@@ -1,2 +1,4 @@
 .config/nvim/lsp
 .config/nvim/lua/plugins/oil.lua
+.config/nvim/lua/plugins/fff.lua
+.config/nvim/lua/disable/overlook.lua
