@@ -49,48 +49,58 @@ vim.api.nvim_create_autocmd("BufEnter", {
 
 -- Syncing Config with Windows and chezmoi
 local confsync = vim.api.nvim_create_augroup("ConfigSync", { clear = true })
+if vim.fn.has("wsl") == 1 then
+	vim.api.nvim_create_autocmd("BufWritePost", {
+		group = confsync,
+		pattern = "*/.local/share/chezmoi/*",
+		callback = function()
+			local wsl = vim.fn.stdpath("config")
+			local win = vim.fn.expand("$HOME/windows/AppData/Local/nvim")
+			local ch = vim.fn.expand("$HOME/.local/share/chezmoi/dot_config/nvim")
 
-vim.api.nvim_create_autocmd("BufWritePost", {
-	group = confsync,
-	pattern = "*/.local/share/chezmoi/*",
-	callback = function()
-		local wsl = vim.fn.stdpath("config")
-		local win = vim.fn.expand("$HOME/windows/AppData/Local/nvim")
-		local ch = vim.fn.expand("$HOME/.local/share/chezmoi/dot_config/nvim")
+			if vim.fn.isdirectory(win) then
+				-- add new spellings from windows before overwriting everything
+				vim.system({ "rsync", "-rtu", win .. "/spell/", ch .. "/spell" }, { text = true }, function(_) end)
+			end
 
-		if vim.fn.isdirectory(win) then
-			-- add new spellings from windows before overwriting everything
-			vim.system({ "rsync", "-rtu", win .. "/spell/", ch .. "/spell" }, { text = true }, function(_) end)
-		end
-
-		local apply = vim.system({ "chezmoi", "apply" }, {
-			stdout = function(_, data)
-				if data ~= nil then
-					vim.notify("Apply failed.\nRun chezmoi apply from command line.", vim.log.levels.ERROR)
-				end
-			end,
-			stderr = function(_, data)
-				if data ~= nil then
-					vim.notify("Apply failed.\nRun chezmoi apply from command line.", vim.log.levels.ERROR)
-				end
-			end,
-			text = true,
-		}, function(_) end)
-
-		if vim.fn.isdirectory(win) and apply:wait().code == 0 then
-			local cmd =
-				{ "rsync", "-a", "--delete", "--exclude", ".git", "--exclude", "lazy-lock.json", wsl .. "/", win }
-			vim.system(cmd, {
+			local apply = vim.system({ "chezmoi", "apply" }, {
+				stdout = function(_, data)
+					if data ~= nil then
+						vim.notify("Apply failed.\nRun chezmoi apply from command line.", vim.log.levels.ERROR)
+					end
+				end,
+				stderr = function(_, data)
+					if data ~= nil then
+						vim.notify("Apply failed.\nRun chezmoi apply from command line.", vim.log.levels.ERROR)
+					end
+				end,
 				text = true,
-			}, function(completed)
-				local code = completed.code
-				if code == 0 then
-					vim.notify("Config synced to Windows", vim.log.levels.INFO)
-				else
-					vim.notify("rsync failed (code " .. code .. ")", vim.log.levels.ERROR)
-				end
-			end)
-		end
-	end,
-	desc = "Push edited config file to Windows via rsync",
-})
+			}, function(_) end)
+
+			if vim.fn.isdirectory(win) and apply:wait().code == 0 then
+				local cmd = {
+					"rsync",
+					"-a",
+					"--delete",
+					"--exclude",
+					".git",
+					"--exclude",
+					"lazy-lock.json",
+					wsl .. "/",
+					win,
+				}
+				vim.system(cmd, {
+					text = true,
+				}, function(completed)
+					local code = completed.code
+					if code == 0 then
+						vim.notify("Config synced to Windows", vim.log.levels.INFO)
+					else
+						vim.notify("rsync failed (code " .. code .. ")", vim.log.levels.ERROR)
+					end
+				end)
+			end
+		end,
+		desc = "Push edited config file to Windows via rsync",
+	})
+end
