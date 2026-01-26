@@ -16,15 +16,6 @@ return {
 						sections = { "watches", "scopes", "exceptions", "breakpoints", "threads", "repl", "console" },
 						default_section = "scopes",
 					},
-					windows = {
-						height = 0.25,
-						position = "below",
-						terminal = {
-							width = 0.5,
-							position = "left",
-							start_hidden = true,
-						},
-					},
 					auto_toggle = true,
 				},
 			},
