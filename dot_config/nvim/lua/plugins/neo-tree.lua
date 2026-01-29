@@ -45,6 +45,7 @@ return {
 				["L"] = "focus_preview",
 				["<C-n>"] = { "scroll_preview", config = { direction = 10 } },
 				["<C-p>"] = { "scroll_preview", config = { direction = -10 } },
+				["f"] = "none",
 			},
 		},
 	},
