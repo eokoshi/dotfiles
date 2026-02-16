@@ -3,7 +3,6 @@ if vim.fn.has("win32") == 1 then
 	parsers = {
 		"c",
 		"css",
-		"csv",
 		"diff",
 		"dockerfile",
 		"git_config",
@@ -36,7 +35,6 @@ else -- linux
 		"bash",
 		"c",
 		"css",
-		"csv",
 		"diff",
 		"dockerfile",
 		"git_config",
@@ -91,6 +89,7 @@ return {
 		dependencies = { "nvim-treesitter/nvim-treesitter" },
 		opts = {
 			ensure_installed = parsers,
+			ignore_install = { "csv" },
 			auto_install = vim.fn.executable("tree-sitter") == 1, -- only enable auto install if `tree-sitter` cli is installed
 			fold = { enable = true },
 			highlight = { enable = true },
