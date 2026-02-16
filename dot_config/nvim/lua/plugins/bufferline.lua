@@ -21,6 +21,7 @@ return {
 			},
 			show_buffer_close_icons = false,
 			tab_size = 10,
+			truncate_names = true,
 		},
 	},
 	init = function()
