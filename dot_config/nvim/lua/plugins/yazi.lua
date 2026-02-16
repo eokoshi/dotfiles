@@ -6,8 +6,8 @@ return {
 		{ "nvim-lua/plenary.nvim", lazy = true },
 	},
 	keys = {
-		{ "<Leader>y", mode = { "n" }, "<CMD>Yazi cwd<CR>", desc = "yazi cwd" },
-		{ "<Leader>fo", mode = { "n" }, "<CMD>Yazi<CR>", desc = "yazi current file" },
+		{ "<Leader>fo", mode = { "n" }, "<CMD>Yazi cwd<CR>", desc = "yazi cwd" },
+		{ "<Leader>y", mode = { "n" }, "<CMD>Yazi<CR>", desc = "yazi current file" },
 	},
 	opts = {
 		open_for_directories = true,
