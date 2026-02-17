@@ -23,7 +23,7 @@ esac
 
 if [ -x /usr/bin/tput ] && tput setaf 1 >&/dev/null; then
     source "$HOME/.config/bash/prompt.sh"
-    PROMPT_COMMAND='LAST_EXIT="$?"; eval "PS1=\"$(__mkps1)\"";'
+    PROMPT_COMMAND='LAST_EXIT="$?"; eval "PS1=\"$(__mkps1)\""'
 else
     PS1='$\u@\h:\w\$ '
 fi
@@ -128,7 +128,6 @@ fi
 export IP="$(ip -o -4 addr list wlan0 | awk '{print $4}' | cut -d/ -f1)"
 {{- end }}
 
-eval "$(zoxide init bash --cmd j)"
 
 # some useful functions
 marimo-serve() {
@@ -139,3 +138,5 @@ chdiffnvim() {
 	diff -bur --color=always ~/.local/share/chezmoi/dot_config/nvim/ ~/.config/nvim/ -x ".git*" -x "*stylua*" -x "lazy-lock.json"
 }
 
+[ -f ~/.fzf.bash ] && source ~/.fzf.bash
+eval "$(zoxide init bash --cmd j)"
