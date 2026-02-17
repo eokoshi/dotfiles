@@ -23,7 +23,7 @@ esac
 
 if [ -x /usr/bin/tput ] && tput setaf 1 >&/dev/null; then
     source "$HOME/.config/bash/prompt.sh"
-    PROMPT_COMMAND='LAST_EXIT="$?"; eval "PS1=\"$(__mkps1)\""'
+    PROMPT_COMMAND='LAST_EXIT="$?"; eval "PS1=\"$(__mkps1)\"";'
 else
     PS1='$\u@\h:\w\$ '
 fi
