@@ -41,10 +41,13 @@ fi
 
 
 echo ""
-read -p "Install zoxide? [y/n]" -n 1 -r
+read -p "Install zoxide and fzf? [y/n]" -n 1 -r
 if [[ $REPLY =~ ^[Yy]$ ]]
 then
+	git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf && ~/.fzf/install
 	curl -sSfL https://raw.githubusercontent.com/ajeetdsouza/zoxide/main/install.sh | sh
+	fzf --version
+	zoxide -V
 fi
 
 
@@ -64,6 +67,7 @@ then
 	sudo tar -C /opt/nvim -xzf "${NVIM_SYS}.tar.gz" --strip-components=1
 	rm -f "${NVIM_SYS}.tar.gz"
 	ln -s --force /opt/nvim/bin/nvim ~/.local/bin/nvim
+	nvim -v
 fi
 
 echo ""
@@ -84,6 +88,7 @@ then
 	rm -f "${YAZI_SYS}.zip"
 	ln -s --force /opt/yazi/yazi ~/.local/bin/yazi
 	ln -s --force /opt/yazi/ya ~/.local/bin/ya
+	yazi -V
 fi
 
 
@@ -97,6 +102,7 @@ then
 	sudo install lazygit -D -t /usr/local/bin/
 	sudo rm -rf lazygit
 	sudo rm lazygit.tar.gz
+	lazygit --version
 fi
 echo ""
 
