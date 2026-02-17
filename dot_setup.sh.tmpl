@@ -46,7 +46,6 @@ if [[ $REPLY =~ ^[Yy]$ ]]
 then
 	git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf
 	~/.fzf/install
-	sudo rm -rf ~/.fzf
 	curl -sSfL https://raw.githubusercontent.com/ajeetdsouza/zoxide/main/install.sh | sh
 	fzf --version
 	zoxide -V
