@@ -139,3 +139,4 @@ chdiffnvim() {
 	diff -bur --color=always ~/.local/share/chezmoi/dot_config/nvim/ ~/.config/nvim/ -x ".git*" -x "*stylua*" -x "lazy-lock.json"
 }
 
+[ -f ~/.fzf.bash ] && source ~/.fzf.bash
