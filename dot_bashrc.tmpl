@@ -138,8 +138,8 @@ function chdiffnvim() {
 	diff -bur --color=always ~/.local/share/chezmoi/dot_config/nvim/ ~/.config/nvim/ -x ".git*" -x "*stylua*" -x "lazy-lock.json"
 }
 
-function watchlast() {
-	watch 'tail -n 30 "$(ls -t1 | head -n 1)"'
+function watchlastlog() {
+	watch 'tail -n 30 "$(ls -Rt1 logs | grep .log | head -n 1)"'
 }
 
 [ -f ~/.fzf.bash ] && source ~/.fzf.bash
