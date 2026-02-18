@@ -130,12 +130,16 @@ export IP="$(ip -o -4 addr list wlan0 | awk '{print $4}' | cut -d/ -f1)"
 
 
 # some useful functions
-marimo-serve() {
+function marimo-serve() {
     uv run marimo edit --headless --watch --host $TS_IP --no-token
 }
 
-chdiffnvim() {
+function chdiffnvim() {
 	diff -bur --color=always ~/.local/share/chezmoi/dot_config/nvim/ ~/.config/nvim/ -x ".git*" -x "*stylua*" -x "lazy-lock.json"
+}
+
+function watchlast() {
+	watch 'tail -n 30 "$(ls -t1 | head -n 1)"'
 }
 
 [ -f ~/.fzf.bash ] && source ~/.fzf.bash
