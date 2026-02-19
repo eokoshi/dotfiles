@@ -139,7 +139,7 @@ function chdiffnvim() {
 }
 
 function watchlastlog() {
-	watch 'tail -n 30 "$(find logs | sort --reverse | head -n 1)"'
+	watch -n 0.1 'tail -n 30 "$(find logs | sort --reverse | head -n 1)"'
 }
 
 [ -f ~/.fzf.bash ] && source ~/.fzf.bash
