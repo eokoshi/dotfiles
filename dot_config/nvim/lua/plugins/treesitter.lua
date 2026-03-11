@@ -90,7 +90,7 @@ return {
 		opts = {
 			ensure_installed = parsers,
 			ignore_install = { "csv" },
-			auto_install = vim.fn.executable("tree-sitter") == 1, -- only enable auto install if `tree-sitter` cli is installed
+			auto_install = false,
 			fold = { enable = true },
 			highlight = { enable = true },
 			incremental_selection = {

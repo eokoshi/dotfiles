@@ -1,24 +1,26 @@
 return {
 	{
+		"igorlfs/nvim-dap-view",
+		---@module 'dap-view'
+		---@type dapview.Config
+		opts = {
+			winbar = {
+				sections = { "watches", "scopes", "exceptions", "breakpoints", "threads", "repl" },
+				default_section = "scopes",
+			},
+			windows = {
+				terminal = {
+					position = "right",
+				},
+			},
+			auto_toggle = true,
+		},
+	},
+	{
 		"mfussenegger/nvim-dap-python",
 		ft = { "python" },
 		dependencies = {
 			{ "mfussenegger/nvim-dap" },
-			{
-				"igorlfs/nvim-dap-view",
-				---@module 'dap-view'
-				---@type dapview.Config
-				opts = {
-					winbar = {
-						controls = {
-							enabled = true,
-						},
-						sections = { "watches", "scopes", "exceptions", "breakpoints", "threads", "repl", "console" },
-						default_section = "scopes",
-					},
-					auto_toggle = true,
-				},
-			},
 		},
 		config = function()
 			require("dap-python").setup("uv")
@@ -92,6 +94,9 @@ return {
 			map("n", "<Leader>dR", function()
 				require("dap").repl.toggle()
 			end, { desc = "Toggle REPL" })
+			map("n", "<Leader>dt", function()
+				require("dap-view").show_view("console")
+			end, { desc = "Show Console" })
 			map("n", "<Leader>ds", function()
 				require("dap").run_to_cursor()
 			end, { desc = "Run To Cursor" })
@@ -109,8 +114,6 @@ return {
 					end
 				end)
 			end, { desc = "Conditional Breakpoint (S-F9)" })
-			-- map("v", "<Leader>dE", function() require("dapui").eval() end, {desc = "Evaluate Input" })
-			-- map("n", "<Leader>du", function() require("dapui").toggle() end, {desc = "Toggle Debugger UI" })
 			map("n", "<Leader>dE", function()
 				vim.ui.input({ prompt = "Expression: " }, function(expr)
 					if expr then
