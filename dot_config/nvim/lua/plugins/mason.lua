@@ -23,6 +23,7 @@ else -- linux
 		"ty",
 		"bashls",
 		"marksman",
+		"docker-language-server",
 
 		-- Formatters
 		"stylua",
