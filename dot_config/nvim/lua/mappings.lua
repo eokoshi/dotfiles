@@ -56,11 +56,11 @@ map("n", "<Leader>ld", function() vim.diagnostic.open_float() end, { desc = "hov
 map("n", "<Leader>lf", function() vim.lsp.buf.format() end, { desc = "format buffer" })
 map("n", "<Leader>lh", function() vim.lsp.buf.signature_help() end, { desc = "signature help" })
 map("n", "<Leader>lc", function() vim.lsp.codelens.run() end, { desc = "codelens run" })
-map("n", "<Leader>lC", function() vim.lsp.codelens.refresh() end, { desc = "codelens refresh" })
 map("n", "<Leader>lr", function() vim.lsp.buf.rename() end, { desc = "rename symbol" })
 map("n", "<Leader>lq", function() vim.diagnostic.setqflist() end, { desc = "qflist diagnostics" })
 map("n", "<Leader>ll", function() vim.diagnostic.setloclist() end, { desc = "loclist diagnostics" })
-map("n", "<Leader>li", "<CMD>LspInfo<CR>", { desc = "LSP info" })
+map("n", "<Leader>lw", function() vim.lsp.buf.workspace_diagnostics() end, { desc = "workspace diagnostics" })
+map("n", "<Leader>li", "<CMD>checkhealth vim.lsp<CR>", { desc = "LSP info" })
 map("n", "gco", "o<Esc>Vcx<Esc><Cmd>normal gcc<CR>fxa<BS>", { desc = "Add comment below" })
 map("n", "gcO", "O<Esc>Vcx<Esc><Cmd>normal gcc<CR>fxa<BS>", { desc = "Add comment above" })
 

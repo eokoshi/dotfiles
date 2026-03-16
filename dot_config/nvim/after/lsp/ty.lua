@@ -3,7 +3,7 @@ return {
 	settings = {
 		ty = {
 			diagnosticMode = "workspace",
-			disableLanguageServices = true,
+			-- disableLanguageServices = true,
 		},
 	},
 }
