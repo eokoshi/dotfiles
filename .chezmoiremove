@@ -3,3 +3,4 @@
 .config/nvim/lua/plugins/fff.lua
 .config/nvim/lua/disable/overlook.lua
 .config/nvim/lua/plugins/notebooks.lua
+.config/nvim/lua/plugins/codecompanion.lua
