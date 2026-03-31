@@ -7,6 +7,9 @@ set -ueo pipefail
 sudo apt-get -y --ignore-missing install ripgrep fd-find python3-venv npm direnv tmux lsd unzip
 ln -s --force $(which fdfind) ~/.local/bin/fd
 
+# tailscale
+curl -fsSL https://tailscale.com/install.sh | sh
+
 echo ""
 read -p "Install GitHub CLI? [y/n]" -n 1 -r
 if [[ $REPLY =~ ^[Yy]$ ]]
@@ -46,6 +49,7 @@ if [[ $REPLY =~ ^[Yy]$ ]]
 then
 	git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf
 	~/.fzf/install
+	ln -s --force ~/.fzf/bin/fzf ~/.local/bin/fzf
 	curl -sSfL https://raw.githubusercontent.com/ajeetdsouza/zoxide/main/install.sh | sh
 	fzf --version
 	zoxide -V
