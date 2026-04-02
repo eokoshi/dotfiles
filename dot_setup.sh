@@ -5,8 +5,34 @@ set -ueo pipefail
 export PATH="$PATH:~/.local/bin"
 
 ## apt packages
-sudo apt-get -y --ignore-missing install ripgrep fd-find python3-venv npm direnv tmux lsd unzip
+sudo apt-get update
+sudo apt-get -y --ignore-missing install ripgrep fd-find python3-venv npm direnv lsd unzip curl
 ln -s --force $(which fdfind) ~/.local/bin/fd
+
+# tmux
+echo ""
+RELEASE_DATA=$(curl -s https://api.github.com/repos/tmux/tmux/releases/latest)
+URL=$(echo "$RELEASE_DATA" | grep -oP '"browser_download_url": "\Khttps://[^"]+\.tar\.gz' | head -n 1)
+if [ -z "$URL" ]; then
+    echo "Error: Could not find a valid download URL."
+    exit 1
+fi
+sudo apt-get install -y libevent-dev ncurses-dev build-essential bison pkg-config
+FILENAME=$(basename "$URL")
+curl -LO "$URL"
+DIR_NAME=$(tar -tf "$FILENAME" | sed -n '1p' | cut -f1 -d"/")
+tar -zxf "$FILENAME"
+cd "$DIR_NAME"
+
+./configure
+make
+sudo make install
+
+cd ..
+rm -rf "$DIR_NAME"
+rm "$FILENAME"
+echo "Installed: $(tmux -V)"
+
 
 # tailscale
 echo ""
@@ -48,15 +74,15 @@ fi
 echo ""
 read -p "Install zoxide and fzf? [y/n]" -n 1 -r
 if [[ $REPLY =~ ^[Yy]$ ]]; then
-	if [ ! -d "~/.fzf" ]; then
+	if [ ! -d "$HOME"/.fzf ]; then
 		git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf
 	fi
 	DIR=$(pwd)
 	cd ~/.fzf
-	git pull
+	git pull -q
 	./install
 	ln -sf ./bin/fzf ~/.local/bin/fzf
-	cd DIR
+	cd $DIR
 
 	curl -sSfL https://raw.githubusercontent.com/ajeetdsouza/zoxide/main/install.sh | sh
 	fzf --version
