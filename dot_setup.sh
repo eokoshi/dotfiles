@@ -9,12 +9,15 @@ sudo apt-get -y --ignore-missing install ripgrep fd-find python3-venv npm direnv
 ln -s --force $(which fdfind) ~/.local/bin/fd
 
 # tailscale
-curl -fsSL https://tailscale.com/install.sh | sh
+echo ""
+read -p "Install Tailscale? [y/n]" -n 1 -r
+if [[ $REPLY =~ ^[Yy]$ ]]; then
+	curl -fsSL https://tailscale.com/install.sh | sh
+fi
 
 echo ""
 read -p "Install GitHub CLI? [y/n]" -n 1 -r
-if [[ $REPLY =~ ^[Yy]$ ]]
-then
+if [[ $REPLY =~ ^[Yy]$ ]]; then
 	(type -p wget >/dev/null || (sudo apt update && sudo apt-get install wget -y)) \
 		&& sudo mkdir -p -m 755 /etc/apt/keyrings \
 			&& out=$(mktemp) && wget -nv -O"$out" https://cli.github.com/packages/githubcli-archive-keyring.gpg \
@@ -28,8 +31,7 @@ fi
 
 echo ""
 read -p "Install chezmoi? [y/n]" -n 1 -r
-if [[ $REPLY =~ ^[Yy]$ ]]
-then
+if [[ $REPLY =~ ^[Yy]$ ]]; then
 	sh -c "$(curl -fsLS get.chezmoi.io)" -- -b "$HOME"/.local/bin
 	chezmoi init --apply eokoshi
 fi
@@ -37,8 +39,7 @@ fi
 
 echo ""
 read -p "Install uv? [y/n]" -n 1 -r
-if [[ $REPLY =~ ^[Yy]$ ]]
-then
+if [[ $REPLY =~ ^[Yy]$ ]]; then
 	curl -LsSf https://astral.sh/uv/install.sh | sh
 	uv python install
 fi
@@ -46,8 +47,7 @@ fi
 
 echo ""
 read -p "Install zoxide and fzf? [y/n]" -n 1 -r
-if [[ $REPLY =~ ^[Yy]$ ]]
-then
+if [[ $REPLY =~ ^[Yy]$ ]]; then
 	if [ ! -d "~/.fzf" ]; then
 		git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf
 	fi
@@ -67,8 +67,7 @@ fi
 
 echo ""
 read -p "Install nvim? [y/n]" -n 1 -r
-if [[ $REPLY =~ ^[Yy]$ ]]
-then
+if [[ $REPLY =~ ^[Yy]$ ]]; then
 	case $ARCH in
 		x86_64)
 			NVIM_SYS="nvim-linux-x86_64"
@@ -93,8 +92,7 @@ fi
 
 echo ""
 read -p "Install yazi? [y/n]" -n 1 -r
-if [[ $REPLY =~ ^[Yy]$ ]]
-then
+if [[ $REPLY =~ ^[Yy]$ ]]; then
 	case $ARCH in
 		x86_64)
 			YAZI_SYS="yazi-x86_64-unknown-linux-gnu"
@@ -123,8 +121,7 @@ fi
 
 echo ""
 read -p "Install lazygit? [y/n]" -n 1 -r
-if [[ $REPLY =~ ^[Yy]$ ]]
-then
+if [[ $REPLY =~ ^[Yy]$ ]]; then
 	LAZYGIT_VERSION=$(curl -s "https://api.github.com/repos/jesseduffield/lazygit/releases/latest" | grep -Po '"tag_name": *"v\K[^"]*')
 	case $ARCH in
     x86_64)
