@@ -5,16 +5,48 @@ set -ueo pipefail
 export PATH="$PATH:~/.local/bin"
 
 ## apt packages
-sudo apt-get -y --ignore-missing install ripgrep fd-find python3-venv npm direnv tmux lsd unzip
+sudo apt-get update
+sudo apt-get -y --ignore-missing install ripgrep fd-find python3-venv npm direnv lsd unzip curl
 ln -s --force $(which fdfind) ~/.local/bin/fd
 
+# tmux
+echo ""
+read -p "Install tmux? [y/n]" -n 1 -r
+if [[ $REPLY =~ ^[Yy]$ ]]; then
+	RELEASE_DATA=$(curl -s https://api.github.com/repos/tmux/tmux/releases/latest)
+	URL=$(echo "$RELEASE_DATA" | grep -oP '"browser_download_url": "\Khttps://[^"]+\.tar\.gz' | head -n 1)
+	if [ -z "$URL" ]; then
+		echo "Error: Could not find a valid download URL."
+		exit 1
+	fi
+	sudo apt-get install -y libevent-dev ncurses-dev build-essential bison pkg-config
+	FILENAME=$(basename "$URL")
+	curl -LO "$URL"
+	DIR_NAME=$(tar -tf "$FILENAME" | sed -n '1p' | cut -f1 -d"/")
+	tar -zxf "$FILENAME"
+	cd "$DIR_NAME"
+
+	./configure
+	make
+	sudo make install
+
+	cd ..
+	rm -rf "$DIR_NAME"
+	rm "$FILENAME"
+	echo "Installed: $(tmux -V)"
+fi
+
 # tailscale
-curl -fsSL https://tailscale.com/install.sh | sh
+echo ""
+read -p "Install Tailscale? [y/n]" -n 1 -r
+if [[ $REPLY =~ ^[Yy]$ ]]; then
+	curl -fsSL https://tailscale.com/install.sh | sh
+	sudo tailscale up
+fi
 
 echo ""
 read -p "Install GitHub CLI? [y/n]" -n 1 -r
-if [[ $REPLY =~ ^[Yy]$ ]]
-then
+if [[ $REPLY =~ ^[Yy]$ ]]; then
 	(type -p wget >/dev/null || (sudo apt update && sudo apt-get install wget -y)) \
 		&& sudo mkdir -p -m 755 /etc/apt/keyrings \
 			&& out=$(mktemp) && wget -nv -O"$out" https://cli.github.com/packages/githubcli-archive-keyring.gpg \
@@ -28,8 +60,7 @@ fi
 
 echo ""
 read -p "Install chezmoi? [y/n]" -n 1 -r
-if [[ $REPLY =~ ^[Yy]$ ]]
-then
+if [[ $REPLY =~ ^[Yy]$ ]]; then
 	sh -c "$(curl -fsLS get.chezmoi.io)" -- -b "$HOME"/.local/bin
 	chezmoi init --apply eokoshi
 fi
@@ -37,8 +68,7 @@ fi
 
 echo ""
 read -p "Install uv? [y/n]" -n 1 -r
-if [[ $REPLY =~ ^[Yy]$ ]]
-then
+if [[ $REPLY =~ ^[Yy]$ ]]; then
 	curl -LsSf https://astral.sh/uv/install.sh | sh
 	uv python install
 fi
@@ -46,12 +76,19 @@ fi
 
 echo ""
 read -p "Install zoxide and fzf? [y/n]" -n 1 -r
-if [[ $REPLY =~ ^[Yy]$ ]]
-then
-	git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf
-	~/.fzf/install
-	ln -s --force ~/.fzf/bin/fzf ~/.local/bin/fzf
+if [[ $REPLY =~ ^[Yy]$ ]]; then
+	if [ ! -d "$HOME"/.fzf ]; then
+		git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf
+	fi
+	DIR=$(pwd)
+	cd ~/.fzf
+	git pull -q
+	./install
+	ln -sf ~/.fzf/bin/fzf ~/.local/bin/fzf
+	cd $DIR
+
 	curl -sSfL https://raw.githubusercontent.com/ajeetdsouza/zoxide/main/install.sh | sh
+
 	fzf --version
 	zoxide -V
 fi
@@ -60,8 +97,7 @@ fi
 
 echo ""
 read -p "Install nvim? [y/n]" -n 1 -r
-if [[ $REPLY =~ ^[Yy]$ ]]
-then
+if [[ $REPLY =~ ^[Yy]$ ]]; then
 	case $ARCH in
 		x86_64)
 			NVIM_SYS="nvim-linux-x86_64"
@@ -86,8 +122,7 @@ fi
 
 echo ""
 read -p "Install yazi? [y/n]" -n 1 -r
-if [[ $REPLY =~ ^[Yy]$ ]]
-then
+if [[ $REPLY =~ ^[Yy]$ ]]; then
 	case $ARCH in
 		x86_64)
 			YAZI_SYS="yazi-x86_64-unknown-linux-gnu"
@@ -116,8 +151,7 @@ fi
 
 echo ""
 read -p "Install lazygit? [y/n]" -n 1 -r
-if [[ $REPLY =~ ^[Yy]$ ]]
-then
+if [[ $REPLY =~ ^[Yy]$ ]]; then
 	LAZYGIT_VERSION=$(curl -s "https://api.github.com/repos/jesseduffield/lazygit/releases/latest" | grep -Po '"tag_name": *"v\K[^"]*')
 	case $ARCH in
     x86_64)
