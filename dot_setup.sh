@@ -48,9 +48,16 @@ echo ""
 read -p "Install zoxide and fzf? [y/n]" -n 1 -r
 if [[ $REPLY =~ ^[Yy]$ ]]
 then
-	git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf
-	~/.fzf/install
-	ln -s --force ~/.fzf/bin/fzf ~/.local/bin/fzf
+	if [ ! -d "~/.fzf" ]; then
+		git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf
+	fi
+	DIR=$(pwd)
+	cd ~/.fzf
+	git pull
+	./install
+	ln -sf ./bin/fzf ~/.local/bin/fzf
+	cd DIR
+
 	curl -sSfL https://raw.githubusercontent.com/ajeetdsouza/zoxide/main/install.sh | sh
 	fzf --version
 	zoxide -V
