@@ -84,7 +84,7 @@ if [[ $REPLY =~ ^[Yy]$ ]]; then
 	cd ~/.fzf
 	git pull -q
 	./install
-	ln -sf ./bin/fzf ~/.local/bin/fzf
+	ln -sf ~/.fzf/bin/fzf ~/.local/bin/fzf
 	cd $DIR
 
 	curl -sSfL https://raw.githubusercontent.com/ajeetdsouza/zoxide/main/install.sh | sh
