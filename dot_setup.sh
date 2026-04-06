@@ -12,7 +12,7 @@ ln -s --force $(which fdfind) ~/.local/bin/fd
 # tmux
 echo ""
 read -p "Install tmux? [y/n]" -n 1 -r
-if [[ $REPLY =~ ^[Yy]$ ]]
+if [[ $REPLY =~ ^[Yy]$ ]]; then
 	RELEASE_DATA=$(curl -s https://api.github.com/repos/tmux/tmux/releases/latest)
 	URL=$(echo "$RELEASE_DATA" | grep -oP '"browser_download_url": "\Khttps://[^"]+\.tar\.gz' | head -n 1)
 	if [ -z "$URL" ]; then
@@ -36,11 +36,10 @@ if [[ $REPLY =~ ^[Yy]$ ]]
 	echo "Installed: $(tmux -V)"
 fi
 
-
 # tailscale
 echo ""
 read -p "Install Tailscale? [y/n]" -n 1 -r
-if [[ $REPLY =~ ^[Yy]$ ]]
+if [[ $REPLY =~ ^[Yy]$ ]]; then
 	curl -fsSL https://tailscale.com/install.sh | sh
 	sudo tailscale up
 fi
