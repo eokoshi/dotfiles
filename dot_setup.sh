@@ -11,27 +11,30 @@ ln -s --force $(which fdfind) ~/.local/bin/fd
 
 # tmux
 echo ""
-RELEASE_DATA=$(curl -s https://api.github.com/repos/tmux/tmux/releases/latest)
-URL=$(echo "$RELEASE_DATA" | grep -oP '"browser_download_url": "\Khttps://[^"]+\.tar\.gz' | head -n 1)
-if [ -z "$URL" ]; then
-    echo "Error: Could not find a valid download URL."
-    exit 1
+read -p "Install tmux? [y/n]" -n 1 -r
+if [[ $REPLY =~ ^[Yy]$ ]]
+	RELEASE_DATA=$(curl -s https://api.github.com/repos/tmux/tmux/releases/latest)
+	URL=$(echo "$RELEASE_DATA" | grep -oP '"browser_download_url": "\Khttps://[^"]+\.tar\.gz' | head -n 1)
+	if [ -z "$URL" ]; then
+		echo "Error: Could not find a valid download URL."
+		exit 1
+	fi
+	sudo apt-get install -y libevent-dev ncurses-dev build-essential bison pkg-config
+	FILENAME=$(basename "$URL")
+	curl -LO "$URL"
+	DIR_NAME=$(tar -tf "$FILENAME" | sed -n '1p' | cut -f1 -d"/")
+	tar -zxf "$FILENAME"
+	cd "$DIR_NAME"
+
+	./configure
+	make
+	sudo make install
+
+	cd ..
+	rm -rf "$DIR_NAME"
+	rm "$FILENAME"
+	echo "Installed: $(tmux -V)"
 fi
-sudo apt-get install -y libevent-dev ncurses-dev build-essential bison pkg-config
-FILENAME=$(basename "$URL")
-curl -LO "$URL"
-DIR_NAME=$(tar -tf "$FILENAME" | sed -n '1p' | cut -f1 -d"/")
-tar -zxf "$FILENAME"
-cd "$DIR_NAME"
-
-./configure
-make
-sudo make install
-
-cd ..
-rm -rf "$DIR_NAME"
-rm "$FILENAME"
-echo "Installed: $(tmux -V)"
 
 
 # tailscale
