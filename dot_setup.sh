@@ -37,8 +37,9 @@ echo "Installed: $(tmux -V)"
 # tailscale
 echo ""
 read -p "Install Tailscale? [y/n]" -n 1 -r
-if [[ $REPLY =~ ^[Yy]$ ]]; then
+if [[ $REPLY =~ ^[Yy]$ ]]
 	curl -fsSL https://tailscale.com/install.sh | sh
+	sudo tailscale up
 fi
 
 echo ""
@@ -85,6 +86,7 @@ if [[ $REPLY =~ ^[Yy]$ ]]; then
 	cd $DIR
 
 	curl -sSfL https://raw.githubusercontent.com/ajeetdsouza/zoxide/main/install.sh | sh
+
 	fzf --version
 	zoxide -V
 fi
