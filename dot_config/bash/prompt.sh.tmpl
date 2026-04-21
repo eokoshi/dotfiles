@@ -54,12 +54,14 @@ __mkps1_hostname() {
     local textcolor='\[\e[3;38;5;1m\]';
     {{ else if eq .chezmoi.hostname "blue-starfish" }}
     local textcolor='\[\e[3;38;5;123m\]';
-    {{ else if eq .chezmoi.hostname "lab" }}
-    local textcolor='\[\e[3;38;5;208m\]';
+    {{ else if eq .chezmoi.hostname "halo" }}
+    local textcolor='\[\e[3;38;5;211m\]';
     {{ else if eq .chezmoi.hostname "eefix" }}
     local textcolor='\[\e[3;38;5;99m\]';
-    {{ else if eq .chezmoi.hostname "DESKTOP-KACLDMD" }}
-    local textcolor='\[\e[3;38;5;219m\]';
+    {{ else if eq .chezmoi.hostname "eefplex7050" }}
+    local textcolor='\[\e[3;38;5;184m\]';
+    {{ else if eq .chezmoi.hostname "MANAS-HP" }}
+    local textcolor='\[\e[3;38;5;9m\]';
     {{ else }}
     local textcolor='\[\e[3;38;5;38m\]';
     {{ end }}
