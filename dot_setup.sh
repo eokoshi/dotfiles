@@ -3,11 +3,15 @@
 ARCH=$(uname -m)
 set -ueo pipefail
 export PATH="$PATH:~/.local/bin"
+if [ ! -d "$HOME"/.local/bin ]; then
+	mkdir "$HOME"/.local/bin -p
+fi
 
 ## apt packages
 sudo apt-get update
-sudo apt-get -y --ignore-missing install ripgrep fd-find python3-venv npm direnv lsd unzip curl
+sudo apt-get -y --ignore-missing install ripgrep fd-find python3-venv npm direnv lsd unzip curl openssh-server
 ln -s --force $(which fdfind) ~/.local/bin/fd
+sudo service ssh start
 
 # tmux
 echo ""
@@ -42,6 +46,7 @@ read -p "Install Tailscale? [y/n]" -n 1 -r
 if [[ $REPLY =~ ^[Yy]$ ]]; then
 	curl -fsSL https://tailscale.com/install.sh | sh
 	sudo tailscale up
+	ssh-copy-id office
 fi
 
 echo ""
@@ -62,6 +67,7 @@ echo ""
 read -p "Install chezmoi? [y/n]" -n 1 -r
 if [[ $REPLY =~ ^[Yy]$ ]]; then
 	sh -c "$(curl -fsLS get.chezmoi.io)" -- -b "$HOME"/.local/bin
+	scp office:/home/ethan/.config/chezmoi/key.txt ~/.config/chezmoi/
 	chezmoi init --apply eokoshi
 fi
 
