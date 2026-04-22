@@ -31,6 +31,8 @@ return {
 			yaml = { "prettier" },
 			toml = { "pyproject-fmt" },
 			json = { "fixjson" },
+			css = { "prettier" },
+			javascript = { "prettier" },
 		},
 		default_format_opts = {
 			lsp_format = "fallback",
