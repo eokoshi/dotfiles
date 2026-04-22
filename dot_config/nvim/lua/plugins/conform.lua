@@ -32,7 +32,7 @@ return {
 			toml = { "pyproject-fmt" },
 			json = { "fixjson" },
 			css = { "prettier" },
-			javascript = { "prettier" },
+			js = { "prettier" },
 		},
 		default_format_opts = {
 			lsp_format = "fallback",
