@@ -19,6 +19,12 @@ return {
 			mode = "n",
 			desc = "format buffer",
 		},
+		{
+			"<leader>lC",
+			"<CMD>ConformInfo<CR>",
+			mode = "n",
+			desc = "ConformInfo",
+		},
 	},
 	---@module "conform"
 	---@type conform.setupOpts
