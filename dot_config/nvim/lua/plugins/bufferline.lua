@@ -6,9 +6,7 @@ return {
 		options = {
 			themable = true,
 			-- separator_style = "slope",
-			right_mouse_command = function()
-				require("snacks").bufdelete()
-			end,
+			right_mouse_command = function() require("snacks").bufdelete() end,
 			diagnostics = "nvim_lsp",
 			show_tab_indicators = true,
 			offsets = {

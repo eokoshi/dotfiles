@@ -23,8 +23,7 @@ vim.api.nvim_create_autocmd("ColorScheme", {
 	pattern = "gruvbox-material",
 	callback = function()
 		local config = vim.fn["gruvbox_material#get_configuration"]()
-		local palette =
-			vim.fn["gruvbox_material#get_palette"](config.background, config.foreground, config.colors_override)
+		local palette = vim.fn["gruvbox_material#get_palette"](config.background, config.foreground, config.colors_override)
 		local set_hl = vim.fn["gruvbox_material#highlight"]
 
 		set_hl("DiffText", palette.none, palette.bg_visual_red)

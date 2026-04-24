@@ -25,9 +25,7 @@ return {
 						icon = "󰙅 ",
 						key = "e",
 						desc = "File Explorer",
-						action = function()
-							require("neo-tree.command").execute({ position = "float" })
-						end,
+						action = function() require("neo-tree.command").execute({ position = "float" }) end,
 					},
 					{ icon = " ", key = "f", desc = "Find File", action = ":lua Snacks.dashboard.pick('files')" },
 					{
@@ -44,10 +42,7 @@ return {
 						action = function()
 							local dir
 							if vim.fn.has("win32") == 1 then
-								vim.notify(
-									"Do not mess with config from Windows, edit in chezmoi dir on linux",
-									vim.log.levels.ERROR
-								)
+								vim.notify("Do not mess with config from Windows, edit in chezmoi dir on linux", vim.log.levels.ERROR)
 							else
 								dir = os.getenv("HOME") .. "/.local/share/chezmoi"
 								vim.cmd("cd " .. dir)
@@ -234,12 +229,8 @@ return {
 			group = group,
 			callback = function()
 				-- Setup some globals for debugging (lazy-loaded)
-				_G.dd = function(...)
-					Snacks.debug.inspect(...)
-				end
-				_G.bt = function()
-					Snacks.debug.backtrace()
-				end
+				_G.dd = function(...) Snacks.debug.inspect(...) end
+				_G.bt = function() Snacks.debug.backtrace() end
 				vim.print = _G.dd -- Override print to use snacks for `:=` command
 			end,
 		})
@@ -339,20 +330,25 @@ return {
 			end
 		end, { desc = "help pages" })
 
-		map("n", "<Leader>xN", function()
-			Snacks.win({
-				file = vim.api.nvim_get_runtime_file("doc/news.txt", false)[1],
-				width = 90,
-				height = 0.6,
-				wo = {
-					spell = false,
-					wrap = false,
-					signcolumn = "yes",
-					statuscolumn = " ",
-					conceallevel = 3,
-				},
-			})
-		end, { desc = "Neovim News" })
+		map(
+			"n",
+			"<Leader>xN",
+			function()
+				Snacks.win({
+					file = vim.api.nvim_get_runtime_file("doc/news.txt", false)[1],
+					width = 90,
+					height = 0.6,
+					wo = {
+						spell = false,
+						wrap = false,
+						signcolumn = "yes",
+						statuscolumn = " ",
+						conceallevel = 3,
+					},
+				})
+			end,
+			{ desc = "Neovim News" }
+		)
 
 		map("n", "<Leader>ui", function()
 			---@diagnostic disable-next-line: missing-parameter
@@ -389,50 +385,55 @@ return {
 			})
 		end, { desc = "icons" })
 
-		map("n", "<Leader>N", function()
-			require("snacks").picker.notifications({
-				confirm = { "yank", "close" },
-				focus = "list",
-				layout = {
+		map(
+			"n",
+			"<Leader>N",
+			function()
+				require("snacks").picker.notifications({
+					confirm = { "yank", "close" },
+					focus = "list",
 					layout = {
-						box = "vertical",
-						backdrop = false,
-						width = 0.8,
-						min_width = 90,
-						height = 0.8,
-						min_height = 30,
-						border = "rounded",
-						title = "{title} {live} {flags}",
-						title_pos = "center",
-						{ win = "input", height = 1, border = "bottom" },
-						{ win = "list", border = "none" },
-						{
-							win = "preview",
-							title = "{preview}",
+						layout = {
+							box = "vertical",
+							backdrop = false,
+							width = 0.8,
+							min_width = 90,
 							height = 0.8,
-							border = "top",
-							wo = { wrap = true, statuscolumn = "%l ", relativenumber = false, foldcolumn = "0" },
+							min_height = 30,
+							border = "rounded",
+							title = "{title} {live} {flags}",
+							title_pos = "center",
+							{ win = "input", height = 1, border = "bottom" },
+							{ win = "list", border = "none" },
+							{
+								win = "preview",
+								title = "{preview}",
+								height = 0.8,
+								border = "top",
+								wo = { wrap = true, statuscolumn = "%l ", relativenumber = false, foldcolumn = "0" },
+							},
 						},
 					},
-				},
-				win = {
-					input = {
-						keys = {
-							["<C-Space>"] = { "cycle_win", mode = { "i", "n" } },
+					win = {
+						input = {
+							keys = {
+								["<C-Space>"] = { "cycle_win", mode = { "i", "n" } },
+							},
+						},
+						list = {
+							keys = {
+								["<C-Space>"] = { "cycle_win", mode = { "i", "n" } },
+							},
+						},
+						preview = {
+							keys = {
+								["<C-Space>"] = { "cycle_win", mode = { "i", "n" } },
+							},
 						},
 					},
-					list = {
-						keys = {
-							["<C-Space>"] = { "cycle_win", mode = { "i", "n" } },
-						},
-					},
-					preview = {
-						keys = {
-							["<C-Space>"] = { "cycle_win", mode = { "i", "n" } },
-						},
-					},
-				},
-			})
-		end, { desc = "Notification history" })
+				})
+			end,
+			{ desc = "Notification history" }
+		)
 	end,
 }

@@ -52,11 +52,12 @@ return {
 	init = function()
 		local map = require("stuff.functions").map
 		map("n", "<Leader>e", "<CMD>Neotree toggle left<CR>", { desc = "File explorer" })
-		map("n", "<Leader>pz", function()
-			require("neo-tree.command").execute({ dir = os.getenv("HOME") .. "/.local/share/chezmoi" })
-		end, { desc = "cd chezmoi" })
-		map("n", "<Leader>pc", function()
-			require("neo-tree.command").execute({ dir = vim.fn.stdpath("config") })
-		end, { desc = "cd config" })
+		map(
+			"n",
+			"<Leader>pz",
+			function() require("neo-tree.command").execute({ dir = os.getenv("HOME") .. "/.local/share/chezmoi" }) end,
+			{ desc = "cd chezmoi" }
+		)
+		map("n", "<Leader>pc", function() require("neo-tree.command").execute({ dir = vim.fn.stdpath("config") }) end, { desc = "cd config" })
 	end,
 }

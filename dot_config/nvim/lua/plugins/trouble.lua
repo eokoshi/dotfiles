@@ -19,9 +19,7 @@ return {
 						for _, item in ipairs(items) do
 							severity = math.min(severity, item.severity)
 						end
-						return vim.tbl_filter(function(item)
-							return item.severity == severity
-						end, items)
+						return vim.tbl_filter(function(item) return item.severity == severity end, items)
 					end,
 				},
 			},
@@ -34,12 +32,7 @@ return {
 			map("n", "<Leader>t", "", { desc = "Trouble" })
 			map("n", "<Leader>td", "<CMD>Trouble diagnostics toggle filter.buf=0<CR>", { desc = "diagnostics" })
 			map("n", "<Leader>tD", "<CMD>Trouble diagnostics toggle<CR>", { desc = "workspace diagnostics" })
-			map(
-				"n",
-				"<Leader>ts",
-				"<CMD>Trouble symbols toggle focus=true pinned=true win.relative=editor<CR>",
-				{ desc = "symbols" }
-			)
+			map("n", "<Leader>ts", "<CMD>Trouble symbols toggle focus=true pinned=true win.relative=editor<CR>", { desc = "symbols" })
 			map(
 				"n",
 				"<Leader>tS",

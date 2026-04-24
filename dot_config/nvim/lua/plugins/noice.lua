@@ -76,11 +76,7 @@ return {
 	},
 	init = function()
 		local map = require("stuff.functions").map
-		map({ "n", "i", "s" }, "<C-n>", function()
-			require("noice.lsp").scroll(4)
-		end, { desc = "Scroll hover down" })
-		map({ "n", "i", "s" }, "<C-p>", function()
-			require("noice.lsp").scroll(-4)
-		end, { desc = "Scroll hover up" })
+		map({ "n", "i", "s" }, "<C-n>", function() require("noice.lsp").scroll(4) end, { desc = "Scroll hover down" })
+		map({ "n", "i", "s" }, "<C-p>", function() require("noice.lsp").scroll(-4) end, { desc = "Scroll hover up" })
 	end,
 }

@@ -1,22 +1,13 @@
 -- Python keymaps
 local map = require("stuff.functions").map
 map("n", "<Leader>fi", "?import<CR>", { desc = "Jump to imports", buffer = true })
-map(
-	"v",
-	"gd",
-	":norm ysaw'f=r:A,<CR>gv<Plug>(nvim-surround-visual-line)}iargs = <ESC>va{o^",
-	{ desc = "Convert lines to dict", buffer = true }
-)
+map("v", "gd", ":norm ysaw'f=r:A,<CR>gv<Plug>(nvim-surround-visual-line)}iargs = <ESC>va{o^", { desc = "Convert lines to dict", buffer = true })
 local api = vim.api
 local fn = vim.fn
 
-local function get_cursor_row()
-	return api.nvim_win_get_cursor(0)[1] - 1
-end
+local function get_cursor_row() return api.nvim_win_get_cursor(0)[1] - 1 end
 
-local function get_line(row)
-	return api.nvim_buf_get_lines(0, row, row + 1, false)[1]
-end
+local function get_line(row) return api.nvim_buf_get_lines(0, row, row + 1, false)[1] end
 
 local function is_marker(row)
 	local line = get_line(row)
@@ -76,10 +67,6 @@ map("x", "aj", select_outer, { buffer = true, desc = "cell" })
 
 map("o", "ij", select_inner, { buffer = true, desc = "cell" })
 map("x", "ij", select_inner, { buffer = true, desc = "cell" })
-map("n", "]j", function()
-	vim.fn.search("^# %%", "W")
-end, { buffer = true, desc = "cell" })
+map("n", "]j", function() vim.fn.search("^# %%", "W") end, { buffer = true, desc = "cell" })
 
-map("n", "[j", function()
-	vim.fn.search("^# %%", "bW")
-end, { buffer = true, desc = "cell" })
+map("n", "[j", function() vim.fn.search("^# %%", "bW") end, { buffer = true, desc = "cell" })

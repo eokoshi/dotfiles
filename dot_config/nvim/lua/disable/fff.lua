@@ -3,9 +3,7 @@ return {
 	dependencies = {
 		"saghen/blink.cmp",
 	},
-	build = function()
-		require("fff.download").download_or_build_binary()
-	end,
+	build = function() require("fff.download").download_or_build_binary() end,
 	lazy = false,
 	opts = {
 		prompt = "❭ ",
@@ -29,9 +27,7 @@ return {
 	keys = {
 		{
 			"ff", -- try it if you didn't it is a banger keybinding for a picker
-			function()
-				require("fff").find_files()
-			end,
+			function() require("fff").find_files() end,
 			desc = "FFFind files",
 		},
 	},

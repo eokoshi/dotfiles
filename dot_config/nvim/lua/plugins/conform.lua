@@ -5,17 +5,13 @@ return {
 	keys = {
 		{
 			"<leader>lf",
-			function()
-				require("conform").format({ async = true })
-			end,
+			function() require("conform").format({ async = true }) end,
 			mode = "n",
 			desc = "format buffer",
 		},
 		{
 			"<leader>bf",
-			function()
-				require("conform").format({ async = true })
-			end,
+			function() require("conform").format({ async = true }) end,
 			mode = "n",
 			desc = "format buffer",
 		},
@@ -36,9 +32,9 @@ return {
 			htmldjango = { "djlint" },
 			yaml = { "prettier" },
 			toml = { "pyproject-fmt" },
-			json = { "fixjson" },
+			json = { "fixjson", "prettier" },
 			css = { "prettier" },
-			js = { "prettier" },
+			javascript = { "prettier" },
 		},
 		default_format_opts = {
 			lsp_format = "fallback",

@@ -58,9 +58,7 @@ vim.o.wrap = false -- Disable line wrap
 
 -- Helper function for VSCode commands
 local function vscode_call(cmd)
-	return function()
-		require("vscode").call(cmd)
-	end
+	return function() require("vscode").call(cmd) end
 end
 
 -- Keybindings

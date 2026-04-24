@@ -59,9 +59,7 @@ return {
 					components = {
 						source_name = {
 							width = { max = 30 },
-							text = function(ctx)
-								return ctx.source_name
-							end,
+							text = function(ctx) return ctx.source_name end,
 							highlight = function(ctx)
 								if ctx.source_name == "rg" then
 									return "BlinkCmpKindKeyword"
@@ -120,9 +118,7 @@ return {
 			providers = {
 				path = {
 					opts = {
-						get_cwd = function(_)
-							return vim.fn.getcwd()
-						end,
+						get_cwd = function(_) return vim.fn.getcwd() end,
 					},
 				},
 				lsp = {
@@ -141,9 +137,7 @@ return {
 					},
 					score_offset = -1,
 					async = true,
-					should_show_items = function(ctx)
-						return ctx.trigger.initial_kind ~= "trigger_character"
-					end,
+					should_show_items = function(ctx) return ctx.trigger.initial_kind ~= "trigger_character" end,
 				},
 				lazydev = {
 					name = "LazyDev",
