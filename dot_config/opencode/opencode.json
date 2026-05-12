@@ -10,9 +10,10 @@
     "edit": "ask",
     "bash": {
       "*": "ask",
-      "git *": "allow",
+      "git status *": "allow",
+      "git *": "ask",
       "npm *": "allow",
-      "rm *": "deny",
+      "rm *": "ask",
       "grep *": "allow"
     },
     "read": "allow",
