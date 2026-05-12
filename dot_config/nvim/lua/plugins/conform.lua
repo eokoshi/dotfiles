@@ -35,6 +35,7 @@ return {
 			json = { "fixjson", "prettier" },
 			css = { "prettier" },
 			javascript = { "prettier" },
+			php = { "php-cs-fixer" },
 		},
 		default_format_opts = {
 			lsp_format = "fallback",
