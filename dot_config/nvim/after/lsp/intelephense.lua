@@ -3,7 +3,7 @@ return {
 	settings = {
 		intelephense = {
 			format = {
-				braces = "allman",
+				enable = false,
 			},
 		},
 	},
