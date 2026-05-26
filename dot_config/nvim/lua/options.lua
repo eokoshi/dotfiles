@@ -2,7 +2,6 @@ local icons = require("stuff.icons")
 
 vim.o.autowrite = true -- Enable auto write (this is not the same as autosave)
 vim.o.autoread = true
-vim.o.clipboard = "unnamedplus" -- Sync with system clipboard
 vim.o.colorcolumn = "+1"
 vim.opt.completeopt = { "menu", "menuone", "noselect" }
 vim.o.conceallevel = 2 -- Hide * markup for bold and italic, but not markers with substitutions
