@@ -111,12 +111,12 @@ return {
 							removed = "GitSignsStagedDelete", -- Changes the diff's removed color you
 						},
 					},
-					"diagnostics",
-					{
-						require("noice").api.status.mode.get,
-						cond = require("noice").api.status.mode.has,
-						color = "lualine_c_diagnostics_error_insert",
-					},
+					-- "diagnostics",
+					-- {
+					-- 	require("noice").api.status.mode.get,
+					-- 	cond = require("noice").api.status.mode.has,
+					-- 	color = "lualine_c_diagnostics_error_insert",
+					-- },
 				},
 				lualine_x = {
 					{

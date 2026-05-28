@@ -330,25 +330,25 @@ return {
 			end
 		end, { desc = "help pages" })
 
-		map(
-			"n",
-			"<Leader>xN",
-			function()
-				Snacks.win({
-					file = vim.api.nvim_get_runtime_file("doc/news.txt", false)[1],
-					width = 90,
-					height = 0.6,
-					wo = {
-						spell = false,
-						wrap = false,
-						signcolumn = "yes",
-						statuscolumn = " ",
-						conceallevel = 3,
-					},
-				})
-			end,
-			{ desc = "Neovim News" }
-		)
+		-- map(
+		-- 	"n",
+		-- 	"<Leader>xN",
+		-- 	function()
+		-- 		Snacks.win({
+		-- 			file = vim.api.nvim_get_runtime_file("doc/news.txt", false)[1],
+		-- 			width = 90,
+		-- 			height = 0.6,
+		-- 			wo = {
+		-- 				spell = false,
+		-- 				wrap = false,
+		-- 				signcolumn = "yes",
+		-- 				statuscolumn = " ",
+		-- 				conceallevel = 3,
+		-- 			},
+		-- 		})
+		-- 	end,
+		-- 	{ desc = "Neovim News" }
+		-- )
 
 		map("n", "<Leader>ui", function()
 			---@diagnostic disable-next-line: missing-parameter
