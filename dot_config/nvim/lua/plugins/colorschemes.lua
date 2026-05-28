@@ -1,20 +1,5 @@
 return {
 	{
-		"astronvim/astrotheme",
-		lazy = true,
-		opts = {},
-	},
-	{
-		"ribru17/bamboo.nvim",
-		lazy = true,
-		opts = {},
-	},
-	{
-		"rebelot/kanagawa.nvim",
-		lazy = true,
-		opts = {},
-	},
-	{
 		"olimorris/onedarkpro.nvim",
 		lazy = true,
 		opts = {
@@ -40,15 +25,6 @@ return {
 		end,
 	},
 	{
-		"sainnhe/edge",
-		lazy = true,
-		config = function()
-			vim.g.edge_style = "default"
-			vim.g.edge_better_performance = 1
-			vim.g.edge_enable_italic = 1
-		end,
-	},
-	{
 		"sainnhe/gruvbox-material",
 		lazy = true,
 		config = function()
@@ -60,38 +36,62 @@ return {
 			vim.g.gruvbox_material_transparent_background = 1
 		end,
 	},
-	{
-		"folke/tokyonight.nvim",
-		lazy = true,
-		opts = {},
-	},
-	{
-		"sainnhe/sonokai",
-		lazy = true,
-	},
-	{
-		"mcauley-penney/techbase.nvim",
-		lazy = true,
-		opts = {
-			italic_comments = false,
-			transparent = false,
-			plugin_support = {
-				blink = true,
-				gitsigns = true,
-				lazy = true,
-				lualine = true,
-				mason = true,
-			},
-			hl_overrides = {},
-		},
-	},
-	{
-		"gbprod/nord.nvim",
-		lazy = true,
-	},
-	{
-		"rose-pine/neovim",
-		name = "rose-pine",
-		lazy = true,
-	},
+	-- {
+	-- 	"sainnhe/edge",
+	-- 	lazy = true,
+	-- 	config = function()
+	-- 		vim.g.edge_style = "default"
+	-- 		vim.g.edge_better_performance = 1
+	-- 		vim.g.edge_enable_italic = 1
+	-- 	end,
+	-- },
+	-- {
+	-- 	"mcauley-penney/techbase.nvim",
+	-- 	lazy = true,
+	-- 	opts = {
+	-- 		italic_comments = false,
+	-- 		transparent = false,
+	-- 		plugin_support = {
+	-- 			blink = true,
+	-- 			gitsigns = true,
+	-- 			lazy = true,
+	-- 			lualine = true,
+	-- 			mason = true,
+	-- 		},
+	-- 		hl_overrides = {},
+	-- 	},
+	-- },
+	-- {
+	-- 	"astronvim/astrotheme",
+	-- 	lazy = true,
+	-- 	opts = {},
+	-- },
+	-- {
+	-- 	"ribru17/bamboo.nvim",
+	-- 	lazy = true,
+	-- 	opts = {},
+	-- },
+	-- {
+	-- 	"rebelot/kanagawa.nvim",
+	-- 	lazy = true,
+	-- 	opts = {},
+	-- },
+	-- {
+	-- 	"folke/tokyonight.nvim",
+	-- 	lazy = true,
+	-- 	opts = {},
+	-- },
+	-- {
+	-- 	"sainnhe/sonokai",
+	-- 	lazy = true,
+	-- },
+	-- {
+	-- 	"gbprod/nord.nvim",
+	-- 	lazy = true,
+	-- },
+	-- {
+	-- 	"rose-pine/neovim",
+	-- 	name = "rose-pine",
+	-- 	lazy = true,
+	-- },
 }

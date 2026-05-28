@@ -6,3 +6,4 @@
 .config/nvim/lua/plugins/codecompanion.lua
 .config/nvim/lua/plugins/no-neck-pain.lua
 .config/nvim/lua/plugins/yazi.lua
+.setup.sh

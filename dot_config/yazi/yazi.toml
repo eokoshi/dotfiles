@@ -4,6 +4,7 @@ show_hidden = true
 linemode = "size_and_mtime"
 scrolloff = 4
 
-[[plugin.prepend_previewers]]
-name = "*.ipynb"
-run = 'piper -- nbpreview --no-paging --nerd-font --decorated --no-files --unicode --color --images --color-system=standard --theme=ansi_dark "$1"'
+[plugin]
+prepend_previewers = [
+  { url = "*.ipynb", run = 'piper -- nbpreview --no-paging --nerd-font --decorated --no-files --unicode --color --images --color-system=standard --theme=ansi_dark "$1"' }
+]

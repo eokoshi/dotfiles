@@ -44,7 +44,7 @@ return {
 				auto_brackets = { enabled = true },
 			},
 			menu = {
-				border = "shadow",
+				border = "none",
 				scrollbar = true,
 				auto_show = true,
 				draw = {
