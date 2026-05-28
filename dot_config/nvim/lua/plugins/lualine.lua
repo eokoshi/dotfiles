@@ -87,30 +87,30 @@ return {
 						},
 						padding = 0,
 					},
-					{
-						"diff",
-						symbols = {
-							added = icons.git.added .. " ",
-							modified = icons.git.modified .. " ",
-							removed = icons.git.removed .. " ",
-						},
-						source = function()
-							local gitsigns = vim.b.gitsigns_status_dict
-							if gitsigns then
-								return {
-									added = gitsigns.added,
-									modified = gitsigns.changed,
-									removed = gitsigns.removed,
-								}
-							end
-						end,
-						diff_color = {
-							-- Same color values as the general color option can be used here.
-							added = "GitSignsStagedAdd", -- Changes the diff's added color
-							modified = "GitSignsStagedChange", -- Changes the diff's modified color
-							removed = "GitSignsStagedDelete", -- Changes the diff's removed color you
-						},
-					},
+					-- {
+					-- 	"diff",
+					-- 	symbols = {
+					-- 		added = icons.git.added .. " ",
+					-- 		modified = icons.git.modified .. " ",
+					-- 		removed = icons.git.removed .. " ",
+					-- 	},
+					-- 	source = function()
+					-- 		local gitsigns = vim.b.gitsigns_status_dict
+					-- 		if gitsigns then
+					-- 			return {
+					-- 				added = gitsigns.added,
+					-- 				modified = gitsigns.changed,
+					-- 				removed = gitsigns.removed,
+					-- 			}
+					-- 		end
+					-- 	end,
+					-- 	diff_color = {
+					-- 		-- Same color values as the general color option can be used here.
+					-- 		added = "GitSignsStagedAdd", -- Changes the diff's added color
+					-- 		modified = "GitSignsStagedChange", -- Changes the diff's modified color
+					-- 		removed = "GitSignsStagedDelete", -- Changes the diff's removed color you
+					-- 	},
+					-- },
 					-- "diagnostics",
 					-- {
 					-- 	require("noice").api.status.mode.get,
