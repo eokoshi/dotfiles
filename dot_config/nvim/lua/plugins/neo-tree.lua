@@ -24,8 +24,8 @@ return {
 			follow_current_file = {
 				enabled = true,
 			},
-			-- hijack_netrw_behavior = "open_current",
-			hijack_netrw_behavior = "disabled",
+			hijack_netrw_behavior = "open_current",
+			-- hijack_netrw_behavior = "disabled",
 		},
 		source_selector = {
 			truncation_character = "…",
