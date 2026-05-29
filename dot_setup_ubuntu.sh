@@ -9,7 +9,7 @@ fi
 
 ## apt packages
 sudo apt-get update
-sudo apt-get -y --ignore-missing install ripgrep fd-find python3-venv npm direnv lsd unzip curl openssh-server
+sudo apt-get -y --ignore-missing install ripgrep fd-find python3-venv npm direnv lsd unzip curl openssh-server speedtest-cli 
 ln -s --force $(which fdfind) ~/.local/bin/fd
 sudo service ssh start
 
@@ -47,6 +47,7 @@ if [[ $REPLY =~ ^[Yy]$ ]]; then
 	curl -fsSL https://tailscale.com/install.sh | sh
 	sudo tailscale up
 	ssh-copy-id office
+	ssh-copy-id eeftop
 fi
 
 echo ""
@@ -151,6 +152,7 @@ if [[ $REPLY =~ ^[Yy]$ ]]; then
 	rm -f "${YAZI_SYS}.zip"
 	ln -s --force /opt/yazi/yazi ~/.local/bin/yazi
 	ln -s --force /opt/yazi/ya ~/.local/bin/ya
+	ya pkg upgrade
 	yazi -V
 fi
 
