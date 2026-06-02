@@ -34,6 +34,11 @@ map({ "i", "c" }, "<C-h>", "<C-o>h", { desc = "Move one char left" })
 map("i", "<S-Tab>", "<C-d>", { desc = "Unindent 1 level" })
 map("n", "J", "mzJ`z", { desc = "Shift J without moving cursor", noremap = false })
 map("n", "<BS>", "<C-^>", { desc = "Switch to prev file" })
+map("n", "]t", "<CMD>tabnext<CR>", { desc = "tabnext" })
+map("n", "[t", "<CMD>tabprevious<CR>", { desc = "tabprevious" })
+map("n", "]T", "<CMD>tablast<CR>", { desc = "tablast" })
+map("n", "[T", "<CMD>tabfirst<CR>", { desc = "tabfirst" })
+map("n", "<Leader><BS>", "<CMD>tabclose<CR>", { desc = "Close tab" })
 
 -- Buffers
 map("n", "<Leader>bA", "<CMD>%y+<CR><CR>", { desc = "Copy whole buffer to clipboard" })

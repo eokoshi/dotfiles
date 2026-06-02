@@ -25,6 +25,7 @@ return {
 			comment = { suffix = "" },
 			file = { suffix = "e", options = {} },
 			indent = { suffix = "j", options = {} },
+			treesitter = { suffix = "" },
 		},
 	},
 	{
