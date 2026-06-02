@@ -104,6 +104,7 @@ function watchlastlog() {
 }
 
 export EDITOR="nvim"
+export SUDO_EDITOR="nvim"
 export PATH="$HOME/.local/bin:$HOME/.cargo/bin:$HOME/.local/share/nvim/mason/bin:$PATH"
 
 ############## MISC PROGRAMS #############
