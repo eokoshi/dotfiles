@@ -10,7 +10,6 @@ fi
 ## apt packages
 sudo apt-get update
 sudo apt-get -y --ignore-missing install ripgrep fd-find python3-venv npm direnv lsd unzip curl openssh-server speedtest-cli 
-ln -s --force $(which fdfind) ~/.local/bin/fd
 sudo service ssh start
 
 # tmux
@@ -123,7 +122,7 @@ if [[ $REPLY =~ ^[Yy]$ ]]; then
 	curl -LO "https://github.com/neovim/neovim/releases/latest/download/${NVIM_SYS}.tar.gz"
 	sudo tar -C /opt/nvim -xzf "${NVIM_SYS}.tar.gz" --strip-components=1
 	rm -f "${NVIM_SYS}.tar.gz"
-	ln -s --force /opt/nvim/bin/nvim ~/.local/bin/nvim
+	sudo ln -sf /opt/nvim/bin/nvim /usr/local/bin/nvim
 	nvim -v
 fi
 
@@ -150,8 +149,7 @@ if [[ $REPLY =~ ^[Yy]$ ]]; then
 	sudo mv "${YAZI_SYS}"/* /opt/yazi/
 	rm -rf $YAZI_SYS
 	rm -f "${YAZI_SYS}.zip"
-	ln -s --force /opt/yazi/yazi ~/.local/bin/yazi
-	ln -s --force /opt/yazi/ya ~/.local/bin/ya
+	sudo ln -sf /opt/yazi/yazi /usr/local/bin/yazi
 	ya pkg upgrade
 	yazi -V
 fi
