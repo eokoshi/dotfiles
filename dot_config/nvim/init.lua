@@ -54,6 +54,8 @@ require("final")
 if vim.fn.has("win32") == 1 then
 	vim.cmd.colorscheme("onelight")
 	require("neovide")
+elseif vim.fn.environ()["TERM"] == "linux" then
+	vim.cmd.colorscheme("wildcharm")
 else
 	vim.cmd.colorscheme("gruvbox-material")
 end
