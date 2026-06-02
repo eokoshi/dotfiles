@@ -1,5 +1,12 @@
 local icons = require("stuff.icons")
 
+local style
+if vim.fn.environ()["TERM"] == "linux" then
+	style = "ascii"
+else
+	style = "glyph"
+end
+
 return {
 	-- {
 	-- 	"nvim-mini/mini.operators",
@@ -24,6 +31,7 @@ return {
 		"nvim-mini/mini.icons",
 		lazy = true,
 		opts = {
+			style = style,
 			file = {
 				[".chezmoiignore"] = { glyph = icons.basic.chezmoi, hl = "MiniIconsYellow" },
 				[".chezmoiremove"] = { glyph = icons.basic.chezmoi, hl = "MiniIconsYellow" },
