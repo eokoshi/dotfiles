@@ -133,6 +133,9 @@ return {
 						prefix_min_len = 3,
 						backend = {
 							use = "gitgrep-or-ripgrep",
+							ripgrep = {
+								max_filesize = "200K",
+							},
 						},
 					},
 					score_offset = -1,
