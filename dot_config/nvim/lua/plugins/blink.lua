@@ -108,13 +108,10 @@ return {
 		},
 		signature = { enabled = false },
 		sources = {
-			default = function()
-				if vim.bo.filetype == "lua" then
-					return { "lazydev", "lsp", "buffer", "snippets", "ripgrep" }
-				else
-					return { "path", "lsp", "buffer", "snippets", "ripgrep" }
-				end
-			end,
+			default = { "lsp", "buffer", "snippets", "ripgrep" },
+			per_filetype = {
+				lua = { inherit_defaults = true, "lazydev" },
+			},
 			providers = {
 				path = {
 					opts = {

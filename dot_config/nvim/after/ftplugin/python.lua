@@ -1,3 +1,6 @@
+vim.opt_local.shiftwidth = 4
+vim.opt_local.tabstop = 4
+
 -- Python keymaps
 local map = require("stuff.functions").map
 map("n", "<Leader>fi", "?import<CR>", { desc = "Jump to imports", buffer = true })

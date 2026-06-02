@@ -1,4 +1,8 @@
 .config/nvim/lsp
+.config/nvim/after/ftplugin/javascript.lua
+.config/nvim/after/ftplugin/json.lua
+.config/nvim/after/ftplugin/lua.lua
+.config/nvim/after/ftplugin/php.lua
 .config/nvim/lua/plugins/oil.lua
 .config/nvim/lua/plugins/fff.lua
 .config/nvim/lua/disable/overlook.lua
