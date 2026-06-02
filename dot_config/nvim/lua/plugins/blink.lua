@@ -131,7 +131,7 @@ return {
 						backend = {
 							use = "gitgrep-or-ripgrep",
 							ripgrep = {
-								max_filesize = "200K",
+								max_filesize = "50K",
 							},
 						},
 					},
