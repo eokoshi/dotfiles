@@ -1,3 +1,5 @@
+vim.cmd.packadd("nvim.undotree")
+
 -- Custom Filetypes
 vim.filetype.add({
 	filename = {

@@ -35,6 +35,21 @@ function M.autosave(opts)
 	}, opts)
 end
 
+function M.formatting(opts)
+	return Snacks.toggle.new({
+		id = "formatting",
+		name = "formatting",
+		get = function()
+			if vim.b.disable_autoformat then
+				return false
+			else
+				return true
+			end
+		end,
+		set = function() require("stuff.functions").ToggleBufferAutoFormat() end,
+	}, opts)
+end
+
 function M.math_virt(opts)
 	return Snacks.toggle.new({
 		id = "math_virt",

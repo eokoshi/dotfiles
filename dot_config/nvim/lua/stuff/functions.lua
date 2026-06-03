@@ -41,6 +41,16 @@ function M.ToggleBufferAutoSave()
 end
 vim.api.nvim_create_user_command("ToggleBufferAutoSave", M.ToggleBufferAutoSave, {})
 
+function M.ToggleBufferAutoFormat()
+	local bufnr = vim.api.nvim_get_current_buf()
+
+	if vim.b[bufnr].disable_autoformat then
+		vim.b[bufnr].disable_autoformat = false
+	else
+		vim.b[bufnr].disable_autoformat = true
+	end
+end
+
 -- convert dos fileformat to unix
 function M.DOS_to_Unix()
 	vim.bo.fileformat = "unix"
