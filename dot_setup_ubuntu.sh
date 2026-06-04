@@ -46,7 +46,6 @@ if [[ $REPLY =~ ^[Yy]$ ]]; then
 	curl -fsSL https://tailscale.com/install.sh | sh
 	sudo tailscale up
 	ssh-copy-id office
-	ssh-copy-id eeftop
 fi
 
 echo ""
