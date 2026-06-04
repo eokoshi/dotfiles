@@ -659,10 +659,12 @@ return {
 							{ "n", "<Leader>q", "<CMD>DiffviewClose<CR>", { desc = "Close DiffView" } },
 							{ "n", "<Leader>e", actions.toggle_files, { desc = "toggle file panel" } },
 							{ "n", "gf", actions.goto_file_edit, { desc = "Open file in previous tabpage" } },
-							{ "n", "co", actions.conflict_choose_all("ours"), { desc = "Choose conflict --ours" } },
-							{ "n", "ct", actions.conflict_choose_all("theirs"), { desc = "Choose conflict --theirs" } },
-							{ "n", "cb", actions.conflict_choose_all("base"), { desc = "Choose conflict --base" } },
 							{ "n", "g?", actions.help("view"), { desc = "Open help panel" } },
+							{ "n", "co", actions.conflict_choose("ours"), { desc = "Choose conflict --ours" } },
+							{ "n", "ct", actions.conflict_choose("theirs"), { desc = "Choose conflict --theirs" } },
+							{ "n", "cb", actions.conflict_choose("base"), { desc = "Choose conflict --base" } },
+							{ "n", "ca", actions.conflict_choose("all"), { desc = "Choose conflict --all" } },
+							{ "n", "cn", actions.conflict_choose("none"), { desc = "Choose conflict --none" } },
 						},
 						file_panel = {
 							{ "n", "q", "<CMD>DiffviewClose<CR>", { desc = "Close DiffView" } },
@@ -724,6 +726,7 @@ return {
 						},
 						help_panel = {
 							{ "n", "q", actions.close, { desc = "Close help menu" } },
+							{ "n", "<ESC>", actions.close, { desc = "Close help menu" } },
 						},
 					},
 				})
@@ -987,7 +990,9 @@ return {
 								local node = state.tree:get_node()
 								local path = require("plenary.path"):new(node.path)
 								local cwd = vim.fn.getcwd()
-								vim.fn.setreg("+", "./" .. path:make_relative(cwd), "u")
+								local out = "./" .. path:make_relative(cwd)
+								vim.notify("Yanked: " .. out, "info")
+								vim.fn.setreg("+", out, "u")
 							end,
 							desc = "yank relpath",
 							nowait = true,

@@ -10,10 +10,14 @@
 [pull]
 	ff = only
 
-[tool]
-	mergetool = nvimdiff
+[merge]
+	tool = nvimdiff
+
+[mergetool "vimdiff"]
+		layout = "LOCAL,REMOTE / MERGED) + (LOCAL,MERGED,REMOTE) + ((LOCAL/BASE/REMOTE),MERGED) + (LOCAL,BASE,REMOTE / MERGED)"
 
 [core]
 	autocrlf = input
+
 [url "ssh://git@github.com/"]
 	insteadOf = https://github.com/

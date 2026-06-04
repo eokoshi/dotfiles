@@ -23,3 +23,5 @@ os:
 disableStartupPopups: true
 promptToReturnFromSubprocess: false
 notARepository: prompt
+git:
+  ignoreWhitespaceInDiffView: true
