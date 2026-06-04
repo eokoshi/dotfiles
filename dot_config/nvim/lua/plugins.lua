@@ -1360,7 +1360,7 @@ return {
 			image = { enabled = true, math = { enabled = false } },
 			indent = { enabled = true },
 			input = { enabled = true },
-			lazygit = { enabled = false },
+			lazygit = { theme = { selectedLineBgColor = { bg = "Visual" } } },
 			picker = {
 				layout = function()
 					if vim.o.columns >= 140 then
@@ -1538,6 +1538,7 @@ return {
 			map("n", "<Leader>un", function() Snacks.notifier.hide() end, { desc = "dismiss all notifications" })
 			map("n", "<Leader>gb", function() Snacks.picker.git_branches() end, { desc = "Branches" })
 			map("n", "<Leader>gl", function() Snacks.picker.git_log_file() end, { desc = "Log file" })
+			map("n", "<Leader>gg", function() Snacks.lazygit() end, { desc = "Lazygit" })
 			map("n", "<Leader>lR", function() Snacks.picker.lsp_references() end, { nowait = true, desc = "references" })
 			map("n", "<Leader>fs", function() Snacks.picker.lsp_symbols() end, { desc = "LSP symbols" })
 			map("n", "<Leader>fS", function() Snacks.picker.lsp_workspace_symbols() end, { desc = "LSP workspace Symbols" })
