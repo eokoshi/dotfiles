@@ -1,6 +1,9 @@
 require("full-border"):setup()
+require("git"):setup({
+	-- Order of status signs showing in the linemode
+	order = 1500,
+})
 
--- ~/.config/yazi/init.lua
 function Linemode:size_and_mtime()
 	local time = math.floor(self._file.cha.mtime or 0)
 	if time == 0 then

@@ -8,3 +8,7 @@ scrolloff = 4
 prepend_previewers = [
   { url = "*.ipynb", run = 'piper -- nbpreview --no-paging --nerd-font --decorated --no-files --unicode --color --images --color-system=standard --theme=ansi_dark "$1"' }
 ]
+prepend_fetchers = [
+  { url = "*", run = "git", group = "git" },
+  { url = "*/", run = "git", group = "git" }
+]

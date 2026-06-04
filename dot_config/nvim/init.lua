@@ -18,35 +18,25 @@ if not (vim.uv or vim.loop).fs_stat(lazypath) then
 end
 vim.opt.rtp:prepend(lazypath)
 
-require("options")
-require("autocmds")
-
 require("lazy").setup({
-	spec = {
-		{ import = "plugins" },
-	},
+	spec = { { import = "plugins" } },
 	checker = { enabled = false },
 	change_detection = { notify = false },
 	ui = {
 		title = " 󰒲 lazy.nvim ",
-		size = {
-			width = 0.8,
-			height = 0.8,
-		},
+		size = { width = 0.8, height = 0.8 },
 		border = "none",
 		wrap = false,
-		install = {
-			colorscheme = { "wildcharm" },
-		},
+		install = { colorscheme = { "wildcharm" } },
 		icons = require("stuff.icons").lazy,
 		style = "minimal",
 	},
-	git = {
-		timeout = 300,
-	},
+	git = { timeout = 300 },
 	rocks = { enabled = false },
 })
 
+require("options")
+require("autocmds")
 require("mappings")
 require("highlights")
 require("final")

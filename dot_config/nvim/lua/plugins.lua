@@ -56,7 +56,6 @@ return {
 						},
 					},
 					documentation = {
-						auto_show = true,
 						auto_show_delay_ms = 300,
 						window = {
 							border = "single",
@@ -72,6 +71,7 @@ return {
 					providers = {
 						lsp = {
 							score_offset = 10,
+							async = true,
 						},
 						path = {
 							opts = {
@@ -88,7 +88,8 @@ return {
 								backend = {
 									use = "gitgrep-or-ripgrep",
 									ripgrep = {
-										max_filesize = "50K",
+										context_size = 3,
+										max_filesize = "5K",
 									},
 								},
 							},
@@ -457,7 +458,7 @@ return {
 					r = { "air" },
 					htmldjango = { "djlint" },
 					yaml = { "prettier" },
-					toml = { "pyproject-fmt" },
+					toml = { "tombi" },
 					json = { "fixjson", "prettier" },
 					css = { "prettier" },
 					javascript = { "prettier" },
@@ -1234,7 +1235,7 @@ return {
 						"ruff",
 						"prettier",
 						"fixjson",
-						"pyproject-fmt",
+						"tombi",
 						"debugpy",
 						"tree-sitter-cli",
 					}
