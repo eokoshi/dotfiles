@@ -458,7 +458,6 @@ return {
 					r = { "air" },
 					htmldjango = { "djlint" },
 					yaml = { "prettier" },
-					toml = { "tombi" },
 					json = { "fixjson", "prettier" },
 					css = { "prettier" },
 					javascript = { "prettier" },
@@ -1361,11 +1360,7 @@ return {
 			image = { enabled = true, math = { enabled = false } },
 			indent = { enabled = true },
 			input = { enabled = true },
-			lazygit = {
-				theme = {
-					selectedLineBgColor = { bg = "Visual" },
-				},
-			},
+			lazygit = { enabled = false },
 			picker = {
 				layout = function()
 					if vim.o.columns >= 140 then
@@ -1543,7 +1538,6 @@ return {
 			map("n", "<Leader>un", function() Snacks.notifier.hide() end, { desc = "dismiss all notifications" })
 			map("n", "<Leader>gb", function() Snacks.picker.git_branches() end, { desc = "Branches" })
 			map("n", "<Leader>gl", function() Snacks.picker.git_log_file() end, { desc = "Log file" })
-			map("n", "<Leader>gg", function() Snacks.lazygit() end, { desc = "Lazygit" })
 			map("n", "<Leader>lR", function() Snacks.picker.lsp_references() end, { nowait = true, desc = "references" })
 			map("n", "<Leader>fs", function() Snacks.picker.lsp_symbols() end, { desc = "LSP symbols" })
 			map("n", "<Leader>fS", function() Snacks.picker.lsp_workspace_symbols() end, { desc = "LSP workspace Symbols" })
@@ -1595,7 +1589,7 @@ return {
 			end, { desc = "help pages" })
 
 			map("n", "<Leader>ui", function()
-				local snacks_data = require("snacks.picker.source.icons").icons({})
+				local snacks_data = require("snacks.picker.source.icons").icons()
 				local file = vim.fn.stdpath("config") .. "/unicode_chars.json"
 				local fd = assert(io.open(file, "r"))
 				local data = fd:read("*a")
@@ -1981,10 +1975,7 @@ return {
 					test = { "Linkage", "Identifier", "#FF00FF" },
 				},
 			},
-			init = function()
-				local map = require("stuff.functions").map
-				map("n", "<Leader>T", "<CMD>TodoTrouble<CR>", { desc = "Todo List" })
-			end,
+			init = function() map("n", "<Leader>T", "<CMD>TodoTrouble<CR>", { desc = "Todo List" }) end,
 		},
 	},
 
