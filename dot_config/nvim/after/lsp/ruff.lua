@@ -5,6 +5,7 @@ return {
 		settings = {
 			configurationPreference = "filesystemFirst",
 			lineLength = 120,
+			organizeImports = false,
 		},
 	},
 }
