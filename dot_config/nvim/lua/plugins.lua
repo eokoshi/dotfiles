@@ -331,9 +331,9 @@ return {
 				})
 			end,
 		},
-
 		{
 			"MeanderingProgrammer/render-markdown.nvim",
+			version = "*",
 			ft = { "markdown", "ipynb", "codecompanion" },
 			---@module 'render-markdown'
 			---@type render.md.UserConfig
@@ -362,13 +362,49 @@ return {
 				},
 			},
 		},
-
 		{
 			"jbyuki/nabla.nvim",
+			ft = "markdown",
 			dependencies = {
 				"mason-org/mason.nvim",
 			},
-			ft = "markdown",
+		},
+		{
+			-- "OXY2DEV/markview.nvim",
+			-- lazy = false,
+			-- ---@module "markview"
+			-- ---@type markview.config
+			-- opts = {
+			-- 	preview = {
+			-- 		icon_provider = "mini",
+			-- 		hybrid_modes = { "n", "no", "c", "t" },
+			-- 		enable_hybrid_mode = true,
+			-- 		linewise_hybrid_mode = true,
+			-- 	},
+			-- 	markdown = {
+			-- 		headings = { shift_width = 0 },
+			-- 		list_items = {
+			-- 			marker_minus = { add_padding = false },
+			-- 			marker_star = { add_padding = false, text = "-" },
+			-- 		},
+			-- 		tables = {
+			-- 			parts = {
+			-- 				top = { "╭", "─", "╮", "┬" },
+			-- 				header = { "│", "│", "│" },
+			-- 				separator = { "├", "─", "┤", "┼" },
+			-- 				row = { "│", "│", "│" },
+			-- 				bottom = { "╰", "─", "╯", "┴" },
+			-- 				overlap = { "┝", "━", "┥", "┿" },
+			-- 				align_left = "╼",
+			-- 				align_right = "╾",
+			-- 				align_center = { "╴", "╶" },
+			-- 			},
+			-- 		},
+			-- 	},
+			-- 	markdown_inline = {
+			-- 		checkboxes = { enable = false },
+			-- 	},
+			-- 	latex = { enable = false },
 		},
 	},
 
@@ -497,6 +533,7 @@ return {
 				{ "mfussenegger/nvim-dap" },
 				{
 					"igorlfs/nvim-dap-view",
+					version = "*",
 					---@module 'dap-view'
 					---@type dapview.Config
 					opts = {
@@ -572,7 +609,7 @@ return {
 	{
 		{
 			"lewis6991/gitsigns.nvim",
-			event = "BufEnter",
+			event = "VeryLazy",
 			opts = {
 				current_line_blame_opts = {
 					delay = 300,
@@ -618,7 +655,6 @@ return {
 				end,
 			},
 		},
-
 		{
 			"sindrets/diffview.nvim",
 			cmd = "DiffviewOpen",
@@ -735,9 +771,96 @@ return {
 	},
 
 	-- ===
+	-- Filesystem
+	{
+		{
+			-- "dmtrKovalenko/fff.nvim",
+			-- dependencies = { "saghen/blink.cmp" },
+			-- build = function() require("fff.download").download_or_build_binary() end,
+			-- lazy = false,
+			-- opts = {
+			-- 	prompt = "❭ ",
+			-- 	layout = { prompt_position = "top" },
+			-- 	keymaps = {
+			-- 		preview_scroll_up = "<C-p>",
+			-- 		preview_scroll_down = "<C-n>",
+			-- 	},
+			-- 	hl = {
+			-- 		normal = "NormalFloat",
+			-- 		active_file = "ColorColumn",
+			-- 		title = "FloatTitle",
+			-- 	},
+			-- 	debug = { enabled = false, show_scores = true },
+			-- },
+			-- keys = {
+			-- 	{ "ff", function() require("fff").find_files() end, desc = "FFFind files" },
+			-- },
+		},
+		{
+			-- 	"stevearc/oil.nvim",
+			-- 	dependencies = { { "nvim-mini/mini.icons", opts = {} } },
+			-- 	lazy = false,
+			-- 	---@module 'oil'
+			-- 	---@type oil.SetupOpts
+			-- 	opts = {
+			-- 		default_file_explorer = false,
+			-- 		columns = {
+			-- 			{ "mtime", highlight = "Comment" },
+			-- 			{ "size", highlight = "Ignore" },
+			-- 			"icon",
+			-- 		},
+			-- 		delete_to_trash = true,
+			-- 		watch_for_changes = true,
+			-- 		keymaps = {
+			-- 			["?"] = { "actions.show_help", mode = "n" },
+			-- 			["<CR>"] = "actions.select",
+			-- 			["<C-s>"] = { "actions.select", opts = { vertical = true } },
+			-- 			["<C-b>"] = { "actions.select", opts = { horizontal = true } },
+			-- 			["<C-p>"] = "actions.preview",
+			-- 			["<C-c>"] = { "actions.close", mode = "n" },
+			-- 			["<BS>"] = { "actions.parent", mode = "n" },
+			-- 			["~"] = { "actions.open_cwd", mode = "n" },
+			-- 			["@"] = { "actions.cd", mode = "n" },
+			-- 			["gs"] = { "actions.change_sort", mode = "n" },
+			-- 			["gx"] = "actions.open_external",
+			-- 			["gy"] = "actions.yank_entry",
+			-- 			["g."] = { "actions.toggle_hidden", mode = "n" },
+			-- 			["g\\"] = { "actions.toggle_trash", mode = "n" },
+			-- 			["q"] = { "actions.close", mode = "n" },
+			-- 		},
+			-- 		use_default_keymaps = false,
+			-- 		view_options = {
+			-- 			show_hidden = true,
+			-- 			is_always_hidden = function(name, bufnr)
+			-- 				return name:match("^__") ~= nil
+			-- 			end,
+			-- 			case_insensitive = true,
+			-- 		},
+			-- 		win_options = {
+			-- 			cursorcolumn = false,
+			-- 			colorcolumn = "",
+			-- 			statuscolumn = " %l ",
+			-- 			numberwidth = 2,
+			-- 			relativenumber = false,
+			-- 		},
+			-- 		float = {
+			-- 			max_height = 0.8,
+			-- 			max_width = 0.8,
+			-- 			border = "rounded",
+			-- 			win_options = { winhighlight = "Normal:NormalFloat,FloatBorder:FloatBorder,Visual:FloatShadow" },
+			-- 			title_pos = "center",
+			-- 		},
+			-- 	},
+			-- 	init = function()
+			-- 		local map = require("stuff.functions").map
+			-- 		map("n", "<Leader>fo", function() require("oil").toggle_float() end, { desc = "Oil explorer" })
+			-- 	end,
+		},
+	},
+
+	-- ===
 	-- Utils
 	{
-
 		{
 			"aserowy/tmux.nvim",
 			event = "VeryLazy",
@@ -1192,13 +1315,6 @@ return {
 				map("n", "<leader>bx", "<CMD>BufferLinePickClose<CR>", { desc = "Pick buffer to close" })
 			end,
 		},
-
-		{
-			"WilliamHsieh/overlook.nvim",
-			event = "VeryLazy",
-			opts = {},
-			init = function() map("n", "go", require("overlook.api").peek_definition, { desc = "Peek definition" }) end,
-		},
 	},
 
 	-- ===
@@ -1248,7 +1364,7 @@ return {
 			"mason-org/mason-lspconfig.nvim",
 			dependencies = {
 				"mason-org/mason.nvim",
-				"neovim/nvim-lspconfig",
+				{ "neovim/nvim-lspconfig", version = "*" },
 			},
 			opts = {},
 		},
@@ -1662,7 +1778,7 @@ return {
 	},
 
 	-- ===
-	-- sniprun — code runner (Linux only)
+	-- sniprun — code runner
 	{
 		"michaelb/sniprun",
 		branch = "master",
@@ -1905,6 +2021,12 @@ return {
 	-- LSP/Diagnostics
 	{
 		{
+			"WilliamHsieh/overlook.nvim",
+			event = "LspAttach",
+			opts = {},
+			init = function() map("n", "go", require("overlook.api").peek_definition, { desc = "Peek definition" }) end,
+		},
+		{
 			"folke/trouble.nvim",
 			cmd = "Trouble",
 			opts = {
@@ -1980,356 +2102,162 @@ return {
 		},
 	},
 
-	-- ═══════════════════════════════════════════════════════════════════════════
-	-- DISABLED PLUGINS — commented out, uncomment to re-enable
-	-- ═══════════════════════════════════════════════════════════════════════════
-
-	--[[
 	-- ===
 	-- AI
 	{
-		"yetone/avante.nvim",
-		build = vim.fn.has("win32") ~= 0
-			and "powershell -ExecutionPolicy Bypass -File Build.ps1 -BuildFromSource false"
-			or "make",
-		event = "VeryLazy",
-		version = false,
-		---@module 'avante'
-		---@type avante.Config
-		opts = {
-			instructions_file = "avante.md",
-			provider = "openrouter",
-			providers = {
-				openrouter = {
-					__inherited_from = "openai",
-					endpoint = "https://openrouter.ai/api/v1",
-					api_key_name = "OPENROUTER_API_KEY",
-					model = "z-ai/glm-4.5-air:free",
-				},
-			},
-			selector = {
-				provider = "snacks",
-				provider_opts = {},
-			},
-			input = {
-				provider = "snacks",
-				provider_opts = {
-					title = "Avante Input",
-					icon = " ",
-				},
-			},
+		{
+			-- 	"yetone/avante.nvim",
+			-- 	build = vim.fn.has("win32") ~= 0 and "powershell -ExecutionPolicy Bypass -File Build.ps1 -BuildFromSource false" or "make",
+			-- 	event = "VeryLazy",
+			-- 	version = false,
+			-- 	---@module 'avante'
+			-- 	---@type avante.Config
+			-- 	opts = {
+			-- 		instructions_file = "avante.md",
+			-- 		provider = "openrouter",
+			-- 		providers = {
+			-- 			openrouter = {
+			-- 				__inherited_from = "openai",
+			-- 				endpoint = "https://openrouter.ai/api/v1",
+			-- 				api_key_name = "OPENROUTER_API_KEY",
+			-- 				model = "z-ai/glm-4.5-air:free",
+			-- 			},
+			-- 		},
+			-- 		selector = {
+			-- 			provider = "snacks",
+			-- 			provider_opts = {},
+			-- 		},
+			-- 		input = {
+			-- 			provider = "snacks",
+			-- 			provider_opts = {
+			-- 				title = "Avante Input",
+			-- 				icon = " ",
+			-- 			},
+			-- 		},
+			-- 	},
+			-- 	dependencies = {
+			-- 		"nvim-lua/plenary.nvim",
+			-- 		"MunifTanjim/nui.nvim",
+			-- 		"folke/snacks.nvim",
+			-- 		{
+			-- 			"MeanderingProgrammer/render-markdown.nvim",
+			-- 			opts = { file_types = { "markdown", "Avante" } },
+			-- 			ft = { "markdown", "Avante" },
+			-- 		},
+			-- 	},
 		},
-		dependencies = {
-			"nvim-lua/plenary.nvim",
-			"MunifTanjim/nui.nvim",
-			"folke/snacks.nvim",
-			{
-				"MeanderingProgrammer/render-markdown.nvim",
-				opts = { file_types = { "markdown", "Avante" } },
-				ft = { "markdown", "Avante" },
-			},
-		},
-	},
-
-	-- ============================================================================
-	-- codecompanion.nvim — AI chat (disabled)
-	-- ============================================================================
-	{
-		"olimorris/codecompanion.nvim",
-		version = "17.33.0",
-		dependencies = {
-			"nvim-lua/plenary.nvim",
-		},
-		cmd = { "CodeCompanion", "CodeCompanionChat", "CodeCompanionCmd", "CodeCompanionActions" },
-		opts = {
-			display = {
-				chat = {
-					intro_message = "Chatbot time 󰭹 󰓠 󰚩   . Press ? for options",
-					separator = "---",
-					start_in_insert_mode = false,
-					icons = { buffer_watch = " " },
-					window = { layout = "horizontal", height = 0.45 },
-				},
-				diff = {
-					provider_opts = {
-						split = { opts = { "filler", "closeoff", "algorithm:minimal", "followwrap", "linematch:120" } },
-					},
-				},
-				action_palette = { provider = "default" },
-			},
-			strategies = {
-				chat = {
-					adapter = "gptoss120b_ol_df2",
-					variables = {
-						["buffer"] = { opts = { default_params = "watch" } },
-					},
-					tools = {
-						opts = {
-							auto_submit_errors = true,
-							auto_submit_success = true,
-							default_tools = { "web_search", "file_search", "grep_search", "read_file" },
-						},
-					},
-				},
-				inline = { adapter = "qwen3vl_ol_df2" },
-				cmd = { adapter = "gptoss120b_ol_df2" },
-			},
-			adapters = {
-				http = {
-					opts = { show_defaults = false },
-					gptoss120b_ol_df2 = function()
-						return require("codecompanion.adapters").extend("ollama", {
-							name = "gptoss120b_ol_df2",
-							env = { url = "http://100.106.205.69:11434" },
-							headers = { ["Content-Type"] = "application/json" },
-							schema = {
-								model = { default = "gpt-oss:120b" },
-								keep_alive = { default = "15m" },
-							},
-						})
-					end,
-					qwen3vl_ol_df2 = function()
-						return require("codecompanion.adapters").extend("ollama", {
-							name = "qwen3vl_ol_df2",
-							env = { url = "http://100.106.205.69:11434" },
-							headers = { ["Content-Type"] = "application/json" },
-							schema = {
-								model = { default = "qwen3-vl:32b" },
-								keep_alive = { default = "15m" },
-							},
-						})
-					end,
-					gptoss120b_lc_df2 = function()
-						return require("codecompanion.adapters").extend("openai", {
-							name = "llamacpp",
-							url = "http://100.106.205.69:8000/v1/chat/completions",
-							schema = {
-								model = { default = "/models/gpt-oss-120b/gpt-oss-120b-mxfp4-00001-of-00003.gguf" },
-							},
-						})
-					end,
-					gptoss20b_lc_bs = function()
-						return require("codecompanion.adapters").extend("openai", {
-							name = "llamacpp",
-							url = "http://100.92.126.115:8000/v1/chat/completions",
-							schema = {
-								model = { default = "/models/gpt-oss-20b/gpt-oss-20b-mxfp4.gguf" },
-							},
-						})
-					end,
-					qwen3_ol_office = function()
-						return require("codecompanion.adapters").extend("ollama", {
-							name = "ollama_office",
-							env = { url = "http://100.113.130.46:11434" },
-							headers = { ["Content-Type"] = "application/json" },
-							schema = {
-								model = { default = "qwen3:latest" },
-								num_ctx = { default = 16384 },
-								keep_alive = { default = "60m" },
-							},
-						})
-					end,
-					tavily = function()
-						return require("codecompanion.adapters").extend("tavily", {
-							env = { api_key = "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" },
-						})
-					end,
-				},
-				acp = { opts = { show_defaults = false } },
-			},
-		},
-		init = function()
-			local map = require("stuff.functions").map
-			map({ "n", "x" }, "<Leader>a", "", { desc = "Chatbot" })
-			map({ "n", "x" }, "<Leader>aa", "<CMD>CodeCompanionActions<CR>", { desc = "actions" })
-			map({ "n", "x" }, "<Leader>at", "<CMD>CodeCompanionChat Toggle<CR>", { desc = "toggle chat window" })
-			map({ "n", "x" }, "<Leader>ai", ":CodeCompanion ", { desc = "inline assist" })
-			map("x", "<Leader>ac", "<CMD>CodeCompanionChat Add<CR>", { desc = "add visual selection to chat" })
-		end,
-	},
-
-	-- ============================================================================
-	-- fff.nvim — fuzzy file finder (disabled)
-	-- ============================================================================
-	{
-		"dmtrKovalenko/fff.nvim",
-		dependencies = { "saghen/blink.cmp" },
-		build = function() require("fff.download").download_or_build_binary() end,
-		lazy = false,
-		opts = {
-			prompt = "❭ ",
-			layout = { prompt_position = "top" },
-			keymaps = {
-				preview_scroll_up = "<C-p>",
-				preview_scroll_down = "<C-n>",
-			},
-			hl = {
-				normal = "NormalFloat",
-				active_file = "ColorColumn",
-				title = "FloatTitle",
-			},
-			debug = { enabled = false, show_scores = true },
-		},
-		keys = {
-			{ "ff", function() require("fff").find_files() end, desc = "FFFind files" },
+		{
+			-- 	"olimorris/codecompanion.nvim",
+			-- 	version = "17.33.0",
+			-- 	dependencies = {
+			-- 		"nvim-lua/plenary.nvim",
+			-- 	},
+			-- 	cmd = { "CodeCompanion", "CodeCompanionChat", "CodeCompanionCmd", "CodeCompanionActions" },
+			-- 	opts = {
+			-- 		display = {
+			-- 			chat = {
+			-- 				intro_message = "Chatbot time 󰭹 󰓠 󰚩   . Press ? for options",
+			-- 				separator = "---",
+			-- 				start_in_insert_mode = false,
+			-- 				icons = { buffer_watch = " " },
+			-- 				window = { layout = "horizontal", height = 0.45 },
+			-- 			},
+			-- 			diff = {
+			-- 				provider_opts = {
+			-- 					split = { opts = { "filler", "closeoff", "algorithm:minimal", "followwrap", "linematch:120" } },
+			-- 				},
+			-- 			},
+			-- 			action_palette = { provider = "default" },
+			-- 		},
+			-- 		strategies = {
+			-- 			chat = {
+			-- 				adapter = "gptoss120b_ol_df2",
+			-- 				variables = {
+			-- 					["buffer"] = { opts = { default_params = "watch" } },
+			-- 				},
+			-- 				tools = {
+			-- 					opts = {
+			-- 						auto_submit_errors = true,
+			-- 						auto_submit_success = true,
+			-- 						default_tools = { "web_search", "file_search", "grep_search", "read_file" },
+			-- 					},
+			-- 				},
+			-- 			},
+			-- 			inline = { adapter = "qwen3vl_ol_df2" },
+			-- 			cmd = { adapter = "gptoss120b_ol_df2" },
+			-- 		},
+			-- 		adapters = {
+			-- 			http = {
+			-- 				opts = { show_defaults = false },
+			-- 				gptoss120b_ol_df2 = function()
+			-- 					return require("codecompanion.adapters").extend("ollama", {
+			-- 						name = "gptoss120b_ol_df2",
+			-- 						env = { url = "http://100.106.205.69:11434" },
+			-- 						headers = { ["Content-Type"] = "application/json" },
+			-- 						schema = {
+			-- 							model = { default = "gpt-oss:120b" },
+			-- 							keep_alive = { default = "15m" },
+			-- 						},
+			-- 					})
+			-- 				end,
+			-- 				qwen3vl_ol_df2 = function()
+			-- 					return require("codecompanion.adapters").extend("ollama", {
+			-- 						name = "qwen3vl_ol_df2",
+			-- 						env = { url = "http://100.106.205.69:11434" },
+			-- 						headers = { ["Content-Type"] = "application/json" },
+			-- 						schema = {
+			-- 							model = { default = "qwen3-vl:32b" },
+			-- 							keep_alive = { default = "15m" },
+			-- 						},
+			-- 					})
+			-- 				end,
+			-- 				gptoss120b_lc_df2 = function()
+			-- 					return require("codecompanion.adapters").extend("openai", {
+			-- 						name = "llamacpp",
+			-- 						url = "http://100.106.205.69:8000/v1/chat/completions",
+			-- 						schema = {
+			-- 							model = { default = "/models/gpt-oss-120b/gpt-oss-120b-mxfp4-00001-of-00003.gguf" },
+			-- 						},
+			-- 					})
+			-- 				end,
+			-- 				gptoss20b_lc_bs = function()
+			-- 					return require("codecompanion.adapters").extend("openai", {
+			-- 						name = "llamacpp",
+			-- 						url = "http://100.92.126.115:8000/v1/chat/completions",
+			-- 						schema = {
+			-- 							model = { default = "/models/gpt-oss-20b/gpt-oss-20b-mxfp4.gguf" },
+			-- 						},
+			-- 					})
+			-- 				end,
+			-- 				qwen3_ol_office = function()
+			-- 					return require("codecompanion.adapters").extend("ollama", {
+			-- 						name = "ollama_office",
+			-- 						env = { url = "http://100.113.130.46:11434" },
+			-- 						headers = { ["Content-Type"] = "application/json" },
+			-- 						schema = {
+			-- 							model = { default = "qwen3:latest" },
+			-- 							num_ctx = { default = 16384 },
+			-- 							keep_alive = { default = "60m" },
+			-- 						},
+			-- 					})
+			-- 				end,
+			-- 				tavily = function()
+			-- 					return require("codecompanion.adapters").extend("tavily", {
+			-- 						env = { api_key = "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" },
+			-- 					})
+			-- 				end,
+			-- 			},
+			-- 			acp = { opts = { show_defaults = false } },
+			-- 		},
+			-- 	},
+			-- 	init = function()
+			-- 		local map = require("stuff.functions").map
+			-- 		map({ "n", "x" }, "<Leader>a", "", { desc = "Chatbot" })
+			-- 		map({ "n", "x" }, "<Leader>aa", "<CMD>CodeCompanionActions<CR>", { desc = "actions" })
+			-- 		map({ "n", "x" }, "<Leader>at", "<CMD>CodeCompanionChat Toggle<CR>", { desc = "toggle chat window" })
+			-- 		map({ "n", "x" }, "<Leader>ai", ":CodeCompanion ", { desc = "inline assist" })
+			-- 		map("x", "<Leader>ac", "<CMD>CodeCompanionChat Add<CR>", { desc = "add visual selection to chat" })
+			-- 	end,
 		},
 	},
-
-	-- ============================================================================
-	-- markview.nvim — alternative markdown renderer (disabled)
-	-- ============================================================================
-	---@diagnostic disable: missing-fields
-	{
-		"OXY2DEV/markview.nvim",
-		lazy = false,
-		---@module "markview"
-		---@type markview.config
-		opts = {
-			preview = {
-				icon_provider = "mini",
-				hybrid_modes = { "n", "no", "c", "t" },
-				enable_hybrid_mode = true,
-				linewise_hybrid_mode = true,
-			},
-			markdown = {
-				headings = { shift_width = 0 },
-				list_items = {
-					marker_minus = { add_padding = false },
-					marker_star = { add_padding = false, text = "-" },
-				},
-				tables = {
-					parts = {
-						top = { "╭", "─", "╮", "┬" },
-						header = { "│", "│", "│" },
-						separator = { "├", "─", "┤", "┼" },
-						row = { "│", "│", "│" },
-						bottom = { "╰", "─", "╯", "┴" },
-						overlap = { "┝", "━", "┥", "┿" },
-						align_left = "╼",
-						align_right = "╾",
-						align_center = { "╴", "╶" },
-					},
-				},
-			},
-			markdown_inline = {
-				checkboxes = { enable = false },
-			},
-			latex = { enable = false },
-		},
-	},
-
-	-- ============================================================================
-	-- oil.nvim — file explorer as buffer (disabled)
-	-- ============================================================================
-	{
-		"stevearc/oil.nvim",
-		dependencies = { { "nvim-mini/mini.icons", opts = {} } },
-		lazy = false,
-		---@module 'oil'
-		---@type oil.SetupOpts
-		opts = {
-			default_file_explorer = false,
-			columns = {
-				{ "mtime", highlight = "Comment" },
-				{ "size", highlight = "Ignore" },
-				"icon",
-			},
-			delete_to_trash = true,
-			watch_for_changes = true,
-			keymaps = {
-				["?"] = { "actions.show_help", mode = "n" },
-				["<CR>"] = "actions.select",
-				["<C-s>"] = { "actions.select", opts = { vertical = true } },
-				["<C-b>"] = { "actions.select", opts = { horizontal = true } },
-				["<C-p>"] = "actions.preview",
-				["<C-c>"] = { "actions.close", mode = "n" },
-				["<BS>"] = { "actions.parent", mode = "n" },
-				["~"] = { "actions.open_cwd", mode = "n" },
-				["@"] = { "actions.cd", mode = "n" },
-				["gs"] = { "actions.change_sort", mode = "n" },
-				["gx"] = "actions.open_external",
-				["gy"] = "actions.yank_entry",
-				["g."] = { "actions.toggle_hidden", mode = "n" },
-				["g\\"] = { "actions.toggle_trash", mode = "n" },
-				["q"] = { "actions.close", mode = "n" },
-			},
-			use_default_keymaps = false,
-			view_options = {
-				show_hidden = true,
-				is_always_hidden = function(name, bufnr)
-					return name:match("^__") ~= nil
-				end,
-				case_insensitive = true,
-			},
-			win_options = {
-				cursorcolumn = false,
-				colorcolumn = "",
-				statuscolumn = " %l ",
-				numberwidth = 2,
-				relativenumber = false,
-			},
-			float = {
-				max_height = 0.8,
-				max_width = 0.8,
-				border = "rounded",
-				win_options = { winhighlight = "Normal:NormalFloat,FloatBorder:FloatBorder,Visual:FloatShadow" },
-				title_pos = "center",
-			},
-		},
-		init = function()
-			local map = require("stuff.functions").map
-			map("n", "<Leader>fo", function() require("oil").toggle_float() end, { desc = "Oil explorer" })
-		end,
-	},
-
-	-- ============================================================================
-	-- org-list.nvim — markdown list cycling (disabled)
-	-- ============================================================================
-	{
-		"hamidi-dev/org-list.nvim",
-		dependencies = { "tpope/vim-repeat" },
-		ft = { "markdown" },
-		opts = {
-			mapping = { key = "<Leader>ml", desc = "Cycle through list types" },
-		},
-	},
-
-
-	-- ============================================================================
-	-- undotree — undo history visualizer (disabled)
-	-- ============================================================================
-	{
-		"mbbill/undotree",
-		event = "VeryLazy",
-		init = function()
-			vim.g.undotree_WindowLayout = 2
-			vim.g.undotree_setFocusWhenToggle = 1
-			vim.g.undotree_TreeNodeShape = ""
-			vim.g.undotree_TreeVertShape = "┃"
-			vim.g.undotree_TreeSplitShape = "━┛"
-			vim.g.undotree_TreeReturnShape = "━┓"
-
-			local map = require("stuff.functions").map
-			map("n", "<Leader>U", "<CMD>UndotreeToggle<CR>", { desc = "Open Undotree" })
-		end,
-	},
-
-	-- ============================================================================
-	-- yazi.nvim — file manager (disabled)
-	-- ============================================================================
-	{
-		"mikavilpas/yazi.nvim",
-		event = "VeryLazy",
-		version = "*",
-		dependencies = { { "nvim-lua/plenary.nvim", lazy = true } },
-		keys = {
-			{ "<Leader>fo", mode = { "n" }, "<CMD>Yazi cwd<CR>", desc = "yazi cwd" },
-			{ "<Leader>y", mode = { "n" }, "<CMD>Yazi<CR>", desc = "yazi current file" },
-		},
-		opts = {
-			open_for_directories = true,
-		},
-		init = function() vim.g.loaded_netrwPlugin = 1 end,
-	},
-	--]]
 }
