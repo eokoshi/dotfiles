@@ -1197,9 +1197,8 @@ return {
 					},
 				},
 				lsp = {
-					override = {
-						["cmp.entry.get_documentation"] = false,
-					},
+					progress = { enabled = true },
+					override = { ["cmp.entry.get_documentation"] = false },
 				},
 				cmdline = {
 					enabled = true,
@@ -1222,69 +1221,204 @@ return {
 					local reg = vim.fn.reg_recording()
 					if reg == "" then
 						return ""
-					end -- not recording
+					end
 					return "recording @" .. reg
 				end
 
-				return {
-					options = {
-						theme = "auto",
-						component_separators = "",
-						section_separators = { left = icons.lualine.rsep, right = icons.lualine.lsep },
-						globalstatus = true,
-						disabled_filetypes = {
-							{ "snacks_dashboard" },
-						},
-					},
-					sections = {
-						lualine_a = { { "mode", separator = { left = icons.lualine.lsep }, right_padding = 2 } },
-						lualine_b = { "branch" },
-						lualine_c = {
-							{
-								"filetype",
-								padding = { left = 1, right = 0 },
-								icon_only = true,
-							},
-							{
-								"filename",
-								path = 1,
-								symbols = {
-									modified = icons.lualine.modified,
-									readonly = icons.lualine.readonly,
-									unnamed = icons.lualine.unnamed,
-									newfile = icons.lualine.newfile,
-								},
-								padding = 0,
-							},
-							"diagnostics",
-							{
-								macro,
-								color = "lualine_c_diagnostics_error_insert",
-							},
-							-- { "diff", symbols = { added = icons.git.added .. " ", modified = icons.git.modified .. " ", removed = icons.git.removed .. " ", }, source = function() local gitsigns = vim.b.gitsigns_status_dict if gitsigns then return { added = gitsigns.added, modified = gitsigns.changed, removed = gitsigns.removed, } end end, diff_color = { -- Same color values as the general color option can be used here. added = "GitSignsStagedAdd", -- Changes the diff's added color modified = "GitSignsStagedChange", -- Changes the diff's modified color removed = "GitSignsStagedDelete", -- Changes the diff's removed color you }, },
-						},
-						lualine_x = {
-							{
-								"lsp_status",
-								icon = icons.lualine.lsp,
-								symbols = {
-									done = "",
-									separator = " ",
-								},
-							},
-						},
-						lualine_y = {
-							{ "fileformat", padding = { left = 0, right = 0 } },
-							"location",
-						},
-						lualine_z = {
-							{
-								"progress",
-							},
-						},
-					},
-					-- tabline = { lualine_a = { { "buffers", mode = 4, hide_filename_extension = true, symbols = { alternate_file = icons.lualine.alternate .. " ", modified = " " .. icons.lualine.modified, }, filetype_names = { snacks_picker_list = icons.filetype.snacks_picker_list, ["dap-view-term"] = icons.debug.bug, }, use_mode_colors = true, -- cond = function() if vim.fn.expand("%") == "" then return false else return true end end, }, }, lualine_b = {}, lualine_c = {}, lualine_x = { { trouble.get, cond = trouble.has, }, }, lualine_y = { { "tabs", use_mode_colors = true, show_modified_status = false, }, }, lualine_z = {}, }
+				local formatters = function()
+					local status, conform = pcall(require, "conform")
+					if not status then
+						return "Conform not installed"
+					end
+					local lsp_format = require("conform.lsp_format")
+					local formatters = conform.list_formatters_for_buffer()
+					if formatters and #formatters > 0 then
+						local formatterNames = {}
+
+						for _, formatter in ipairs(formatters) do
+							table.insert(formatterNames, formatter)
+						end
+
+						return table.concat(formatterNames, " ")
+					end
+					local bufnr = vim.api.nvim_get_current_buf()
+					local lsp_clients = lsp_format.get_format_clients({ bufnr = bufnr })
+					if not vim.tbl_isempty(lsp_clients) then
+						return "󰷈 LSP Formatter"
+					end
+					return ""
+				end
+
+				-- my custom config
+				-- return { options = { theme = "auto", component_separators = "", section_separators = { left = icons.lualine.rsep, right = icons.lualine.lsep }, globalstatus = true, disabled_filetypes = { { "snacks_dashboard" } }, }, sections = { lualine_a = { { "mode", separator = { left = icons.lualine.lsep }, right_padding = 2 } }, lualine_b = { "branch" }, lualine_c = { { "filetype", padding = { left = 1, right = 0 }, icon_only = true, }, { "filename", path = 1, symbols = { modified = icons.lualine.modified, readonly = icons.lualine.readonly, unnamed = icons.lualine.unnamed, newfile = icons.lualine.newfile, }, padding = 0, }, {"diagnostics"}, { macro, color = "lualine_c_diagnostics_error_insert", }, { "diff", symbols = { added = icons.git.added .. " ", modified = icons.git.modified .. " ", removed = icons.git.removed .. " ", }, source = function() local gitsigns = vim.b.gitsigns_status_dict if gitsigns then return { added = gitsigns.added, modified = gitsigns.changed, removed = gitsigns.removed, } end end, diff_color = { added = "GitSignsStagedAdd", modified = "GitSignsStagedChange", removed = "GitSignsStagedDelete"}, }, }, lualine_x = { { "lsp_status", formatters, }, }, lualine_y = { { "fileformat", padding = { left = 0, right = 0 } }, "location", }, lualine_z = { { "progress", }, }, }, tabline = { lualine_a = { { "buffers", mode = 4, hide_filename_extension = true, symbols = { alternate_file = icons.lualine.alternate .. " ", modified = " " .. icons.lualine.modified, }, filetype_names = { snacks_picker_list = icons.filetype.snacks_picker_list, ["dap-view-term"] = icons.debug.bug, }, use_mode_colors = true, cond = function() if vim.fn.expand("%") == "" then return false else return true end end, }, }, lualine_b = {}, lualine_c = {}, lualine_x = { { trouble.get, cond = trouble.has, }, }, lualine_y = { { "tabs", use_mode_colors = true, show_modified_status = false, }, }, lualine_z = {}, } }
+
+				-- Evilline
+				local conditions = {
+					buffer_not_empty = function() return vim.fn.empty(vim.fn.expand("%:t")) ~= 1 end,
+					hide_in_width = function() return vim.fn.winwidth(0) > 80 end,
+					check_git_workspace = function()
+						local filepath = vim.fn.expand("%:p:h")
+						local gitdir = vim.fn.finddir(".git", filepath .. ";")
+						return gitdir and #gitdir > 0 and #gitdir < #filepath
+					end,
 				}
+				local colors = {
+					bg = "NONE",
+					fg = "#bbc2cf",
+					yellow = "#ECBE7B",
+					cyan = "#008080",
+					darkblue = "#081633",
+					green = "#98be65",
+					orange = "#FF8800",
+					violet = "#a9a1e1",
+					magenta = "#c678dd",
+					blue = "#51afef",
+					red = "#ec5f67",
+				}
+				local config = {
+					options = {
+						globalstatus = true,
+						component_separators = "",
+						section_separators = "",
+						theme = {
+							normal = { c = { fg = colors.fg, bg = colors.bg } },
+							inactive = { c = { fg = colors.fg, bg = colors.bg } },
+						},
+						diabled_filetypes = { { "snacks_dashboard" } },
+					},
+					sections = { lualine_a = {}, lualine_b = {}, lualine_y = {}, lualine_z = {}, lualine_c = {}, lualine_x = {} },
+					inactive_sections = { lualine_a = {}, lualine_b = {}, lualine_y = {}, lualine_z = {}, lualine_c = {}, lualine_x = {} },
+				}
+
+				local function ins_left(component) table.insert(config.sections.lualine_c, component) end
+				local function ins_right(component) table.insert(config.sections.lualine_x, component) end
+
+				ins_left({
+					-- mode component
+					function() return vim.fn.mode() end,
+					color = function()
+						local mode_color = {
+							n = colors.red,
+							i = colors.green,
+							v = colors.blue,
+							V = colors.blue,
+							c = colors.magenta,
+							no = colors.red,
+							s = colors.orange,
+							S = colors.orange,
+							[""] = colors.orange,
+							ic = colors.yellow,
+							R = colors.violet,
+							Rv = colors.violet,
+							cv = colors.red,
+							ce = colors.red,
+							r = colors.cyan,
+							rm = colors.cyan,
+							["r?"] = colors.cyan,
+							["!"] = colors.red,
+							t = colors.red,
+						}
+						return { fg = colors.darkblue, bg = mode_color[vim.fn.mode()] }
+					end,
+					padding = 2,
+				})
+
+				ins_left({
+					-- filesize component
+					"filesize",
+					cond = conditions.buffer_not_empty,
+				})
+
+				ins_left({
+					"filename",
+					cond = conditions.buffer_not_empty,
+					color = { fg = colors.magenta, gui = "bold" },
+				})
+
+				ins_left({ "location" })
+
+				ins_left({ "progress", color = { fg = colors.fg, gui = "bold" } })
+
+				ins_left({
+					"diagnostics",
+					sources = { "nvim_diagnostic" },
+					symbols = { error = " ", warn = " ", info = " " },
+					diagnostics_color = {
+						error = { fg = colors.red },
+						warn = { fg = colors.yellow },
+						info = { fg = colors.cyan },
+					},
+				})
+
+				-- Insert mid section. You can make any number of sections in neovim :)
+				-- for lualine it's any number greater then 2
+				ins_left({
+					function() return "%=" end,
+				})
+
+				ins_left({
+					-- Lsp server name .
+					function()
+						local msg = "󰟢"
+						local buf_ft = vim.api.nvim_get_option_value("filetype", { buf = 0 })
+						local clients = vim.lsp.get_clients()
+						if next(clients) == nil then
+							return msg
+						end
+						for _, client in ipairs(clients) do
+							local filetypes = client.config.filetypes
+							if filetypes and vim.fn.index(filetypes, buf_ft) ~= -1 then
+								return client.name
+							end
+						end
+						return msg
+					end,
+					icon = "",
+					color = { fg = colors.cyan, gui = "bold" },
+				})
+				ins_left({
+					formatters,
+					icon = "󰉼",
+					color = { fg = colors.cyan, gui = "bold" },
+				})
+
+				ins_right({
+					"encoding",
+					fmt = string.upper,
+					cond = conditions.hide_in_width,
+					color = { fg = colors.green, gui = "bold" },
+				})
+
+				ins_right({
+					"fileformat",
+					fmt = string.upper,
+					icons_enabled = false,
+					color = { fg = colors.green, gui = "bold" },
+				})
+
+				ins_right({
+					"branch",
+					icon = "",
+					color = { fg = colors.violet, gui = "bold" },
+				})
+
+				ins_right({
+					"diff",
+					symbols = { added = " ", modified = "󰝤 ", removed = " " },
+					diff_color = {
+						added = { fg = colors.green },
+						modified = { fg = colors.orange },
+						removed = { fg = colors.red },
+					},
+					cond = conditions.hide_in_width,
+				})
+
+				ins_right({
+					function() return "▊" end,
+					color = { fg = colors.blue },
+					padding = { left = 1 },
+				})
+				return config
 			end,
 		},
 
@@ -1422,30 +1556,36 @@ return {
 				preset = {
 					header = require("stuff.ascii").cat,
 					keys = {
-						{ icon = " ", key = "n", desc = "New File", action = ":ene | startinsert" },
+						-- { icon = " ", key = "n", desc = "New File", action = ":ene | startinsert" },
+						{ icon = " ", key = "f", desc = "Find File", action = ":lua Snacks.dashboard.pick('files')" },
 						{
 							icon = "󰙅 ",
 							key = "e",
 							desc = "File Explorer",
-							action = function() require("neo-tree.command").execute({ position = "float" }) end,
+							action = function() require("neo-tree.command").execute({ position = "current" }) end,
 						},
-						{ icon = " ", key = "f", desc = "Find File", action = ":lua Snacks.dashboard.pick('files')" },
-						{ icon = " ", key = "w", desc = "Find Word", action = ":lua Snacks.dashboard.pick('live_grep')" },
-						{ icon = " ", key = "r", desc = "Recents", action = ":lua Snacks.dashboard.pick('oldfiles')" },
 						{
-							icon = " ",
-							key = "c",
-							desc = "Config",
-							action = function()
-								if vim.fn.has("win32") == 1 then
-									vim.notify("Do not mess with config from Windows", vim.log.levels.ERROR)
-								else
-									local dir = os.getenv("HOME") .. "/.local/share/chezmoi"
-									vim.cmd("cd " .. dir)
-									require("neo-tree.command").execute({ position = "float" })
-								end
-							end,
+							icon = " ",
+							key = "d",
+							desc = "DiffView",
+							action = ": DiffviewOpen",
 						},
+						-- { icon = " ", key = "w", desc = "Find Word", action = ":lua Snacks.dashboard.pick('live_grep')" },
+						-- { icon = " ", key = "r", desc = "Recents", action = ":lua Snacks.dashboard.pick('oldfiles')" },
+						-- {
+						-- 	icon = " ",
+						-- 	key = "c",
+						-- 	desc = "Config",
+						-- 	action = function()
+						-- 		if vim.fn.has("win32") == 1 then
+						-- 			vim.notify("Do not mess with config from Windows", vim.log.levels.ERROR)
+						-- 		else
+						-- 			local dir = os.getenv("HOME") .. "/.local/share/chezmoi"
+						-- 			vim.cmd("cd " .. dir)
+						-- 			require("neo-tree.command").execute({ position = "float" })
+						-- 		end
+						-- 	end,
+						-- },
 						{
 							icon = " ",
 							key = "s",
@@ -1463,13 +1603,13 @@ return {
 								require("resession").load(get_session_name(), { dir = "dirsession", silence_errors = true })
 							end,
 						},
-						{ icon = " ", key = "q", desc = "Quit", action = ":qa" },
+						-- { icon = " ", key = "q", desc = "Quit", action = ":qa" },
 					},
 				},
 				sections = {
 					{ section = "header" },
-					{ section = "keys", gap = 1, padding = 2 },
-					{ section = "recent_files", icon = " ", title = "Recent Files", indent = 2, padding = 2, limit = 10 },
+					{ section = "keys", gap = 0, padding = 2 },
+					{ section = "recent_files", icon = " ", title = "Recent Files", indent = 2, padding = 2, limit = 20 },
 					{ section = "startup" },
 				},
 			},
@@ -1705,36 +1845,12 @@ return {
 				end
 			end, { desc = "help pages" })
 
-			map("n", "<Leader>ui", function()
-				local snacks_data = require("snacks.picker.source.icons").icons()
-				local file = vim.fn.stdpath("config") .. "/unicode_chars.json"
-				local fd = assert(io.open(file, "r"))
-				local data = fd:read("*a")
-				fd:close()
-				data = vim.json.decode(data)
-				local result = {}
-				for desc, info in pairs(data) do
-					table.insert(result, {
-						category = info.code,
-						icon = info.char,
-						name = desc,
-						source = "unicode",
-					})
-				end
-				for _, icon in ipairs(result) do
-					icon.text = Snacks.picker.util.text(icon, { "source", "category", "name" })
-					icon.data = icon.icon
-				end
-				for _, v in ipairs(snacks_data) do
-					table.insert(result, v)
-				end
-				Snacks.picker.pick({
-					items = result,
-					layout = { preset = "vscode" },
-					confirm = "put",
-					format = "icon",
-				})
-			end, { desc = "icons" })
+			map(
+				"n",
+				"<Leader>ui",
+				function() require("snacks.picker").icons({ custom_sources = { unicode = vim.fn.stdpath("config") .. "/unicode_chars.json" } }) end,
+				{ desc = "icons" }
+			)
 
 			map(
 				"n",
