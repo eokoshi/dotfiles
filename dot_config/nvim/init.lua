@@ -31,7 +31,7 @@ require("lazy").setup({
 		icons = require("stuff.icons").lazy,
 		style = "minimal",
 	},
-	concurrency = 1,
+	concurrency = 5,
 	git = { timeout = 30 },
 	rocks = { enabled = false },
 })

@@ -92,7 +92,7 @@ fi
 
 # some useful functions
 function marimo-serve() {
-    uv run marimo edit --headless --watch --no-token
+    uv run marimo edit --headless --watch --no-token --host 0.0.0.0
 }
 
 function chdiffnvim() {
