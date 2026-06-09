@@ -9,7 +9,7 @@ fi
 
 ## apt packages
 sudo apt-get update
-sudo apt-get -y --ignore-missing install ripgrep fd-find python3-venv npm direnv lsd unzip curl openssh-server speedtest-cli 
+sudo apt-get -y --ignore-missing install ripgrep fd-find python3-venv npm direnv lsd unzip curl openssh-server speedtest-cli visidata
 sudo service ssh start
 
 # tmux

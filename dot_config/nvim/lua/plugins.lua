@@ -365,9 +365,6 @@ return {
 		{
 			"jbyuki/nabla.nvim",
 			ft = "markdown",
-			dependencies = {
-				"mason-org/mason.nvim",
-			},
 		},
 		{
 			-- "OXY2DEV/markview.nvim",
@@ -797,64 +794,134 @@ return {
 			-- },
 		},
 		{
-			-- 	"stevearc/oil.nvim",
-			-- 	dependencies = { { "nvim-mini/mini.icons", opts = {} } },
-			-- 	lazy = false,
-			-- 	---@module 'oil'
-			-- 	---@type oil.SetupOpts
-			-- 	opts = {
-			-- 		default_file_explorer = false,
-			-- 		columns = {
-			-- 			{ "mtime", highlight = "Comment" },
-			-- 			{ "size", highlight = "Ignore" },
-			-- 			"icon",
+			"stevearc/oil.nvim",
+			dependencies = { "nvim-mini/mini.icons" },
+			lazy = false,
+			---@module 'oil'
+			---@type oil.SetupOpts
+			opts = {
+				default_file_explorer = true,
+				columns = {
+					{ "permissions", highlight = "Ignore" },
+					{ "size", highlight = "Ignore" },
+					{ "mtime", highlight = "Comment" },
+					"icon",
+				},
+				delete_to_trash = true,
+				watch_for_changes = true,
+				keymaps = {
+					["?"] = { "actions.show_help", mode = "n" },
+					["<CR>"] = "actions.select",
+					["s"] = { "actions.select", opts = { vertical = true } },
+					["S"] = { "actions.select", opts = { horizontal = true } },
+					["P"] = "actions.preview",
+					["<C-p>"] = "actions.preview_scroll_up",
+					["<C-n>"] = "actions.preview_scroll_down",
+					["<BS>"] = { "actions.parent", mode = "n" },
+					["~"] = { "actions.open_cwd", mode = "n" },
+					["<leader>."] = { "actions.cd", mode = "n" },
+					["gs"] = { "actions.change_sort", mode = "n" },
+					["gx"] = "actions.open_external",
+					["gy"] = "actions.yank_entry",
+					["g."] = { "actions.toggle_hidden", mode = "n" },
+					["g\\"] = { "actions.toggle_trash", mode = "n" },
+					["q"] = { "actions.close", mode = "n" },
+					["ff"] = {
+						function() require("snacks.picker").files({ hidden = true, ignored = true, cmd = "fd", dirs = { require("oil").get_current_dir() } }) end,
+						mode = "n",
+						nowait = true,
+					},
+				},
+				use_default_keymaps = false,
+				view_options = {
+					show_hidden = true,
+					-- is_always_hidden = function(name, bufnr) return name:match("^__") ~= nil end,
+				},
+				win_options = {
+					cursorcolumn = false,
+					colorcolumn = "",
+					statuscolumn = " %l ",
+					numberwidth = 2,
+					relativenumber = false,
+				},
+				float = {
+					max_height = 0.8,
+					max_width = 0.8,
+					border = "rounded",
+					win_options = { winhighlight = "Normal:NormalFloat,FloatBorder:FloatBorder,Visual:FloatShadow" },
+					title_pos = "center",
+				},
+			},
+			init = function()
+				map("n", "<Leader>e", function() require("oil").toggle_float() end, { desc = "Oil explorer" })
+			end,
+		},
+		{
+			-- "nvim-neo-tree/neo-tree.nvim",
+			-- branch = "v3.x",
+			-- dependencies = {
+			-- 	"nvim-lua/plenary.nvim",
+			-- 	"MunifTanjim/nui.nvim",
+			-- },
+			-- lazy = false, -- neo-tree will lazily load itself
+			-- ---@module "neo-tree"
+			-- ---@type neotree.Config?
+			-- opts = {
+			-- 	sources = { "filesystem" },
+			-- 	source_selector = {
+			-- 		truncation_character = "…",
+			-- 		show_scrolled_off_parent_node = true,
+			-- 		sources = { { source = "filesystem" } },
+			-- 	},
+			-- 	filesystem = {
+			-- 		filtered_items = {
+			-- 			visible = true,
+			-- 			never_show_by_pattern = { "**/__**__" },
 			-- 		},
-			-- 		delete_to_trash = true,
-			-- 		watch_for_changes = true,
-			-- 		keymaps = {
-			-- 			["?"] = { "actions.show_help", mode = "n" },
-			-- 			["<CR>"] = "actions.select",
-			-- 			["<C-s>"] = { "actions.select", opts = { vertical = true } },
-			-- 			["<C-b>"] = { "actions.select", opts = { horizontal = true } },
-			-- 			["<C-p>"] = "actions.preview",
-			-- 			["<C-c>"] = { "actions.close", mode = "n" },
-			-- 			["<BS>"] = { "actions.parent", mode = "n" },
-			-- 			["~"] = { "actions.open_cwd", mode = "n" },
-			-- 			["@"] = { "actions.cd", mode = "n" },
-			-- 			["gs"] = { "actions.change_sort", mode = "n" },
-			-- 			["gx"] = "actions.open_external",
-			-- 			["gy"] = "actions.yank_entry",
-			-- 			["g."] = { "actions.toggle_hidden", mode = "n" },
-			-- 			["g\\"] = { "actions.toggle_trash", mode = "n" },
-			-- 			["q"] = { "actions.close", mode = "n" },
-			-- 		},
-			-- 		use_default_keymaps = false,
-			-- 		view_options = {
-			-- 			show_hidden = true,
-			-- 			is_always_hidden = function(name, bufnr)
-			-- 				return name:match("^__") ~= nil
-			-- 			end,
-			-- 			case_insensitive = true,
-			-- 		},
-			-- 		win_options = {
-			-- 			cursorcolumn = false,
-			-- 			colorcolumn = "",
-			-- 			statuscolumn = " %l ",
-			-- 			numberwidth = 2,
-			-- 			relativenumber = false,
-			-- 		},
-			-- 		float = {
-			-- 			max_height = 0.8,
-			-- 			max_width = 0.8,
-			-- 			border = "rounded",
-			-- 			win_options = { winhighlight = "Normal:NormalFloat,FloatBorder:FloatBorder,Visual:FloatShadow" },
-			-- 			title_pos = "center",
+			-- 		follow_current_file = { enabled = true },
+			-- 		hijack_netrw_behavior = "open_current",
+			-- 	},
+			-- 	window = {
+			-- 		mappings = {
+			-- 			["<space>"] = "none",
+			-- 			["<"] = "none",
+			-- 			[">"] = "none",
+			-- 			["<C-b>"] = "none",
+			-- 			["<C-f>"] = "none",
+			-- 			["f"] = "none",
+			--
+			-- 			["l"] = "open",
+			-- 			["h"] = "close_node",
+			-- 			["L"] = "focus_preview",
+			-- 			["<C-n>"] = { "scroll_preview", config = { direction = 10 } },
+			-- 			["<C-p>"] = { "scroll_preview", config = { direction = -10 } },
+			-- 			["C"] = "copy",
+			-- 			["c"] = {
+			-- 				---@diagnostic disable-next-line: assign-type-mismatch
+			-- 				function(state)
+			-- 					local node = state.tree:get_node()
+			-- 					local path = require("plenary.path"):new(node.path)
+			-- 					local cwd = vim.fn.getcwd()
+			-- 					local out = "./" .. path:make_relative(cwd)
+			-- 					vim.notify("Yanked: " .. out, "info")
+			-- 					vim.fn.setreg("+", out, "u")
+			-- 				end,
+			-- 				desc = "yank relpath",
+			-- 				nowait = true,
+			-- 			},
 			-- 		},
 			-- 	},
-			-- 	init = function()
-			-- 		local map = require("stuff.functions").map
-			-- 		map("n", "<Leader>fo", function() require("oil").toggle_float() end, { desc = "Oil explorer" })
-			-- 	end,
+			-- },
+			-- init = function()
+			-- 	map("n", "<Leader>e", "<CMD>Neotree toggle left<CR>", { desc = "File explorer" })
+			-- 	map(
+			-- 		"n",
+			-- 		"<Leader>pz",
+			-- 		function() require("neo-tree.command").execute({ dir = os.getenv("HOME") .. "/.local/share/chezmoi" }) end,
+			-- 		{ desc = "cd chezmoi" }
+			-- 	)
+			-- 	map("n", "<Leader>pc", function() require("neo-tree.command").execute({ dir = vim.fn.stdpath("config") }) end, { desc = "cd config" })
+			-- end,
 		},
 	},
 
@@ -1067,73 +1134,7 @@ return {
 				},
 			},
 		},
-		{
-			"nvim-neo-tree/neo-tree.nvim",
-			branch = "v3.x",
-			dependencies = {
-				"nvim-lua/plenary.nvim",
-				"MunifTanjim/nui.nvim",
-			},
-			lazy = false, -- neo-tree will lazily load itself
-			---@module "neo-tree"
-			---@type neotree.Config?
-			opts = {
-				sources = { "filesystem" },
-				source_selector = {
-					truncation_character = "…",
-					show_scrolled_off_parent_node = true,
-					sources = { { source = "filesystem" } },
-				},
-				filesystem = {
-					filtered_items = {
-						visible = true,
-						never_show_by_pattern = { "**/__**__" },
-					},
-					follow_current_file = { enabled = true },
-					hijack_netrw_behavior = "open_current",
-				},
-				window = {
-					mappings = {
-						["<space>"] = "none",
-						["<"] = "none",
-						[">"] = "none",
-						["<C-b>"] = "none",
-						["<C-f>"] = "none",
-						["f"] = "none",
 
-						["l"] = "open",
-						["h"] = "close_node",
-						["L"] = "focus_preview",
-						["<C-n>"] = { "scroll_preview", config = { direction = 10 } },
-						["<C-p>"] = { "scroll_preview", config = { direction = -10 } },
-						["C"] = "copy",
-						["c"] = {
-							---@diagnostic disable-next-line: assign-type-mismatch
-							function(state)
-								local node = state.tree:get_node()
-								local path = require("plenary.path"):new(node.path)
-								local cwd = vim.fn.getcwd()
-								local out = "./" .. path:make_relative(cwd)
-								vim.notify("Yanked: " .. out, "info")
-								vim.fn.setreg("+", out, "u")
-							end,
-							desc = "yank relpath",
-							nowait = true,
-						},
-					},
-				},
-			},
-			init = function()
-				map("n", "<Leader>e", "<CMD>Neotree toggle left<CR>", { desc = "File explorer" })
-				map(
-					"n",
-					"<Leader>pz",
-					function() require("neo-tree.command").execute({ dir = os.getenv("HOME") .. "/.local/share/chezmoi" }) end,
-					{ desc = "cd chezmoi" }
-				)
-				map("n", "<Leader>pc", function() require("neo-tree.command").execute({ dir = vim.fn.stdpath("config") }) end, { desc = "cd config" })
-			end,
-		},
 		{
 			"folke/noice.nvim",
 			dependencies = {
@@ -1350,6 +1351,8 @@ return {
 					},
 				})
 
+				ins_left({ macro, color = { fg = colors.red, gui = "bold" } })
+
 				-- Insert mid section. You can make any number of sections in neovim :)
 				-- for lualine it's any number greater then 2
 				ins_left({
@@ -1537,7 +1540,7 @@ return {
 				},
 				auto_close = true,
 			},
-			explorer = { enabled = false },
+			explorer = { enabled = true },
 			dashboard = {
 				preset = {
 					header = require("stuff.ascii").cat,
@@ -1548,13 +1551,13 @@ return {
 							icon = "󰙅 ",
 							key = "e",
 							desc = "File Explorer",
-							action = function() require("neo-tree.command").execute({ position = "current" }) end,
+							action = ":e .",
 						},
 						{
 							icon = " ",
 							key = "d",
 							desc = "DiffView",
-							action = ": DiffviewOpen",
+							action = ":DiffviewOpen",
 						},
 						-- { icon = " ", key = "w", desc = "Find Word", action = ":lua Snacks.dashboard.pick('live_grep')" },
 						-- { icon = " ", key = "r", desc = "Recents", action = ":lua Snacks.dashboard.pick('oldfiles')" },
@@ -1589,7 +1592,7 @@ return {
 								require("resession").load(get_session_name(), { dir = "dirsession", silence_errors = true })
 							end,
 						},
-						-- { icon = " ", key = "q", desc = "Quit", action = ":qa" },
+						{ icon = " ", key = "q", desc = "Quit", action = ":qa" },
 					},
 				},
 				sections = {
@@ -1600,7 +1603,7 @@ return {
 				},
 			},
 			image = { enabled = true, math = { enabled = false } },
-			indent = { enabled = true },
+			indent = { enabled = true, scope = { only_current = true } },
 			input = { enabled = true },
 			lazygit = { theme = { selectedLineBgColor = { bg = "Visual" } } },
 			picker = {
@@ -1741,6 +1744,7 @@ return {
 				end,
 			})
 
+			map("n", "<Leader>fe", function() Snacks.explorer() end, { desc = "File explorer" })
 			map("n", "<Leader>c", function() Snacks.bufdelete() end, { desc = "Close buffer" })
 			map("n", "<Leader>H", function() Snacks.dashboard() end, { desc = "Home" })
 			map("n", "<Leader>R", function() Snacks.rename.rename_file() end, { desc = "Rename file" })
