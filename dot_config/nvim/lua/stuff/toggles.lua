@@ -20,18 +20,30 @@ function M.virtual_lines(opts)
 	}, opts)
 end
 
+-- Toggle autosave for current buffer
 function M.autosave(opts)
 	return Snacks.toggle.new({
 		id = "autosave",
 		name = "autosave",
-		get = function()
-			if vim.b["autosave_enabled"] then
-				return true
+		get = function() return vim.b.autosave end,
+		set = function(state)
+			local bufnr = vim.api.nvim_get_current_buf()
+			if state then
+				local group = vim.api.nvim_create_augroup("AutoSaveBuffer" .. bufnr, { clear = true })
+				vim.api.nvim_create_autocmd({ "InsertLeave", "TextChanged" }, {
+					group = group,
+					buffer = bufnr,
+					callback = function()
+						if vim.b.autosave and vim.bo.modifiable and vim.bo.modified then
+							vim.cmd("silent write")
+						end
+					end,
+				})
 			else
-				return false
+				vim.cmd("autocmd! AutoSaveBuffer" .. bufnr)
 			end
+			vim.b.autosave = state
 		end,
-		set = function() require("stuff.functions").ToggleBufferAutoSave() end,
 	}, opts)
 end
 
@@ -39,14 +51,17 @@ function M.formatting(opts)
 	return Snacks.toggle.new({
 		id = "formatting",
 		name = "formatting",
-		get = function()
-			if vim.b.disable_autoformat then
-				return false
-			else
-				return true
-			end
-		end,
-		set = function() require("stuff.functions").ToggleBufferAutoFormat() end,
+		get = function() return vim.b.autoformat or vim.b.autoformat == nil end,
+		set = function(state) vim.b.autoformat = state end,
+	}, opts)
+end
+
+function M.completion(opts)
+	return Snacks.toggle.new({
+		id = "completion",
+		name = "completion",
+		get = function() return vim.b.completion or vim.b.completion == nil end,
+		set = function(state) vim.b.completion = state end,
 	}, opts)
 end
 
@@ -56,8 +71,7 @@ function M.math_virt(opts)
 		name = "math virtual text",
 		get = function()
 			local bufnr = vim.api.nvim_get_current_buf()
-			local state = require("nabla").is_virt_enabled(bufnr)
-			return state
+			return require("nabla").is_virt_enabled(bufnr)
 		end,
 		set = function() require("nabla").toggle_virt({ autogen = "true", silent = "true" }) end,
 	}, opts)

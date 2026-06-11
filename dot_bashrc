@@ -61,6 +61,7 @@ alias ch="chezmoi"
 alias cl="clear"
 alias csvlens="csvlens --colorful"
 alias timeit="/usr/bin/time -f %Mkb:%es"
+alias nv='nvim'
 if lsd >&/dev/null; then
 	alias ls='lsd'
 	alias ll='lsd -alFg'

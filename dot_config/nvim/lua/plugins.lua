@@ -18,6 +18,7 @@ return {
 			---@module 'blink.cmp'
 			---@type blink.cmp.Config
 			opts = {
+				enabled = function() return vim.b.completion or vim.b.completion == nil end,
 				keymap = {
 					["<C-Space>"] = { "show", "show_documentation", "hide_documentation" },
 					["<C-e>"] = { "cancel", "fallback" },
@@ -312,20 +313,20 @@ return {
 					callback = function()
 						---@diagnostic disable-next-line: undefined-field
 						if string.match(vim.v.event.directory, "\\Obsidian") then
-							vim.system({ "git", "pull" }, {
-								cwd = vim.fn.expand("$HOME/Documents/Obsidian"),
-								text = true,
-								stdout = function(_, data)
-									if data ~= nil then
-										vim.notify(data, vim.log.levels.INFO)
+							vim.system(
+								{ "git", "pull" },
+								{
+									cwd = vim.fn.expand("$HOME/Documents/Obsidian"),
+									text = true,
+								},
+								vim.schedule_wrap(function(obj)
+									if obj.stdout ~= nil then
+										vim.notify(obj.stdout, vim.log.levels.INFO, { title = "Git pull", style = "minimal" })
+									elseif obj.stderr ~= nil then
+										vim.notify(obj.stdout, vim.log.levels.ERROR, { title = "Git pull" })
 									end
-								end,
-								stderr = function(_, data)
-									if data ~= nil then
-										vim.notify(data, vim.log.levels.ERROR)
-									end
-								end,
-							}, function(_) end)
+								end)
+							)
 						end
 					end,
 				})
@@ -499,10 +500,9 @@ return {
 					lsp_format = "fallback",
 				},
 				format_on_save = function(bufnr)
-					if vim.b[bufnr].disable_autoformat then
-						return
+					if vim.b[bufnr].autoformat or vim.b[bufnr].autoformat == nil then
+						return { timeout_ms = 500, lsp_format = "fallback" }
 					end
-					return { timeout_ms = 500, lsp_format = "fallback" }
 				end,
 				formatters = {
 					ruff_format = {
@@ -514,8 +514,8 @@ return {
 				map("n", "<Leader>lc", "<CMD>ConformInfo<CR>", { desc = "Formatter info" })
 				vim.o.formatexpr = "v:lua.require'conform'.formatexpr()"
 
-				vim.api.nvim_create_user_command("FormatDisable", function() vim.b.disable_autoformat = true end, { desc = "Disable autoformat-on-save" })
-				vim.api.nvim_create_user_command("FormatEnable", function() vim.b.disable_autoformat = false end, { desc = "Enable autoformat-on-save" })
+				vim.api.nvim_create_user_command("FormatDisable", function() vim.b.autoformat = false end, { desc = "Disable autoformat-on-save" })
+				vim.api.nvim_create_user_command("FormatEnable", function() vim.b.autoformat = true end, { desc = "Enable autoformat-on-save" })
 			end,
 		},
 	},
@@ -730,7 +730,7 @@ return {
 											return
 										end
 										local results = vim.system({ "git", "commit", "-m", msg }, { text = true }):wait()
-										vim.notify(results.stdout, vim.log.levels.INFO, { title = "Commit", render = "simple" })
+										vim.notify(results.stdout, vim.log.levels.INFO, { title = "Commit" })
 									end)
 								end,
 							},
@@ -739,7 +739,7 @@ return {
 								"cx",
 								function()
 									local results = vim.system({ "git", "commit", "--amend", "--no-edit" }, { text = true }):wait()
-									vim.notify(results.stdout, vim.log.levels.INFO, { title = "Commit amend", render = "simple" })
+									vim.notify(results.stdout, vim.log.levels.INFO, { title = "Commit amend" })
 								end,
 							},
 						},
@@ -853,7 +853,7 @@ return {
 					max_height = 0.8,
 					max_width = 0.8,
 					border = "rounded",
-					win_options = { winhighlight = "Normal:Normal,FloatBorder:Red,FloatTitle:RedBold" },
+					win_options = { winhighlight = "Normal:Normal,FloatBorder:Purple,FloatTitle:PurpleBold" },
 					title_pos = "center",
 				},
 			},
@@ -1165,9 +1165,8 @@ return {
 						filter = {
 							event = "msg_show",
 							any = {
-								{ find = "%d+L, %d+B" },
-								{ find = "; after #%d+" },
-								{ find = "; before #%d+" },
+								{ kind = "bufwrite" },
+								{ kind = "undo" },
 								{ find = "%d+ lines" },
 								{ find = "%d+ more lines" },
 								{ find = "%d+ fewer" },
@@ -1181,9 +1180,8 @@ return {
 						filter = {
 							event = "msg_show",
 							kind = "lua_print",
-							find = "[nvim-treesitter]",
 						},
-						view = "mini",
+						view = "notify",
 					},
 					{
 						filter = {
@@ -1200,6 +1198,13 @@ return {
 							cmdline = true,
 						},
 						view = "popup",
+					},
+					{
+						filter = {
+							event = "notify",
+							cond = function(message) return message.opts.title == "config sync" end,
+						},
+						view = "mini",
 					},
 				},
 				lsp = {
@@ -1801,17 +1806,17 @@ return {
 			local toggles = require("stuff.toggles")
 			toggles.autosave():map("<Leader>ba")
 			toggles.formatting():map("<Leader>bF")
+			toggles.completion():map("<Leader>bC")
 			toggles.virtual_text():map("<Leader>uv")
 			toggles.virtual_lines():map("<Leader>uV")
 			toggles.math_virt():map("<Leader>um")
 			Snacks.toggle.option("spell", { name = "spellcheck" }):map("<leader>us")
 			Snacks.toggle.option("wrap", { name = "wrap" }):map("<leader>uw")
-			Snacks.toggle.option("relativenumber", { name = "relative number" }):map("<leader>uL")
-			Snacks.toggle.option("hlsearch", { name = "hlsearch" }):map("<Leader>uh")
-			Snacks.toggle.option("conceallevel", { off = 0, on = vim.o.conceallevel > 0 and vim.o.conceallevel or 2 }):map("<leader>uC")
+			Snacks.toggle.option("relativenumber", { name = "relative number" }):map("<leader>ul")
 			Snacks.toggle.option("background", { off = "light", on = "dark", name = "dark background" }):map("<leader>ub")
+			Snacks.toggle.option("scrollbind"):map("<leader>uS")
 			Snacks.toggle.diagnostics():map("<leader>ud")
-			Snacks.toggle.line_number():map("<leader>ul")
+			Snacks.toggle.line_number():map("<leader>uL")
 			Snacks.toggle.treesitter():map("<leader>uT")
 			Snacks.toggle.inlay_hints():map("<leader>uI")
 			Snacks.toggle.indent():map("<leader>ug")

@@ -13,44 +13,6 @@ function M.map(mode, lhs, rhs, opts)
 	vim.keymap.set(mode, lhs, rhs, opts)
 end
 
--- Toggle autosave for current buffer
-function M.ToggleBufferAutoSave()
-	local bufnr = vim.api.nvim_get_current_buf()
-	local key = "autosave_enabled"
-
-	-- Toggle the buffer-local variable
-	local current = vim.b[key]
-	if current then
-		vim.b[key] = false
-		vim.cmd("autocmd! AutoSaveBuffer" .. bufnr)
-		-- vim.notify("AutoSave disabled for buffer " .. bufnr, vim.log.levels.INFO)
-	else
-		vim.b[key] = true
-		local group = vim.api.nvim_create_augroup("AutoSaveBuffer" .. bufnr, { clear = true })
-		vim.api.nvim_create_autocmd({ "InsertLeave", "TextChanged" }, {
-			group = group,
-			buffer = bufnr,
-			callback = function()
-				if vim.b[key] and vim.bo.modifiable and vim.bo.modified then
-					vim.cmd("silent write")
-				end
-			end,
-		})
-		-- vim.notify("AutoSave enabled for buffer " .. bufnr, vim.log.levels.INFO)
-	end
-end
-vim.api.nvim_create_user_command("ToggleBufferAutoSave", M.ToggleBufferAutoSave, {})
-
-function M.ToggleBufferAutoFormat()
-	local bufnr = vim.api.nvim_get_current_buf()
-
-	if vim.b[bufnr].disable_autoformat then
-		vim.b[bufnr].disable_autoformat = false
-	else
-		vim.b[bufnr].disable_autoformat = true
-	end
-end
-
 -- convert dos fileformat to unix
 function M.DOS_to_Unix()
 	vim.bo.fileformat = "unix"

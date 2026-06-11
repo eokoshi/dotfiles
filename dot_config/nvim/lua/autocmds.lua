@@ -46,50 +46,42 @@ vim.api.nvim_create_autocmd("BufWritePost", {
 	pattern = "*/.local/share/chezmoi/*",
 	callback = function()
 		local wsl = vim.fn.stdpath("config")
-		local win = vim.fn.expand("$HOME/windows/AppData/Local/nvim")
 		local ch = vim.fn.expand("$HOME/.local/share/chezmoi/dot_config/nvim")
+		-- assumes that a link to windows exists here (wsl)
+		local win = vim.fn.expand("$HOME/windows/AppData/Local/nvim")
 
 		if vim.fn.isdirectory(win) == 1 then
 			-- add new spellings from windows before overwriting everything
-			vim.system({ "rsync", "-rtu", win .. "/spell/", ch .. "/spell" }, { text = true }, function(_) end)
+			vim.system({ "rsync", "-rtu", win .. "/spell/", ch .. "/spell" }, { text = true })
 		end
 
-		local apply = vim.system({ "chezmoi", "apply" }, {
-			stdout = function(_, data)
-				if data ~= nil then
-					vim.notify("Apply failed.\nRun chezmoi apply from command line.", vim.log.levels.ERROR)
-				end
-			end,
-			stderr = function(_, data)
-				if data ~= nil then
-					vim.notify("Apply failed.\nRun chezmoi apply from command line.", vim.log.levels.ERROR)
-				end
-			end,
-			text = true,
-		}, function(_) end)
+		local result = vim.system({ "chezmoi", "apply" }, { text = true }):wait(3000)
 
-		if vim.fn.isdirectory(win) == 1 and apply:wait().code == 0 then
-			local cmd = {
-				"rsync",
-				"-a",
-				"--delete",
-				"--exclude",
-				".git",
-				"--exclude",
-				"lazy-lock.json",
-				wsl .. "/",
-				win,
-			}
-			vim.system(cmd, {
-				text = true,
-			}, function(completed)
-				local code = completed.code
-				if code == 0 then
-					vim.notify("Config synced to Windows", vim.log.levels.INFO)
+		if result.code == 0 then
+			if vim.fn.isdirectory(win) == 1 then
+				local rsync_result = vim
+					.system({
+						"rsync",
+						"-a",
+						"--delete",
+						"--exclude",
+						".git",
+						"--exclude",
+						"lazy-lock.json",
+						wsl .. "/",
+						win,
+					}, {
+						text = true,
+					})
+					:wait()
+				if rsync_result.code == 0 then
+					vim.notify(wsl .. " ⮕ " .. win, vim.log.levels.INFO, { title = "config sync" })
 				else
-					vim.notify("rsync failed (code " .. code .. ")", vim.log.levels.ERROR)
+					vim.notify("code=" .. rsync_result.code, vim.log.levels.ERROR, { title = "rsync error" })
 				end
-			end)
+			end
+		else
+			vim.notify("Run chezmoi apply from command line.", vim.log.levels.ERROR, { title = "ch apply failed" })
 		end
 	end,
 	desc = "Push edited config file to Windows via rsync",
