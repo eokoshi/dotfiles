@@ -12,6 +12,7 @@
 
 [merge]
 	tool = nvimdiff
+	renormalize = true
 
 [mergetool "vimdiff"]
 		layout = "LOCAL,REMOTE / MERGED) + (LOCAL,MERGED,REMOTE) + ((LOCAL/BASE/REMOTE),MERGED) + (LOCAL,BASE,REMOTE / MERGED)"
