@@ -858,7 +858,8 @@ return {
 				},
 			},
 			init = function()
-				map("n", "<Leader>e", function() require("oil").toggle_float() end, { desc = "Oil explorer" })
+				local Oil = require("oil")
+				map("n", "<Leader>e", function() Oil.toggle_float(vim.fn.getcwd()) end, { desc = "Oil explorer" })
 			end,
 		},
 		{
