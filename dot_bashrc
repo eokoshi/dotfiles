@@ -103,8 +103,9 @@ function watchlastlog() {
 	watch -n 0.1 'tail -n 30 "$(find logs | sort --reverse | head -n 1)"'
 }
 
-export EDITOR="nvim"
-export SUDO_EDITOR="nvim"
+export EDITOR=nvim
+export SUDO_EDITOR=nvim
+export SYSTEMD_EDITOR=nvim
 export PATH="$HOME/.local/bin:$HOME/.cargo/bin:$HOME/.local/share/nvim/mason/bin:$PATH"
 
 ############## MISC PROGRAMS #############
