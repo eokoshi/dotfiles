@@ -90,7 +90,11 @@ __mkps1_workdir() {
 }
 
 # For Git PS1
-source /usr/lib/git-core/git-sh-prompt;
+{{- if eq .chezmoi.osRelease.id "ubuntu" }}
+	source /usr/lib/git-core/git-sh-prompt;
+{{- else if eq .chezmoi.osRelease.id "opensuse-tumbleweed" }}
+	source /usr/share/bash-completion/completions/git-prompt.sh;
+{{- end }}
 # GIT_PS1_SHOWDIRTYSTATE=0
 # GIT_PS1_SHOWUPSTREAM="auto"
 

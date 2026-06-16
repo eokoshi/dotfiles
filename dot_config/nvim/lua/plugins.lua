@@ -543,7 +543,7 @@ return {
 								position = "right",
 							},
 						},
-						auto_toggle = true,
+						auto_toggle = "keep_terminal",
 					},
 				},
 			},
@@ -552,50 +552,43 @@ return {
 				local dap = require("dap")
 				dap.defaults.fallback.stepping_granularity = "line"
 				dap.defaults.fallback.auto_continue_if_many_stopped = false
-				map("n", "<F5>", function() require("dap").continue() end, { desc = "Debugger: Start" })
-				map("n", "<F17>", function() require("dap").terminate() end, { desc = "Debugger: Stop" })
-				map("n", "<F29>", function() require("dap").restart_frame() end, { desc = "Debugger: Restart" })
-				map("n", "<F6>", function() require("dap").pause() end, { desc = "Debugger: Pause" })
-				map("n", "<F9>", function() require("dap").toggle_breakpoint() end, { desc = "Debugger: Toggle Breakpoint" })
-				map("n", "<F10>", function() require("dap").step_over() end, { desc = "Debugger: Step Over" })
-				map("n", "<F11>", function() require("dap").step_into() end, { desc = "Debugger: Step Into" })
-				map("n", "<F23>", function() require("dap").step_out() end, { desc = "Debugger: Step Out" })
-				map("n", "<Leader>db", function() require("dap").toggle_breakpoint() end, { desc = "Toggle Breakpoint (F9)" })
-				map("n", "<Leader>dB", function() require("dap").clear_breakpoints() end, { desc = "Clear Breakpoints" })
-				map("n", "<Leader>dc", function() require("dap").continue() end, { desc = "Start/Continue (F5)" })
+				map("n", "<F5>", function() dap.continue() end, { desc = "Debugger: Start" })
+				map("n", "<F17>", function() dap.terminate() end, { desc = "Debugger: Stop" })
+				map("n", "<F29>", function() dap.restart_frame() end, { desc = "Debugger: Restart" })
+				map("n", "<F6>", function() dap.pause() end, { desc = "Debugger: Pause" })
+				map("n", "<F9>", function() dap.toggle_breakpoint() end, { desc = "Debugger: Toggle Breakpoint" })
+				map("n", "<F10>", function() dap.step_over() end, { desc = "Debugger: Step Over" })
+				map("n", "<F11>", function() dap.step_into() end, { desc = "Debugger: Step Into" })
+				map("n", "<F23>", function() dap.step_out() end, { desc = "Debugger: Step Out" })
+				map("n", "<Leader>db", function() dap.toggle_breakpoint() end, { desc = "Toggle Breakpoint (F9)" })
+				map("n", "<Leader>dB", function() dap.clear_breakpoints() end, { desc = "Clear Breakpoints" })
+				map("n", "<Leader>dc", function() dap.continue() end, { desc = "Start/Continue (F5)" })
 				map("n", "<Leader>dh", function() require("dap.ui.widgets").hover() end, { desc = "Debugger Hover" })
-				map("n", "<Leader>di", function() require("dap").step_into() end, { desc = "Step Into (F11)" })
+				map("n", "<Leader>di", function() dap.step_into() end, { desc = "Step Into (F11)" })
 				map("n", "<Leader>dj", "<CMD>e $PWD/.vscode/launch.json<CR><CMD>w ++p<CR>", { desc = "Open workspace DAP config" })
-				map("n", "<Leader>do", function() require("dap").step_over() end, { desc = "Step Over (F10)" })
-				map("n", "<Leader>dO", function() require("dap").step_out() end, { desc = "Step Out (S-F11)" })
-				map("n", "<Leader>dp", function() require("dap").pause() end, { desc = "Pause (F6)" })
-				map("n", "<Leader>dq", function() require("dap").close() end, { desc = "Close Session" })
-				map("n", "<Leader>dQ", function() require("dap").terminate() end, { desc = "Terminate Session (S-F5)" })
-				map("n", "<Leader>dr", function() require("dap").restart_frame() end, { desc = "Restart (C-F5)" })
-				map("n", "<Leader>dR", function() require("dap").repl.toggle() end, { desc = "Toggle REPL" })
+				map("n", "<Leader>do", function() dap.step_over() end, { desc = "Step Over (F10)" })
+				map("n", "<Leader>dO", function() dap.step_out() end, { desc = "Step Out (S-F11)" })
+				map("n", "<Leader>dp", function() dap.pause() end, { desc = "Pause (F6)" })
+				map("n", "<Leader>dq", function() dap.close() end, { desc = "Close Session" })
+				map("n", "<Leader>dQ", function() dap.terminate() end, { desc = "Terminate Session (S-F5)" })
+				map("n", "<Leader>dr", function() dap.restart_frame() end, { desc = "Restart (C-F5)" })
+				map("n", "<Leader>dR", function() dap.repl.toggle() end, { desc = "Toggle REPL" })
 				map("n", "<Leader>dt", function() require("dap-view").show_view("console") end, { desc = "Show Console" })
-				map("n", "<Leader>ds", function() require("dap").run_to_cursor() end, { desc = "Run To Cursor" })
+				map("n", "<Leader>ds", function() dap.run_to_cursor() end, { desc = "Run To Cursor" })
 				map("n", "<F21>", function()
-					vim.ui.input({ prompt = "Condition: " }, function(condition)
-						if condition then
-							require("dap").set_breakpoint(condition)
+					vim.ui.input({ prompt = "Condition: " }, function(cond)
+						if cond then
+							dap.set_breakpoint(cond)
 						end
 					end)
 				end, { desc = "Debugger: Conditional Breakpoint" })
 				map("n", "<Leader>dC", function()
-					vim.ui.input({ prompt = "Condition: " }, function(condition)
-						if condition then
-							require("dap").set_breakpoint(condition)
+					vim.ui.input({ prompt = "Condition: " }, function(cond)
+						if cond then
+							dap.set_breakpoint(cond)
 						end
 					end)
 				end, { desc = "Conditional Breakpoint (S-F9)" })
-				map("n", "<Leader>dE", function()
-					vim.ui.input({ prompt = "Expression: " }, function(expr)
-						if expr then
-							require("dapui").eval(expr, { enter = true })
-						end
-					end)
-				end, { desc = "Evaluate Input" })
 				map("n", "<Leader>du", function() require("dap-view").toggle(true) end, { desc = "Toggle Debugger UI" })
 			end,
 		},
@@ -653,117 +646,135 @@ return {
 			},
 		},
 		{
-			"sindrets/diffview.nvim",
-			cmd = "DiffviewOpen",
-			keys = {
-				{ "<Leader>gD", mode = { "n" }, "<CMD>DiffviewOpen<CR>", desc = "Diff repo" },
-				{ "<Leader>gh", mode = { "n" }, "<CMD>DiffviewFileHistory %<CR>", desc = "History: file" },
-				{ "<Leader>gH", mode = { "n" }, "<CMD>DiffviewFileHistory<CR>", desc = "History: repo" },
-			},
-			config = function()
-				local actions = require("diffview.actions")
-				require("diffview").setup({
-					enhanced_diff_hl = true,
+			"esmuellert/codediff.nvim",
+			cmd = "CodeDiff",
+			opts = {
+				diff = {
+					compute_moves = true,
+				},
+				keymaps = {
 					view = {
-						default = {
-							disable_diagnostics = true,
-							winbar_info = true,
-						},
-						merge_tool = {
-							layout = "diff3_mixed",
-						},
+						toggle_explorer = "<leader>e",
+						stage_hunk = "<leader>gs",
+						unstage_hunk = "<leader>gu",
+						discard_hunk = "<leader>gr",
+						show_help = "?",
 					},
-					file_panel = {
-						win_config = {
-							position = "bottom",
-							height = 10,
-						},
-					},
-					file_history_panel = {
-						win_config = {
-							type = "split",
-							position = "bottom",
-							height = 10,
-						},
-					},
-					keymaps = {
-						disable_defaults = true,
-						view = {
-							{ "n", "<Leader>q", "<CMD>DiffviewClose<CR>", { desc = "Close DiffView" } },
-							{ "n", "<Leader>e", actions.toggle_files, { desc = "toggle file panel" } },
-							{ "n", "gf", actions.goto_file_edit, { desc = "Open file in previous tabpage" } },
-							{ "n", "g?", actions.help("view"), { desc = "Open help panel" } },
-							{ "n", "co", actions.conflict_choose("ours"), { desc = "Choose conflict --ours" } },
-							{ "n", "ct", actions.conflict_choose("theirs"), { desc = "Choose conflict --theirs" } },
-							{ "n", "cb", actions.conflict_choose("base"), { desc = "Choose conflict --base" } },
-							{ "n", "ca", actions.conflict_choose("all"), { desc = "Choose conflict --all" } },
-							{ "n", "cn", actions.conflict_choose("none"), { desc = "Choose conflict --none" } },
-						},
-						file_panel = {
-							{ "n", "q", "<CMD>DiffviewClose<CR>", { desc = "Close DiffView" } },
-							{ "n", "<Leader>e", actions.toggle_files, { desc = "toggle file panel" } },
-							{ "n", "j", actions.next_entry, { desc = "Next file entry" } },
-							{ "n", "<down>", actions.select_next_entry, { desc = "Select next file entry" } },
-							{ "n", "k", actions.prev_entry, { desc = "Previous file entry" } },
-							{ "n", "<up>", actions.select_prev_entry, { desc = "Select previous file entry" } },
-							{ "n", "<cr>", actions.select_entry, { desc = "Open diff for selected entry" } },
-							{ "n", "s", actions.toggle_stage_entry, { desc = "Stage/unstage entry" } },
-							{ "n", "S", actions.stage_all, { desc = "Stage all entries" } },
-							{ "n", "U", actions.unstage_all, { desc = "Unstage all entries" } },
-							{ "n", "[x", actions.prev_conflict, { desc = "Go to prev conflict" } },
-							{ "n", "]x", actions.next_conflict, { desc = "Go to next conflict" } },
-							{ "n", "gf", actions.goto_file_edit, { desc = "Open file in previous tabpage" } },
-							{ "n", "co", actions.conflict_choose_all("ours"), { desc = "Choose conflict --ours" } },
-							{ "n", "ct", actions.conflict_choose_all("theirs"), { desc = "Choose conflict --theirs" } },
-							{ "n", "cb", actions.conflict_choose_all("base"), { desc = "Choose conflict --base" } },
-							{ "n", "l", actions.open_fold, { desc = "Expand fold" } },
-							{ "n", "h", actions.close_fold, { desc = "Collapse fold" } },
-							{ "n", "t", actions.listing_style, { desc = "Toggle list/tree views" } },
-							{ "n", "L", actions.open_commit_log, { desc = "Open commit log panel" } },
-							{ "n", "g?", actions.help("file_panel"), { desc = "Open help panel" } },
-							{
-								"n",
-								"cc",
-								function()
-									vim.ui.input({ prompt = "Commit message: " }, function(msg)
-										if not msg then
-											return
-										end
-										local results = vim.system({ "git", "commit", "-m", msg }, { text = true }):wait()
-										vim.notify(results.stdout, vim.log.levels.INFO, { title = "Commit" })
-									end)
-								end,
-							},
-							{
-								"n",
-								"cx",
-								function()
-									local results = vim.system({ "git", "commit", "--amend", "--no-edit" }, { text = true }):wait()
-									vim.notify(results.stdout, vim.log.levels.INFO, { title = "Commit amend" })
-								end,
-							},
-						},
-						file_history_panel = {
-							{ "n", "q", "<CMD>DiffviewClose<CR>", { desc = "Close DiffView" } },
-							{ "n", "<Leader>e", actions.toggle_files, { desc = "toggle file panel" } },
-							{ "n", "j", actions.next_entry, { desc = "Next log entry" } },
-							{ "n", "<down>", actions.select_next_entry, { desc = "Select next log entry" } },
-							{ "n", "k", actions.prev_entry, { desc = "Previous log entry" } },
-							{ "n", "<up>", actions.select_prev_entry, { desc = "Select previous file entry" } },
-							{ "n", "<cr>", actions.select_entry, { desc = "Open diff for selected entry" } },
-							{ "n", "gd", actions.open_in_diffview, { desc = "Open entry in diffview" } },
-							{ "n", "y", actions.copy_hash, { desc = "Copy commit hash" } },
-							{ "n", "L", actions.open_commit_log, { desc = "Show commit details" } },
-							{ "n", "gf", actions.goto_file_edit, { desc = "Open file in previous tabpage" } },
-							{ "n", "g?", actions.help("file_history_panel"), { desc = "Open help panel" } },
-						},
-						help_panel = {
-							{ "n", "q", actions.close, { desc = "Close help menu" } },
-							{ "n", "<ESC>", actions.close, { desc = "Close help menu" } },
-						},
-					},
-				})
-			end,
+				},
+			},
+		},
+		{
+			-- "sindrets/diffview.nvim",
+			-- cmd = "DiffviewOpen",
+			-- keys = {
+			-- 	{ "<Leader>gD", mode = { "n" }, "<CMD>DiffviewOpen<CR>", desc = "Diff repo" },
+			-- 	{ "<Leader>gh", mode = { "n" }, "<CMD>DiffviewFileHistory %<CR>", desc = "History: file" },
+			-- 	{ "<Leader>gH", mode = { "n" }, "<CMD>DiffviewFileHistory<CR>", desc = "History: repo" },
+			-- },
+			-- config = function()
+			-- 	local actions = require("diffview.actions")
+			-- 	require("diffview").setup({
+			-- 		enhanced_diff_hl = true,
+			-- 		view = {
+			-- 			default = {
+			-- 				disable_diagnostics = true,
+			-- 				winbar_info = true,
+			-- 			},
+			-- 			merge_tool = {
+			-- 				layout = "diff3_mixed",
+			-- 			},
+			-- 		},
+			-- 		file_panel = {
+			-- 			win_config = {
+			-- 				position = "bottom",
+			-- 				height = 10,
+			-- 			},
+			-- 		},
+			-- 		file_history_panel = {
+			-- 			win_config = {
+			-- 				type = "split",
+			-- 				position = "bottom",
+			-- 				height = 10,
+			-- 			},
+			-- 		},
+			-- 		keymaps = {
+			-- 			disable_defaults = true,
+			-- 			view = {
+			-- 				{ "n", "<Leader>q", "<CMD>DiffviewClose<CR>", { desc = "Close DiffView" } },
+			-- 				{ "n", "<Leader>e", actions.toggle_files, { desc = "toggle file panel" } },
+			-- 				{ "n", "gf", actions.goto_file_edit, { desc = "Open file in previous tabpage" } },
+			-- 				{ "n", "g?", actions.help("view"), { desc = "Open help panel" } },
+			-- 				{ "n", "co", actions.conflict_choose("ours"), { desc = "Choose conflict --ours" } },
+			-- 				{ "n", "ct", actions.conflict_choose("theirs"), { desc = "Choose conflict --theirs" } },
+			-- 				{ "n", "cb", actions.conflict_choose("base"), { desc = "Choose conflict --base" } },
+			-- 				{ "n", "ca", actions.conflict_choose("all"), { desc = "Choose conflict --all" } },
+			-- 				{ "n", "cn", actions.conflict_choose("none"), { desc = "Choose conflict --none" } },
+			-- 			},
+			-- 			file_panel = {
+			-- 				{ "n", "q", "<CMD>DiffviewClose<CR>", { desc = "Close DiffView" } },
+			-- 				{ "n", "<Leader>e", actions.toggle_files, { desc = "toggle file panel" } },
+			-- 				{ "n", "j", actions.next_entry, { desc = "Next file entry" } },
+			-- 				{ "n", "<down>", actions.select_next_entry, { desc = "Select next file entry" } },
+			-- 				{ "n", "k", actions.prev_entry, { desc = "Previous file entry" } },
+			-- 				{ "n", "<up>", actions.select_prev_entry, { desc = "Select previous file entry" } },
+			-- 				{ "n", "<cr>", actions.select_entry, { desc = "Open diff for selected entry" } },
+			-- 				{ "n", "s", actions.toggle_stage_entry, { desc = "Stage/unstage entry" } },
+			-- 				{ "n", "S", actions.stage_all, { desc = "Stage all entries" } },
+			-- 				{ "n", "U", actions.unstage_all, { desc = "Unstage all entries" } },
+			-- 				{ "n", "[x", actions.prev_conflict, { desc = "Go to prev conflict" } },
+			-- 				{ "n", "]x", actions.next_conflict, { desc = "Go to next conflict" } },
+			-- 				{ "n", "gf", actions.goto_file_edit, { desc = "Open file in previous tabpage" } },
+			-- 				{ "n", "co", actions.conflict_choose_all("ours"), { desc = "Choose conflict --ours" } },
+			-- 				{ "n", "ct", actions.conflict_choose_all("theirs"), { desc = "Choose conflict --theirs" } },
+			-- 				{ "n", "cb", actions.conflict_choose_all("base"), { desc = "Choose conflict --base" } },
+			-- 				{ "n", "l", actions.open_fold, { desc = "Expand fold" } },
+			-- 				{ "n", "h", actions.close_fold, { desc = "Collapse fold" } },
+			-- 				{ "n", "t", actions.listing_style, { desc = "Toggle list/tree views" } },
+			-- 				{ "n", "L", actions.open_commit_log, { desc = "Open commit log panel" } },
+			-- 				{ "n", "g?", actions.help("file_panel"), { desc = "Open help panel" } },
+			-- 				{
+			-- 					"n",
+			-- 					"cc",
+			-- 					function()
+			-- 						vim.ui.input({ prompt = "Commit message: " }, function(msg)
+			-- 							if not msg then
+			-- 								return
+			-- 							end
+			-- 							local results = vim.system({ "git", "commit", "-m", msg }, { text = true }):wait()
+			-- 							vim.notify(results.stdout, vim.log.levels.INFO, { title = "Commit" })
+			-- 						end)
+			-- 					end,
+			-- 				},
+			-- 				{
+			-- 					"n",
+			-- 					"cx",
+			-- 					function()
+			-- 						local results = vim.system({ "git", "commit", "--amend", "--no-edit" }, { text = true }):wait()
+			-- 						vim.notify(results.stdout, vim.log.levels.INFO, { title = "Commit amend" })
+			-- 					end,
+			-- 				},
+			-- 			},
+			-- 			file_history_panel = {
+			-- 				{ "n", "q", "<CMD>DiffviewClose<CR>", { desc = "Close DiffView" } },
+			-- 				{ "n", "<Leader>e", actions.toggle_files, { desc = "toggle file panel" } },
+			-- 				{ "n", "j", actions.next_entry, { desc = "Next log entry" } },
+			-- 				{ "n", "<down>", actions.select_next_entry, { desc = "Select next log entry" } },
+			-- 				{ "n", "k", actions.prev_entry, { desc = "Previous log entry" } },
+			-- 				{ "n", "<up>", actions.select_prev_entry, { desc = "Select previous file entry" } },
+			-- 				{ "n", "<cr>", actions.select_entry, { desc = "Open diff for selected entry" } },
+			-- 				{ "n", "gd", actions.open_in_diffview, { desc = "Open entry in diffview" } },
+			-- 				{ "n", "y", actions.copy_hash, { desc = "Copy commit hash" } },
+			-- 				{ "n", "L", actions.open_commit_log, { desc = "Show commit details" } },
+			-- 				{ "n", "gf", actions.goto_file_edit, { desc = "Open file in previous tabpage" } },
+			-- 				{ "n", "g?", actions.help("file_history_panel"), { desc = "Open help panel" } },
+			-- 			},
+			-- 			help_panel = {
+			-- 				{ "n", "q", actions.close, { desc = "Close help menu" } },
+			-- 				{ "n", "<ESC>", actions.close, { desc = "Close help menu" } },
+			-- 			},
+			-- 		},
+			-- 	})
+			-- end,
 		},
 	},
 
@@ -792,6 +803,19 @@ return {
 			-- keys = {
 			-- 	{ "ff", function() require("fff").find_files() end, desc = "FFFind files" },
 			-- },
+		},
+		{
+			-- "FylerOrg/fyler.nvim",
+			-- branch = "stable",
+			-- ---@module 'fyler'
+			-- opts = {
+			-- 	integrations = { icon = "mini_icons" },
+			-- 	},
+			-- },
+			-- init = function()
+			-- 	local fyler = require("fyler")
+			-- 	map("n", "<leader>e", function() fyler.toggle({ kind = "split_left_most" }) end, { desc = "Open Fyler View" })
+			-- end,
 		},
 		{
 			"stevearc/oil.nvim",
@@ -840,7 +864,7 @@ return {
 				use_default_keymaps = false,
 				view_options = {
 					show_hidden = true,
-					-- is_always_hidden = function(name, bufnr) return name:match("^__") ~= nil end,
+					is_always_hidden = function(name, bufnr) return name:match("__.+__$") ~= nil end,
 				},
 				win_options = {
 					cursorcolumn = false,
@@ -1014,9 +1038,6 @@ return {
 						enabled = false,
 						autohide = true,
 					},
-					search = {
-						-- enabled = true,
-					},
 				},
 				label = {
 					rainbow = {
@@ -1080,6 +1101,8 @@ return {
 				preset = "helix",
 				show_help = false,
 				spec = {
+					{ "<BS>", mode = { "n" }, group = "Close" },
+					{ "<Leader>c", mode = { "n" }, group = "Conflicts" },
 					{ "<Leader>f", mode = { "n", "x" }, group = "Find" },
 					{ "<Leader>g", mode = { "n", "x" }, group = "Git" },
 					{ "<Leader>l", mode = { "n", "x" }, group = "Language Tools" },
@@ -1096,35 +1119,36 @@ return {
 					separator = "",
 					group = "",
 					rules = {
-						{ pattern = "buffer", icon = icons.basic.buffer, color = "green" },
-						{ pattern = "explorer", icon = icons.basic.explorer, color = "red" },
-						{ pattern = "undotree", icon = icons.basic.undotree, color = "red" },
-						{ pattern = "history", icon = icons.basic.history, color = "yellow" },
-						{ pattern = "language", icon = icons.basic.language, color = "purple" },
-						{ pattern = "config", icon = icons.basic.config, color = "orange" },
-						{ pattern = "packages", icon = icons.basic.packages, color = "red" },
-						{ pattern = "extras", icon = icons.basic.extras, color = "yellow" },
-						{ pattern = "home", icon = icons.basic.home, color = "purple" },
-						{ pattern = "cd", icon = icons.basic.cd, color = "cyan" },
-						{ pattern = "math", icon = icons.basic.math, color = "purple" },
-						{ pattern = "fold", icon = icons.folds.foldclose, color = "gray" },
-						{ pattern = "right", icon = icons.basic.right, color = "azure" },
-						{ pattern = "left", icon = icons.basic.left, color = "azure" },
-						{ pattern = "top", icon = icons.basic.top, color = "azure" },
-						{ pattern = "bottom", icon = icons.basic.bottom, color = "azure" },
-						{ pattern = "center", icon = icons.basic.center, color = "azure" },
-						{ pattern = "list", icon = icons.basic.list, color = "blue" },
-						{ pattern = "chatbot", icon = icons.basic.ai, color = "gray" },
-						{ pattern = "markdown", icon = icons.basic.markdown, color = "purple" },
-						{ pattern = "debugger", icon = icons.debug.bug, color = "red" },
-						{ pattern = "trouble", icon = icons.debug.bug, color = "red" },
-						{ pattern = "overlook", icon = icons.basic.popup, color = "blue" },
-						{ pattern = "peek", icon = icons.basic.search, color = "green" },
+						{ pattern = "buffer", icon = "", color = "green" },
+						{ pattern = "explorer", icon = "󰙅", color = "red" },
+						{ pattern = "undotree", icon = "󰕍", color = "red" },
+						{ pattern = "history", icon = "", color = "yellow" },
+						{ pattern = "language", icon = "󱌯", color = "purple" },
+						{ pattern = "conflict", icon = "", color = "green" },
+						{ pattern = "config", icon = "", color = "orange" },
+						{ pattern = "packages", icon = "󰏗", color = "red" },
+						{ pattern = "extras", icon = "󱁖", color = "yellow" },
+						{ pattern = "home", icon = "", color = "purple" },
+						{ pattern = "cd", icon = "", color = "cyan" },
+						{ pattern = "math", icon = "󰒠", color = "purple" },
+						{ pattern = "fold", icon = "", color = "gray" },
+						{ pattern = "right", icon = "󱦰", color = "azure" },
+						{ pattern = "left", icon = "󱦱", color = "azure" },
+						{ pattern = "top", icon = "", color = "azure" },
+						{ pattern = "bottom", icon = "", color = "azure" },
+						{ pattern = "center", icon = "󰘢", color = "azure" },
+						{ pattern = "list", icon = "󰉹", color = "blue" },
+						{ pattern = "chatbot", icon = "󱚡", color = "gray" },
+						{ pattern = "markdown", icon = "", color = "purple" },
+						{ pattern = "debugger", icon = "", color = "red" },
+						{ pattern = "trouble", icon = "", color = "red" },
+						{ pattern = "overlook", icon = "", color = "blue" },
+						{ pattern = "peek", icon = "", color = "green" },
 						{ pattern = "noneckpain", icon = "", color = "blue" },
-						{ pattern = "yazi", icon = icons.basic.explorer, color = "cyan" },
-						{ pattern = "go", icon = icons.basic.go, color = "yellow" },
+						{ pattern = "yazi", icon = "󰙅", color = "cyan" },
+						{ pattern = "go", icon = "", color = "yellow" },
 						{ pattern = "align", icon = "󱇃", color = "green" },
-						{ pattern = "prev", icon = icons.basic.left, color = "purple" },
+						{ pattern = "prev", icon = "󱦱", color = "purple" },
 						{ pattern = "first", icon = "󰘀", color = "purple" },
 						{ pattern = "last", icon = "󰘁", color = "purple" },
 						{ pattern = "insert", icon = "", color = "green" },
@@ -1173,6 +1197,7 @@ return {
 								{ find = "%d+ fewer" },
 								{ find = "is deprecated" },
 								{ find = "Hunk %d+ of %d+" },
+								{ find = "[nvim-treesitter/install" },
 							},
 						},
 						view = "mini",
@@ -1206,6 +1231,9 @@ return {
 							cond = function(message) return message.opts.title == "config sync" end,
 						},
 						view = "mini",
+						opts = {
+							format = { "{message}" },
+						},
 					},
 				},
 				lsp = {
@@ -1459,6 +1487,7 @@ return {
 			cmd = "Mason",
 			build = ":MasonUpdate",
 			opts = {},
+			init = function() map("n", "<Leader>pm", "<CMD>Mason<CR>", { desc = "Mason" }) end,
 		},
 		{
 			"WhoIsSethDaniel/mason-tool-installer.nvim",
@@ -1567,8 +1596,8 @@ return {
 						{
 							icon = " ",
 							key = "d",
-							desc = "DiffView",
-							action = ":DiffviewOpen",
+							desc = "CodeDiff",
+							action = ":CodeDiff",
 						},
 						-- { icon = " ", key = "w", desc = "Find Word", action = ":lua Snacks.dashboard.pick('live_grep')" },
 						-- { icon = " ", key = "r", desc = "Recents", action = ":lua Snacks.dashboard.pick('oldfiles')" },
@@ -1756,7 +1785,7 @@ return {
 			})
 
 			map("n", "<Leader>fe", function() Snacks.explorer() end, { desc = "File explorer" })
-			map("n", "<Leader>c", function() Snacks.bufdelete() end, { desc = "Close buffer" })
+			map("n", "<BS>b", function() Snacks.bufdelete() end, { desc = "Close buffer" })
 			map("n", "<Leader>H", function() Snacks.dashboard() end, { desc = "Home" })
 			map("n", "<Leader>R", function() Snacks.rename.rename_file() end, { desc = "Rename file" })
 			map({ "n", "t", "i" }, "<F7>", function() Snacks.terminal.toggle() end, { desc = "toggle terminal" })
@@ -1802,7 +1831,7 @@ return {
 			map("n", "gd", function() Snacks.picker.lsp_definitions() end, { desc = "Go to definition" })
 			map("n", "gD", function() Snacks.picker.lsp_declarations() end, { desc = "Go to Declaration" })
 			map("n", "gI", function() Snacks.picker.lsp_implementations() end, { desc = "Go to Implementation" })
-			map("n", "gp", function() Snacks.picker.lsp_type_definitions() end, { desc = "Go to ty[p]e definition" })
+			map("n", "gy", function() Snacks.picker.lsp_type_definitions() end, { desc = "Go to type definition" })
 
 			local toggles = require("stuff.toggles")
 			toggles.autosave():map("<Leader>ba")
@@ -1852,7 +1881,11 @@ return {
 				function() require("snacks.picker").icons({ custom_sources = { unicode = vim.fn.stdpath("config") .. "/unicode_chars.json" } }) end,
 				{ desc = "icons" }
 			)
-
+			map("i", "<C-l>", function()
+				local pos = vim.fn.getcursorcharpos()
+				require("snacks.picker").icons({ custom_sources = { unicode = vim.fn.stdpath("config") .. "/unicode_chars.json" } })
+				vim.fn.setcursorcharpos(pos)
+			end, { desc = "insert icon" })
 			map(
 				"n",
 				"<Leader>N",
@@ -2033,15 +2066,6 @@ return {
 					auto_install = false,
 					fold = { enable = true },
 					highlight = { enable = true },
-					incremental_selection = {
-						enable = true,
-						keymaps = {
-							init_selection = "gnn",
-							node_incremental = "gnn",
-							scope_incremental = "gns",
-							node_decremental = "gnm",
-						},
-					},
 					indent = { enable = true },
 				}
 			end,

@@ -52,7 +52,6 @@ fi
 # See /usr/share/doc/bash-doc/examples in the bash-doc package.
 alias watch='watch -c -n 0.5'
 alias lg="lazygit"
-alias fd="fdfind"
 alias tm="tmux"
 alias tma="tmux new-session -A -t 0 -s A"
 alias tmb="tmux new-session -A -t 0 -s B"
@@ -143,3 +142,4 @@ eval "$(zoxide init bash --cmd j)"
 # opencode
 export PATH=/home/ethan/.opencode/bin:$PATH
 
+eval "$(uv generate-shell-completion bash)"

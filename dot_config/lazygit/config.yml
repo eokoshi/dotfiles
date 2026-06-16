@@ -16,10 +16,13 @@ gui:
   showRootItemInFileTree: true
   switchTabsWithPanelJumpKeys: true
 os:
-  edit: nvim -- {{filename}}
-  editAtLine: nvim +{{line}} -- {{filename}}
-  editAtLineAndWait: nvim +{{line}} -- {{filename}}
-  openDirInEditor: nvim -- {{dir}}
+  editPreset: "nvim-remote"
+  copyToClipboardCmd: >
+    if [[ "$TERM" =~ ^(screen|tmux) ]]; then
+      printf "\033Ptmux;\033\033]52;c;$(printf {{text}} | base64 -w 0)\a\033\\" > /dev/tty
+    else
+      printf "\033]52;c;$(printf {{text}} | base64 -w 0)\a" > /dev/tty
+    fi
 disableStartupPopups: true
 promptToReturnFromSubprocess: false
 notARepository: prompt

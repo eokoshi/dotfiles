@@ -18,7 +18,6 @@ vim.opt.fillchars = {
 	-- foldinner = " ",
 	eob = " ",
 }
-vim.o.findfunc = "fd"
 vim.o.foldcolumn = "1"
 vim.o.foldmethod = "expr"
 vim.o.foldexpr = "v:lua.vim.treesitter.foldexpr()"

@@ -7,10 +7,71 @@ if [ ! -d "$HOME"/.local/bin ]; then
 	mkdir "$HOME"/.local/bin -p
 fi
 
+{{- if eq .chezmoi.osRelease.id "opensuse-tumbleweed" }}
+
+sudo zypper refresh
+sudo zypper install -y \
+	terminfo \
+	ripgrep \
+	fd \
+	fzf \
+	zoxide \
+	7zip \
+	jq \
+	chafa \
+	npm \
+	direnv \
+	lsd \
+	unzip \
+	curl \
+	neovim \
+	yazi \
+	lazygit \
+	tar \
+	gzip \
+	tmux \
+	git \
+	gh \
+	tailscale \
+	cargo \
+	chezmoi \
+	rsync \
+	diffutils \
+	python3
+sudo systemctl enable --now sshd
+sudo tailscale set --operator=$USER
+ya pkg upgrade
+
+curl -LsSf https://astral.sh/uv/install.sh | sh
+uv python install
+uv tool install visidata --with openpyxl --with lxml 
+uv tool install speedtest-cli
+
+# tailscale
+echo ""
+read -p "Login to Tailscale? [y/n]" -n 1 -r
+if [[ $REPLY =~ ^[Yy]$ ]]; then
+	sudo systemctl start tailscaled
+	sudo tailscale up
+	ssh-copy-id office
+fi
+
+echo ""
+read -p "Login to GitHub? [y/n]" -n 1 -r
+if [[ $REPLY =~ ^[Yy]$ ]]; then
+	gh auth login
+fi
+
+
+
+
+{{- else if eq .chezmoi.osRelease.id "ubuntu" }}
+
 ## apt packages
 sudo apt-get update
 sudo apt-get -y --ignore-missing install ripgrep fd-find python3-venv npm direnv lsd unzip curl openssh-server speedtest-cli visidata
 sudo service ssh start
+sudo ln -sf /usr/bin/fdfind ~/.local/bin/fd
 
 # tmux
 echo ""
@@ -185,3 +246,4 @@ if [[ $REPLY =~ ^[Yy]$ ]]; then
 	lazygit --version
 fi
 echo ""
+{{- end }}

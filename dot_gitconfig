@@ -11,7 +11,7 @@
 	ff = only
 
 [merge]
-	tool = nvimdiff
+	tool = codediff
 	renormalize = true
 
 [mergetool "vimdiff"]
@@ -22,3 +22,12 @@
 
 ; [url "ssh://git@github.com/"]
 ; 	insteadOf = https://github.com/
+
+[mergetool "codediff"]
+	cmd = "nvim \"$MERGED\" -c \"CodeDiff merge \\\"$MERGED\\\"\""
+
+[diff]
+	tool = codediff
+
+[difftool "codediff"]
+	cmd = "nvim \"$LOCAL\" \"$REMOTE\" +\"CodeDiff file $LOCAL $REMOTE\""

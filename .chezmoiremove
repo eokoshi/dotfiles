@@ -4,4 +4,3 @@
 .config/nvim/after/ftplugin/php.lua
 .config/nvim/lua/plugins
 .config/nvim/lua/disable
-.setup.sh

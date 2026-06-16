@@ -17,7 +17,6 @@ if not (vim.uv or vim.loop).fs_stat(lazypath) then
 	end
 end
 vim.opt.rtp:prepend(lazypath)
-
 require("lazy").setup({
 	spec = { { import = "plugins" } },
 	checker = { enabled = false },
@@ -34,6 +33,7 @@ require("lazy").setup({
 	git = { timeout = 30 },
 	rocks = { enabled = false },
 })
+vim.keymap.set("n", "<Leader>pi", "<CMD>Lazy<CR>", { desc = "Lazy" })
 
 require("options")
 require("autocmds")

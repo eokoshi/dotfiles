@@ -26,6 +26,11 @@ except:
     pass
 
 
+print("yo")
+for i in range(100):
+    print(i)
+
+
 def greet(name: str) -> str:
     """Return a greeting message."""
     return f"Hello, {name}!"
