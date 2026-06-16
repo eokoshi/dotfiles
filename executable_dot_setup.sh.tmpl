@@ -61,6 +61,7 @@ if [[ $REPLY =~ ^[Yy]$ ]]; then
 	gh auth login
 fi
 
+chezmoi init --apply eokoshi
 
 
 
@@ -126,7 +127,6 @@ echo ""
 read -p "Install chezmoi? [y/n]" -n 1 -r
 if [[ $REPLY =~ ^[Yy]$ ]]; then
 	sh -c "$(curl -fsLS get.chezmoi.io)" -- -b "$HOME"/.local/bin
-	scp office:/home/ethan/.config/chezmoi/key.txt ~/.config/chezmoi/
 	chezmoi init --apply eokoshi
 fi
 
