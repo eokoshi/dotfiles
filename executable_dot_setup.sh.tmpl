@@ -32,14 +32,12 @@ sudo zypper install -y \
 	tmux \
 	git \
 	gh \
-	tailscale \
 	cargo \
 	chezmoi \
 	rsync \
 	diffutils \
 	python3
 sudo systemctl enable --now sshd
-sudo tailscale set --operator=$USER
 ya pkg upgrade
 
 curl -LsSf https://astral.sh/uv/install.sh | sh
@@ -51,8 +49,9 @@ uv tool install speedtest-cli
 echo ""
 read -p "Login to Tailscale? [y/n]" -n 1 -r
 if [[ $REPLY =~ ^[Yy]$ ]]; then
-	sudo systemctl start tailscaled
+	curl -fsSL https://tailscale.com/install.sh | sh
 	sudo tailscale up
+	sudo tailscale set --operator=$USER
 	ssh-copy-id office
 fi
 
