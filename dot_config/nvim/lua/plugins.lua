@@ -1500,7 +1500,7 @@ return {
 				},
 			},
 			init = function()
-				map("n", "<leader>bb", "<CMD>BufferLinePick<CR>", { desc = "Pick buffer" })
+				map("n", "vv", "<CMD>BufferLinePick<CR>", { desc = "Pick buffer" })
 				map("n", "<leader>bx", "<CMD>BufferLinePickClose<CR>", { desc = "Pick buffer to close" })
 			end,
 		},
