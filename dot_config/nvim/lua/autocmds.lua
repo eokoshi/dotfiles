@@ -55,12 +55,10 @@ vim.api.nvim_create_autocmd("BufWritePost", {
 			vim.system({ "rsync", "-rtu", win .. "/spell/", ch .. "/spell" }, { text = true })
 		end
 
-		local result = vim.system({ "chezmoi", "apply" }, { text = true }):wait(3000)
-
-		if result.code == 0 then
-			if vim.fn.isdirectory(win) == 1 then
-				local rsync_result = vim
-					.system({
+		vim.system({ "chezmoi", "apply" }, { text = true, timeout = 1000 }, function(result)
+			if result.code == 0 then
+				if vim.fn.isdirectory(win) == 1 then
+					vim.system({
 						"rsync",
 						"-a",
 						"--delete",
@@ -70,19 +68,18 @@ vim.api.nvim_create_autocmd("BufWritePost", {
 						"lazy-lock.json",
 						wsl .. "/",
 						win,
-					}, {
-						text = true,
-					})
-					:wait()
-				if rsync_result.code == 0 then
-					vim.notify(wsl .. " ⮕ " .. win, vim.log.levels.INFO, { title = "config sync" })
-				else
-					vim.notify("code=" .. rsync_result.code, vim.log.levels.ERROR, { title = "rsync error" })
+					}, { text = true }, function(rsync_result)
+						if rsync_result.code == 0 then
+							vim.notify(wsl .. " ⮕ " .. win, vim.log.levels.INFO, { title = "config sync" })
+						else
+							vim.notify("code=" .. rsync_result.code, vim.log.levels.ERROR, { title = "rsync error" })
+						end
+					end)
 				end
+			else
+				vim.notify(result.stdout, vim.log.levels.ERROR, { title = "ch apply failed" })
 			end
-		else
-			vim.notify("Run chezmoi apply from command line.", vim.log.levels.ERROR, { title = "ch apply failed" })
-		end
+		end)
 	end,
 	desc = "Push edited config file to Windows via rsync",
 })
