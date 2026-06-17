@@ -6,6 +6,7 @@ return {
 			configurationPreference = "filesystemFirst",
 			lineLength = 120,
 			organizeImports = false,
+			fixAll = false,
 		},
 	},
 }

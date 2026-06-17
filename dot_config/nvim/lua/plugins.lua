@@ -34,9 +34,7 @@ return {
 					trigger = {
 						show_in_snippet = false,
 						show_on_blocked_trigger_characters = function()
-							if vim.bo.filetype == "markdown" then
-								return { " ", "\n", "\t", ".", "/", "(", "[" }
-							end
+							if vim.bo.filetype == "markdown" then return { " ", "\n", "\t", ".", "/", "(", "[" } end
 							return { " ", "\n", "\t" }
 						end,
 					},
@@ -52,7 +50,9 @@ return {
 						draw = {
 							columns = { { "kind_icon" }, { "label" }, { "source_name" } },
 							components = {
-								source_name = { highlight = function(ctx) return ctx.kind_hl end },
+								source_name = {
+									highlight = function(ctx) return ctx.kind_hl end,
+								},
 							},
 						},
 					},
@@ -488,7 +488,7 @@ return {
 			opts = {
 				formatters_by_ft = {
 					lua = { "stylua" },
-					python = { "ruff_fix", "ruff_format" },
+					python = { "ruff_fix", "ruff_organize_imports", "ruff_format" },
 					r = { "air" },
 					htmldjango = { "djlint" },
 					yaml = { "prettier" },
@@ -500,13 +500,14 @@ return {
 					lsp_format = "fallback",
 				},
 				format_on_save = function(bufnr)
-					if vim.b[bufnr].autoformat or vim.b[bufnr].autoformat == nil then
-						return { timeout_ms = 500, lsp_format = "fallback" }
-					end
+					if vim.b[bufnr].autoformat or vim.b[bufnr].autoformat == nil then return { timeout_ms = 500, lsp_format = "fallback" } end
 				end,
 				formatters = {
 					ruff_format = {
 						append_args = { "--extension", "ipynb:python" },
+					},
+					stylua = {
+						append_args = { "--config-path", vim.fn.stdpath("config") .. "/.stylua.toml" },
 					},
 				},
 			},
@@ -577,16 +578,12 @@ return {
 				map("n", "<Leader>ds", function() dap.run_to_cursor() end, { desc = "Run To Cursor" })
 				map("n", "<F21>", function()
 					vim.ui.input({ prompt = "Condition: " }, function(cond)
-						if cond then
-							dap.set_breakpoint(cond)
-						end
+						if cond then dap.set_breakpoint(cond) end
 					end)
 				end, { desc = "Debugger: Conditional Breakpoint" })
 				map("n", "<Leader>dC", function()
 					vim.ui.input({ prompt = "Condition: " }, function(cond)
-						if cond then
-							dap.set_breakpoint(cond)
-						end
+						if cond then dap.set_breakpoint(cond) end
 					end)
 				end, { desc = "Conditional Breakpoint (S-F9)" })
 				map("n", "<Leader>du", function() require("dap-view").toggle(true) end, { desc = "Toggle Debugger UI" })
@@ -606,9 +603,7 @@ return {
 				},
 				on_attach = function(bufnr)
 					local gitsigns = require("gitsigns")
-					if vim.api.nvim_buf_get_name(bufnr):match("%.ipynb$") then
-						return false
-					end
+					if vim.api.nvim_buf_get_name(bufnr):match("%.ipynb$") then return false end
 
 					map("n", "]c", function()
 						if vim.wo.diff then
@@ -856,7 +851,14 @@ return {
 					["q"] = { "actions.close", mode = "n" },
 					["<ESC>"] = { "actions.close", mode = "n" },
 					["ff"] = {
-						function() require("snacks.picker").files({ hidden = true, ignored = true, cmd = "fd", dirs = { require("oil").get_current_dir() } }) end,
+						function()
+							require("snacks.picker").files({
+								hidden = true,
+								ignored = true,
+								cmd = "fd",
+								dirs = { require("oil").get_current_dir() },
+							})
+						end,
 						mode = "n",
 						nowait = true,
 					},
@@ -1050,10 +1052,30 @@ return {
 				},
 			},
 			keys = {
-				{ "+", mode = { "n", "x", "o" }, function() require("flash").jump() end, desc = "Flash" },
-				{ "H", mode = { "n", "x", "o" }, function() require("flash").treesitter() end, desc = "Flash treesitter" },
-				{ "L", mode = { "n", "x", "o" }, function() require("flash").treesitter_search() end, desc = "Flash treesitter search" },
-				{ "r", mode = "o", function() require("flash").remote() end, desc = "Remote Flash" },
+				{
+					"+",
+					mode = { "n", "x", "o" },
+					function() require("flash").jump() end,
+					desc = "Flash",
+				},
+				{
+					"H",
+					mode = { "n", "x", "o" },
+					function() require("flash").treesitter() end,
+					desc = "Flash treesitter",
+				},
+				{
+					"L",
+					mode = { "n", "x", "o" },
+					function() require("flash").treesitter_search() end,
+					desc = "Flash treesitter search",
+				},
+				{
+					"r",
+					mode = "o",
+					function() require("flash").remote() end,
+					desc = "Remote Flash",
+				},
 			},
 		},
 
@@ -1257,17 +1279,13 @@ return {
 				local macro = require("lualine.component"):extend()
 				function macro:update_status()
 					local reg = vim.fn.reg_recording()
-					if reg == "" then
-						return ""
-					end
+					if reg == "" then return "" end
 					return "recording @" .. reg
 				end
 
 				local formatters = function()
 					local status, conform = pcall(require, "conform")
-					if not status then
-						return "Conform not installed"
-					end
+					if not status then return "Conform not installed" end
 					local lsp_format = require("conform.lsp_format")
 					local formatters = conform.list_formatters_for_buffer()
 					if formatters and #formatters > 0 then
@@ -1281,9 +1299,7 @@ return {
 					end
 					local bufnr = vim.api.nvim_get_current_buf()
 					local lsp_clients = lsp_format.get_format_clients({ bufnr = bufnr })
-					if not vim.tbl_isempty(lsp_clients) then
-						return "󰷈 LSP Formatter"
-					end
+					if not vim.tbl_isempty(lsp_clients) then return "󰷈 LSP Formatter" end
 					return ""
 				end
 
@@ -1324,8 +1340,22 @@ return {
 						},
 						diabled_filetypes = { { "snacks_dashboard" } },
 					},
-					sections = { lualine_a = {}, lualine_b = {}, lualine_y = {}, lualine_z = {}, lualine_c = {}, lualine_x = {} },
-					inactive_sections = { lualine_a = {}, lualine_b = {}, lualine_y = {}, lualine_z = {}, lualine_c = {}, lualine_x = {} },
+					sections = {
+						lualine_a = {},
+						lualine_b = {},
+						lualine_y = {},
+						lualine_z = {},
+						lualine_c = {},
+						lualine_x = {},
+					},
+					inactive_sections = {
+						lualine_a = {},
+						lualine_b = {},
+						lualine_y = {},
+						lualine_z = {},
+						lualine_c = {},
+						lualine_x = {},
+					},
 				}
 
 				local function ins_left(component) table.insert(config.sections.lualine_c, component) end
@@ -1527,7 +1557,11 @@ return {
 				"mason-org/mason.nvim",
 				{ "neovim/nvim-lspconfig", version = "*" },
 			},
-			opts = {},
+			opts = {
+				automatic_enable = {
+					exclude = { "stylua" },
+				},
+			},
 		},
 	},
 
@@ -1584,7 +1618,12 @@ return {
 					header = require("stuff.ascii").cat,
 					keys = {
 						-- { icon = " ", key = "n", desc = "New File", action = ":ene | startinsert" },
-						{ icon = " ", key = "f", desc = "Find File", action = ":lua Snacks.dashboard.pick('files')" },
+						{
+							icon = " ",
+							key = "f",
+							desc = "Find File",
+							action = ":lua Snacks.dashboard.pick('files')",
+						},
 						{
 							icon = "󰙅 ",
 							key = "e",
@@ -1636,7 +1675,14 @@ return {
 				sections = {
 					{ section = "header" },
 					{ section = "keys", gap = 0, padding = 2 },
-					{ section = "recent_files", icon = " ", title = "Recent Files", indent = 2, padding = 2, limit = 20 },
+					{
+						section = "recent_files",
+						icon = " ",
+						title = "Recent Files",
+						indent = 2,
+						padding = 2,
+						limit = 20,
+					},
 					{ section = "startup" },
 				},
 			},
@@ -1876,12 +1922,18 @@ return {
 			map(
 				"n",
 				"<Leader>ui",
-				function() require("snacks.picker").icons({ custom_sources = { unicode = vim.fn.stdpath("config") .. "/unicode_chars.json" } }) end,
+				function()
+					require("snacks.picker").icons({
+						custom_sources = { unicode = vim.fn.stdpath("config") .. "/unicode_chars.json" },
+					})
+				end,
 				{ desc = "icons" }
 			)
 			map("i", "<C-l>", function()
 				local pos = vim.fn.getcursorcharpos()
-				require("snacks.picker").icons({ custom_sources = { unicode = vim.fn.stdpath("config") .. "/unicode_chars.json" } })
+				require("snacks.picker").icons({
+					custom_sources = { unicode = vim.fn.stdpath("config") .. "/unicode_chars.json" },
+				})
 				vim.fn.setcursorcharpos(pos)
 			end, { desc = "insert icon" })
 			map(
