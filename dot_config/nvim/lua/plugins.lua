@@ -1197,7 +1197,6 @@ return {
 								{ find = "%d+ fewer" },
 								{ find = "is deprecated" },
 								{ find = "Hunk %d+ of %d+" },
-								{ find = "[nvim-treesitter/install" },
 							},
 						},
 						view = "mini",
@@ -1231,14 +1230,13 @@ return {
 							cond = function(message) return message.opts.title == "config sync" end,
 						},
 						view = "mini",
-						opts = {
-							format = { "{message}" },
-						},
 					},
 				},
 				lsp = {
 					progress = { enabled = true },
-					override = { ["cmp.entry.get_documentation"] = false },
+					override = {
+						["cmp.entry.get_documentation"] = false,
+					},
 				},
 				cmdline = {
 					enabled = true,
