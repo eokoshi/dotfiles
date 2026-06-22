@@ -811,42 +811,42 @@ return {
 			-- },
 		},
 		{
-			"FylerOrg/fyler.nvim",
-			---@module 'fyler'
-			opts = {
-				integrations = { icon = "mini_icons" },
-				extensions = {
-					git = { enabled = true, inline = false },
-					trash = { enabled = true },
-				},
-				kind_presets = {
-					split_left_most = { width = 40 },
-					floating = {
-						win_opts = {
-							winhighlight = "Normal:Normal,FloatBorder:Purple,FloatTitle:PurpleBold",
-						},
-					},
-				},
-				ui = {
-					hidden_items = {
-						switches = {},
-					},
-					indent_guides = true,
-				},
-				mappings = {
-					n = {
-						["L"] = { action = "select" },
-						["H"] = { action = "shrink", args = { parent = true } },
-						["J"] = { action = function(_, _) vim.cmd("norm j") end },
-						["K"] = { action = function(_, _) vim.cmd("norm k") end },
-						["<CR>"] = { action = "select", args = { close = true } },
-					},
-				},
-				init = function()
-					local fyler = require("fyler")
-					map("n", "<leader>be", function() fyler.toggle({ kind = "floating" }) end, { desc = "Fyler" })
-				end,
-			},
+			-- "FylerOrg/fyler.nvim",
+			-- ---@module 'fyler'
+			-- opts = {
+			-- 	integrations = { icon = "mini_icons" },
+			-- 	extensions = {
+			-- 		git = { enabled = true, inline = false },
+			-- 		trash = { enabled = true },
+			-- 	},
+			-- 	kind_presets = {
+			-- 		split_left_most = { width = 40 },
+			-- 		floating = {
+			-- 			win_opts = {
+			-- 				winhighlight = "Normal:Normal,FloatBorder:Purple,FloatTitle:PurpleBold",
+			-- 			},
+			-- 		},
+			-- 	},
+			-- 	ui = {
+			-- 		hidden_items = {
+			-- 			switches = {},
+			-- 		},
+			-- 		indent_guides = true,
+			-- 	},
+			-- 	mappings = {
+			-- 		n = {
+			-- 			["L"] = { action = "select" },
+			-- 			["H"] = { action = "shrink", args = { parent = true } },
+			-- 			["J"] = { action = function(_, _) vim.cmd("norm j") end },
+			-- 			["K"] = { action = function(_, _) vim.cmd("norm k") end },
+			-- 			["<CR>"] = { action = "select", args = { close = true } },
+			-- 		},
+			-- 	},
+			-- 	init = function()
+			-- 		local fyler = require("fyler")
+			-- 		map("n", "<leader>be", function() fyler.toggle({ kind = "floating" }) end, { desc = "Fyler" })
+			-- 	end,
+			-- },
 		},
 		{
 			"stevearc/oil.nvim",
@@ -1020,6 +1020,18 @@ return {
 		{
 			"nvim-mini/mini.align",
 			opts = {},
+		},
+
+		{
+			"nvim-mini/mini.files",
+			opts = {
+				windows = { preview = true },
+			},
+			init = function()
+				local MiniFiles = require("mini.files")
+				map("n", "<leader>be", function() MiniFiles.open() end, { desc = "MiniFiles" })
+				map("n", "<leader>b.", function() MiniFiles.open(vim.api.nvim_buf_get_name(0), false) end, { desc = "MiniFiles this file" })
+			end,
 		},
 
 		{
@@ -1750,7 +1762,7 @@ return {
 				end,
 				sources = {
 					explorer = {
-						exclude = { ".gitattributes", "__**__", ".ipynb_checkpoints" },
+						exclude = { "__**__", ".ipynb_checkpoints" },
 						follow_file = true,
 						hidden = true,
 						ignored = true,
@@ -2319,6 +2331,26 @@ return {
 				},
 			},
 			init = function() map("n", "<Leader>T", "<CMD>TodoTrouble<CR>", { desc = "Todo List" }) end,
+		},
+	},
+
+	-- ===
+	-- Notebooks
+	{
+		{
+			"SUSTech-data/neopyter",
+			dependencies = {
+				"AbaoFromCUG/websocket.nvim", -- for mode='direct'
+			},
+			---@type neopyter.Option
+			opts = {
+				mode = "direct",
+				remote_address = "127.0.0.1:8888",
+				file_pattern = { "*.ju.*" },
+				on_attach = function(bufnr)
+					-- do some buffer keymap
+				end,
+			},
 		},
 	},
 
