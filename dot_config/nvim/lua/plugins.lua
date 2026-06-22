@@ -833,11 +833,20 @@ return {
 					},
 					indent_guides = true,
 				},
+				mappings = {
+					n = {
+						["L"] = { action = "select" },
+						["H"] = { action = "shrink", args = { parent = true } },
+						["J"] = { action = function(_, _) vim.cmd("norm j") end },
+						["K"] = { action = function(_, _) vim.cmd("norm k") end },
+						["<CR>"] = { action = "select", args = { close = true } },
+					},
+				},
+				init = function()
+					local fyler = require("fyler")
+					map("n", "<leader>be", function() fyler.toggle({ kind = "floating" }) end, { desc = "Fyler" })
+				end,
 			},
-			init = function()
-				local fyler = require("fyler")
-				map("n", "<leader>be", function() fyler.toggle({ kind = "floating" }) end, { desc = "Fyler" })
-			end,
 		},
 		{
 			"stevearc/oil.nvim",
