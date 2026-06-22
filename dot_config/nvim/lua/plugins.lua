@@ -507,7 +507,18 @@ return {
 						append_args = { "--extension", "ipynb:python" },
 					},
 					stylua = {
-						append_args = { "--config-path", vim.fn.stdpath("config") .. "/.stylua.toml" },
+						append_args = function()
+							local paths = {
+								vim.fn.getcwd() .. "/.stylua.toml",
+								vim.fn.getcwd() .. "/stylua.toml",
+								vim.fn.stdpath("config") .. "/.stylua.toml",
+								vim.fn.stdpath("config") .. "/stylua.toml",
+							}
+							for _, config in ipairs(paths) do
+								if vim.fn.filereadable(config) == 1 then return { "--config-path", config } end
+							end
+							return {}
+						end,
 					},
 				},
 			},
@@ -800,17 +811,34 @@ return {
 			-- },
 		},
 		{
-			-- "FylerOrg/fyler.nvim",
-			-- branch = "stable",
-			-- ---@module 'fyler'
-			-- opts = {
-			-- 	integrations = { icon = "mini_icons" },
-			-- 	},
-			-- },
-			-- init = function()
-			-- 	local fyler = require("fyler")
-			-- 	map("n", "<leader>e", function() fyler.toggle({ kind = "split_left_most" }) end, { desc = "Open Fyler View" })
-			-- end,
+			"FylerOrg/fyler.nvim",
+			---@module 'fyler'
+			opts = {
+				integrations = { icon = "mini_icons" },
+				extensions = {
+					git = { enabled = true, inline = false },
+					trash = { enabled = true },
+				},
+				kind_presets = {
+					split_left_most = { width = 40 },
+					floating = {
+						win_opts = {
+							winhighlight = "Normal:Normal,FloatBorder:Purple,FloatTitle:PurpleBold",
+						},
+					},
+				},
+				ui = {
+					hidden_items = {
+						switches = {},
+					},
+					indent_guides = true,
+				},
+			},
+			init = function()
+				local fyler = require("fyler")
+				map("n", "<leader>e", function() fyler.toggle({ kind = "split_left_most" }) end, { desc = "Open Fyler View" })
+				map("n", "<leader>E", function() fyler.toggle({ kind = "floating" }) end, { desc = "Open Fyler View" })
+			end,
 		},
 		{
 			"stevearc/oil.nvim",
@@ -885,7 +913,7 @@ return {
 			},
 			init = function()
 				local Oil = require("oil")
-				map("n", "<Leader>e", function() Oil.toggle_float(vim.fn.getcwd()) end, { desc = "Oil explorer" })
+				map("n", "<Leader>O", function() Oil.toggle_float(vim.fn.getcwd()) end, { desc = "Oil" })
 			end,
 		},
 		{
@@ -1229,14 +1257,6 @@ return {
 							kind = "lua_print",
 						},
 						view = "notify",
-					},
-					{
-						filter = {
-							event = "msg_show",
-							min_height = 10,
-							cmdline = false,
-						},
-						view = "split",
 					},
 					{
 						filter = {
@@ -1829,7 +1849,7 @@ return {
 			})
 
 			map("n", "<Leader>fe", function() Snacks.explorer() end, { desc = "File explorer" })
-			map("n", "<BS>b", function() Snacks.bufdelete() end, { desc = "Close buffer" })
+			map("n", "<leader>bc", function() Snacks.bufdelete() end, { desc = "Close buffer" })
 			map("n", "<Leader>H", function() Snacks.dashboard() end, { desc = "Home" })
 			map("n", "<Leader>R", function() Snacks.rename.rename_file() end, { desc = "Rename file" })
 			map({ "n", "t", "i" }, "<F7>", function() Snacks.terminal.toggle() end, { desc = "toggle terminal" })
@@ -1860,7 +1880,7 @@ return {
 			map("n", "<Leader>f:", function() Snacks.picker.command_history() end, { desc = "Command history" })
 			map("n", "<Leader>f<space>", function() Snacks.picker.resume() end, { desc = "Resume last search" })
 			map({ "n", "x" }, "<Leader>f*", function() Snacks.picker.grep_word() end, { desc = "grep current selection" })
-			map("n", "<Leader>bc", function() Snacks.bufdelete.other() end, { desc = "Close all other bufs" })
+			map("n", "<Leader>bC", function() Snacks.bufdelete.other() end, { desc = "Close all other bufs" })
 			map("n", "<Leader>bs", function() Snacks.scratch() end, { desc = "scratch buffer" })
 			map("n", "<Leader>uc", function() Snacks.picker.colorschemes() end, { desc = "search colorschemes" })
 			map("n", "<Leader>uz", function() Snacks.zen.zoom() end, { desc = "zoom pane" })
