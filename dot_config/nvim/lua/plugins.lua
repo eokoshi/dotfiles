@@ -836,8 +836,7 @@ return {
 			},
 			init = function()
 				local fyler = require("fyler")
-				map("n", "<leader>e", function() fyler.toggle({ kind = "split_left_most" }) end, { desc = "Open Fyler View" })
-				map("n", "<leader>E", function() fyler.toggle({ kind = "floating" }) end, { desc = "Open Fyler View" })
+				map("n", "<leader>be", function() fyler.toggle({ kind = "floating" }) end, { desc = "Fyler" })
 			end,
 		},
 		{
@@ -913,7 +912,7 @@ return {
 			},
 			init = function()
 				local Oil = require("oil")
-				map("n", "<Leader>O", function() Oil.toggle_float(vim.fn.getcwd()) end, { desc = "Oil" })
+				map("n", "<Leader>bE", function() Oil.toggle_float(vim.fn.getcwd()) end, { desc = "Oil" })
 			end,
 		},
 		{
@@ -1153,6 +1152,7 @@ return {
 				spec = {
 					{ "<BS>", mode = { "n" }, group = "Close" },
 					{ "<Leader>c", mode = { "n" }, group = "Conflicts" },
+					{ "<Leader>e", mode = { "n" }, group = "Explorer" },
 					{ "<Leader>f", mode = { "n", "x" }, group = "Find" },
 					{ "<Leader>g", mode = { "n", "x" }, group = "Git" },
 					{ "<Leader>l", mode = { "n", "x" }, group = "Language Tools" },
@@ -1848,7 +1848,7 @@ return {
 				end,
 			})
 
-			map("n", "<Leader>fe", function() Snacks.explorer() end, { desc = "File explorer" })
+			map("n", "<Leader>e", function() Snacks.explorer() end, { desc = "File explorer" })
 			map("n", "<leader>bc", function() Snacks.bufdelete() end, { desc = "Close buffer" })
 			map("n", "<Leader>H", function() Snacks.dashboard() end, { desc = "Home" })
 			map("n", "<Leader>R", function() Snacks.rename.rename_file() end, { desc = "Rename file" })
