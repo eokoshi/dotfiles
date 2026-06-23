@@ -2338,19 +2338,34 @@ return {
 	-- Notebooks
 	{
 		{
-			"SUSTech-data/neopyter",
-			dependencies = {
-				"AbaoFromCUG/websocket.nvim", -- for mode='direct'
-			},
-			---@type neopyter.Option
-			opts = {
-				mode = "direct",
-				remote_address = "127.0.0.1:8888",
-				file_pattern = { "*.ju.*" },
-				on_attach = function(bufnr)
-					-- do some buffer keymap
-				end,
-			},
+			-- "SUSTech-data/neopyter",
+			-- dependencies = {
+			-- 	"AbaoFromCUG/websocket.nvim", -- for mode='direct'
+			-- },
+			-- ---@type neopyter.Option
+			-- opts = {
+			-- 	mode = "direct",
+			-- 	remote_address = "127.0.0.1:9001",
+			-- 	file_pattern = { "*.ju.*" },
+			-- 	on_attach = function(buf)
+			-- 		map("n", "<C-Enter>", "<cmd>Neopyter execute notebook:run-cell<cr>", { desc = "run selected", buffer = buf })
+			-- 		map("n", "<space>X", "<cmd>Neopyter execute notebook:run-all-above<cr>", { desc = "run all above cell", buffer = buf })
+			-- 		map("n", "<space>nt", "<cmd>Neopyter execute kernelmenu:restart<cr>", { desc = "restart kernel", buffer = buf })
+			-- 		map(
+			-- 			"n",
+			-- 			"<S-Enter>",
+			-- 			"<cmd>Neopyter execute notebook:run-cell-and-select-next<cr>",
+			-- 			{ desc = "run selected and select next", buffer = buf }
+			-- 		)
+			-- 		map(
+			-- 			"n",
+			-- 			"<M-Enter>",
+			-- 			"<cmd>Neopyter execute notebook:run-cell-and-insert-below<cr>",
+			-- 			{ desc = "run selected and insert below", buffer = buf }
+			-- 		)
+			-- 		map("n", "<F5>", "<cmd>Neopyter execute notebook:restart-run-all<cr>", { desc = "restart kernel and run all", buffer = buf })
+			-- 	end,
+			-- },
 		},
 	},
 
