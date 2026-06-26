@@ -1871,6 +1871,7 @@ return {
 
 			map("n", "<Leader>e", function() Snacks.explorer() end, { desc = "File explorer" })
 			map("n", "<leader>bc", function() Snacks.bufdelete() end, { desc = "Close buffer" })
+			map("n", "<leader>bX", function() Snacks.bufdelete.other() end, { desc = "Close all other buffers" })
 			map("n", "<Leader>H", function() Snacks.dashboard() end, { desc = "Home" })
 			map("n", "<Leader>R", function() Snacks.rename.rename_file() end, { desc = "Rename file" })
 			map({ "n", "t", "i" }, "<F7>", function() Snacks.terminal.toggle() end, { desc = "toggle terminal" })
