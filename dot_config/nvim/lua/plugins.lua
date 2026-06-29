@@ -670,117 +670,7 @@ return {
 			},
 		},
 		{
-			-- "sindrets/diffview.nvim",
-			-- cmd = "DiffviewOpen",
-			-- keys = {
-			-- 	{ "<Leader>gD", mode = { "n" }, "<CMD>DiffviewOpen<CR>", desc = "Diff repo" },
-			-- 	{ "<Leader>gh", mode = { "n" }, "<CMD>DiffviewFileHistory %<CR>", desc = "History: file" },
-			-- 	{ "<Leader>gH", mode = { "n" }, "<CMD>DiffviewFileHistory<CR>", desc = "History: repo" },
-			-- },
-			-- config = function()
-			-- 	local actions = require("diffview.actions")
-			-- 	require("diffview").setup({
-			-- 		enhanced_diff_hl = true,
-			-- 		view = {
-			-- 			default = {
-			-- 				disable_diagnostics = true,
-			-- 				winbar_info = true,
-			-- 			},
-			-- 			merge_tool = {
-			-- 				layout = "diff3_mixed",
-			-- 			},
-			-- 		},
-			-- 		file_panel = {
-			-- 			win_config = {
-			-- 				position = "bottom",
-			-- 				height = 10,
-			-- 			},
-			-- 		},
-			-- 		file_history_panel = {
-			-- 			win_config = {
-			-- 				type = "split",
-			-- 				position = "bottom",
-			-- 				height = 10,
-			-- 			},
-			-- 		},
-			-- 		keymaps = {
-			-- 			disable_defaults = true,
-			-- 			view = {
-			-- 				{ "n", "<Leader>q", "<CMD>DiffviewClose<CR>", { desc = "Close DiffView" } },
-			-- 				{ "n", "<Leader>e", actions.toggle_files, { desc = "toggle file panel" } },
-			-- 				{ "n", "gf", actions.goto_file_edit, { desc = "Open file in previous tabpage" } },
-			-- 				{ "n", "g?", actions.help("view"), { desc = "Open help panel" } },
-			-- 				{ "n", "co", actions.conflict_choose("ours"), { desc = "Choose conflict --ours" } },
-			-- 				{ "n", "ct", actions.conflict_choose("theirs"), { desc = "Choose conflict --theirs" } },
-			-- 				{ "n", "cb", actions.conflict_choose("base"), { desc = "Choose conflict --base" } },
-			-- 				{ "n", "ca", actions.conflict_choose("all"), { desc = "Choose conflict --all" } },
-			-- 				{ "n", "cn", actions.conflict_choose("none"), { desc = "Choose conflict --none" } },
-			-- 			},
-			-- 			file_panel = {
-			-- 				{ "n", "q", "<CMD>DiffviewClose<CR>", { desc = "Close DiffView" } },
-			-- 				{ "n", "<Leader>e", actions.toggle_files, { desc = "toggle file panel" } },
-			-- 				{ "n", "j", actions.next_entry, { desc = "Next file entry" } },
-			-- 				{ "n", "<down>", actions.select_next_entry, { desc = "Select next file entry" } },
-			-- 				{ "n", "k", actions.prev_entry, { desc = "Previous file entry" } },
-			-- 				{ "n", "<up>", actions.select_prev_entry, { desc = "Select previous file entry" } },
-			-- 				{ "n", "<cr>", actions.select_entry, { desc = "Open diff for selected entry" } },
-			-- 				{ "n", "s", actions.toggle_stage_entry, { desc = "Stage/unstage entry" } },
-			-- 				{ "n", "S", actions.stage_all, { desc = "Stage all entries" } },
-			-- 				{ "n", "U", actions.unstage_all, { desc = "Unstage all entries" } },
-			-- 				{ "n", "[x", actions.prev_conflict, { desc = "Go to prev conflict" } },
-			-- 				{ "n", "]x", actions.next_conflict, { desc = "Go to next conflict" } },
-			-- 				{ "n", "gf", actions.goto_file_edit, { desc = "Open file in previous tabpage" } },
-			-- 				{ "n", "co", actions.conflict_choose_all("ours"), { desc = "Choose conflict --ours" } },
-			-- 				{ "n", "ct", actions.conflict_choose_all("theirs"), { desc = "Choose conflict --theirs" } },
-			-- 				{ "n", "cb", actions.conflict_choose_all("base"), { desc = "Choose conflict --base" } },
-			-- 				{ "n", "l", actions.open_fold, { desc = "Expand fold" } },
-			-- 				{ "n", "h", actions.close_fold, { desc = "Collapse fold" } },
-			-- 				{ "n", "t", actions.listing_style, { desc = "Toggle list/tree views" } },
-			-- 				{ "n", "L", actions.open_commit_log, { desc = "Open commit log panel" } },
-			-- 				{ "n", "g?", actions.help("file_panel"), { desc = "Open help panel" } },
-			-- 				{
-			-- 					"n",
-			-- 					"cc",
-			-- 					function()
-			-- 						vim.ui.input({ prompt = "Commit message: " }, function(msg)
-			-- 							if not msg then
-			-- 								return
-			-- 							end
-			-- 							local results = vim.system({ "git", "commit", "-m", msg }, { text = true }):wait()
-			-- 							vim.notify(results.stdout, vim.log.levels.INFO, { title = "Commit" })
-			-- 						end)
-			-- 					end,
-			-- 				},
-			-- 				{
-			-- 					"n",
-			-- 					"cx",
-			-- 					function()
-			-- 						local results = vim.system({ "git", "commit", "--amend", "--no-edit" }, { text = true }):wait()
-			-- 						vim.notify(results.stdout, vim.log.levels.INFO, { title = "Commit amend" })
-			-- 					end,
-			-- 				},
-			-- 			},
-			-- 			file_history_panel = {
-			-- 				{ "n", "q", "<CMD>DiffviewClose<CR>", { desc = "Close DiffView" } },
-			-- 				{ "n", "<Leader>e", actions.toggle_files, { desc = "toggle file panel" } },
-			-- 				{ "n", "j", actions.next_entry, { desc = "Next log entry" } },
-			-- 				{ "n", "<down>", actions.select_next_entry, { desc = "Select next log entry" } },
-			-- 				{ "n", "k", actions.prev_entry, { desc = "Previous log entry" } },
-			-- 				{ "n", "<up>", actions.select_prev_entry, { desc = "Select previous file entry" } },
-			-- 				{ "n", "<cr>", actions.select_entry, { desc = "Open diff for selected entry" } },
-			-- 				{ "n", "gd", actions.open_in_diffview, { desc = "Open entry in diffview" } },
-			-- 				{ "n", "y", actions.copy_hash, { desc = "Copy commit hash" } },
-			-- 				{ "n", "L", actions.open_commit_log, { desc = "Show commit details" } },
-			-- 				{ "n", "gf", actions.goto_file_edit, { desc = "Open file in previous tabpage" } },
-			-- 				{ "n", "g?", actions.help("file_history_panel"), { desc = "Open help panel" } },
-			-- 			},
-			-- 			help_panel = {
-			-- 				{ "n", "q", actions.close, { desc = "Close help menu" } },
-			-- 				{ "n", "<ESC>", actions.close, { desc = "Close help menu" } },
-			-- 			},
-			-- 		},
-			-- 	})
-			-- end,
+			-- "sindrets/diffview.nvim", cmd = "DiffviewOpen", keys = { { "<Leader>gD", mode = { "n" }, "<CMD>DiffviewOpen<CR>", desc = "Diff repo" }, { "<Leader>gh", mode = { "n" }, "<CMD>DiffviewFileHistory %<CR>", desc = "History: file" }, { "<Leader>gH", mode = { "n" }, "<CMD>DiffviewFileHistory<CR>", desc = "History: repo" }, }, config = function() local actions = require("diffview.actions") require("diffview").setup({ enhanced_diff_hl = true, view = { default = { disable_diagnostics = true, winbar_info = true, }, merge_tool = { layout = "diff3_mixed", }, }, file_panel = { win_config = { position = "bottom", height = 10, }, }, file_history_panel = { win_config = { type = "split", position = "bottom", height = 10, }, }, keymaps = { disable_defaults = true, view = { { "n", "<Leader>q", "<CMD>DiffviewClose<CR>", { desc = "Close DiffView" } }, { "n", "<Leader>e", actions.toggle_files, { desc = "toggle file panel" } }, { "n", "gf", actions.goto_file_edit, { desc = "Open file in previous tabpage" } }, { "n", "g?", actions.help("view"), { desc = "Open help panel" } }, { "n", "co", actions.conflict_choose("ours"), { desc = "Choose conflict --ours" } }, { "n", "ct", actions.conflict_choose("theirs"), { desc = "Choose conflict --theirs" } }, { "n", "cb", actions.conflict_choose("base"), { desc = "Choose conflict --base" } }, { "n", "ca", actions.conflict_choose("all"), { desc = "Choose conflict --all" } }, { "n", "cn", actions.conflict_choose("none"), { desc = "Choose conflict --none" } }, }, file_panel = { { "n", "q", "<CMD>DiffviewClose<CR>", { desc = "Close DiffView" } }, { "n", "<Leader>e", actions.toggle_files, { desc = "toggle file panel" } }, { "n", "j", actions.next_entry, { desc = "Next file entry" } }, { "n", "<down>", actions.select_next_entry, { desc = "Select next file entry" } }, { "n", "k", actions.prev_entry, { desc = "Previous file entry" } }, { "n", "<up>", actions.select_prev_entry, { desc = "Select previous file entry" } }, { "n", "<cr>", actions.select_entry, { desc = "Open diff for selected entry" } }, { "n", "s", actions.toggle_stage_entry, { desc = "Stage/unstage entry" } }, { "n", "S", actions.stage_all, { desc = "Stage all entries" } }, { "n", "U", actions.unstage_all, { desc = "Unstage all entries" } }, { "n", "[x", actions.prev_conflict, { desc = "Go to prev conflict" } }, { "n", "]x", actions.next_conflict, { desc = "Go to next conflict" } }, { "n", "gf", actions.goto_file_edit, { desc = "Open file in previous tabpage" } }, { "n", "co", actions.conflict_choose_all("ours"), { desc = "Choose conflict --ours" } }, { "n", "ct", actions.conflict_choose_all("theirs"), { desc = "Choose conflict --theirs" } }, { "n", "cb", actions.conflict_choose_all("base"), { desc = "Choose conflict --base" } }, { "n", "l", actions.open_fold, { desc = "Expand fold" } }, { "n", "h", actions.close_fold, { desc = "Collapse fold" } }, { "n", "t", actions.listing_style, { desc = "Toggle list/tree views" } }, { "n", "L", actions.open_commit_log, { desc = "Open commit log panel" } }, { "n", "g?", actions.help("file_panel"), { desc = "Open help panel" } }, { "n", "cc", function() vim.ui.input({ prompt = "Commit message: " }, function(msg) if not msg then return end local results = vim.system({ "git", "commit", "-m", msg }, { text = true }):wait() vim.notify(results.stdout, vim.log.levels.INFO, { title = "Commit" }) end) end, }, { "n", "cx", function() local results = vim.system({ "git", "commit", "--amend", "--no-edit" }, { text = true }):wait() vim.notify(results.stdout, vim.log.levels.INFO, { title = "Commit amend" }) end, }, }, file_history_panel = { { "n", "q", "<CMD>DiffviewClose<CR>", { desc = "Close DiffView" } }, { "n", "<Leader>e", actions.toggle_files, { desc = "toggle file panel" } }, { "n", "j", actions.next_entry, { desc = "Next log entry" } }, { "n", "<down>", actions.select_next_entry, { desc = "Select next log entry" } }, { "n", "k", actions.prev_entry, { desc = "Previous log entry" } }, { "n", "<up>", actions.select_prev_entry, { desc = "Select previous file entry" } }, { "n", "<cr>", actions.select_entry, { desc = "Open diff for selected entry" } }, { "n", "gd", actions.open_in_diffview, { desc = "Open entry in diffview" } }, { "n", "y", actions.copy_hash, { desc = "Copy commit hash" } }, { "n", "L", actions.open_commit_log, { desc = "Show commit details" } }, { "n", "gf", actions.goto_file_edit, { desc = "Open file in previous tabpage" } }, { "n", "g?", actions.help("file_history_panel"), { desc = "Open help panel" } }, }, help_panel = { { "n", "q", actions.close, { desc = "Close help menu" } }, { "n", "<ESC>", actions.close, { desc = "Close help menu" } }, }, }, }) end,
 		},
 	},
 
@@ -788,65 +678,10 @@ return {
 	-- Filesystem
 	{
 		{
-			-- "dmtrKovalenko/fff.nvim",
-			-- dependencies = { "saghen/blink.cmp" },
-			-- build = function() require("fff.download").download_or_build_binary() end,
-			-- lazy = false,
-			-- opts = {
-			-- 	prompt = "❭ ",
-			-- 	layout = { prompt_position = "top" },
-			-- 	keymaps = {
-			-- 		preview_scroll_up = "<C-p>",
-			-- 		preview_scroll_down = "<C-n>",
-			-- 	},
-			-- 	hl = {
-			-- 		normal = "NormalFloat",
-			-- 		active_file = "ColorColumn",
-			-- 		title = "FloatTitle",
-			-- 	},
-			-- 	debug = { enabled = false, show_scores = true },
-			-- },
-			-- keys = {
-			-- 	{ "ff", function() require("fff").find_files() end, desc = "FFFind files" },
-			-- },
+			-- "dmtrKovalenko/fff.nvim", dependencies = { "saghen/blink.cmp" }, build = function() require("fff.download").download_or_build_binary() end, lazy = false, opts = { prompt = "❭ ", layout = { prompt_position = "top" }, keymaps = { preview_scroll_up = "<C-p>", preview_scroll_down = "<C-n>", }, hl = { normal = "NormalFloat", active_file = "ColorColumn", title = "FloatTitle", }, debug = { enabled = false, show_scores = true }, }, keys = { { "ff", function() require("fff").find_files() end, desc = "FFFind files" }, },
 		},
 		{
-			-- "FylerOrg/fyler.nvim",
-			-- ---@module 'fyler'
-			-- opts = {
-			-- 	integrations = { icon = "mini_icons" },
-			-- 	extensions = {
-			-- 		git = { enabled = true, inline = false },
-			-- 		trash = { enabled = true },
-			-- 	},
-			-- 	kind_presets = {
-			-- 		split_left_most = { width = 40 },
-			-- 		floating = {
-			-- 			win_opts = {
-			-- 				winhighlight = "Normal:Normal,FloatBorder:Purple,FloatTitle:PurpleBold",
-			-- 			},
-			-- 		},
-			-- 	},
-			-- 	ui = {
-			-- 		hidden_items = {
-			-- 			switches = {},
-			-- 		},
-			-- 		indent_guides = true,
-			-- 	},
-			-- 	mappings = {
-			-- 		n = {
-			-- 			["L"] = { action = "select" },
-			-- 			["H"] = { action = "shrink", args = { parent = true } },
-			-- 			["J"] = { action = function(_, _) vim.cmd("norm j") end },
-			-- 			["K"] = { action = function(_, _) vim.cmd("norm k") end },
-			-- 			["<CR>"] = { action = "select", args = { close = true } },
-			-- 		},
-			-- 	},
-			-- 	init = function()
-			-- 		local fyler = require("fyler")
-			-- 		map("n", "<leader>be", function() fyler.toggle({ kind = "floating" }) end, { desc = "Fyler" })
-			-- 	end,
-			-- },
+			-- "FylerOrg/fyler.nvim", opts = { integrations = { icon = "mini_icons" }, extensions = { git = { enabled = true, inline = false }, trash = { enabled = true }, }, kind_presets = { split_left_most = { width = 40 }, floating = { win_opts = { winhighlight = "Normal:Normal,FloatBorder:Purple,FloatTitle:PurpleBold", }, }, }, ui = { hidden_items = { switches = {}, }, indent_guides = true, }, mappings = { n = { ["L"] = { action = "select" }, ["H"] = { action = "shrink", args = { parent = true } }, ["J"] = { action = function(_, _) vim.cmd("norm j") end }, ["K"] = { action = function(_, _) vim.cmd("norm k") end }, ["<CR>"] = { action = "select", args = { close = true } }, }, }, init = function() local fyler = require("fyler") map("n", "<leader>be", function() fyler.toggle({ kind = "floating" }) end, { desc = "Fyler" }) end, },
 		},
 		{
 			"stevearc/oil.nvim",
@@ -925,71 +760,12 @@ return {
 			end,
 		},
 		{
-			-- "nvim-neo-tree/neo-tree.nvim",
-			-- branch = "v3.x",
-			-- dependencies = {
-			-- 	"nvim-lua/plenary.nvim",
-			-- 	"MunifTanjim/nui.nvim",
-			-- },
-			-- lazy = false, -- neo-tree will lazily load itself
+			-- "nvim-neo-tree/neo-tree.nvim", branch = "v3.x", dependencies = { "nvim-lua/plenary.nvim", "MunifTanjim/nui.nvim", }, lazy = false,
 			-- ---@module "neo-tree"
 			-- ---@type neotree.Config?
-			-- opts = {
-			-- 	sources = { "filesystem" },
-			-- 	source_selector = {
-			-- 		truncation_character = "…",
-			-- 		show_scrolled_off_parent_node = true,
-			-- 		sources = { { source = "filesystem" } },
-			-- 	},
-			-- 	filesystem = {
-			-- 		filtered_items = {
-			-- 			visible = true,
-			-- 			never_show_by_pattern = { "**/__**__" },
-			-- 		},
-			-- 		follow_current_file = { enabled = true },
-			-- 		hijack_netrw_behavior = "open_current",
-			-- 	},
-			-- 	window = {
-			-- 		mappings = {
-			-- 			["<space>"] = "none",
-			-- 			["<"] = "none",
-			-- 			[">"] = "none",
-			-- 			["<C-b>"] = "none",
-			-- 			["<C-f>"] = "none",
-			-- 			["f"] = "none",
-			--
-			-- 			["l"] = "open",
-			-- 			["h"] = "close_node",
-			-- 			["L"] = "focus_preview",
-			-- 			["<C-n>"] = { "scroll_preview", config = { direction = 10 } },
-			-- 			["<C-p>"] = { "scroll_preview", config = { direction = -10 } },
-			-- 			["C"] = "copy",
-			-- 			["c"] = {
+			-- opts = { sources = { "filesystem" }, source_selector = { truncation_character = "…", show_scrolled_off_parent_node = true, sources = { { source = "filesystem" } }, }, filesystem = { filtered_items = { visible = true, never_show_by_pattern = { "**/__**__" }, }, follow_current_file = { enabled = true }, hijack_netrw_behavior = "open_current", }, window = { mappings = { ["<space>"] = "none", ["<"] = "none", [">"] = "none", ["<C-b>"] = "none", ["<C-f>"] = "none", ["f"] = "none", ["l"] = "open", ["h"] = "close_node", ["L"] = "focus_preview", ["<C-n>"] = { "scroll_preview", config = { direction = 10 } }, ["<C-p>"] = { "scroll_preview", config = { direction = -10 } }, ["C"] = "copy", ["c"] = {
 			-- 				---@diagnostic disable-next-line: assign-type-mismatch
-			-- 				function(state)
-			-- 					local node = state.tree:get_node()
-			-- 					local path = require("plenary.path"):new(node.path)
-			-- 					local cwd = vim.fn.getcwd()
-			-- 					local out = "./" .. path:make_relative(cwd)
-			-- 					vim.notify("Yanked: " .. out, "info")
-			-- 					vim.fn.setreg("+", out, "u")
-			-- 				end,
-			-- 				desc = "yank relpath",
-			-- 				nowait = true,
-			-- 			},
-			-- 		},
-			-- 	},
-			-- },
-			-- init = function()
-			-- 	map("n", "<Leader>e", "<CMD>Neotree toggle left<CR>", { desc = "File explorer" })
-			-- 	map(
-			-- 		"n",
-			-- 		"<Leader>pz",
-			-- 		function() require("neo-tree.command").execute({ dir = os.getenv("HOME") .. "/.local/share/chezmoi" }) end,
-			-- 		{ desc = "cd chezmoi" }
-			-- 	)
-			-- 	map("n", "<Leader>pc", function() require("neo-tree.command").execute({ dir = vim.fn.stdpath("config") }) end, { desc = "cd config" })
-			-- end,
+			-- 				function(state) local node = state.tree:get_node() local path = require("plenary.path"):new(node.path) local cwd = vim.fn.getcwd() local out = "./" .. path:make_relative(cwd) vim.notify("Yanked: " .. out, "info") vim.fn.setreg("+", out, "u") end, desc = "yank relpath", nowait = true, }, }, }, }, init = function() map("n", "<Leader>e", "<CMD>Neotree toggle left<CR>", { desc = "File explorer" }) map( "n", "<Leader>pz", function() require("neo-tree.command").execute({ dir = os.getenv("HOME") .. "/.local/share/chezmoi" }) end, { desc = "cd chezmoi" }) map("n", "<Leader>pc", function() require("neo-tree.command").execute({ dir = vim.fn.stdpath("config") }) end, { desc = "cd config" }) end,
 		},
 	},
 
@@ -1100,30 +876,10 @@ return {
 				},
 			},
 			keys = {
-				{
-					"+",
-					mode = { "n", "x", "o" },
-					function() require("flash").jump() end,
-					desc = "Flash",
-				},
-				{
-					"H",
-					mode = { "n", "x", "o" },
-					function() require("flash").treesitter() end,
-					desc = "Flash treesitter",
-				},
-				{
-					"L",
-					mode = { "n", "x", "o" },
-					function() require("flash").treesitter_search() end,
-					desc = "Flash treesitter search",
-				},
-				{
-					"r",
-					mode = "o",
-					function() require("flash").remote() end,
-					desc = "Remote Flash",
-				},
+				{ "+", mode = { "n", "x", "o" }, function() require("flash").jump() end, desc = "Flash" },
+				{ "H", mode = { "n", "x", "o" }, function() require("flash").treesitter() end, desc = "Flash treesitter" },
+				{ "L", mode = { "n", "x", "o" }, function() require("flash").treesitter_search() end, desc = "Flash treesitter search" },
+				{ "r", mode = "o", function() require("flash").remote() end, desc = "Remote Flash" },
 			},
 		},
 
@@ -1235,7 +991,6 @@ return {
 				},
 			},
 		},
-
 		{
 			"folke/noice.nvim",
 			dependencies = {
@@ -1517,7 +1272,6 @@ return {
 				return config
 			end,
 		},
-
 		{
 			"akinsho/bufferline.nvim",
 			event = "VeryLazy",
