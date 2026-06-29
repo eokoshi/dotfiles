@@ -2,59 +2,137 @@
 vim.g.mapleader = " "
 vim.g.maplocalleader = " "
 
-vim.o.autowrite = true -- Enable auto write (this is not the same as autosave)
-vim.o.autoread = true
-vim.o.colorcolumn = "+1"
-vim.opt.completeopt = { "menu", "menuone", "noselect" }
-vim.o.confirm = true -- Confirm to save changes before exiting modified buffer
-vim.o.cursorline = true -- Enable highlighting of the current line
-vim.o.expandtab = false -- Use spaces instead of tabs when true
-vim.o.findfunc = "fd"
-vim.o.foldmethod = "expr"
-vim.o.foldlevelstart = 99
-vim.o.formatoptions = "lnjq"
-vim.o.grepformat = "%f:%l:%c:%m"
-vim.o.grepprg = "rg --vimgrep"
-vim.o.hlsearch = true
-vim.o.ignorecase = true -- Ignore case
-vim.o.incsearch = true
-vim.o.inccommand = "nosplit" -- preview incremental substitute
-vim.o.incsearch = true
-vim.o.jumpoptions = "view"
-vim.o.laststatus = 3 -- global statusline
-vim.o.linebreak = true -- Wrap lines at convenient points
-vim.o.list = false -- Show some invisible characters (tabs...
-vim.o.mouse = "a" -- Enable mouse mode
-vim.o.number = true
-vim.o.relativenumber = true
-vim.o.ruler = false -- Disable the default ruler
-vim.o.scrolloff = 10 -- Lines of context
-vim.opt.sessionoptions = { "buffers", "curdir", "tabpages", "winsize", "help", "globals", "skiprtp", "folds" }
-vim.o.shiftround = true -- Round indent
-vim.o.shiftwidth = 0 -- Size of an indent, 0 to inherit from tabstop
-vim.o.shortmess = "aoOsIcCF"
-vim.o.sidescrolloff = 8 -- Columns of context
-vim.o.smartcase = true -- Don't ignore case with capitals
-vim.o.smartindent = false -- Insert indents automatically (messes with python treesitter, so leave false)
-vim.o.smoothscroll = true
-vim.o.softtabstop = 0
-vim.o.spelllang = "en_us,medical"
-vim.o.spellcapcheck = ""
-vim.o.splitkeep = "screen"
-vim.o.splitbelow = true -- Put new windows below current
-vim.o.splitright = true -- Put new windows right of current
-vim.o.swapfile = true
-vim.o.tabstop = 2 -- Number of spaces tabs count for
-vim.o.termguicolors = true -- True color support
-vim.o.timeoutlen = 300 -- Lower than default (1000) to quickly trigger which-key
-vim.o.undofile = true
-vim.o.undolevels = 10000
-vim.o.updatetime = 200 -- Save swap file and trigger CursorHold
-vim.o.virtualedit = "block" -- Allow cursor to move where there is no text in visual block mode
-vim.o.wildmode = "longest:full,full" -- Command-line completion mode
-vim.o.winborder = "rounded"
-vim.o.winminwidth = 20 -- Minimum window width
-vim.o.wrap = false -- Disable line wrap
+-- Bootstrap lazy.nvim
+local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
+if not (vim.uv or vim.loop).fs_stat(lazypath) then
+	local lazyrepo = "https://github.com/folke/lazy.nvim.git"
+	local out = vim.fn.system({ "git", "clone", "--filter=blob:none", "--branch=stable", lazyrepo, lazypath })
+	if vim.v.shell_error ~= 0 then
+		vim.api.nvim_echo({
+			{ "Failed to clone lazy.nvim:\n", "ErrorMsg" },
+			{ out, "WarningMsg" },
+			{ "\nPress any key to exit..." },
+		}, true, {})
+		vim.fn.getchar()
+		os.exit(1)
+	end
+end
+vim.opt.rtp:prepend(lazypath)
+require("lazy").setup({
+	spec = {
+		{
+			{
+				"windwp/nvim-autopairs",
+				event = "InsertEnter",
+				opts = {},
+			},
+
+			{
+				"kylechui/nvim-surround",
+				opts = {},
+			},
+
+			{
+				"nvim-mini/mini.align",
+				opts = {},
+			},
+			{
+				"nvimdev/hlsearch.nvim",
+				opts = {},
+			},
+			{
+				"nvim-lualine/lualine.nvim",
+				opts = function()
+					local macro = require("lualine.component"):extend()
+					function macro:update_status()
+						local reg = vim.fn.reg_recording()
+						if reg == "" then return "" end
+						return "recording @" .. reg .. " "
+					end
+					return {
+						options = {
+							theme = "auto",
+							component_separators = " ",
+							section_separators = { left = " ", right = " ⦙" },
+							globalstatus = true,
+						},
+						sections = {
+							lualine_a = { "mode" },
+							lualine_b = {},
+							lualine_c = {},
+							lualine_x = {},
+							lualine_y = { "location" },
+							lualine_z = { macro },
+						},
+					}
+				end,
+			},
+			{
+				"folke/flash.nvim",
+				event = "VeryLazy",
+				opts = {
+					modes = {
+						char = {
+							enabled = false,
+							autohide = true,
+						},
+					},
+					label = {
+						rainbow = {
+							enabled = true,
+							shade = 6,
+						},
+					},
+					prompt = {
+						enabled = false,
+					},
+				},
+				keys = {
+					{
+						"+",
+						mode = { "n", "x", "o" },
+						function() require("flash").jump() end,
+						desc = "Flash",
+					},
+					{
+						"H",
+						mode = { "n", "x", "o" },
+						function() require("flash").treesitter() end,
+						desc = "Flash treesitter",
+					},
+					{
+						"L",
+						mode = { "n", "x", "o" },
+						function() require("flash").treesitter_search() end,
+						desc = "Flash treesitter search",
+					},
+					{
+						"r",
+						mode = "o",
+						function() require("flash").remote() end,
+						desc = "Remote Flash",
+					},
+				},
+			},
+		},
+	},
+	checker = { enabled = false },
+	change_detection = { notify = false },
+	ui = {
+		title = " 󰒲 lazy.nvim ",
+		size = { width = 0.8, height = 0.8 },
+		border = "none",
+		wrap = false,
+		install = { colorscheme = { "wildcharm" } },
+		icons = require("stuff.icons").lazy,
+		style = "minimal",
+	},
+	git = { timeout = 30 },
+	rocks = { enabled = false },
+})
+vim.keymap.set("n", "<Leader>pi", "<CMD>Lazy<CR>", { desc = "Lazy" })
+
+require("options")
 
 -- Helper function for VSCode commands
 local function vscode_call(cmd)
@@ -62,28 +140,14 @@ local function vscode_call(cmd)
 end
 
 -- Keybindings
-local keymap = vim.keymap.set
-local opts = { noremap = true, silent = true }
-
--- Navigation: Next/Previous Editor (Tabs)
-keymap("n", "]b", vscode_call("workbench.action.nextEditor"), opts)
-keymap("n", "[b", vscode_call("workbench.action.previousEditor"), opts)
-
--- File Management
-keymap("n", "<leader>c", vscode_call("workbench.action.closeActiveEditor"), opts)
-keymap("n", "<leader>w", vscode_call("workbench.action.files.save"), opts)
-keymap("n", "ff", vscode_call("workbench.action.quickOpen"), opts)
-
--- Close the entire editor group (the split/pane)
-keymap("n", "<leader>q", vscode_call("workbench.action.closeEditorsInGroup"), opts)
-
--- Window Focus (Ctrl-hjkl)
--- These move focus between editor splits and sidebars
-keymap("n", "<C-h>", vscode_call("workbench.action.navigateLeft"), opts)
-keymap("n", "<C-l>", vscode_call("workbench.action.navigateRight"), opts)
-
--- Map Backspace to go back to the alternate/previous file
-keymap("n", "<BS>", vscode_call("workbench.action.navigateBack"), opts)
-
--- Toggle Sidebar Visibility (Reliable for closing)
-keymap("n", "<leader>e", vscode_call("workbench.action.toggleSidebarVisibility"), opts)
+local map = require("stuff.functions").map
+map("n", "]b", vscode_call("workbench.action.nextEditor"), { desc = "next editor" })
+map("n", "[b", vscode_call("workbench.action.previousEditor"), { desc = "prev editor" })
+map("n", "<leader>bc", vscode_call("workbench.action.closeActiveEditor"), { desc = "close active editor" })
+map("n", "<leader>w", vscode_call("workbench.action.files.save"), { desc = "save" })
+map("n", "ff", vscode_call("workbench.action.quickOpen"), { desc = "find files" })
+map("n", "<leader>q", vscode_call("workbench.action.closeEditorsInGroup"), { desc = "close editor group" })
+map("n", "<C-h>", vscode_call("workbench.action.navigateLeft"), { desc = "move left" })
+map("n", "<C-l>", vscode_call("workbench.action.navigateRight"), { desc = "move right" })
+map("n", "<BS>", vscode_call("workbench.action.navigateBack"), { desc = "go to alt file" })
+map("n", "<leader>e", vscode_call("workbench.action.toggleSidebarVisibility"), { desc = "toggle sidebar" })
