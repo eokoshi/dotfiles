@@ -495,6 +495,7 @@ return {
 					json = { "fixjson", "prettier" },
 					css = { "prettier" },
 					javascript = { "prettier" },
+					dts = { "dts_linter" },
 				},
 				default_format_opts = {
 					lsp_format = "fallback",
@@ -519,6 +520,10 @@ return {
 							end
 							return {}
 						end,
+					},
+					dts_linter = {
+						command = "dts-linter",
+						args = { "--format", "--file", "$FILENAME" },
 					},
 				},
 			},
@@ -678,86 +683,123 @@ return {
 	-- Filesystem
 	{
 		{
-			-- "dmtrKovalenko/fff.nvim", dependencies = { "saghen/blink.cmp" }, build = function() require("fff.download").download_or_build_binary() end, lazy = false, opts = { prompt = "❭ ", layout = { prompt_position = "top" }, keymaps = { preview_scroll_up = "<C-p>", preview_scroll_down = "<C-n>", }, hl = { normal = "NormalFloat", active_file = "ColorColumn", title = "FloatTitle", }, debug = { enabled = false, show_scores = true }, }, keys = { { "ff", function() require("fff").find_files() end, desc = "FFFind files" }, },
+			"nvim-mini/mini.files",
+			opts = {
+				options = {
+					permanent_delete = false,
+				},
+				windows = {
+					preview = true,
+					width_preview = 90,
+				},
+				mappings = {
+					close = "<esc>",
+					go_in = "",
+					go_in_plus = "L",
+					go_out = "H",
+					go_out_plus = "",
+					synchronize = "<leader>w",
+				},
+			},
+			init = function()
+				local MiniFiles = require("mini.files")
+				local minifiles_toggle = function(...)
+					if not MiniFiles.close() then MiniFiles.open(...) end
+				end
+				local yank_path = function()
+					local path = (MiniFiles.get_fs_entry() or {}).path
+					if path == nil then return vim.notify("Cursor is not on valid entry") end
+					if vim.fs.relpath(vim.fn.getcwd(), path) then
+						path = "./" .. vim.fs.relpath(vim.fn.getcwd(), path)
+					elseif vim.fs.relpath("~", path) and vim.fs.relpath("~", path) ~= "." then
+						path = "~/" .. vim.fs.relpath("~", path)
+					end
+					vim.notify("yanked: " .. path)
+					vim.fn.setreg(vim.v.register, path)
+				end
+				local set_cwd = function()
+					local path = (MiniFiles.get_fs_entry() or {}).path
+					if path == nil then return vim.notify("Cursor is not on valid entry") end
+					local dir = vim.fs.dirname(path)
+					local msg
+					if vim.fs.relpath("~", dir) then
+						msg = "cwd: ~/" .. vim.fs.relpath("~", dir)
+					else
+						msg = "cwd: " .. dir
+					end
+					vim.notify(msg)
+					vim.fn.chdir(dir)
+				end
+				local toggle_preview = function()
+					local preview = MiniFiles.config.windows.preview
+					local preview_next = not preview
+					MiniFiles.config.windows.preview = preview_next
+					MiniFiles.trim_right()
+					MiniFiles.refresh({
+						windows = { preview = preview_next },
+					})
+					if preview then
+						local branch = MiniFiles.get_explorer_state().branch
+						table.remove(branch)
+						pcall(function()
+							MiniFiles.set_branch(branch)
+							return 0
+						end)
+					end
+				end
+
+				map("n", "<leader>fe", function() minifiles_toggle(vim.api.nvim_buf_get_name(0)) end, { desc = "MiniFiles" })
+
+				vim.api.nvim_create_autocmd("User", {
+					pattern = "MiniFilesBufferCreate",
+					callback = function(args)
+						local b = args.data.buf_id
+						map("n", "<leader>.", function() MiniFiles.open(nil) end, { buffer = b, desc = "go to cwd" })
+						map("n", "J", "<DOWN>", { buffer = b })
+						map("n", "K", "<UP>", { buffer = b })
+						map("n", "q", function() MiniFiles.close() end, { buffer = b })
+						map("n", "g.", set_cwd, { buffer = b, desc = "Set cwd" })
+						map("n", "gy", yank_path, { buffer = b, desc = "Yank path" })
+						map("n", "<C-space>", toggle_preview, { buffer = b, desc = "Toggle preview" })
+					end,
+				})
+
+			end,
+		},
+		{
+			"dmtrKovalenko/fff.nvim",
+			build = function() require("fff.download").download_or_build_binary() end,
+			lazy = false,
+			opts = {
+				prompt = "❭ ",
+				layout = { prompt_position = "top" },
+				keymaps = { preview_scroll_up = "<C-p>", preview_scroll_down = "<C-n>" },
+				hl = { normal = "NormalFloat", active_file = "ColorColumn", title = "FloatTitle" },
+				debug = {
+					enabled = true,
+					show_scores = true,
+				},
+			},
+			keys = {
+				{ "ff", function() require("fff").find_files() end, desc = "FFFind files" },
+				{ "<leader>fw", function() require("fff").live_grep() end, desc = "LiFFFe grep" },
+				{ "<leader>fj", function() require("fff").live_grep({ grep = { modes = { "fuzzy", "plain" } } }) end, desc = "Live fffuzy grep" },
+				{
+					"<leader>f*",
+					function() require("fff").live_grep_under_cursor() end,
+					mode = { "n", "x" },
+					desc = "Search current word / selection",
+				},
+			},
 		},
 		{
 			-- "FylerOrg/fyler.nvim", opts = { integrations = { icon = "mini_icons" }, extensions = { git = { enabled = true, inline = false }, trash = { enabled = true }, }, kind_presets = { split_left_most = { width = 40 }, floating = { win_opts = { winhighlight = "Normal:Normal,FloatBorder:Purple,FloatTitle:PurpleBold", }, }, }, ui = { hidden_items = { switches = {}, }, indent_guides = true, }, mappings = { n = { ["L"] = { action = "select" }, ["H"] = { action = "shrink", args = { parent = true } }, ["J"] = { action = function(_, _) vim.cmd("norm j") end }, ["K"] = { action = function(_, _) vim.cmd("norm k") end }, ["<CR>"] = { action = "select", args = { close = true } }, }, }, init = function() local fyler = require("fyler") map("n", "<leader>be", function() fyler.toggle({ kind = "floating" }) end, { desc = "Fyler" }) end, },
 		},
 		{
-			"stevearc/oil.nvim",
-			dependencies = { "nvim-mini/mini.icons" },
-			lazy = false,
-			---@module 'oil'
-			---@type oil.SetupOpts
-			opts = {
-				default_file_explorer = true,
-				columns = {
-					{ "permissions", highlight = "Ignore" },
-					{ "size", highlight = "Ignore" },
-					{ "mtime", highlight = "Comment" },
-					"icon",
-				},
-				delete_to_trash = true,
-				watch_for_changes = true,
-				keymaps = {
-					["?"] = { "actions.show_help", mode = "n" },
-					["<CR>"] = "actions.select",
-					["s"] = { "actions.select", opts = { vertical = true } },
-					["S"] = { "actions.select", opts = { horizontal = true } },
-					["P"] = "actions.preview",
-					["<C-p>"] = "actions.preview_scroll_up",
-					["<C-n>"] = "actions.preview_scroll_down",
-					["<BS>"] = { "actions.parent", mode = "n" },
-					["H"] = { "actions.parent", mode = "n" },
-					["L"] = { "actions.select", mode = "n" },
-					["J"] = { "j", mode = "n" },
-					["K"] = { "k", mode = "n" },
-					["~"] = { "actions.open_cwd", mode = "n" },
-					["<leader>."] = { "actions.cd", mode = "n" },
-					["gs"] = { "actions.change_sort", mode = "n" },
-					["gx"] = "actions.open_external",
-					["gy"] = "actions.yank_entry",
-					["g."] = { "actions.toggle_hidden", mode = "n" },
-					["g\\"] = { "actions.toggle_trash", mode = "n" },
-					["q"] = { "actions.close", mode = "n" },
-					["<ESC>"] = { "actions.close", mode = "n" },
-					["ff"] = {
-						function()
-							require("snacks.picker").files({
-								hidden = true,
-								ignored = true,
-								cmd = "fd",
-								dirs = { require("oil").get_current_dir() },
-							})
-						end,
-						mode = "n",
-						nowait = true,
-					},
-				},
-				use_default_keymaps = false,
-				view_options = {
-					show_hidden = true,
-					is_always_hidden = function(name, bufnr) return name:match("__.+__$") ~= nil end,
-				},
-				win_options = {
-					cursorcolumn = false,
-					colorcolumn = "",
-					statuscolumn = " %l ",
-					numberwidth = 2,
-					relativenumber = false,
-				},
-				float = {
-					max_height = 0.8,
-					max_width = 0.8,
-					border = "rounded",
-					win_options = { winhighlight = "Normal:Normal,FloatBorder:Purple,FloatTitle:PurpleBold" },
-					title_pos = "center",
-				},
-			},
-			init = function()
-				local Oil = require("oil")
-				map("n", "<Leader>bE", function() Oil.toggle_float(vim.fn.getcwd()) end, { desc = "Oil" })
-			end,
+			-- "stevearc/oil.nvim", dependencies = { "nvim-mini/mini.icons" }, lazy = false,
+			-- ---@module 'oil'
+			-- ---@type oil.SetupOpts
+			-- opts = { default_file_explorer = false, columns = { { "permissions", highlight = "Ignore" }, { "size", highlight = "Ignore" }, { "mtime", highlight = "Comment" }, "icon", }, delete_to_trash = true, watch_for_changes = true, keymaps = { ["?"] = { "actions.show_help", mode = "n" }, ["<CR>"] = "actions.select", ["s"] = { "actions.select", opts = { vertical = true } }, ["S"] = { "actions.select", opts = { horizontal = true } }, ["P"] = "actions.preview", ["<C-p>"] = "actions.preview_scroll_up", ["<C-n>"] = "actions.preview_scroll_down", ["<BS>"] = { "actions.parent", mode = "n" }, ["H"] = { "actions.parent", mode = "n" }, ["L"] = { "actions.select", mode = "n" }, ["J"] = { "j", mode = "n" }, ["K"] = { "k", mode = "n" }, ["~"] = { "actions.open_cwd", mode = "n" }, ["<leader>."] = { "actions.cd", mode = "n" }, ["gs"] = { "actions.change_sort", mode = "n" }, ["gx"] = "actions.open_external", ["gy"] = "actions.yank_entry", ["g."] = { "actions.toggle_hidden", mode = "n" }, ["g\\"] = { "actions.toggle_trash", mode = "n" }, ["q"] = { "actions.close", mode = "n" }, ["<ESC>"] = { "actions.close", mode = "n" }, ["ff"] = { function() require("snacks.picker").files({ hidden = true, ignored = true, cmd = "fd", dirs = { require("oil").get_current_dir() }, }) end, mode = "n", nowait = true, }, }, use_default_keymaps = false, view_options = { show_hidden = true, is_always_hidden = function(name, bufnr) return name:match("__.+__$") ~= nil end, }, win_options = { cursorcolumn = false, colorcolumn = "", statuscolumn = " %l ", numberwidth = 2, relativenumber = false, }, float = { max_height = 0.8, max_width = 0.8, border = "rounded", win_options = { winhighlight = "Normal:Normal,FloatBorder:Purple,FloatTitle:PurpleBold" }, title_pos = "center", }, }, init = function() local Oil = require("oil") map("n", "<Leader>bE", function() Oil.toggle_float(vim.fn.getcwd()) end, { desc = "Oil" }) end,
 		},
 		{
 			-- "nvim-neo-tree/neo-tree.nvim", branch = "v3.x", dependencies = { "nvim-lua/plenary.nvim", "MunifTanjim/nui.nvim", }, lazy = false,
@@ -796,18 +838,6 @@ return {
 		{
 			"nvim-mini/mini.align",
 			opts = {},
-		},
-
-		{
-			"nvim-mini/mini.files",
-			opts = {
-				windows = { preview = true },
-			},
-			init = function()
-				local MiniFiles = require("mini.files")
-				map("n", "<leader>be", function() MiniFiles.open() end, { desc = "MiniFiles" })
-				map("n", "<leader>b.", function() MiniFiles.open(vim.api.nvim_buf_get_name(0), false) end, { desc = "MiniFiles this file" })
-			end,
 		},
 
 		{
@@ -1186,23 +1216,18 @@ return {
 					end,
 					padding = 2,
 				})
-
 				ins_left({
 					-- filesize component
 					"filesize",
 					cond = conditions.buffer_not_empty,
 				})
-
 				ins_left({
 					"filename",
 					cond = conditions.buffer_not_empty,
 					color = { fg = colors.magenta, gui = "bold" },
 				})
-
 				ins_left({ "location" })
-
 				ins_left({ "progress", color = { fg = colors.fg, gui = "bold" } })
-
 				ins_left({
 					"diagnostics",
 					sources = { "nvim_diagnostic" },
@@ -1213,15 +1238,10 @@ return {
 						info = { fg = colors.cyan },
 					},
 				})
-
 				ins_left({ macro, color = { fg = colors.red, gui = "bold" } })
-
-				-- Insert mid section. You can make any number of sections in neovim :)
-				-- for lualine it's any number greater then 2
 				ins_left({
 					function() return "%=" end,
 				})
-
 				ins_left({
 					"lsp_status",
 					icon = "",
@@ -1232,27 +1252,23 @@ return {
 					icon = "󰉼",
 					color = { fg = colors.cyan, gui = "bold" },
 				})
-
 				ins_right({
 					"encoding",
 					fmt = string.upper,
 					cond = conditions.hide_in_width,
 					color = { fg = colors.green, gui = "bold" },
 				})
-
 				ins_right({
 					"fileformat",
 					fmt = string.upper,
 					icons_enabled = false,
 					color = { fg = colors.green, gui = "bold" },
 				})
-
 				ins_right({
 					"branch",
 					icon = "",
 					color = { fg = colors.violet, gui = "bold" },
 				})
-
 				ins_right({
 					"diff",
 					symbols = { added = " ", modified = "󰝤 ", removed = " " },
@@ -1263,7 +1279,6 @@ return {
 					},
 					cond = conditions.hide_in_width,
 				})
-
 				ins_right({
 					function() return "▊" end,
 					color = { fg = colors.blue },
@@ -1407,7 +1422,7 @@ return {
 				},
 				auto_close = true,
 			},
-			explorer = { enabled = true },
+			explorer = { enabled = true, replace_netrw = false },
 			dashboard = {
 				preset = {
 					header = require("stuff.ascii").cat,
@@ -1623,8 +1638,12 @@ return {
 				end,
 			})
 
+			-- map("n", "ff", function() Snacks.picker.files() end, { desc = "files" })
+			map("n", "<Leader>ff", function() Snacks.picker.files({ hidden = true, ignored = true, cmd = "fd" }) end, { desc = "all files" })
+			map("n", "<Leader>fw", function() Snacks.picker.grep({ cmd = "rg" }) end, { desc = "word" })
+			map("n", "<Leader>fW", function() Snacks.picker.grep({ cmd = "rg", hidden = true, ignored = true }) end, { desc = "Word in all files" })
 			map("n", "<Leader>e", function() Snacks.explorer() end, { desc = "File explorer" })
-			map("n", "<leader>bc", function() Snacks.bufdelete() end, { desc = "Close buffer" })
+			map("n", "<leader>c", function() Snacks.bufdelete() end, { desc = "Close buffer" })
 			map("n", "<leader>bX", function() Snacks.bufdelete.other() end, { desc = "Close all other buffers" })
 			map("n", "<Leader>H", function() Snacks.dashboard() end, { desc = "Home" })
 			map("n", "<Leader>R", function() Snacks.rename.rename_file() end, { desc = "Rename file" })
@@ -1636,10 +1655,7 @@ return {
 			map("n", "<Leader>fd", function() Snacks.picker.diagnostics() end, { desc = "diagnostics" })
 			map("n", "<Leader>fD", function() Snacks.picker.diagnostics_buffer() end, { desc = "buffer Diagnostics" })
 			map("n", "<Leader>fH", function() Snacks.picker.highlights() end, { desc = "Highlights" })
-			map("n", "ff", function() Snacks.picker.files() end, { desc = "files" })
-			map("n", "<Leader>ff", function() Snacks.picker.files({ hidden = true, ignored = true, cmd = "fd" }) end, { desc = "all files" })
 			map("n", "<Leader>fk", function() Snacks.picker.keymaps() end, { desc = "keymaps" })
-			map("n", "<Leader>fj", function() Snacks.picker.zoxide() end, { desc = "zoxide" })
 			map("n", "<Leader>fJ", function() Snacks.picker.jumps() end, { desc = "jumps" })
 			map("n", "<Leader>fl", function() Snacks.picker.loclist() end, { desc = "location list" })
 			map("n", "<Leader>fm", function() Snacks.picker.marks() end, { desc = "marks" })
@@ -1650,8 +1666,6 @@ return {
 			map("n", "<Leader>fR", function() Snacks.picker.registers() end, { desc = "registers" })
 			map("n", "<Leader>bS", function() Snacks.scratch.select() end, { desc = "search scratch buffers" })
 			map("n", "<Leader>fu", function() Snacks.picker.undo() end, { desc = "undo" })
-			map("n", "<Leader>fw", function() Snacks.picker.grep({ cmd = "rg" }) end, { desc = "word" })
-			map("n", "<Leader>fW", function() Snacks.picker.grep({ cmd = "rg", hidden = true, ignored = true }) end, { desc = "Word in all files" })
 			map("n", "<Leader>f=", function() Snacks.picker.spelling() end, { desc = "Spelling Suggestions" })
 			map("n", "<Leader>f:", function() Snacks.picker.command_history() end, { desc = "Command history" })
 			map("n", "<Leader>f<space>", function() Snacks.picker.resume() end, { desc = "Resume last search" })
@@ -1665,7 +1679,7 @@ return {
 			map("n", "<Leader>gb", function() Snacks.picker.git_branches() end, { desc = "Branches" })
 			map("n", "<Leader>gl", function() Snacks.picker.git_log_file() end, { desc = "Log file" })
 			map("n", "<Leader>gg", function() Snacks.lazygit() end, { desc = "Lazygit" })
-			map("n", "<Leader>lR", function() Snacks.picker.lsp_references() end, { nowait = true, desc = "references" })
+			map("n", "grr", function() Snacks.picker.lsp_references() end, { nowait = true, desc = "references" })
 			map("n", "<Leader>fs", function() Snacks.picker.lsp_symbols() end, { desc = "LSP symbols" })
 			map("n", "<Leader>fS", function() Snacks.picker.lsp_workspace_symbols() end, { desc = "LSP workspace Symbols" })
 			map("n", "gd", function() Snacks.picker.lsp_definitions() end, { desc = "Go to definition" })
@@ -2014,47 +2028,7 @@ return {
 			init = function() map("n", "go", require("overlook.api").peek_definition, { desc = "Peek definition" }) end,
 		},
 		{
-			"folke/trouble.nvim",
-			cmd = "Trouble",
-			opts = {
-				focus = true,
-				modes = {
-					diagnostics = {
-						mode = "diagnostics",
-						preview = {
-							type = "split",
-							relative = "win",
-							position = "right",
-							size = 0.3,
-						},
-						filter = function(items)
-							local severity = vim.diagnostic.severity.HINT
-							for _, item in ipairs(items) do
-								severity = math.min(severity, item.severity)
-							end
-							return vim.tbl_filter(function(item) return item.severity == severity end, items)
-						end,
-					},
-				},
-				win = {
-					colorcolumn = false,
-				},
-			},
-			init = function()
-				map("n", "<Leader>t", "", { desc = "Trouble" })
-				map("n", "<Leader>td", "<CMD>Trouble diagnostics toggle filter.buf=0<CR>", { desc = "diagnostics" })
-				map("n", "<Leader>tD", "<CMD>Trouble diagnostics toggle<CR>", { desc = "workspace diagnostics" })
-				map("n", "<Leader>ts", "<CMD>Trouble symbols toggle focus=true pinned=true win.relative=editor<CR>", { desc = "symbols" })
-				map(
-					"n",
-					"<Leader>tS",
-					"<CMD>Trouble lsp_document_symbols toggle pinned=true win.relative=editor win.position=right<CR>",
-					{ desc = "all symbols" }
-				)
-				map("n", "<Leader>tl", "<CMD>Trouble loclist<CR>", { desc = "loclist" })
-				map("n", "<Leader>tq", "<CMD>Trouble qflist<CR>", { desc = "quickfix list" })
-				map("n", "<Leader>tt", "<CMD>TodoTrouble<CR>", { desc = "Todo List" })
-			end,
+			-- "folke/trouble.nvim", cmd = "Trouble", opts = { focus = true, modes = { diagnostics = { mode = "diagnostics", preview = { type = "split", relative = "win", position = "left", size = 20, }, filter = function(items) local severity = vim.diagnostic.severity.HINT for _, item in ipairs(items) do severity = math.min(severity, item.severity) end return vim.tbl_filter(function(item) return item.severity == severity end, items) end, }, }, win = { colorcolumn = false, }, }, init = function() map("n", "<Leader>t", "", { desc = "Trouble" }) map("n", "<Leader>td", "<CMD>Trouble diagnostics toggle filter.buf=0<CR>", { desc = "diagnostics" }) map("n", "<Leader>tD", "<CMD>Trouble diagnostics toggle<CR>", { desc = "workspace diagnostics" }) map("n", "<Leader>ts", "<CMD>Trouble symbols toggle focus=true pinned=true win.relative=editor<CR>", { desc = "symbols" }) map( "n", "<Leader>tS", "<CMD>Trouble lsp_document_symbols toggle pinned=true win.relative=editor win.position=right<CR>", { desc = "all symbols" }) map("n", "<Leader>tl", "<CMD>Trouble loclist<CR>", { desc = "loclist" }) map("n", "<Leader>tq", "<CMD>Trouble qflist<CR>", { desc = "quickfix list" }) map("n", "<Leader>tt", "<CMD>TodoTrouble<CR>", { desc = "Todo List" }) end,
 		},
 		{
 			"folke/todo-comments.nvim",
