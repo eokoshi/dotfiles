@@ -41,10 +41,10 @@ map("n", "<Leader>bD", function() functions.DOS_to_Unix() end, { desc = "DOS to 
 map("n", "<Leader>bf", function() vim.lsp.buf.format() end, { desc = "format buffer" })
 
 -- LSP
-map("n", "<leader>ld", function() vim.diagnostic.open_float() end, { desc = "hover diagnostics" })
+map("n", "<Leader>ld", function() vim.diagnostic.open_float() end, { desc = "hover diagnostics" })
 map("n", "<Leader>lq", function() vim.diagnostic.setqflist() end, { desc = "qflist diagnostics" })
 map("n", "<Leader>ll", function() vim.diagnostic.setloclist() end, { desc = "loclist diagnostics" })
-map("n", "grD", function() vim.lsp.buf.workspace_diagnostics() end, { desc = "workspace diagnostics" })
-map("n", "grI", "<CMD>checkhealth vim.lsp<CR>", { desc = "LSP info" })
+map("n", "<Leader>lw", function() vim.lsp.buf.workspace_diagnostics() end, { desc = "workspace diagnostics" })
+map("n", "<Leader>li", "<CMD>checkhealth vim.lsp<CR>", { desc = "LSP info" })
 map("n", "gco", "o<Esc>Vcx<Esc><Cmd>normal gcc<CR>fxa<BS>", { desc = "Add comment below" })
 map("n", "gcO", "O<Esc>Vcx<Esc><Cmd>normal gcc<CR>fxa<BS>", { desc = "Add comment above" })
