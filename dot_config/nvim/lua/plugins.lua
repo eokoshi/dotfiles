@@ -683,8 +683,8 @@ return {
 				mappings = {
 					close = "<esc>",
 					go_in = "",
-					go_in_plus = "L",
-					go_out = "H",
+					go_in_plus = "l",
+					go_out = "h",
 					go_out_plus = "",
 					synchronize = "<leader>w",
 				},
@@ -755,7 +755,84 @@ return {
 			end,
 		},
 		{
-			-- "dmtrKovalenko/fff.nvim", build = function() require("fff.download").download_or_build_binary() end, lazy = false, opts = { prompt = "❭ ", layout = { prompt_position = "top" }, keymaps = { preview_scroll_up = "<C-p>", preview_scroll_down = "<C-n>" }, hl = { normal = "NormalFloat", active_file = "ColorColumn", title = "FloatTitle" }, debug = { enabled = true, show_scores = true, }, }, keys = { { "ff", function() require("fff").find_files() end, desc = "FFFind files" }, { "<leader>fw", function() require("fff").live_grep() end, desc = "LiFFFe grep" }, { "<leader>fj", function() require("fff").live_grep({ grep = { modes = { "fuzzy", "plain" } } }) end, desc = "Live fffuzy grep" }, { "<leader>f*", function() require("fff").live_grep_under_cursor() end, mode = { "n", "x" }, desc = "Search current word / selection", }, },
+			"dmtrKovalenko/fff.nvim",
+			build = function() require("fff.download").download_or_build_binary() end,
+			lazy = false,
+			opts = {
+				prompt = "❭ ",
+				title = "fff",
+				layout = { prompt_position = "top" },
+				preview = { line_numbers = true },
+				keymaps = { focus_preview = "/" },
+				hl = {
+					border = "Purple",
+					normal = "Normal",
+					matched = "Purple",
+					title = "Red",
+					prompt = "Question",
+					cursor = "CursorLine",
+					frecency = "Number",
+					debug = "Comment",
+					combo_header = "Number",
+					scrollbar = "Comment",
+					directory_path = "Comment",
+					-- Multi-select highlights
+					selected = "FFFSelected",
+					selected_active = "FFFSelectedActive",
+					-- Git text highlights for file names
+					git_staged = "FFFGitStaged",
+					git_modified = "FFFGitModified",
+					git_deleted = "FFFGitDeleted",
+					git_renamed = "FFFGitRenamed",
+					git_untracked = "FFFGitUntracked",
+					git_ignored = "FFFGitIgnored",
+					-- Git sign/border highlights
+					git_sign_staged = "FFFGitSignStaged",
+					git_sign_modified = "FFFGitSignModified",
+					git_sign_deleted = "FFFGitSignDeleted",
+					git_sign_renamed = "FFFGitSignRenamed",
+					git_sign_untracked = "FFFGitSignUntracked",
+					git_sign_ignored = "FFFGitSignIgnored",
+					-- Git sign selected highlights
+					git_sign_staged_selected = "FFFGitSignStagedSelected",
+					git_sign_modified_selected = "FFFGitSignModifiedSelected",
+					git_sign_deleted_selected = "FFFGitSignDeletedSelected",
+					git_sign_renamed_selected = "FFFGitSignRenamedSelected",
+					git_sign_untracked_selected = "FFFGitSignUntrackedSelected",
+					git_sign_ignored_selected = "FFFGitSignIgnoredSelected",
+					-- Grep highlights
+					grep_match = "Red", -- Highlight for matched text in grep results
+					grep_line_number = "LineNr", -- Highlight for :line:col location
+					grep_regex_active = "DiagnosticInfo", -- Highlight for keybind + label when regex is on
+					grep_plain_active = "Comment", -- Highlight for keybind + label when regex is off
+					grep_fuzzy_active = "DiagnosticHint", -- Highlight for keybind + label when fuzzy is on
+					-- Cross-mode suggestion highlights
+					suggestion_header = "WarningMsg", -- Highlight for the "No results found. Suggested..." banner
+					-- File info panel highlights
+					file_info_section = "FFFFileInfoSection", -- Section header label (e.g. "file", "score")
+					file_info_separator = "FFFFileInfoSeparator", -- Dash dividers used like a border
+					file_info_label = "FFFFileInfoLabel", -- Row labels (Size, Type, Git, ...)
+					file_info_value = "FFFFileInfoValue", -- Plain values
+					file_info_value_dim = "FFFFileInfoValueDim", -- Tertiary values, separators inside rows
+					file_info_size = "FFFFileInfoSize", -- File size value
+					file_info_type = "FFFFileInfoType", -- Filetype value
+					file_info_path = "FFFFileInfoPath", -- Full path value
+					file_info_total_score = "FFFFileInfoTotalScore", -- Total score (bold)
+					file_info_match_type = "FFFFileInfoMatchType", -- match_type label (bold)
+					file_info_score_pos = "FFFFileInfoScorePos", -- Positive score components
+					file_info_score_neg = "FFFFileInfoScoreNeg", -- Negative score components / penalties
+				},
+				git = {
+					status_text_color = true,
+				},
+				debug = { enabled = true, show_scores = false },
+			},
+			keys = {
+				{ "ff", function() require("fff").find_files() end, desc = "FFFind files" },
+				{ "<leader>fw", function() require("fff").live_grep() end, desc = "grep" },
+				{ "<leader>fj", function() require("fff").live_grep({ grep = { modes = { "fuzzy", "plain" } } }) end, desc = "fuzzy grep" },
+				{ "<leader>f*", function() require("fff").live_grep_under_cursor() end, mode = { "n", "x" }, desc = "current word / selection" },
+			},
 		},
 		{
 			-- "FylerOrg/fyler.nvim", opts = { integrations = { icon = "mini_icons" }, extensions = { git = { enabled = true, inline = false }, trash = { enabled = true }, }, kind_presets = { split_left_most = { width = 40 }, floating = { win_opts = { winhighlight = "Normal:Normal,FloatBorder:Purple,FloatTitle:PurpleBold", }, }, }, ui = { hidden_items = { switches = {}, }, indent_guides = true, }, mappings = { n = { ["L"] = { action = "select" }, ["H"] = { action = "shrink", args = { parent = true } }, ["J"] = { action = function(_, _) vim.cmd("norm j") end }, ["K"] = { action = function(_, _) vim.cmd("norm k") end }, ["<CR>"] = { action = "select", args = { close = true } }, }, }, init = function() local fyler = require("fyler") map("n", "<leader>be", function() fyler.toggle({ kind = "floating" }) end, { desc = "Fyler" }) end, },
@@ -1591,25 +1668,25 @@ return {
 			map({ "n", "t", "i" }, "<F7>", function() Snacks.terminal.toggle() end, { desc = "toggle terminal" })
 			map("n", "<Leader>R", function() Snacks.rename.rename_file() end, { desc = "Rename file" })
 
-			map("n", "ff", function() Snacks.picker.files() end, { desc = "files" })
+			-- map("n", "ff", function() Snacks.picker.files() end, { desc = "files" })
+			-- map("n", "<Leader>fw", function() Snacks.picker.grep({ cmd = "rg" }) end, { desc = "word" })
+			-- map({ "n", "x" }, "<Leader>f*", function() Snacks.picker.grep_word() end, { desc = "grep current selection" })
 			map("n", "<Leader>ff", function() Snacks.picker.files({ hidden = true, ignored = true, cmd = "fd" }) end, { desc = "all files" })
-			map("n", "<Leader>fw", function() Snacks.picker.grep({ cmd = "rg" }) end, { desc = "word" })
 			map("n", "<Leader>fW", function() Snacks.picker.grep({ cmd = "rg", hidden = true, ignored = true }) end, { desc = "Word in all files" })
-			map({ "n", "x" }, "<Leader>f*", function() Snacks.picker.grep_word() end, { desc = "grep current selection" })
 
 			map("n", "<Leader>f:", function() Snacks.picker.command_history() end, { desc = "Command history" })
 			map("n", "<Leader>f<space>", function() Snacks.picker.resume() end, { desc = "Resume last search" })
 			map("n", "<Leader>f=", function() Snacks.picker.spelling() end, { desc = "Spelling Suggestions" })
 			map("n", "<Leader>fA", function() Snacks.picker.autocmds() end, { desc = "autocmds" })
 			map("n", "<Leader>fC", function() Snacks.picker.commands() end, { desc = "Commands" })
-			map("n", "<Leader>fH", function() Snacks.picker.highlights() end, { desc = "Highlights" })
 			map("n", "<Leader>fJ", function() Snacks.picker.jumps() end, { desc = "jumps" })
+			map("n", "<Leader>fL", function() Snacks.picker.loclist() end, { desc = "location list" })
 			map("n", "<Leader>fM", function() Snacks.picker.man() end, { desc = "Man pages" })
 			map("n", "<Leader>fR", function() Snacks.picker.registers() end, { desc = "registers" })
 			map("n", "<Leader>fb", function() Snacks.picker.buffers() end, { desc = "buffers" })
 			map("n", "<Leader>fd", function() Snacks.picker.diagnostics_buffer() end, { desc = "diagnostics" })
 			map("n", "<Leader>fk", function() Snacks.picker.keymaps() end, { desc = "keymaps" })
-			map("n", "<Leader>fl", function() Snacks.picker.loclist() end, { desc = "location list" })
+			map("n", "<Leader>fl", function() Snacks.picker.highlights() end, { desc = "Highlights" })
 			map("n", "<Leader>fm", function() Snacks.picker.marks() end, { desc = "marks" })
 			map("n", "<Leader>fp", function() Snacks.picker.projects() end, { desc = "projects" })
 			map("n", "<Leader>fq", function() Snacks.picker.qflist() end, { desc = "quickfix list" })

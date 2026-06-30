@@ -14,6 +14,7 @@ vim.api.nvim_create_autocmd({ "ColorScheme" }, {
 		set_hl(0, "SniprunVirtualTextErr", { link = "Red" })
 		set_hl(0, "BufferLineFill", { link = "Normal" })
 		set_hl(0, "BlinkCmpKindRipgrepRipgrep", { link = "BlinkCmpKindKey" })
+		set_hl(0, "MatchParen", { link = "Error" })
 	end,
 	desc = "Update custom highlight settings on colorscheme change for all colorschemes",
 })
