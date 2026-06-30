@@ -483,7 +483,6 @@ return {
 					json = { "fixjson", "prettier" },
 					css = { "prettier" },
 					javascript = { "prettier" },
-					dts = { "dts_linter" },
 				},
 				default_format_opts = {
 					lsp_format = "fallback",
@@ -508,10 +507,6 @@ return {
 							end
 							return {}
 						end,
-					},
-					dts_linter = {
-						command = "dts-linter",
-						args = { "--format", "--file", "$FILENAME" },
 					},
 				},
 			},
