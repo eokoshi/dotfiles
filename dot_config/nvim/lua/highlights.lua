@@ -15,6 +15,9 @@ vim.api.nvim_create_autocmd({ "ColorScheme" }, {
 		set_hl(0, "BufferLineFill", { link = "Normal" })
 		set_hl(0, "BlinkCmpKindRipgrepRipgrep", { link = "BlinkCmpKindKey" })
 		set_hl(0, "MatchParen", { link = "Error" })
+		set_hl(0, "GitSignsAddInline", { link = "DiffAdd" })
+		set_hl(0, "GitSignsChangeInline", { link = "DiffChange" })
+		set_hl(0, "GitSignsDeleteInline", { link = "DiffText" })
 	end,
 	desc = "Update custom highlight settings on colorscheme change for all colorschemes",
 })
