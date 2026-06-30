@@ -465,22 +465,10 @@ return {
 			cmd = { "ConformInfo" },
 			keys = {
 				{
-					"<leader>lf",
-					function() require("conform").format({ async = true }) end,
-					mode = "n",
-					desc = "format buffer",
-				},
-				{
 					"<leader>bf",
 					function() require("conform").format({ async = true }) end,
 					mode = "n",
 					desc = "format buffer",
-				},
-				{
-					"<leader>lc",
-					"<CMD>ConformInfo<CR>",
-					mode = "n",
-					desc = "ConformInfo",
 				},
 			},
 			---@module "conform"
@@ -767,30 +755,7 @@ return {
 			end,
 		},
 		{
-			"dmtrKovalenko/fff.nvim",
-			build = function() require("fff.download").download_or_build_binary() end,
-			lazy = false,
-			opts = {
-				prompt = "❭ ",
-				layout = { prompt_position = "top" },
-				keymaps = { preview_scroll_up = "<C-p>", preview_scroll_down = "<C-n>" },
-				hl = { normal = "NormalFloat", active_file = "ColorColumn", title = "FloatTitle" },
-				debug = {
-					enabled = true,
-					show_scores = true,
-				},
-			},
-			keys = {
-				{ "ff", function() require("fff").find_files() end, desc = "FFFind files" },
-				{ "<leader>fw", function() require("fff").live_grep() end, desc = "LiFFFe grep" },
-				{ "<leader>fj", function() require("fff").live_grep({ grep = { modes = { "fuzzy", "plain" } } }) end, desc = "Live fffuzy grep" },
-				{
-					"<leader>f*",
-					function() require("fff").live_grep_under_cursor() end,
-					mode = { "n", "x" },
-					desc = "Search current word / selection",
-				},
-			},
+			-- "dmtrKovalenko/fff.nvim", build = function() require("fff.download").download_or_build_binary() end, lazy = false, opts = { prompt = "❭ ", layout = { prompt_position = "top" }, keymaps = { preview_scroll_up = "<C-p>", preview_scroll_down = "<C-n>" }, hl = { normal = "NormalFloat", active_file = "ColorColumn", title = "FloatTitle" }, debug = { enabled = true, show_scores = true, }, }, keys = { { "ff", function() require("fff").find_files() end, desc = "FFFind files" }, { "<leader>fw", function() require("fff").live_grep() end, desc = "LiFFFe grep" }, { "<leader>fj", function() require("fff").live_grep({ grep = { modes = { "fuzzy", "plain" } } }) end, desc = "Live fffuzy grep" }, { "<leader>f*", function() require("fff").live_grep_under_cursor() end, mode = { "n", "x" }, desc = "Search current word / selection", }, },
 		},
 		{
 			-- "FylerOrg/fyler.nvim", opts = { integrations = { icon = "mini_icons" }, extensions = { git = { enabled = true, inline = false }, trash = { enabled = true }, }, kind_presets = { split_left_most = { width = 40 }, floating = { win_opts = { winhighlight = "Normal:Normal,FloatBorder:Purple,FloatTitle:PurpleBold", }, }, }, ui = { hidden_items = { switches = {}, }, indent_guides = true, }, mappings = { n = { ["L"] = { action = "select" }, ["H"] = { action = "shrink", args = { parent = true } }, ["J"] = { action = function(_, _) vim.cmd("norm j") end }, ["K"] = { action = function(_, _) vim.cmd("norm k") end }, ["<CR>"] = { action = "select", args = { close = true } }, }, }, init = function() local fyler = require("fyler") map("n", "<leader>be", function() fyler.toggle({ kind = "floating" }) end, { desc = "Fyler" }) end, },
@@ -958,7 +923,6 @@ return {
 				show_help = false,
 				spec = {
 					{ "<BS>", mode = { "n" }, group = "Close" },
-					{ "<Leader>c", mode = { "n" }, group = "Conflicts" },
 					{ "<Leader>e", mode = { "n" }, group = "Explorer" },
 					{ "<Leader>f", mode = { "n", "x" }, group = "Find" },
 					{ "<Leader>g", mode = { "n", "x" }, group = "Git" },
@@ -1446,22 +1410,6 @@ return {
 							desc = "CodeDiff",
 							action = ":CodeDiff",
 						},
-						-- { icon = " ", key = "w", desc = "Find Word", action = ":lua Snacks.dashboard.pick('live_grep')" },
-						-- { icon = " ", key = "r", desc = "Recents", action = ":lua Snacks.dashboard.pick('oldfiles')" },
-						-- {
-						-- 	icon = " ",
-						-- 	key = "c",
-						-- 	desc = "Config",
-						-- 	action = function()
-						-- 		if vim.fn.has("win32") == 1 then
-						-- 			vim.notify("Do not mess with config from Windows", vim.log.levels.ERROR)
-						-- 		else
-						-- 			local dir = os.getenv("HOME") .. "/.local/share/chezmoi"
-						-- 			vim.cmd("cd " .. dir)
-						-- 			require("neo-tree.command").execute({ position = "float" })
-						-- 		end
-						-- 	end,
-						-- },
 						{
 							icon = " ",
 							key = "s",
@@ -1643,7 +1591,7 @@ return {
 			map({ "n", "t", "i" }, "<F7>", function() Snacks.terminal.toggle() end, { desc = "toggle terminal" })
 			map("n", "<Leader>R", function() Snacks.rename.rename_file() end, { desc = "Rename file" })
 
-			-- map("n", "ff", function() Snacks.picker.files() end, { desc = "files" })
+			map("n", "ff", function() Snacks.picker.files() end, { desc = "files" })
 			map("n", "<Leader>ff", function() Snacks.picker.files({ hidden = true, ignored = true, cmd = "fd" }) end, { desc = "all files" })
 			map("n", "<Leader>fw", function() Snacks.picker.grep({ cmd = "rg" }) end, { desc = "word" })
 			map("n", "<Leader>fW", function() Snacks.picker.grep({ cmd = "rg", hidden = true, ignored = true }) end, { desc = "Word in all files" })
@@ -1678,13 +1626,14 @@ return {
 			map("n", "<Leader>gl", function() Snacks.picker.git_log_file() end, { desc = "Log file" })
 			map("n", "<Leader>gg", function() Snacks.lazygit() end, { desc = "Lazygit" })
 
-			map("n", "grr", function() Snacks.picker.lsp_references() end, { nowait = true, desc = "references" })
-			map("n", "grs", function() Snacks.picker.lsp_symbols() end, { desc = "LSP symbols" })
-			map("n", "grS", function() Snacks.picker.lsp_workspace_symbols() end, { desc = "LSP workspace Symbols" })
+			map("n", "<Leader>ll", "", { desc = "LSP" })
+			map("n", "<Leader>llr", function() Snacks.picker.lsp_references() end, { nowait = true, desc = "references" })
+			map("n", "<Leader>lls", function() Snacks.picker.lsp_symbols() end, { desc = "LSP symbols" })
+			map("n", "<Leader>llw", function() Snacks.picker.lsp_workspace_symbols() end, { desc = "LSP workspace Symbols" })
+			map("n", "<Leader>lli", function() Snacks.picker.lsp_implementations() end, { desc = "Go to Implementation" })
+			map("n", "<Leader>llt", function() Snacks.picker.lsp_type_definitions() end, { desc = "Go to type definition" })
 			map("n", "gd", function() Snacks.picker.lsp_definitions() end, { desc = "Go to definition" })
 			map("n", "gD", function() Snacks.picker.lsp_declarations() end, { desc = "Go to Declaration" })
-			map("n", "<Leader>lt", function() Snacks.picker.lsp_type_definitions() end, { desc = "Go to type definition" })
-			map("n", "gri", function() Snacks.picker.lsp_implementations() end, { desc = "Go to Implementation" })
 
 			local toggles = require("stuff.toggles")
 			toggles.autosave():map("<Leader>ba")
