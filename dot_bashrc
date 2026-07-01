@@ -46,6 +46,20 @@ if [[ "$TERM" == "linux" ]]; then
 	echo -en "\e]PC247BFF" # Bright Blue
 fi
 
+# colored GCC warnings and errors
+export GCC_COLORS='error=01;31:warning=01;35:note=01;36:caret=01;32:locus=01:quote=01'
+
+# source profile.d
+if [ -d /etc/profile.d ]; then
+  for i in /etc/profile.d/*.sh; do
+    if [ -r $i ]; then
+      . $i
+    fi
+  done
+  unset i
+fi
+
+
 ##### Alias definitions ######
 # You may want to put all your additions into a separate file like
 # ~/.bash_aliases, instead of adding them here directly.
@@ -81,18 +95,6 @@ if [ -f ~/.keys ]; then
     . ~/.keys
 fi
 
-# colored GCC warnings and errors
-export GCC_COLORS='error=01;31:warning=01;35:note=01;36:caret=01;32:locus=01:quote=01'
-
-# source profile.d
-if [ -d /etc/profile.d ]; then
-  for i in /etc/profile.d/*.sh; do
-    if [ -r $i ]; then
-      . $i
-    fi
-  done
-  unset i
-fi
 
 # some useful functions
 function marimo-serve() {
@@ -106,11 +108,6 @@ function chdiffnvim() {
 function watchlastlog() {
 	watch -n 0.1 'tail -n 30 "$(find logs | sort --reverse | head -n 1)"'
 }
-
-export EDITOR=nvim
-export SUDO_EDITOR=nvim
-export SYSTEMD_EDITOR=nvim
-export PATH="$HOME/.local/bin:$HOME/.cargo/bin:$HOME/.local/share/nvim/mason/bin:$PATH"
 
 ############## MISC PROGRAMS #############
 # Direnv stuff
@@ -142,11 +139,18 @@ function y() {
 }
 
 if fzf --version >&/dev/null; then
-	source ~/.fzf.bash
+	eval "$(fzf --bash)"
 fi
-eval "$(zoxide init bash --cmd j)"
+if zoxide --version >&/dev/null; then
+	eval "$(zoxide init bash --cmd j)"
+fi
+if uv --version >&/dev/null; then
+	eval "$(uv generate-shell-completion bash)"
+fi
 
-# opencode
+export EDITOR=nvim
+export SUDO_EDITOR=nvim
+export SYSTEMD_EDITOR=nvim
+export PATH="$HOME/.local/bin:$HOME/.cargo/bin:$HOME/.local/share/nvim/mason/bin:$PATH"
 export PATH=/home/ethan/.opencode/bin:$PATH
 
-eval "$(uv generate-shell-completion bash)"
