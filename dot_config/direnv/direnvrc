@@ -43,3 +43,4 @@ layout_python() {
   export VIRTUAL_ENV
   PATH_add "$VIRTUAL_ENV/bin"
 }
+source $HOME/.nix-profile/share/nix-direnv/direnvrc

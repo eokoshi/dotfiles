@@ -149,7 +149,7 @@ if uv --version >&/dev/null; then
 fi
 
 export EDITOR=nvim
-export SUDO_EDITOR=nvim
+export SUDO_EDITOR=vim
 export SYSTEMD_EDITOR=nvim
 export PATH="$HOME/.local/bin:$HOME/.cargo/bin:$HOME/.local/share/nvim/mason/bin:$PATH"
 export PATH=/home/ethan/.opencode/bin:$PATH
