@@ -141,7 +141,7 @@ function y() {
 	rm -f -- "$tmp"
 }
 
-if fzf >&/dev/null; then
+if fzf --version >&/dev/null; then
 	source ~/.fzf.bash
 fi
 eval "$(zoxide init bash --cmd j)"
