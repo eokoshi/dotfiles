@@ -141,7 +141,9 @@ function y() {
 	rm -f -- "$tmp"
 }
 
-[ -f ~/.fzf.bash ] && source ~/.fzf.bash
+if fzf >&/dev/null; then
+	source ~/.fzf.bash
+fi
 eval "$(zoxide init bash --cmd j)"
 
 # opencode
