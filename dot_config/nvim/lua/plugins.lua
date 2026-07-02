@@ -740,6 +740,7 @@ return {
 						map("n", "<leader>.", function() MiniFiles.open(nil) end, { buffer = b, desc = "go to cwd" })
 						map("n", "J", "<DOWN>", { buffer = b })
 						map("n", "K", "<UP>", { buffer = b })
+						map("n", "<CR>", function() MiniFiles.go_in({ close_on_file = true }) end, { buffer = b })
 						map("n", "q", function() MiniFiles.close() end, { buffer = b })
 						map("n", "g.", set_cwd, { buffer = b, desc = "Set cwd" })
 						map("n", "gy", yank_path, { buffer = b, desc = "Yank path" })
