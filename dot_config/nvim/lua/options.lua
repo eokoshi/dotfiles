@@ -92,7 +92,7 @@ if vim.fn.has("win32") == 1 then
 	vim.o.shellquote = ""
 	vim.o.shellxquote = ""
 else
-	vim.o.shell = "/usr/bin/env bash"
+	vim.o.shell = "/bin/bash"
 end
 
 -- diagnostic options
