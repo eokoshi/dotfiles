@@ -44,8 +44,7 @@ vim.o.jumpoptions = "view"
 vim.o.laststatus = 3 -- global statusline
 vim.o.linebreak = true -- Wrap lines at convenient points
 vim.o.list = false -- Show some invisible characters (tabs...
-vim.o.listchars = "extends:…,tab:  "
-vim.opt.listchars = { space = "␠", tab = "␉" }
+vim.opt.listchars = { space = "␠", tab = "␉_" }
 vim.o.mouse = "a" -- Enable mouse mode
 vim.o.number = true
 vim.o.numberwidth = 2
