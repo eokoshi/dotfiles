@@ -209,7 +209,7 @@ if [[ $REPLY =~ ^[Yy]$ ]]; then
 	rm -rf $YAZI_SYS
 	rm -f "${YAZI_SYS}.zip"
 	sudo ln -sf /opt/yazi/yazi /usr/local/bin/yazi
-	ya pkg upgrade
+	ya pkg upgrade --discard
 	yazi -V
 fi
 
