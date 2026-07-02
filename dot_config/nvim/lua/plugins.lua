@@ -731,7 +731,7 @@ return {
 					end
 				end
 
-				map("n", "<leader>fe", function() minifiles_toggle(vim.api.nvim_buf_get_name(0)) end, { desc = "MiniFiles" })
+				map("n", "<leader>e", function() minifiles_toggle(vim.api.nvim_buf_get_name(0)) end, { desc = "MiniFiles" })
 
 				vim.api.nvim_create_autocmd("User", {
 					pattern = "MiniFilesBufferCreate",
@@ -1660,7 +1660,7 @@ return {
 			})
 			map("n", "<leader>c", function() Snacks.bufdelete() end, { desc = "Close buffer" })
 			map("n", "<leader>bc", function() Snacks.bufdelete.other() end, { desc = "Close all other buffers" })
-			map("n", "<Leader>e", function() Snacks.explorer() end, { desc = "File explorer" })
+			map("n", "<Leader>fe", function() Snacks.explorer() end, { desc = "File explorer" })
 			map({ "n", "t", "i" }, "<F7>", function() Snacks.terminal.toggle() end, { desc = "toggle terminal" })
 			map("n", "<Leader>R", function() Snacks.rename.rename_file() end, { desc = "Rename file" })
 
