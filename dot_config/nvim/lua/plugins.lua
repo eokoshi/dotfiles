@@ -1146,6 +1146,19 @@ return {
 					return "recording @" .. reg
 				end
 
+				local lsp_format = require("lualine.component"):extend()
+				function lsp_format:update_status()
+					local out = ""
+					local bufnr = vim.api.nvim_get_current_buf()
+					if #vim.lsp.get_clients({ bufnr = bufnr }) > 0 then out = out .. " " end
+
+					local status, conform = pcall(require, "conform")
+					if not status then return "Conform not installed" end
+					if #conform.list_formatters_for_buffer(bufnr) > 0 then out = out .. "󰉼" end
+
+					return out
+				end
+
 				local formatters = function()
 					local status, conform = pcall(require, "conform")
 					if not status then return "Conform not installed" end
@@ -1233,6 +1246,7 @@ return {
 							i = colors.green,
 							v = colors.blue,
 							V = colors.blue,
+							[""] = colors.cyan,
 							c = colors.magenta,
 							no = colors.red,
 							s = colors.orange,
@@ -1253,18 +1267,20 @@ return {
 					end,
 					padding = 2,
 				})
+				ins_left({ "%n", color = { fg = colors.violet } })
 				ins_left({
-					-- filesize component
 					"filesize",
+					cond = conditions.buffer_not_empty and conditions.hide_in_width,
+				})
+				ins_left({
+					"location",
 					cond = conditions.buffer_not_empty,
 				})
 				ins_left({
-					"filename",
+					"progress",
+					color = { fg = colors.fg, gui = "bold" },
 					cond = conditions.buffer_not_empty,
-					color = { fg = colors.magenta, gui = "bold" },
 				})
-				ins_left({ "location" })
-				ins_left({ "progress", color = { fg = colors.fg, gui = "bold" } })
 				ins_left({
 					"diagnostics",
 					sources = { "nvim_diagnostic" },
@@ -1276,29 +1292,25 @@ return {
 					},
 				})
 				ins_left({ macro, color = { fg = colors.red, gui = "bold" } })
+				ins_left({ "%=" })
 				ins_left({
-					function() return "%=" end,
+					"filename",
+					cond = conditions.buffer_not_empty,
+					path = 1,
+					color = { fg = colors.magenta, gui = "bold" },
 				})
-				ins_left({
-					"lsp_status",
-					icon = "",
-					color = { fg = colors.cyan, gui = "bold" },
-				})
-				ins_left({
-					formatters,
-					icon = "󰉼",
+				ins_right({
+					lsp_format,
 					color = { fg = colors.cyan, gui = "bold" },
 				})
 				ins_right({
-					"encoding",
-					fmt = string.upper,
-					cond = conditions.hide_in_width,
+					"%Y",
 					color = { fg = colors.green, gui = "bold" },
 				})
 				ins_right({
 					"fileformat",
 					fmt = string.upper,
-					icons_enabled = false,
+					icons_enabled = true,
 					color = { fg = colors.green, gui = "bold" },
 				})
 				ins_right({
