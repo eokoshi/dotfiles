@@ -12,3 +12,6 @@ prepend_fetchers = [
   { url = "*", run = "git", group = "git" },
   { url = "*/", run = "git", group = "git" }
 ]
+
+[opener]
+csv = [{ run = "csvlens %s", block = true, for = "unix" }]
