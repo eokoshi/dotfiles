@@ -41,6 +41,7 @@ map("n", "<Leader>bD", function() functions.DOS_to_Unix() end, { desc = "DOS to 
 map("n", "<Leader>bf", function() vim.lsp.buf.format() end, { desc = "format buffer" })
 
 -- LSP
+map("n", "<Leader>la", function() vim.lsp.buf.code_action() end, { desc = "code actions" })
 map("n", "<Leader>ld", function() vim.diagnostic.open_float() end, { desc = "show diagnostic" })
 map("n", "<Leader>lc", function() vim.diagnostic.setqflist() end, { desc = "qflist diagnostics" })
 map("n", "<Leader>lr", function() vim.lsp.buf.rename() end, { desc = "rename symbol" })
