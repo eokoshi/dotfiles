@@ -31,3 +31,6 @@
 
 [difftool "codediff"]
 	cmd = "nvim \"$LOCAL\" \"$REMOTE\" +\"CodeDiff file $LOCAL $REMOTE\""
+
+[rebase]
+	updateRefs = true
