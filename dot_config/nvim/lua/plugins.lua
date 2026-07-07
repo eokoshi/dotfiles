@@ -685,7 +685,204 @@ return {
 				},
 			},
 			init = function()
-				local MiniFiles = require("mini.files")
+				local _, MiniFiles = pcall(require, "mini.files")
+				local nsMiniFiles = vim.api.nvim_create_namespace("mini_files_git")
+				local autocmd = vim.api.nvim_create_autocmd
+
+				-- Cache for git status
+				local gitStatusCache = {}
+				local cacheTimeout = 2000 -- in milliseconds
+				local uv = vim.uv or vim.loop
+
+				local function isSymlink(path)
+					local stat = uv.fs_lstat(path)
+					return stat and stat.type == "link"
+				end
+
+				---@type table<string, {symbol: string, hlGroup: string}>
+				---@param status string
+				---@return string symbol, string hlGroup
+				local function mapSymbols(status, is_symlink)
+					local statusMap = {
+						[" M"] = { symbol = "•", hlGroup = "MiniDiffSignChange" }, -- Modified in the working directory
+						["M "] = { symbol = "✹", hlGroup = "MiniDiffSignChange" }, -- modified in index
+						["MM"] = { symbol = "≠", hlGroup = "MiniDiffSignChange" }, -- modified in both working tree and index
+						["A "] = { symbol = "+", hlGroup = "MiniDiffSignAdd" }, -- Added to the staging area, new file
+						["AA"] = { symbol = "≈", hlGroup = "MiniDiffSignAdd" }, -- file is added in both working tree and index
+						["D "] = { symbol = "-", hlGroup = "MiniDiffSignDelete" }, -- Deleted from the staging area
+						["AM"] = { symbol = "⊕", hlGroup = "MiniDiffSignChange" }, -- added in working tree, modified in index
+						["AD"] = { symbol = "-•", hlGroup = "MiniDiffSignChange" }, -- Added in the index and deleted in the working directory
+						["R "] = { symbol = "→", hlGroup = "MiniDiffSignChange" }, -- Renamed in the index
+						["U "] = { symbol = "‖", hlGroup = "MiniDiffSignChange" }, -- Unmerged path
+						["UU"] = { symbol = "⇄", hlGroup = "MiniDiffSignAdd" }, -- file is unmerged
+						["UA"] = { symbol = "⊕", hlGroup = "MiniDiffSignAdd" }, -- file is unmerged and added in working tree
+						["??"] = { symbol = "?", hlGroup = "Macro" }, -- Untracked files
+						["!!"] = { symbol = "", hlGroup = "Ignore" }, -- Ignored files
+					}
+
+					local result = statusMap[status] or { symbol = "?", hlGroup = "NonText" }
+					local gitSymbol = result.symbol
+					local gitHlGroup = result.hlGroup
+
+					local symlinkSymbol = is_symlink and "↩" or ""
+
+					-- Combine symlink symbol with Git status if both exist
+					local combinedSymbol = (symlinkSymbol .. gitSymbol):gsub("^%s+", ""):gsub("%s+$", "")
+					-- Change the color of the symlink icon from "MiniDiffSignDelete" to something else
+					local combinedHlGroup = is_symlink and "MiniDiffSignDelete" or gitHlGroup
+
+					return combinedSymbol, combinedHlGroup
+				end
+
+				---@param cwd string
+				---@param callback function
+				---@return nil
+				local function fetchGitStatus(cwd, callback)
+					local clean_cwd = cwd:gsub("^minifiles://%d+/", "")
+					---@param content table
+					local function on_exit(content)
+						if content.code == 0 then
+							callback(content.stdout) -- vim.g.content = content.stdout
+						end
+					end
+					---@see vim.system
+					vim.system({ "git", "status", "-uall", "--ignored=matching", "--porcelain" }, { text = true, cwd = clean_cwd }, on_exit)
+				end
+
+				---@param buf_id integer
+				---@param gitStatusMap table
+				---@return nil
+				local function updateMiniWithGit(buf_id, gitStatusMap)
+					vim.schedule(function()
+						local nlines = vim.api.nvim_buf_line_count(buf_id)
+						local cwd = vim.fs.root(buf_id, ".git")
+						local escapedcwd = cwd and vim.pesc(cwd)
+						escapedcwd = vim.fs.normalize(escapedcwd)
+
+						for i = 1, nlines do
+							local entry = MiniFiles.get_fs_entry(buf_id, i)
+							if not entry then break end
+							local relativePath = entry.path:gsub("^" .. escapedcwd .. "/", "")
+							local status = gitStatusMap[relativePath]
+
+							if not status then
+								local checkPath = relativePath
+								while true do
+									checkPath = checkPath:match("^(.*)/[^/]+$")
+									if not checkPath then break end
+									if gitStatusMap[checkPath] == "!!" then
+										status = "!!"
+										break
+									end
+								end
+							end
+
+							if status then
+								local symbol, hlGroup = mapSymbols(status, isSymlink(entry.path))
+								vim.api.nvim_buf_set_extmark(buf_id, nsMiniFiles, i - 1, 0, {
+									virt_text = { { symbol, hlGroup } },
+									virt_text_pos = "right_align",
+									hl_mode = "combine",
+								})
+								local line = vim.api.nvim_buf_get_lines(buf_id, i - 1, i, false)[1]
+								local nameStartCol = line:find(vim.pesc(entry.name)) or 0
+								if nameStartCol > 0 then
+									vim.api.nvim_buf_set_extmark(buf_id, nsMiniFiles, i - 1, nameStartCol - 1, {
+										end_col = nameStartCol + #entry.name - 1,
+										hl_group = hlGroup,
+									})
+								end
+
+							else
+							end
+						end
+					end)
+				end
+
+				-- Thanks for the idea of gettings https://github.com/refractalize/oil-git-status.nvim signs for dirs
+				---@param content string
+				---@return table
+				local function parseGitStatus(content)
+					local gitStatusMap = {}
+					-- lua match is faster than vim.split (in my experience )
+					for line in content:gmatch("[^\r\n]+") do
+						local status, filePath = string.match(line, "^(..)%s+(.*)")
+						-- Split the file path into parts
+						local parts = {}
+						for part in filePath:gmatch("[^/]+") do
+							table.insert(parts, part)
+						end
+						-- Start with the root directory
+						local currentKey = ""
+						for i, part in ipairs(parts) do
+							if i > 1 then
+								-- Concatenate parts with a separator to create a unique key
+								currentKey = currentKey .. "/" .. part
+							else
+								currentKey = part
+							end
+							-- If it's the last part, it's a file, so add it with its status
+							if i == #parts then
+								gitStatusMap[currentKey] = status
+							else
+								-- If it's not the last part, it's a directory. Check if it exists, if not, add it.
+								if status ~= "!!" and not gitStatusMap[currentKey] then gitStatusMap[currentKey] = status end
+							end
+						end
+					end
+					return gitStatusMap
+				end
+
+				---@param buf_id integer
+				---@return nil
+				local function updateGitStatus(buf_id)
+					if not vim.fs.root(buf_id, ".git") then return end
+					local cwd = vim.fs.root(buf_id, ".git")
+					local currentTime = os.time()
+
+					if gitStatusCache[cwd] and currentTime - gitStatusCache[cwd].time < cacheTimeout then
+						updateMiniWithGit(buf_id, gitStatusCache[cwd].statusMap)
+					else
+						fetchGitStatus(cwd, function(content)
+							local gitStatusMap = parseGitStatus(content)
+							gitStatusCache[cwd] = {
+								time = currentTime,
+								statusMap = gitStatusMap,
+							}
+							updateMiniWithGit(buf_id, gitStatusMap)
+						end)
+					end
+				end
+
+				---@return nil
+				local function clearCache() gitStatusCache = {} end
+
+				local function augroup(name) return vim.api.nvim_create_augroup("MiniFiles_" .. name, { clear = true }) end
+
+				autocmd("User", {
+					group = augroup("start"),
+					pattern = "MiniFilesExplorerOpen",
+					callback = function()
+						local bufnr = vim.api.nvim_get_current_buf()
+						updateGitStatus(bufnr)
+					end,
+				})
+
+				autocmd("User", {
+					group = augroup("close"),
+					pattern = "MiniFilesExplorerClose",
+					callback = function() clearCache() end,
+				})
+
+				autocmd("User", {
+					group = augroup("update"),
+					pattern = "MiniFilesBufferUpdate",
+					callback = function(args)
+						local bufnr = args.data.buf_id
+						local cwd = vim.fs.root(bufnr, ".git")
+						if gitStatusCache[cwd] then updateMiniWithGit(bufnr, gitStatusCache[cwd].statusMap) end
+					end,
+				})
 				local minifiles_toggle = function(...)
 					if not MiniFiles.close() then MiniFiles.open(...) end
 				end
@@ -731,7 +928,10 @@ return {
 					end
 				end
 
-				map("n", "<leader>e", function() minifiles_toggle(vim.api.nvim_buf_get_name(0)) end, { desc = "MiniFiles" })
+				map("n", "<leader>e", function()
+					minifiles_toggle(vim.api.nvim_buf_get_name(0), false)
+					MiniFiles.reveal_cwd()
+				end, { desc = "MiniFiles" })
 
 				vim.api.nvim_create_autocmd("User", {
 					pattern = "MiniFilesBufferCreate",
@@ -1159,25 +1359,7 @@ return {
 					return out
 				end
 
-				local formatters = function()
-					local status, conform = pcall(require, "conform")
-					if not status then return "Conform not installed" end
-					local lsp_format = require("conform.lsp_format")
-					local formatters = conform.list_formatters_for_buffer()
-					if formatters and #formatters > 0 then
-						local formatterNames = {}
-
-						for _, formatter in ipairs(formatters) do
-							table.insert(formatterNames, formatter)
-						end
-
-						return table.concat(formatterNames, " ")
-					end
-					local bufnr = vim.api.nvim_get_current_buf()
-					local lsp_clients = lsp_format.get_format_clients({ bufnr = bufnr })
-					if not vim.tbl_isempty(lsp_clients) then return "󰷈 LSP Formatter" end
-					return ""
-				end
+				-- local formatters = function() local status, conform = pcall(require, "conform") if not status then return "Conform not installed" end local lsp_format = require("conform.lsp_format") local formatters = conform.list_formatters_for_buffer() if formatters and #formatters > 0 then local formatterNames = {} for _, formatter in ipairs(formatters) do table.insert(formatterNames, formatter) end return table.concat(formatterNames, " ") end local bufnr = vim.api.nvim_get_current_buf() local lsp_clients = lsp_format.get_format_clients({ bufnr = bufnr }) if not vim.tbl_isempty(lsp_clients) then return "󰷈 LSP Formatter" end return "" end
 
 				-- my custom config
 				-- return { options = { theme = "auto", component_separators = "", section_separators = { left = icons.lualine.rsep, right = icons.lualine.lsep }, globalstatus = true, disabled_filetypes = { { "snacks_dashboard" } }, }, sections = { lualine_a = { { "mode", separator = { left = icons.lualine.lsep }, right_padding = 2 } }, lualine_b = { "branch" }, lualine_c = { { "filetype", padding = { left = 1, right = 0 }, icon_only = true, }, { "filename", path = 1, symbols = { modified = icons.lualine.modified, readonly = icons.lualine.readonly, unnamed = icons.lualine.unnamed, newfile = icons.lualine.newfile, }, padding = 0, }, {"diagnostics"}, { macro, color = "lualine_c_diagnostics_error_insert", }, { "diff", symbols = { added = icons.git.added .. " ", modified = icons.git.modified .. " ", removed = icons.git.removed .. " ", }, source = function() local gitsigns = vim.b.gitsigns_status_dict if gitsigns then return { added = gitsigns.added, modified = gitsigns.changed, removed = gitsigns.removed, } end end, diff_color = { added = "GitSignsStagedAdd", modified = "GitSignsStagedChange", removed = "GitSignsStagedDelete"}, }, }, lualine_x = { { "lsp_status", formatters, }, }, lualine_y = { { "fileformat", padding = { left = 0, right = 0 } }, "location", }, lualine_z = { { "progress", }, }, }, tabline = { lualine_a = { { "buffers", mode = 4, hide_filename_extension = true, symbols = { alternate_file = icons.lualine.alternate .. " ", modified = " " .. icons.lualine.modified, }, filetype_names = { snacks_picker_list = icons.filetype.snacks_picker_list, ["dap-view-term"] = icons.debug.bug, }, use_mode_colors = true, cond = function() if vim.fn.expand("%") == "" then return false else return true end end, }, }, lualine_b = {}, lualine_c = {}, lualine_x = { { trouble.get, cond = trouble.has, }, }, lualine_y = { { "tabs", use_mode_colors = true, show_modified_status = false, }, }, lualine_z = {}, } }
@@ -1261,7 +1443,7 @@ return {
 							rm = colors.cyan,
 							["r?"] = colors.cyan,
 							["!"] = colors.red,
-							t = colors.red,
+							t = colors.green,
 						}
 						return { fg = colors.darkblue, bg = mode_color[vim.fn.mode()] }
 					end,
@@ -1694,7 +1876,7 @@ return {
 			map("n", "<Leader>fb", function() Snacks.picker.buffers() end, { desc = "buffers" })
 			map("n", "<Leader>fd", function() Snacks.picker.diagnostics_buffer() end, { desc = "diagnostics" })
 			map("n", "<Leader>fk", function() Snacks.picker.keymaps() end, { desc = "keymaps" })
-			map("n", "<Leader>fl", function() Snacks.picker.highlights() end, { desc = "Highlights" })
+			map("n", "<Leader>fH", function() Snacks.picker.highlights() end, { desc = "Highlights" })
 			map("n", "<Leader>fm", function() Snacks.picker.marks() end, { desc = "marks" })
 			map("n", "<Leader>fp", function() Snacks.picker.projects() end, { desc = "projects" })
 			map("n", "<Leader>fq", function() Snacks.picker.qflist() end, { desc = "quickfix list" })
