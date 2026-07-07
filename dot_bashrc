@@ -67,9 +67,9 @@ fi
 alias watch='watch -c -n 0.5'
 alias lg="lazygit"
 alias tm="tmux"
-alias tma="tmux new-session -A -t 0 -s A"
-alias tmb="tmux new-session -A -t 0 -s B"
-alias tmc="tmux new-session -A -t 0 -s C"
+alias tma="tmux new-session -A -s A"
+alias tmb="tmux new-session -A -s B"
+alias tmc="tmux new-session -A -s C"
 alias ch="chezmoi"
 alias cl="clear"
 alias csvlens="csvlens --colorful"
