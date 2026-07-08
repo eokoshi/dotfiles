@@ -90,7 +90,7 @@ if [[ $REPLY =~ ^[Yy]$ ]]; then
 	tar -zxf "$FILENAME"
 	cd "$DIR_NAME"
 
-	./configure
+	./configure --enable-sixel
 	make
 	sudo make install
 
