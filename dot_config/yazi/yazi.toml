@@ -1,6 +1,6 @@
 [mgr]
 sort_sensitive = false
-show_hidden = true
+show_hidden = false
 linemode = "size_and_mtime"
 scrolloff = 4
 
