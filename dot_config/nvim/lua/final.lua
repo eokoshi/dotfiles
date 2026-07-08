@@ -5,15 +5,12 @@ vim.filetype.add({
 	filename = {
 		["dot_bashrc"] = "bash",
 	},
-	extension = {
-		tmpl = "gotmpl",
-		age = "age",
-	},
-})
-
-vim.filetype.add({
 	pattern = {
 		["compose.*%.ya?ml"] = "yaml.docker-compose",
 		["docker%-compose.*%.ya?ml"] = "yaml.docker-compose",
+	},
+	extension = {
+		tmpl = "gotmpl",
+		age = "age",
 	},
 })

@@ -743,6 +743,7 @@ return {
 				end
 
 				local function inArray(array, x)
+					if not array then return false end
 					for _, v in ipairs(array) do
 						if v == x then return true end
 					end
@@ -1307,7 +1308,7 @@ return {
 					},
 				},
 				lsp = {
-					progress = { enabled = true },
+					progress = { enabled = false },
 					override = {
 						["cmp.entry.get_documentation"] = false,
 					},
@@ -1469,6 +1470,14 @@ return {
 					cond = conditions.buffer_not_empty,
 					path = 1,
 					color = { fg = colors.magenta, gui = "bold" },
+				})
+				ins_right({
+					"lsp_status",
+					icon = "",
+					symbols = { done = "", separator = "" },
+					show_name = false,
+					padding = 0,
+					color = { fg = colors.cyan },
 				})
 				ins_right({
 					lsp_format,
