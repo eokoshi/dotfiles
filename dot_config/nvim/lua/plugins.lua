@@ -1572,6 +1572,7 @@ return {
 						"docker-language-server",
 						"stylua",
 						"ruff",
+						"emmylua_ls",
 						"prettier",
 						"fixjson",
 						"tombi",
