@@ -15,10 +15,10 @@ displayed_models = []
 [ai.open_ai]
 
 [completion]
-activate_on_typing = true
+activate_on_typing = false
 auto_close_pairs = true
 copilot = "custom"
-signature_hint_on_typing = false
+signature_hint_on_typing = true
 
 [diagnostics]
 enabled = false
@@ -49,6 +49,9 @@ enable_pydocstyle = false
 enable_pyflakes = false
 enable_pylint = false
 enable_ruff = false
+enabled = true
+
+[language_servers.ty]
 enabled = false
 
 [mcp]
@@ -74,7 +77,7 @@ watcher_on_save = "autorun"
 [save]
 autosave = "off"
 autosave_delay = 1000
-format_on_save = false
+format_on_save = true
 
 [server]
 browser = "default"
