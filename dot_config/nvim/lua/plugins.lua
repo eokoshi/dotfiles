@@ -66,9 +66,6 @@ return {
 				},
 				sources = {
 					default = { "lsp", "path", "snippets", "buffer", "ripgrep" },
-					per_filetype = {
-						lua = { inherit_defaults = true, "lazydev" },
-					},
 					providers = {
 						lsp = {
 							score_offset = 10,
@@ -96,11 +93,6 @@ return {
 							},
 							score_offset = -1,
 							async = true,
-						},
-						lazydev = {
-							name = "LazyDev",
-							module = "lazydev.integrations.blink",
-							score_offset = 100,
 						},
 					},
 				},
@@ -253,6 +245,7 @@ return {
 			cmd = "Obsidian",
 			enabled = vim.fn.has("win32") == 1,
 			---@module 'obsidian'
+			---@diagnostic disable-next-line: type-not-found
 			---@type obsidian.config
 			opts = function()
 				return {
@@ -266,6 +259,7 @@ return {
 							path = "~/Documents/Obsidian",
 						},
 					},
+					---@diagnostic disable-next-line: unresolved-require
 					note_id_func = require("obsidian.builtin").title_id,
 					templates = { folder = "Templates" },
 					picker = { name = "snacks.picker" },
@@ -290,6 +284,7 @@ return {
 					pattern = "ObsidianNoteEnter",
 					callback = function()
 						vim.keymap.set("n", "<CR>", function()
+							---@diagnostic disable-next-line: unresolved-require
 							local M = require("obsidian.api")
 							if M.cursor_link() then
 								return "<cmd>Obsidian follow_link<cr>"
@@ -315,6 +310,7 @@ return {
 						if string.match(vim.v.event.directory, "\\Obsidian") then
 							vim.system(
 								{ "git", "pull" },
+								---@diagnostic disable-next-line: param-type-mismatch
 								{
 									cwd = vim.fn.expand("$HOME/Documents/Obsidian"),
 									text = true,
@@ -686,20 +682,19 @@ return {
 			},
 			init = function()
 				local _, MiniFiles = pcall(require, "mini.files")
+				if not MiniFiles then return end
 				local nsMiniFiles = vim.api.nvim_create_namespace("mini_files_git")
-				local autocmd = vim.api.nvim_create_autocmd
 
 				-- Cache for git status
 				local gitStatusCache = {}
 				local cacheTimeout = 2000 -- in milliseconds
-				local uv = vim.uv or vim.loop
+				local uv = vim.uv
 
 				local function isSymlink(path)
 					local stat = uv.fs_lstat(path)
 					return stat and stat.type == "link"
 				end
 
-				---@type table<string, {symbol: string, hlGroup: string}>
 				---@param status string
 				---@return string symbol, string hlGroup
 				local function mapSymbols(status, is_symlink)
@@ -738,7 +733,6 @@ return {
 					local function on_exit(content)
 						if content.code == 0 then callback(content.stdout) end
 					end
-					---@see vim.system
 					vim.system({ "git", "status", "-uall", "--ignored=matching", "--porcelain" }, { text = true, cwd = clean_cwd }, on_exit)
 				end
 
@@ -759,6 +753,7 @@ return {
 						local nlines = vim.api.nvim_buf_line_count(buf_id)
 						local cwd = vim.fs.root(buf_id, ".git")
 						local escapedcwd = cwd and vim.pesc(cwd)
+						---@diagnostic disable-next-line: param-type-mismatch
 						escapedcwd = vim.fs.normalize(escapedcwd)
 						for i = 1, nlines do
 							local entry = MiniFiles.get_fs_entry(buf_id, i)
@@ -787,7 +782,7 @@ return {
 										hl_mode = "combine",
 									})
 									local line = vim.api.nvim_buf_get_lines(buf_id, i - 1, i, false)[1]
-									local nameStartCol = line:find(vim.pesc(entry.name)) or 0
+									local nameStartCol = line--[[@cast -?]]:find(vim.pesc(entry.name)) or 0
 									if nameStartCol > 0 then
 										vim.api.nvim_buf_set_extmark(buf_id, nsMiniFiles, i - 1, nameStartCol - 1, {
 											end_col = nameStartCol + #entry.name - 1,
@@ -806,9 +801,12 @@ return {
 					local gitStatusMap = {}
 					for line in content:gmatch("[^\r\n]+") do
 						local status, filePath = string.match(line, "^(..)%s+(.*)")
+						---@diagnostic disable-next-line: param-type-mismatch
 						if status == "R " then filePath = string.match(filePath, "^.*%s%-%>%s(.*)") end
 						local parts = {}
-						for part in filePath:gmatch("[^/]+") do
+						for part in
+							filePath--[[@cast -?]]:gmatch("[^/]+")
+						do
 							table.insert(parts, part)
 						end
 						local currentKey = ""
@@ -853,12 +851,12 @@ return {
 				---@return nil
 				local function clearCache() gitStatusCache = {} end
 				local function augroup(name) return vim.api.nvim_create_augroup("MiniFiles_" .. name, { clear = true }) end
-				autocmd("User", {
+				vim.api.nvim_create_autocmd("User", {
 					group = augroup("close"),
 					pattern = "MiniFilesExplorerClose",
 					callback = function() clearCache() end,
 				})
-				autocmd("User", {
+				vim.api.nvim_create_autocmd("User", {
 					group = augroup("update"),
 					pattern = "MiniFilesBufferUpdate",
 					callback = function(args)
@@ -1115,9 +1113,11 @@ return {
 		},
 		{
 			"folke/flash.nvim",
-			event = "VeryLazy",
+			event = "InsertEnter",
+			---@type Flash.Config
 			opts = {
 				modes = {
+					---@diagnostic disable-next-line: missing-fields
 					char = {
 						enabled = false,
 						autohide = true,
@@ -1133,12 +1133,13 @@ return {
 					enabled = false,
 				},
 			},
-			keys = {
-				{ "+", mode = { "n", "x", "o" }, function() require("flash").jump() end, desc = "Flash" },
-				{ "H", mode = { "n", "x", "o" }, function() require("flash").treesitter() end, desc = "Flash treesitter" },
-				{ "L", mode = { "n", "x", "o" }, function() require("flash").treesitter_search() end, desc = "Flash treesitter search" },
-				{ "r", mode = "o", function() require("flash").remote() end, desc = "Remote Flash" },
-			},
+			init = function()
+				---@type Flash.Commands
+				local flash = require("flash")
+				map({ "n", "x", "o" }, "+", function() flash.jump() end, { desc = "Flash" })
+				map({ "n", "x", "o" }, "-", function() flash.treesitter() end, { desc = "Flash treesitter" })
+				map("o", "r", function() flash.remote() end, { desc = "Remote Flash" })
+			end,
 		},
 
 		{
@@ -1154,12 +1155,6 @@ return {
 
 		{
 			"nvimdev/hlsearch.nvim",
-			opts = {},
-		},
-
-		{
-			"folke/lazydev.nvim",
-			ft = "lua",
 			opts = {},
 		},
 
@@ -1330,20 +1325,20 @@ return {
 			"nvim-lualine/lualine.nvim",
 			opts = function()
 				local macro = require("lualine.component"):extend()
-				function macro:update_status()
+				function macro.update_status()
 					local reg = vim.fn.reg_recording()
 					if reg == "" then return "" end
 					return "recording @" .. reg
 				end
 
 				local lsp_format = require("lualine.component"):extend()
-				function lsp_format:update_status()
+				function lsp_format.update_status()
 					local out = ""
 					local bufnr = vim.api.nvim_get_current_buf()
 					if #vim.lsp.get_clients({ bufnr = bufnr }) > 0 then out = out .. " " end
 
-					local status, conform = pcall(require, "conform")
-					if not status then return "Conform not installed" end
+					local _, conform = pcall(require, "conform")
+					if not conform then return "Conform not installed" end
 					if #conform.list_formatters_for_buffer(bufnr) > 0 then out = out .. "󰉼" end
 
 					return out
@@ -1571,7 +1566,6 @@ return {
 					}
 				else
 					installs = {
-						"lua-language-server",
 						"ty",
 						"bashls",
 						"marksman",
@@ -1712,12 +1706,15 @@ return {
 			image = { enabled = true, math = { enabled = false } },
 			indent = { enabled = true, scope = { only_current = true } },
 			input = { enabled = true },
+			---@diagnostic disable-next-line: missing-fields
 			lazygit = { theme = { selectedLineBgColor = { bg = "Visual" } } },
 			picker = {
 				layout = function()
 					if vim.o.columns >= 140 then
+						---@diagnostic disable-next-line: return-type-mismatch
 						return { preset = "default" }
 					else
+						---@diagnostic disable-next-line: return-type-mismatch
 						return {
 							layout = {
 								box = "vertical",
@@ -1824,6 +1821,7 @@ return {
 			quickfile = { enabled = true },
 			scope = { enabled = false },
 			scratch = {
+				---@diagnostic disable-next-line: missing-fields
 				win = {
 					wo = {
 						number = true,
@@ -1845,7 +1843,9 @@ return {
 				pattern = "VeryLazy",
 				group = group,
 				callback = function()
+					---@diagnostic disable-next-line: global-in-non-module
 					_G.dd = function(...) Snacks.debug.inspect(...) end
+					---@diagnostic disable-next-line: global-in-non-module
 					_G.bt = function() Snacks.debug.backtrace() end
 					vim.print = _G.dd
 				end,
@@ -1881,11 +1881,13 @@ return {
 			map("n", "<Leader>fr", function() Snacks.picker.recent() end, { desc = "recent" })
 			map("n", "<Leader>fu", function() Snacks.picker.undo() end, { desc = "undo" })
 			map("n", "<Leader>fz", function() Snacks.picker.files({ cwd = vim.fn.stdpath("config") }) end, { desc = "local config" })
+			map("n", "<Leader>fS", function() Snacks.picker.scratch() end, { desc = "local config" })
 
 			map("n", "<Leader>bs", function() Snacks.scratch() end, { desc = "scratch buffer" })
 			map("n", "<Leader>bS", function() Snacks.scratch.select() end, { desc = "search scratch buffers" })
 			map("n", "<Leader>uc", function() Snacks.picker.colorschemes() end, { desc = "search colorschemes" })
 			map("n", "<Leader>uz", function() Snacks.zen.zoom() end, { desc = "zoom pane" })
+			---@diagnostic disable-next-line: missing-parameter
 			map("n", "<Leader>uZ", function() Snacks.zen() end, { desc = "Zen mode" })
 			map("n", "<Leader>un", function() Snacks.notifier.hide() end, { desc = "dismiss all notifications" })
 			map("n", "<Leader>gl", function() Snacks.picker.git_log_file() end, { desc = "Log file" })
@@ -1959,44 +1961,40 @@ return {
 				})
 				vim.fn.setcursorcharpos(pos)
 			end, { desc = "insert icon" })
-			map(
-				"n",
-				"<Leader>N",
-				function()
-					require("snacks").picker.notifications({
-						confirm = { "yank", "close" },
-						focus = "list",
+			map("n", "<Leader>N", function()
+				require("snacks").picker.notifications({
+					confirm = { "yank", "close" },
+					focus = "list",
+					layout = {
+						---@diagnostic disable-next-line: missing-fields
 						layout = {
-							layout = {
-								box = "vertical",
-								backdrop = false,
-								width = 0.8,
-								min_width = 90,
+							box = "vertical",
+							backdrop = false,
+							width = 0.8,
+							min_width = 90,
+							height = 0.8,
+							min_height = 30,
+							border = "rounded",
+							title = "{title} {live} {flags}",
+							title_pos = "center",
+							{ win = "input", height = 1, border = "bottom" },
+							{ win = "list", border = "none" },
+							{
+								win = "preview",
+								title = "{preview}",
 								height = 0.8,
-								min_height = 30,
-								border = "rounded",
-								title = "{title} {live} {flags}",
-								title_pos = "center",
-								{ win = "input", height = 1, border = "bottom" },
-								{ win = "list", border = "none" },
-								{
-									win = "preview",
-									title = "{preview}",
-									height = 0.8,
-									border = "top",
-									wo = { wrap = true, statuscolumn = "%l ", relativenumber = false, foldcolumn = "0" },
-								},
+								border = "top",
+								wo = { wrap = true, statuscolumn = "%l ", relativenumber = false, foldcolumn = "0" },
 							},
 						},
-						win = {
-							input = { keys = { ["<C-Space>"] = { "cycle_win", mode = { "i", "n" } } } },
-							list = { keys = { ["<C-Space>"] = { "cycle_win", mode = { "i", "n" } } } },
-							preview = { keys = { ["<C-Space>"] = { "cycle_win", mode = { "i", "n" } } } },
-						},
-					})
-				end,
-				{ desc = "Notification history" }
-			)
+					},
+					win = {
+						input = { keys = { ["<C-Space>"] = { "cycle_win", mode = { "i", "n" } } } },
+						list = { keys = { ["<C-Space>"] = { "cycle_win", mode = { "i", "n" } } } },
+						preview = { keys = { ["<C-Space>"] = { "cycle_win", mode = { "i", "n" } } } },
+					},
+				})
+			end, { desc = "Notification history" })
 		end,
 	},
 
@@ -2031,13 +2029,72 @@ return {
 						vim.cmd("SnipRun")
 						vim.cmd("normal! ")
 					end, { desc = "Run above", buffer = true })
-					map("n", "<Leader>r<Space>", function()
-						vim.api.nvim_feedkeys("vaj", "n", false)
-						vim.cmd("SnipRun")
-						vim.cmd("normal! ")
-					end, { desc = "Run cell", buffer = true })
+					-- map("n", "<Leader>r<Space>", function()
+					-- 	vim.api.nvim_feedkeys("vaj", "n", false)
+					-- 	vim.cmd("SnipRun")
+					-- 	vim.cmd("normal! ")
+					-- end, { desc = "Run cell", buffer = true })
+
+					-- TODO: API viewer
+					-- local sa = require("sniprun.api")
+					-- local function listener(d)
+					-- 	local config = { midline_pct = 0.4, topline_pct = 0.2, height_pct = 0.6, outwin = { width_pct = 0.55 } }
+					-- 	vim.b.sniprun_buf = vim.api.nvim_get_current_buf()
+					-- 	vim.b.sniprun_win = vim.api.nvim_get_current_win()
+					-- 	local win_config = vim.api.nvim_win_get_config(vim.b.sniprun_win)
+					-- 	if win_config.relative ~= "" then
+					-- 		local cols, rows = vim.o.columns, vim.o.lines
+					-- 		local height = math.ceil(rows * config.height_pct)
+					-- 		vim.api.nvim_win_set_config(
+					-- 			vim.b.sniprun_win,
+					-- 			{ relative = "editor", anchor = "NE", col = cols * config.midline_pct, row = rows * config.topline_pct, height = height }
+					-- 		)
+					-- 		if not vim.b.sniprun_outbuf then vim.b.sniprun_outbuf = vim.api.nvim_create_buf(false, true) end
+					-- 		vim.schedule(function()
+					-- 			if vim.b.sniprun_outwin == nil then
+					-- 				vim.b.sniprun_outwin = vim.api.nvim_open_win(
+					-- 					vim.b.sniprun_outbuf,
+					-- 					false,
+					-- 					{
+					-- 						relative = "editor",
+					-- 						col = cols * config.midline_pct,
+					-- 						row = rows * config.topline_pct,
+					-- 						width = math.max(win_config.width, math.ceil(cols * config.outwin.width_pct)),
+					-- 						height = height,
+					-- 						style = "minimal",
+					-- 					}
+					-- 				)
+					-- 				vim.api.nvim_create_autocmd(
+					-- 					"BufHidden",
+					-- 					{
+					-- 						group = vim.api.nvim_create_augroup("SnipRun_APIWinClose", { clear = true }),
+					-- 						pattern = tostring(vim.b.sniprun_buf),
+					-- 						callback = function() vim.api.nvim_win_close(vim.b.sniprun_outwin, true) end,
+					-- 					}
+					-- 				)
+					-- 			end
+					-- 		end)
+					-- 		vim.api.nvim_set_option_value("winhl", vim.wo[vim.b.sniprun_win].winhighlight, { win = vim.b.sniprun_outwin })
+					-- 		print("in floating cond", vim.b.sniprun_outbuf, vim.b.sniprun_outwin)
+					-- 		if vim.b.sniprun_outbuf == 0 or vim.b.sniprun_outwin == 0 then
+					-- 			vim.notify("SnipRun output buffer could not be created", vim.log.levels.ERROR)
+					-- 			return
+					-- 		end
+					-- 		print("hellooo")
+					-- 		if d.status == "ok" then
+					-- 			print("nice: ", d.message)
+					-- 		elseif d.status == "error" then
+					-- 			print("no: ", d.message)
+					-- 		else
+					-- 			print("Unknown status: ", d.status)
+					-- 		end
+					-- 	end
+					-- end
+					-- if #sa.listeners == 0 then sa.register_listener(listener) end
+
 				end,
 			})
+
 		end,
 	},
 
