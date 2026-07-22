@@ -1640,7 +1640,7 @@ return {
 			bigfile = { enabled = true },
 			terminal = {
 				win = {
-					wo = { statuscolumn = " " },
+					wo = { statuscolumn = " ", winhighlight = "Normal:Normal,FloatBorder:Green" },
 					position = "float",
 					backdrop = 100,
 					border = "rounded",
@@ -1702,7 +1702,7 @@ return {
 						title = "Recent Files",
 						indent = 2,
 						padding = 2,
-						limit = 20,
+						limit = 10,
 					},
 					{ section = "startup" },
 				},
