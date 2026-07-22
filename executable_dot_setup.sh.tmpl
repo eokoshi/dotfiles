@@ -42,8 +42,6 @@ ya pkg upgrade
 
 curl -LsSf https://astral.sh/uv/install.sh | sh
 uv python install
-uv tool install visidata --with openpyxl --with lxml 
-uv tool install speedtest-cli
 
 # tailscale
 echo ""
@@ -69,7 +67,7 @@ chezmoi init --apply eokoshi
 
 ## apt packages
 sudo apt-get update
-sudo apt-get -y --ignore-missing install ripgrep fd-find python3-venv npm direnv lsd unzip curl openssh-server speedtest-cli visidata
+sudo apt-get -y --ignore-missing install ripgrep fd-find python3-venv npm direnv lsd unzip curl openssh-server
 sudo service ssh start
 sudo ln -sf /usr/bin/fdfind ~/.local/bin/fd
 
