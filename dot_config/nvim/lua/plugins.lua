@@ -645,6 +645,7 @@ return {
 				keymaps = {
 					view = {
 						toggle_explorer = "<leader>e",
+						focus_explorer = false,
 						stage_hunk = "<leader>gs",
 						unstage_hunk = "<leader>gu",
 						discard_hunk = "<leader>gr",
@@ -940,6 +941,7 @@ return {
 		},
 		{
 			"dmtrKovalenko/fff.nvim",
+			version = "0.10.0",
 			build = function() require("fff.download").download_or_build_binary() end,
 			lazy = false,
 			opts = {
@@ -2293,10 +2295,7 @@ return {
 	-- LSP/Diagnostics
 	{
 		{
-			"WilliamHsieh/overlook.nvim",
-			event = "LspAttach",
-			opts = {},
-			init = function() map("n", "go", require("overlook.api").peek_definition, { desc = "Peek definition" }) end,
+			-- "WilliamHsieh/overlook.nvim", event = "LspAttach", opts = {}, init = function() map("n", "go", require("overlook.api").peek_definition, { desc = "Peek definition" }) end,
 		},
 		{
 			-- "folke/trouble.nvim", cmd = "Trouble", opts = { focus = true, modes = { diagnostics = { mode = "diagnostics", preview = { type = "split", relative = "win", position = "left", size = 20, }, filter = function(items) local severity = vim.diagnostic.severity.HINT for _, item in ipairs(items) do severity = math.min(severity, item.severity) end return vim.tbl_filter(function(item) return item.severity == severity end, items) end, }, }, win = { colorcolumn = false, }, }, init = function() map("n", "<Leader>t", "", { desc = "Trouble" }) map("n", "<Leader>td", "<CMD>Trouble diagnostics toggle filter.buf=0<CR>", { desc = "diagnostics" }) map("n", "<Leader>tD", "<CMD>Trouble diagnostics toggle<CR>", { desc = "workspace diagnostics" }) map("n", "<Leader>ts", "<CMD>Trouble symbols toggle focus=true pinned=true win.relative=editor<CR>", { desc = "symbols" }) map( "n", "<Leader>tS", "<CMD>Trouble lsp_document_symbols toggle pinned=true win.relative=editor win.position=right<CR>", { desc = "all symbols" }) map("n", "<Leader>tl", "<CMD>Trouble loclist<CR>", { desc = "loclist" }) map("n", "<Leader>tq", "<CMD>Trouble qflist<CR>", { desc = "quickfix list" }) map("n", "<Leader>tt", "<CMD>TodoTrouble<CR>", { desc = "Todo List" }) end,
