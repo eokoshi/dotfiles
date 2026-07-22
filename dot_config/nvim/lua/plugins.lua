@@ -962,51 +962,12 @@ return {
 					combo_header = "Number",
 					scrollbar = "Comment",
 					directory_path = "Comment",
-					-- Multi-select highlights
-					selected = "FFFSelected",
-					selected_active = "FFFSelectedActive",
-					-- Git text highlights for file names
-					git_staged = "FFFGitStaged",
-					git_modified = "FFFGitModified",
-					git_deleted = "FFFGitDeleted",
-					git_renamed = "FFFGitRenamed",
-					git_untracked = "FFFGitUntracked",
-					git_ignored = "FFFGitIgnored",
-					-- Git sign/border highlights
-					git_sign_staged = "FFFGitSignStaged",
-					git_sign_modified = "FFFGitSignModified",
-					git_sign_deleted = "FFFGitSignDeleted",
-					git_sign_renamed = "FFFGitSignRenamed",
-					git_sign_untracked = "FFFGitSignUntracked",
-					git_sign_ignored = "FFFGitSignIgnored",
-					-- Git sign selected highlights
-					git_sign_staged_selected = "FFFGitSignStagedSelected",
-					git_sign_modified_selected = "FFFGitSignModifiedSelected",
-					git_sign_deleted_selected = "FFFGitSignDeletedSelected",
-					git_sign_renamed_selected = "FFFGitSignRenamedSelected",
-					git_sign_untracked_selected = "FFFGitSignUntrackedSelected",
-					git_sign_ignored_selected = "FFFGitSignIgnoredSelected",
-					-- Grep highlights
 					grep_match = "Red", -- Highlight for matched text in grep results
 					grep_line_number = "LineNr", -- Highlight for :line:col location
 					grep_regex_active = "DiagnosticInfo", -- Highlight for keybind + label when regex is on
 					grep_plain_active = "Comment", -- Highlight for keybind + label when regex is off
 					grep_fuzzy_active = "DiagnosticHint", -- Highlight for keybind + label when fuzzy is on
-					-- Cross-mode suggestion highlights
 					suggestion_header = "WarningMsg", -- Highlight for the "No results found. Suggested..." banner
-					-- File info panel highlights
-					file_info_section = "FFFFileInfoSection", -- Section header label (e.g. "file", "score")
-					file_info_separator = "FFFFileInfoSeparator", -- Dash dividers used like a border
-					file_info_label = "FFFFileInfoLabel", -- Row labels (Size, Type, Git, ...)
-					file_info_value = "FFFFileInfoValue", -- Plain values
-					file_info_value_dim = "FFFFileInfoValueDim", -- Tertiary values, separators inside rows
-					file_info_size = "FFFFileInfoSize", -- File size value
-					file_info_type = "FFFFileInfoType", -- Filetype value
-					file_info_path = "FFFFileInfoPath", -- Full path value
-					file_info_total_score = "FFFFileInfoTotalScore", -- Total score (bold)
-					file_info_match_type = "FFFFileInfoMatchType", -- match_type label (bold)
-					file_info_score_pos = "FFFFileInfoScorePos", -- Positive score components
-					file_info_score_neg = "FFFFileInfoScoreNeg", -- Negative score components / penalties
 				},
 				git = {
 					status_text_color = true,
@@ -1652,10 +1613,9 @@ return {
 						-- { icon = " ", key = "n", desc = "New File", action = ":ene | startinsert" },
 						{
 							icon = " ",
-							key = "ff",
+							key = "f",
 							desc = "Find File",
-							action = ":FFFFind",
-							-- action = ":lua Snacks.dashboard.pick('files')",
+							action = ":lua Snacks.dashboard.pick('files')",
 						},
 						{
 							icon = "󰙅 ",

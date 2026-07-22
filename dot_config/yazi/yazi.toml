@@ -8,7 +8,7 @@ scrolloff = 4
 prepend_previewers = [
   { url = "*.ipynb", run = 'piper -- nbpreview --no-paging --nerd-font --decorated --no-files --unicode --color --images --color-system=standard --theme=ansi_dark "$1"' },
   { url = "*.h5", run = 'piper -- h5ls "$1"' },
-  { url = "*.csv", run = 'piper -- echo "N rows: " && xan count "$1"' }
+  { url = "*.csv", run = 'piper -- echo "N rows: " && xan count "$1" && echo "" && xan flatten "$1" -l 1 && echo "" && xan stats "$1" | xan view -s type,count,mean' }
 ]
 prepend_fetchers = [
   { url = "*", run = "git", group = "git" },
