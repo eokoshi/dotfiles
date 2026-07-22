@@ -1656,9 +1656,10 @@ return {
 						-- { icon = " ", key = "n", desc = "New File", action = ":ene | startinsert" },
 						{
 							icon = " ",
-							key = "f",
+							key = "ff",
 							desc = "Find File",
-							action = ":lua Snacks.dashboard.pick('files')",
+							action = ":FFFFind",
+							-- action = ":lua Snacks.dashboard.pick('files')",
 						},
 						{
 							icon = "󰙅 ",
