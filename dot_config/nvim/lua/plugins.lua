@@ -1099,9 +1099,9 @@ return {
 			init = function()
 				---@type Flash.Commands
 				local flash = require("flash")
-				map({ "n", "x", "o" }, "+", function() flash.jump() end, { desc = "Flash" })
-				map({ "n", "x", "o" }, "-", function() flash.treesitter() end, { desc = "Flash treesitter" })
-				map("o", "r", function() flash.remote() end, { desc = "Remote Flash" })
+				map({ "n", "x", "o" }, "+", function() flash.jump() end, { desc = "Flash Jump" })
+				map({ "n", "x", "o" }, "-", function() flash.treesitter() end, { desc = "Flash Treesitter" })
+				map("o", "r", function() flash.remote() end, { desc = "Flash Remote" })
 			end,
 		},
 
