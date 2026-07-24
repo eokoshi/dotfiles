@@ -74,7 +74,6 @@ alias ch="chezmoi"
 alias cl="clear"
 alias csvlens="csvlens --colorful"
 alias timeit="/usr/bin/time -f %Mkb:%es"
-alias nv='nvim'
 if lsd >&/dev/null; then
 	alias ls='lsd'
 	alias ll='lsd -alFg'
@@ -82,6 +81,12 @@ if lsd >&/dev/null; then
 fi
 if rg >&/dev/null; then
 	alias grep='rg'
+fi
+if bat --help >&/dev/null; then
+	alias bathelp='bat --plain --language=help'
+	help() {
+			"$@" --help 2>&1 | bathelp
+	}
 fi
 # Add an "alert" alias for long running commands.  Use like so:
 #   sleep 10; alert
