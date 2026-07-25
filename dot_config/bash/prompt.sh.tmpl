@@ -5,7 +5,9 @@
 # (Or, Make PS1)
 
 # Different functions generate different parts (segments) of the PS1 prompt.
-# Each function should leave the colors in a clean state (e.g. call reset if they changed any colors).
+# Each function should leave the colors in a clean state (e.g. call RESET if they changed any colors).
+
+RESET='\[\e[00m\]'
 
 __chroot() {
 	# This string is intentionally single-quoted:
@@ -25,22 +27,20 @@ __exitcode() {
 	local bg=1
 	local textcolor="\[\e[0;38;5;${fg};48;5;${bg}m\]"
 	local sepcolor="\[\e[38;5;${bg}m\]"
-	local reset='\[\e[00m\]'
 
 	if [[ $code -ne 0 ]]; then
-		echo "$sepcolor$lsep$textcolor $code $reset$sepcolor$rsep"
+		echo "$sepcolor$lsep$textcolor $code $RESET$sepcolor$rsep"
 	fi
 }
 
 __time() {
-	local l_arrow=$'\uE0B2'
-	local r_arrow=$'\uE0B0'
-	local bg=240
+	local l_arrow=""
+	local r_arrow=""
+	local bg=""
 	local sepcolor="\[\e[38;5;${bg}m\]"
-	local textcolor="\[\e[1;38;5;7;48;5;${bg}m\]"
-	local reset='\[\e[00m\]'
+	local textcolor="\[\e[1;38;5;242;48;5;${bg}m\]"
 
-	echo "$sepcolor$l_arrow$textcolor \t $reset$sepcolor$r_arrow$reset"
+	echo "$sepcolor$l_arrow$textcolor\t$RESET$sepcolor$r_arrow$RESET"
 }
 
 __hostname() {
@@ -65,9 +65,8 @@ __hostname() {
 	{{ else }}
 	local textcolor='\[\e[3;38;5;38m\]'
 	{{ end }}
-	local reset='\[\e[00m\]'
 
-	echo "$textcolor\h$reset"
+	echo "$textcolor\h$RESET"
 }
 
 __workdir() {
@@ -78,15 +77,12 @@ __workdir() {
 	local bg=4
 	local textcolor="\[\e[0;38;5;${fg};48;5;${bg}m\]"
 	local sepcolor="\[\e[38;5;${bg}m\]"
-	# match this value with git bg below when using seps
 	local sepcolor2="\[\e[38;5;${bg};48;5;235m\]"
-
 	local textcolor2="\[\e[0;38;5;69m\]"
-	local reset='\[\e[00m\]'
 
 	# use top one for the powerline style, bottom one for simple colored text
-	# echo "$sepcolor$lsep$textcolor \w $reset$sepcolor2$rsep"
-	echo "$textcolor2$diricon \w$reset"
+	# echo "$sepcolor$lsep$textcolor \w $RESET$sepcolor2$rsep"
+	echo "$textcolor2$diricon \w$RESET"
 }
 
 # For Git PS1
@@ -107,12 +103,11 @@ __git() {
 	local textcolor="\[\e[0;38;5;${fg};48;5;${bg}m\]"
 	local textcolor2="\[\e[0;38;5;248m\]"
 	local sepcolor="\[\e[38;05;${bg}m\]"
-	local reset='\[\e[00m\]'
 
 	# Escaping the $ is intentional:
 	# This is evaluated when the prompt is generated.
 	# echo "\$(__git_ps1 '$textcolor $gitbranch %s ')$reset$sepcolor$rsep$reset";
-	echo "\$(__git_ps1 '$textcolor2 $gitbranch %s ')$reset"
+	echo "\$(__git_ps1 '$textcolor2$gitbranch %s')$reset"
 
 }
 
@@ -124,9 +119,8 @@ __venv_get() {
 	local bg=33
 	local textcolor="\[\e[0;38;5;${fg};48;5;${bg}m\]"
 	local sepcolor="\[\e[38;05;${bg}m\]"
-	local reset='\[\e[00m\]'
 
-	[ -n "${VIRTUAL_ENV}" ] && echo "${sepcolor}${lsep}${textcolor}${python}${reset}${sepcolor}${rsep}${reset}"
+	[ -n "${VIRTUAL_ENV}" ] && echo "${sepcolor}${lsep}${textcolor}${python}${RESET}${sepcolor}${rsep}${RESET}"
 }
 
 __venv() {
@@ -135,22 +129,22 @@ __venv() {
 
 __box_top() {
 	local color='\[\e[38;5;242m\]'
-	local reset='\[\e[00m\]'
 	local curve='╭╴'
 	local box='┌╴'
 	local box_heavy='┏╸'
 	local double='╔═ '
+	local curlybracket='⎧ '
 
 	echo "$color$curve$reset"
 }
 
 __box_bottom() {
 	local color='\[\e[0;38;5;242m\]'
-	local reset='\[\e[00m\]'
 	local curve='╰╴'
 	local box='└╴'
 	local box_heavy='┗╸'
 	local double='╚═ '
+	local curlybracket='⎩ '
 
 	echo "$color$curve$reset"
 }
@@ -160,25 +154,23 @@ __user_prompt() {
 	local small_chevron=$'\ueab6 '
 	local box_icon=''
 	local textcolor='\[\e[1;38;5;13m\]'
-	local reset='\[\e[00m\]'
 	local input='\[\e[0;97m\]'
 
-	echo "$textcolor$box_icon$reset"
+	echo "$textcolor$box_icon$RESET"
 }
 
 check_chezmoi_nvim() {
 	local color='\[\e[0;38;5;9m\]'
-	local reset='\[\e[00m\]'
 	local icon=''
 
 	if ! chdiffnvim >/dev/null 2>&1; then
-		echo "$color$icon$reset"
+		echo "$color$icon$RESET"
 	fi
 }
 
 __mkps1() {
 	local ps1="
-	$(__box_top)$(__hostname) $(__chroot)$(__workdir) $(__git) $(check_chezmoi_nvim) $(__venv)  $(__exitcode)
-	$(__box_bottom)$(__user_prompt) "
+$(__box_top)$(__hostname) $(__chroot)$(__workdir) $(__time) $(__git) $(__venv)  $(__exitcode) $(check_chezmoi_nvim) 
+$(__box_bottom)$(__user_prompt) "
 	echo "$ps1"
 }
