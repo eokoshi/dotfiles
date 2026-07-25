@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/user/bin/env bash
 
 # MKPS1
 # (Mike Kasberg PS1)
@@ -7,171 +7,169 @@
 # Different functions generate different parts (segments) of the PS1 prompt.
 # Each function should leave the colors in a clean state (e.g. call reset if they changed any colors).
 
-__mkps1_chroot() {
-    # This string is intentionally single-quoted:
-    # It will be evaluated when $PS1 is evaluated to generate the prompt each time.
+__chroot() {
+	# This string is intentionally single-quoted:
+	# It will be evaluated when $PS1 is evaluated to generate the prompt each time.
 	{{- if eq .chezmoi.osRelease.id "ubuntu" }}
-    echo '${debian_chroot:+[$debian_chroot]} ';
+	echo '${debian_chroot:+[$debian_chroot]} '
 	{{- else }}
 	echo ""
 	{{- end }}
 }
 
-__mkps1_exitcode() {
-    local code="${LAST_EXIT:-0}"
-    local lsep=$'\ue0b2';
-    local rsep=$'\ue0b0';
-    local fg=7;
-    local bg=1;
-    local textcolor="\[\e[0;38;5;${fg};48;5;${bg}m\]";
-    local sepcolor="\[\e[38;5;${bg}m\]";
-    local reset='\[\e[00m\]';
-    
-    if [[ $code -ne 0 ]]; then
-        echo "$sepcolor$lsep$textcolor $code $reset$sepcolor$rsep"
-    fi
+__exitcode() {
+	local code="${LAST_EXIT:-0}"
+	local lsep=$'\ue0b2'
+	local rsep=$'\ue0b0'
+	local fg=7
+	local bg=1
+	local textcolor="\[\e[0;38;5;${fg};48;5;${bg}m\]"
+	local sepcolor="\[\e[38;5;${bg}m\]"
+	local reset='\[\e[00m\]'
+
+	if [[ $code -ne 0 ]]; then
+		echo "$sepcolor$lsep$textcolor $code $reset$sepcolor$rsep"
+	fi
 }
 
-__mkps1_time() {
-    local l_arrow=$'\uE0B2';
-    local r_arrow=$'\uE0B0';
-    local bg=240
-    local sepcolor="\[\e[38;5;${bg}m\]";
-    local textcolor="\[\e[1;38;5;7;48;5;${bg}m\]";
-    local reset='\[\e[00m\]';
+__time() {
+	local l_arrow=$'\uE0B2'
+	local r_arrow=$'\uE0B0'
+	local bg=240
+	local sepcolor="\[\e[38;5;${bg}m\]"
+	local textcolor="\[\e[1;38;5;7;48;5;${bg}m\]"
+	local reset='\[\e[00m\]'
 
-    echo "$sepcolor$l_arrow$textcolor \t $reset$sepcolor$r_arrow$reset";
+	echo "$sepcolor$l_arrow$textcolor \t $reset$sepcolor$r_arrow$reset"
 }
 
-__mkps1_hostname() {
-    {{ if eq .chezmoi.hostname "eeftop" }}
-    local textcolor='\[\e[3;38;5;14m\]';
-    {{ else if eq .chezmoi.hostname "office" }}
-    local textcolor='\[\e[3;38;5;10m\]';
-    {{ else if eq .chezmoi.hostname "DF1" }}
-    local textcolor='\[\e[3;38;5;214m\]';
-    {{ else if eq .chezmoi.hostname "DF2" }}
-    local textcolor='\[\e[3;38;5;1m\]';
-    {{ else if eq .chezmoi.hostname "blue-starfish" }}
-    local textcolor='\[\e[3;38;5;123m\]';
-    {{ else if eq .chezmoi.hostname "halo" }}
-    local textcolor='\[\e[3;38;5;211m\]';
-    {{ else if eq .chezmoi.hostname "eefix" }}
-    local textcolor='\[\e[3;38;5;99m\]';
-    {{ else if eq .chezmoi.hostname "eefplex7050" }}
-    local textcolor='\[\e[3;38;5;184m\]';
-    {{ else if eq .chezmoi.hostname "MANAS-HP" }}
-    local textcolor='\[\e[3;38;5;9m\]';
-    {{ else }}
-    local textcolor='\[\e[3;38;5;38m\]';
-    {{ end }}
-    local reset='\[\e[00m\]';
+__hostname() {
+	{{ if eq .chezmoi.hostname "eeftop" }}
+	local textcolor='\[\e[3;38;5;14m\]'
+	{{ else if eq .chezmoi.hostname "office" }}
+	local textcolor='\[\e[3;38;5;10m\]'
+	{{ else if eq .chezmoi.hostname "DF1" }}
+	local textcolor='\[\e[3;38;5;214m\]'
+	{{ else if eq .chezmoi.hostname "DF2" }}
+	local textcolor='\[\e[3;38;5;1m\]'
+	{{ else if eq .chezmoi.hostname "blue-starfish" }}
+	local textcolor='\[\e[3;38;5;123m\]'
+	{{ else if eq .chezmoi.hostname "halo" }}
+	local textcolor='\[\e[3;38;5;211m\]'
+	{{ else if eq .chezmoi.hostname "eefix" }}
+	local textcolor='\[\e[3;38;5;99m\]'
+	{{ else if eq .chezmoi.hostname "eefplex7050" }}
+	local textcolor='\[\e[3;38;5;184m\]'
+	{{ else if eq .chezmoi.hostname "MANAS-HP" }}
+	local textcolor='\[\e[3;38;5;9m\]'
+	{{ else }}
+	local textcolor='\[\e[3;38;5;38m\]'
+	{{ end }}
+	local reset='\[\e[00m\]'
 
-    echo "$textcolor\h$reset";
+	echo "$textcolor\h$reset"
 }
 
-__mkps1_workdir() {
-    local lsep=$'\ue0ba';
-    local rsep=$'\ue0b0';
-	local diricon='';
-    local fg=7;
-    local bg=4;
-    local textcolor="\[\e[0;38;5;${fg};48;5;${bg}m\]";
-    local sepcolor="\[\e[38;5;${bg}m\]";
-    # match this value with git bg below when using seps
-    local sepcolor2="\[\e[38;5;${bg};48;5;235m\]";
+__workdir() {
+	local lsep=$'\ue0ba'
+	local rsep=$'\ue0b0'
+	local diricon=''
+	local fg=7
+	local bg=4
+	local textcolor="\[\e[0;38;5;${fg};48;5;${bg}m\]"
+	local sepcolor="\[\e[38;5;${bg}m\]"
+	# match this value with git bg below when using seps
+	local sepcolor2="\[\e[38;5;${bg};48;5;235m\]"
 
-    local textcolor2="\[\e[0;38;5;69m\]";
-    local reset='\[\e[00m\]';
+	local textcolor2="\[\e[0;38;5;69m\]"
+	local reset='\[\e[00m\]'
 
-    # use top one for the powerline style, bottom one for simple colored text
-    # echo "$sepcolor$lsep$textcolor \w $reset$sepcolor2$rsep"
-    echo "$textcolor2$diricon \w$reset"
+	# use top one for the powerline style, bottom one for simple colored text
+	# echo "$sepcolor$lsep$textcolor \w $reset$sepcolor2$rsep"
+	echo "$textcolor2$diricon \w$reset"
 }
 
 # For Git PS1
 {{- if eq .chezmoi.osRelease.id "ubuntu" }}
-	source /usr/lib/git-core/git-sh-prompt;
+source /usr/lib/git-core/git-sh-prompt
 {{- else if eq .chezmoi.osRelease.id "opensuse-tumbleweed" }}
-	source /usr/share/bash-completion/completions/git-prompt.sh;
+source /usr/share/bash-completion/completions/git-prompt.sh
 {{- end }}
 # GIT_PS1_SHOWDIRTYSTATE=0
 # GIT_PS1_SHOWUPSTREAM="auto"
 
-__mkps1_git() {
-    local lsep=$'\ue0b6';
-    local rsep=$'\ue0b4';
-    local gitbranch=$'\ue0a0';
-    local fg=248;
-    local bg=235;
-    local textcolor="\[\e[0;38;5;${fg};48;5;${bg}m\]";
-    local textcolor2="\[\e[0;38;5;248m\]";
-    local sepcolor="\[\e[38;05;${bg}m\]";
-    local reset='\[\e[00m\]';
+__git() {
+	local lsep=$'\ue0b6'
+	local rsep=$'\ue0b4'
+	local gitbranch=$'\ue0a0'
+	local fg=248
+	local bg=235
+	local textcolor="\[\e[0;38;5;${fg};48;5;${bg}m\]"
+	local textcolor2="\[\e[0;38;5;248m\]"
+	local sepcolor="\[\e[38;05;${bg}m\]"
+	local reset='\[\e[00m\]'
 
-    # Escaping the $ is intentional:
-    # This is evaluated when the prompt is generated.
-    # echo "\$(__git_ps1 '$textcolor $gitbranch %s ')$reset$sepcolor$rsep$reset";
-    echo "\$(__git_ps1 '$textcolor2 $gitbranch %s ')$reset";
+	# Escaping the $ is intentional:
+	# This is evaluated when the prompt is generated.
+	# echo "\$(__git_ps1 '$textcolor $gitbranch %s ')$reset$sepcolor$rsep$reset";
+	echo "\$(__git_ps1 '$textcolor2 $gitbranch %s ')$reset"
 
 }
 
-__mkps1_venv_get() {
-    local python='󰌠';
-    local lsep=$'\ue0b6';
-    local rsep=$'\ue0b4';
-    local fg=220;
-    local bg=33;
-    local textcolor="\[\e[0;38;5;${fg};48;5;${bg}m\]";
-    local sepcolor="\[\e[38;05;${bg}m\]";
-    local reset='\[\e[00m\]';
-    
-    [ -n "${VIRTUAL_ENV}" ] && echo "${sepcolor}${lsep}${textcolor}${python}${reset}${sepcolor}${rsep}${reset}";
+__venv_get() {
+	local python='󰌠'
+	local lsep=$'\ue0b6'
+	local rsep=$'\ue0b4'
+	local fg=220
+	local bg=33
+	local textcolor="\[\e[0;38;5;${fg};48;5;${bg}m\]"
+	local sepcolor="\[\e[38;05;${bg}m\]"
+	local reset='\[\e[00m\]'
+
+	[ -n "${VIRTUAL_ENV}" ] && echo "${sepcolor}${lsep}${textcolor}${python}${reset}${sepcolor}${rsep}${reset}"
 }
 
-__mkps1_venv() {
-    echo "\$(__mkps1_venv_get)";
+__venv() {
+	echo "\$(__venv_get)"
 }
 
-
-__mkps1_box_top() {
-    local color='\[\e[38;5;242m\]';
-    local reset='\[\e[00m\]';
+__box_top() {
+	local color='\[\e[38;5;242m\]'
+	local reset='\[\e[00m\]'
 	local curve='╭╴'
 	local box='┌╴'
 	local box_heavy='┏╸'
 	local double='╔═ '
 
-    echo "$color$curve$reset";
+	echo "$color$curve$reset"
 }
 
-__mkps1_box_bottom() {
-    local color='\[\e[0;38;5;242m\]';
-    local reset='\[\e[00m\]';
+__box_bottom() {
+	local color='\[\e[0;38;5;242m\]'
+	local reset='\[\e[00m\]'
 	local curve='╰╴'
 	local box='└╴'
 	local box_heavy='┗╸'
 	local double='╚═ '
 
-    echo "$color$curve$reset";
+	echo "$color$curve$reset"
 }
 
+__user_prompt() {
+	local tall_chevron=$'\u3009'
+	local small_chevron=$'\ueab6 '
+	local box_icon=''
+	local textcolor='\[\e[1;38;5;13m\]'
+	local reset='\[\e[00m\]'
+	local input='\[\e[0;97m\]'
 
-__mkps1_user_prompt() {
-    local tall_chevron=$'\u3009';
-    local small_chevron=$'\ueab6 ';
-	local box_icon='';
-    local textcolor='\[\e[1;38;5;13m\]';
-    local reset='\[\e[00m\]';
-    local input='\[\e[0;97m\]'
-    
-    echo "$textcolor$box_icon$reset";
+	echo "$textcolor$box_icon$reset"
 }
 
 check_chezmoi_nvim() {
-    local color='\[\e[0;38;5;9m\]';
-    local reset='\[\e[00m\]';
-	local icon='';
+	local color='\[\e[0;38;5;9m\]'
+	local reset='\[\e[00m\]'
+	local icon=''
 
 	if ! chdiffnvim >/dev/null 2>&1; then
 		echo "$color$icon$reset"
@@ -179,6 +177,8 @@ check_chezmoi_nvim() {
 }
 
 __mkps1() {
-    local ps1="\n$(__mkps1_box_top)$(__mkps1_hostname) $(__mkps1_chroot)$(__mkps1_workdir) $(__mkps1_git) $(check_chezmoi_nvim) $(__mkps1_venv)  $(__mkps1_exitcode)\n$(__mkps1_box_bottom)$(__mkps1_user_prompt) ";
-    echo "$ps1";
+	local ps1="
+	$(__box_top)$(__hostname) $(__chroot)$(__workdir) $(__git) $(check_chezmoi_nvim) $(__venv)  $(__exitcode)
+	$(__box_bottom)$(__user_prompt) "
+	echo "$ps1"
 }

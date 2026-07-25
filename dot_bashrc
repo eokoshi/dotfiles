@@ -74,23 +74,11 @@ alias ch="chezmoi"
 alias cl="clear"
 alias csvlens="csvlens --colorful"
 alias timeit="/usr/bin/time -f %Mkb:%es"
-if lsd >&/dev/null; then
+if lsd --version >&/dev/null; then
 	alias ls='lsd'
 	alias ll='lsd -alFg'
 	alias la='lsd -A'
 fi
-if rg >&/dev/null; then
-	alias grep='rg'
-fi
-if bat --help >&/dev/null; then
-	alias bathelp='bat --plain --language=help'
-	help() {
-			"$@" --help 2>&1 | bathelp
-	}
-fi
-# Add an "alert" alias for long running commands.  Use like so:
-#   sleep 10; alert
-alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo error)" "$(history|tail -n1|sed -e '\''s/^\s*[0-9]\+\s*//;s/[;&|]\s*alert$//'\'')"'
 
 if [ -f ~/.bash_aliases ]; then
     . ~/.bash_aliases
@@ -101,7 +89,14 @@ if [ -f ~/.keys ]; then
 fi
 
 
-# some useful functions
+if bat --version >&/dev/null; then
+	alias bathelp="bat -plhelp"
+	function h() {
+			"$@" --help 2>&1 | bathelp
+	}
+	export MANPAGER="sh -c 'sed -u -e \"s/\\x1B\[[0-9;]*m//g; s/.\\x08//g\" | bat -p -lman'"
+fi
+
 function marimo-serve() {
     uv run marimo edit --headless --watch --no-token --host 0.0.0.0
 }
@@ -111,7 +106,7 @@ function chdiffnvim() {
 }
 
 function watchlastlog() {
-	watch -n 0.1 'tail -n 30 "$(find logs | sort --reverse | head -n 1)"'
+	watch -n 0.1 'tail -n 30 "$(find ./logs | sort --reverse | head -n 1)"'
 }
 
 ############## MISC PROGRAMS #############
@@ -159,3 +154,4 @@ export SYSTEMD_EDITOR=nvim
 export PATH="$HOME/.local/bin:$HOME/.cargo/bin:$HOME/.local/share/nvim/mason/bin:$PATH"
 export PATH=/home/ethan/.opencode/bin:$PATH
 
+echo "sourced $0"

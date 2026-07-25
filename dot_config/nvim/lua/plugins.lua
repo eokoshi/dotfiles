@@ -479,6 +479,7 @@ return {
 					json = { "fixjson", "prettier" },
 					css = { "prettier" },
 					javascript = { "prettier" },
+					gotmpl = { "shfmt" },
 				},
 				default_format_opts = {
 					lsp_format = "fallback",
