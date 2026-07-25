@@ -1915,13 +1915,7 @@ return {
 				end,
 				{ desc = "icons" }
 			)
-			map("i", "<C-l>", function()
-				local pos = vim.fn.getcursorcharpos()
-				require("snacks.picker").icons({
-					custom_sources = { unicode = vim.fn.stdpath("config") .. "/unicode_chars.json" },
-				})
-				vim.fn.setcursorcharpos(pos)
-			end, { desc = "insert icon" })
+			-- map("i", "<C-l>", function() local pos = vim.fn.getcursorcharpos() require("snacks.picker").icons({ custom_sources = { unicode = vim.fn.stdpath("config") .. "/unicode_chars.json" }, }) vim.fn.setcursorcharpos(pos) end, { desc = "insert icon" })
 			map("n", "<Leader>N", function()
 				require("snacks").picker.notifications({
 					confirm = { "yank", "close" },

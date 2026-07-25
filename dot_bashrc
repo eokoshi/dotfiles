@@ -1,8 +1,8 @@
 # ~/.bashrc: executed by bash(1) for non-login shells.
 # If not running interactively, don't do anything
 case $- in
-    *i*) ;;
-      *) return;;
+*i*) ;;
+*) return ;;
 esac
 
 # See bash(1) for more options /list of shopt options
@@ -20,30 +20,30 @@ shopt -s cmdhist
 ####### PROMPT AND COLORS #########
 DEFAULT_PS1='${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ '
 if [ -x /usr/bin/tput ] && tput setaf 1 >&/dev/null; then
-    source "$HOME/.config/bash/prompt.sh"
-    PROMPT_COMMAND='LAST_EXIT="$?"; eval "PS1=\"$(__mkps1)\""'
+  source "$HOME/.config/bash/prompt.sh"
+  PROMPT_COMMAND='LAST_EXIT="$?"; eval "PS1=\"$(__mkps1)\""'
 
-	if [[ "$TERM_PROGRAM" == "vscode" ]]; then
-		unset PROMPT_COMMAND
-		PS1=$'\[\e[02;32m\]\w\[\e[00m\]\$ '
-		PS1="\n$PS1"
-	fi
+  if [[ "$TERM_PROGRAM" == "vscode" ]]; then
+    unset PROMPT_COMMAND
+    PS1=$'\[\e[02;32m\]\w\[\e[00m\]\$ '
+    PS1="\n$PS1"
+  fi
 
-	if [[ -n "$NVIM" || -n "$RSTUDIO" ]]; then
-		unset PROMPT_COMMAND
-		PS1=$'\[\e[00;32m\]\w ❯ \[\e[00m\]'
-		PS1="\n$PS1"
-	fi
+  if [[ -n "$NVIM" || -n "$RSTUDIO" ]]; then
+    unset PROMPT_COMMAND
+    PS1=$'\[\e[00;32m\]\w ❯ \[\e[00m\]'
+    PS1="\n$PS1"
+  fi
 else
-    PS1='\u@\h:\w\$ '
+  PS1='\u@\h:\w\$ '
 fi
 
 if [[ "$TERM" == "linux" ]]; then
-	unset PROMPT_COMMAND
-	PS1=$DEFAULT_PS1
+  unset PROMPT_COMMAND
+  PS1=$DEFAULT_PS1
 
-	# set nicer colors in tty
-	echo -en "\e]PC247BFF" # Bright Blue
+  # set nicer colors in tty
+  echo -en "\e]PC247BFF" # Bright Blue
 fi
 
 # colored GCC warnings and errors
@@ -58,7 +58,6 @@ if [ -d /etc/profile.d ]; then
   done
   unset i
 fi
-
 
 ##### Alias definitions ######
 # You may want to put all your additions into a separate file like
@@ -75,49 +74,51 @@ alias cl="clear"
 alias csvlens="csvlens --colorful"
 alias timeit="/usr/bin/time -f %Mkb:%es"
 if lsd --version >&/dev/null; then
-	alias ls='lsd'
-	alias ll='lsd -alFg'
-	alias la='lsd -A'
+  alias ls='lsd'
+  alias ll='lsd -alFg'
+  alias la='lsd -A'
 fi
 
 if [ -f ~/.bash_aliases ]; then
-    . ~/.bash_aliases
+  . ~/.bash_aliases
 fi
 
 if [ -f ~/.keys ]; then
-    . ~/.keys
+  . ~/.keys
 fi
-
 
 if bat --version >&/dev/null; then
-	alias bathelp="bat -plhelp"
-	function h() {
-			"$@" --help 2>&1 | bathelp
-	}
-	export MANPAGER="sh -c 'sed -u -e \"s/\\x1B\[[0-9;]*m//g; s/.\\x08//g\" | bat -p -lman'"
+  function h() {
+    "$@" --help 2>&1 | bat -plhelp
+  }
+  export MANPAGER="sh -c 'sed -u -e \"s/\\x1B\[[0-9;]*m//g; s/.\\x08//g\" | bat -p -lman'"
 fi
 
+function ansi() {
+  bash "$HOME/.config/bash/ansi.sh" "$@"
+}
+
 function marimo-serve() {
-    uv run marimo edit --headless --watch --no-token --host 0.0.0.0
+  uv run marimo edit --headless --watch --no-token --host 0.0.0.0
 }
 
 function chdiffnvim() {
-	diff -bur --color=always ~/.local/share/chezmoi/dot_config/nvim/ ~/.config/nvim/ -x ".git*" -x "*stylua*" -x "lazy-lock.json"
+  diff -bur --color=always ~/.local/share/chezmoi/dot_config/nvim/ ~/.config/nvim/ -x ".git*" -x "*stylua*" -x "lazy-lock.json"
 }
 
 function watchlastlog() {
-	watch -n 0.1 'tail -n 30 "$(find ./logs | sort --reverse | head -n 1)"'
+  watch -n 0.1 'tail -n 30 "$(find ./logs | sort --reverse | head -n 1)"'
 }
 
 ############## MISC PROGRAMS #############
 # Direnv stuff
 _direnv_hook() {
-  local previous_exit_status=$?;
-  trap -- '' SIGINT;
-  eval "$("/usr/bin/direnv" export bash)";
-  trap - SIGINT;
-  return $previous_exit_status;
-};
+  local previous_exit_status=$?
+  trap -- '' SIGINT
+  eval "$("/usr/bin/direnv" export bash)"
+  trap - SIGINT
+  return $previous_exit_status
+}
 if ! [[ "${PROMPT_COMMAND:-}" =~ _direnv_hook ]]; then
   PROMPT_COMMAND="_direnv_hook${PROMPT_COMMAND:+;$PROMPT_COMMAND}"
 fi
@@ -127,25 +128,25 @@ completions_dir="$HOME/.config/bash/completions"
 [ -s "$completions_dir/trash" ] && \. "$completions_dir/trash"
 
 export NVM_DIR="$HOME/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
-[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"                   # This loads nvm
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion" # This loads nvm bash_completion
 
 function y() {
-	local tmp="$(mktemp -t "yazi-cwd.XXXXXX")" cwd
-	yazi "$@" --cwd-file="$tmp"
-	IFS= read -r -d '' cwd < "$tmp"
-	[ -n "$cwd" ] && [ "$cwd" != "$PWD" ] && builtin cd -- "$cwd"
-	rm -f -- "$tmp"
+  local tmp="$(mktemp -t "yazi-cwd.XXXXXX")" cwd
+  yazi "$@" --cwd-file="$tmp"
+  IFS= read -r -d '' cwd <"$tmp"
+  [ -n "$cwd" ] && [ "$cwd" != "$PWD" ] && builtin cd -- "$cwd"
+  rm -f -- "$tmp"
 }
 
 if fzf --version >&/dev/null; then
-	eval "$(fzf --bash)"
+  eval "$(fzf --bash)"
 fi
 if zoxide --version >&/dev/null; then
-	eval "$(zoxide init bash --cmd j)"
+  eval "$(zoxide init bash --cmd j)"
 fi
 if uv --version >&/dev/null; then
-	eval "$(uv generate-shell-completion bash)"
+  eval "$(uv generate-shell-completion bash)"
 fi
 
 export EDITOR=nvim
