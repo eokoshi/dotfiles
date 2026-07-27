@@ -676,10 +676,13 @@ return {
 				mappings = {
 					close = "<esc>",
 					go_in = "",
-					go_in_plus = "l",
-					go_out = "h",
-					go_out_plus = "",
+					go_in_plus = "L",
+					go_out = "H",
+					go_out_plus = "<BS>",
 					synchronize = "<leader>w",
+					mark_goto = ";",
+					show_help = "?",
+					reset = "<home>",
 				},
 			},
 			init = function()
