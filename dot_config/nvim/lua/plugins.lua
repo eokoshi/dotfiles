@@ -47,6 +47,7 @@ return {
 					},
 					menu = {
 						border = "none",
+						auto_show_delay_ms = 150,
 						draw = {
 							columns = { { "kind_icon" }, { "label" }, { "source_name" } },
 							components = {
