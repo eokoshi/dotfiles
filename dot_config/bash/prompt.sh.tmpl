@@ -107,7 +107,7 @@ __git() {
 	# Escaping the $ is intentional:
 	# This is evaluated when the prompt is generated.
 	# echo "\$(__git_ps1 '$textcolor $gitbranch %s ')$reset$sepcolor$rsep$reset";
-	echo "\$(__git_ps1 '$textcolor$gitbranch %s ')$RESET"
+	echo "\$(__git_ps1 '$textcolor$gitbranch %s') $RESET"
 
 }
 

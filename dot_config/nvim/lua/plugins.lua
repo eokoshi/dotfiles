@@ -676,10 +676,10 @@ return {
 				},
 				mappings = {
 					close = "<esc>",
-					go_in = "",
+					go_in = "<right>",
 					go_in_plus = "L",
 					go_out = "H",
-					go_out_plus = "<BS>",
+					go_out_plus = "<left>",
 					synchronize = "<leader>w",
 					mark_goto = ";",
 					show_help = "?",
