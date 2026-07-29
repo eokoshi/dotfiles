@@ -36,6 +36,21 @@ if vim.bo[bufnr].buftype == "" then
 		vim.schedule(function() vim.api.nvim_buf_set_lines(0, import_row, import_row, false, { "import numpy as np" }) end)
 	end, {})
 
+	vim.api.nvim_buf_create_user_command(0, "Importplt", function()
+		local import_row = 0
+		for i = 0, 50 do
+			local line = vim.api.nvim_buf_get_lines(0, i - 1, i, false)[1] or ""
+			if line:match("^import ") or line:match("^from .* import ") then
+				import_row = i
+				break
+			elseif line:match("^__author__.*") then
+				import_row = i - 1
+				break
+			end
+		end
+		vim.schedule(function() vim.api.nvim_buf_set_lines(0, import_row, import_row, false, { "import matplotlib.pyplot as plt" }) end)
+	end, {})
+
 	-- keymaps
 	local map = require("stuff.functions").map
 	map("v", "gd", ":norm ysaw'f=r:A,<CR>gv<Plug>(nvim-surround-visual-line)}iargs = <ESC>va{o^", { desc = "Convert lines to dict", buffer = true })
