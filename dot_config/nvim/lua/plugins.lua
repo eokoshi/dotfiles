@@ -654,6 +654,27 @@ return {
 						show_help = "?",
 					},
 				},
+				explorer = {
+					file_filter = {
+						ignore = {
+							".git/**",
+							"*.pyc",
+							"*.pyo",
+							"__pycache__",
+							"node_modules",
+							"*.egg-info",
+							".venv",
+							"*.png",
+							"*.jpg",
+							"*.jpeg",
+							"*.csv",
+							"*.tiff",
+							"*.svs",
+							"*.db",
+							"*.ipynb",
+						},
+					},
+				},
 			},
 		},
 		{
