@@ -15,6 +15,7 @@ return {
 					version = "*",
 				},
 			},
+			opts_extend = { "sources" },
 			---@module 'blink.cmp'
 			---@type blink.cmp.Config
 			opts = {
@@ -47,7 +48,7 @@ return {
 					},
 					menu = {
 						border = "none",
-						auto_show_delay_ms = 150,
+						auto_show_delay_ms = 500,
 						draw = {
 							columns = { { "kind_icon" }, { "label" }, { "source_name" } },
 							components = {
@@ -78,6 +79,7 @@ return {
 							},
 						},
 						ripgrep = {
+							enabled = function() return vim.fs.root(0, ".git") ~= nil end,
 							module = "blink-ripgrep",
 							name = "rg",
 							---@module "blink-ripgrep"
@@ -85,7 +87,7 @@ return {
 							opts = {
 								prefix_min_len = 3,
 								backend = {
-									use = "gitgrep",
+									use = "gitgrep-or-ripgrep",
 									ripgrep = {
 										context_size = 3,
 										max_filesize = "5K",
@@ -113,7 +115,6 @@ return {
 					},
 				},
 			},
-			opts_extend = { "sources.default" },
 		},
 	},
 
@@ -593,7 +594,6 @@ return {
 	{
 		{
 			"lewis6991/gitsigns.nvim",
-			event = "VeryLazy",
 			opts = {
 				current_line_blame_opts = {
 					delay = 300,
@@ -967,10 +967,10 @@ return {
 		},
 		{
 			"dmtrKovalenko/fff.nvim",
+			enabled = vim.fs.root(0, ".git") ~= nil,
 			version = "0.10.0",
 			build = function() require("fff.download").download_or_build_binary() end,
 			lazy = false,
-			enabled = vim.fs.root(0, ".git") ~= nil,
 			opts = {
 				prompt = "❭ ",
 				title = "fff",
@@ -1002,7 +1002,7 @@ return {
 				debug = { enabled = true, show_scores = false },
 			},
 			keys = {
-				{ "ff", function() require("fff").find_files() end, desc = "FFFind files" },
+				{ "ff", function() require("fff").find_files({ wait_fot_index_ms = 1 }) end, desc = "FFFind files" },
 				{ "<leader>fw", function() require("fff").live_grep() end, desc = "grep" },
 				{ "<leader>fj", function() require("fff").live_grep({ grep = { modes = { "fuzzy", "plain" } } }) end, desc = "fuzzy grep" },
 				{ "<leader>f*", function() require("fff").live_grep_under_cursor() end, mode = { "n", "x" }, desc = "current word / selection" },
