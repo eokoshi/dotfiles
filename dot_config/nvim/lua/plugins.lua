@@ -85,7 +85,7 @@ return {
 							opts = {
 								prefix_min_len = 3,
 								backend = {
-									use = "gitgrep-or-ripgrep",
+									use = "gitgrep",
 									ripgrep = {
 										context_size = 3,
 										max_filesize = "5K",
@@ -970,6 +970,7 @@ return {
 			version = "0.10.0",
 			build = function() require("fff.download").download_or_build_binary() end,
 			lazy = false,
+			enabled = vim.fs.root(0, ".git") ~= nil,
 			opts = {
 				prompt = "❭ ",
 				title = "fff",
@@ -1842,9 +1843,12 @@ return {
 			map({ "n", "t", "i" }, "<F7>", function() Snacks.terminal.toggle() end, { desc = "toggle terminal" })
 			map("n", "<Leader>R", function() Snacks.rename.rename_file() end, { desc = "Rename file" })
 
-			-- map("n", "ff", function() Snacks.picker.files() end, { desc = "files" })
-			-- map("n", "<Leader>fw", function() Snacks.picker.grep({ cmd = "rg" }) end, { desc = "word" })
-			-- map({ "n", "x" }, "<Leader>f*", function() Snacks.picker.grep_word() end, { desc = "grep current selection" })
+			local fff_avail, _ = pcall(require, "fff")
+			if not fff_avail then
+				map("n", "ff", function() Snacks.picker.files() end, { desc = "files" })
+				map("n", "<Leader>fw", function() Snacks.picker.grep({ cmd = "rg" }) end, { desc = "word" })
+				map({ "n", "x" }, "<Leader>f*", function() Snacks.picker.grep_word() end, { desc = "grep current selection" })
+			end
 			map("n", "<Leader>ff", function() Snacks.picker.files({ hidden = true, ignored = true, cmd = "fd" }) end, { desc = "all files" })
 			map("n", "<Leader>fW", function() Snacks.picker.grep({ cmd = "rg", hidden = true, ignored = true }) end, { desc = "Word in all files" })
 
