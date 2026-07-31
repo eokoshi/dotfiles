@@ -207,6 +207,7 @@ elif [[ "$DISTRO" == "openSUSE" ]]; then
 		npm \
 		direnv \
 		lsd \
+		bat \
 		unzip \
 		curl \
 		neovim \
