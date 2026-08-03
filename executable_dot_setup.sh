@@ -155,6 +155,7 @@ if [[ "$DISTRO" == "Ubuntu" ]]; then
 		rm -rf $YAZI_SYS
 		rm -f "${YAZI_SYS}.zip"
 		sudo ln -sf /opt/yazi/yazi /usr/local/bin/yazi
+		sudo ln -sf /opt/yazi/ya /usr/local/bin/ya
 		ya pkg upgrade --discard
 		yazi -V
 	fi
