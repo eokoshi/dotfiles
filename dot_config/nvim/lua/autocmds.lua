@@ -83,3 +83,63 @@ vim.api.nvim_create_autocmd("BufWritePost", {
 	end,
 	desc = "Push edited config file to Windows via rsync",
 })
+
+-- auto nohlsearch
+local autonohlsearch_group = vim.api.nvim_create_augroup("autonohlsearch", { clear = true })
+vim.api.nvim_create_autocmd("BufWinEnter", {
+	group = autonohlsearch_group,
+	callback = function(opt)
+
+		local function stop_hl()
+			if vim.v.hlsearch == 0 then return end
+			local keycode = vim.api.nvim_replace_termcodes("<Cmd>nohl<CR>", true, false, true)
+			vim.api.nvim_feedkeys(keycode, "n", false)
+		end
+
+		local function start_hl()
+			local res = vim.fn.getreg("/")
+			if vim.v.hlsearch ~= 1 then return end
+			if res ~= nil and res:find([[%#]], 1, true) then
+				stop_hl()
+				return
+			end
+			ok, status = pcall(vim.fn.search, [[\%#\zs]] .. res, "cnW")
+			if ok and status == 0 then
+				stop_hl()
+				return
+			end
+		end
+
+		local function hs_event(bufnr)
+			if vim.b.autonohlsearch then return end
+			vim.b.autonohlsearch = true
+			local cm_id = vim.api.nvim_create_autocmd("CursorMoved", {
+				buffer = bufnr,
+				group = autonohlsearch_group,
+				callback = function() start_hl() end,
+				desc = "Auto hlsearch",
+			})
+
+			local ie_id = vim.api.nvim_create_autocmd("InsertEnter", {
+				buffer = bufnr,
+				group = autonohlsearch_group,
+				callback = function() stop_hl() end,
+				desc = "Auto remove hlsearch",
+			})
+
+			vim.api.nvim_create_autocmd("BufDelete", {
+				buffer = bufnr,
+				group = autonohlsearch_group,
+				callback = function(data)
+					vim.b.autonohlsearch = nil
+					pcall(vim.api.nvim_del_autocmd, cm_id)
+					pcall(vim.api.nvim_del_autocmd, ie_id)
+					pcall(vim.api.nvim_del_autocmd, data.id)
+				end,
+			})
+		end
+
+		hs_event(opt.buf)
+	end,
+	desc = "hlsearch.nvim event",
+})

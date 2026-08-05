@@ -48,7 +48,7 @@ return {
 					},
 					menu = {
 						border = "none",
-						auto_show_delay_ms = 500,
+						auto_show_delay_ms = 200,
 						draw = {
 							columns = { { "kind_icon" }, { "label" }, { "source_name" } },
 							components = {
@@ -319,7 +319,7 @@ return {
 								},
 								vim.schedule_wrap(function(obj)
 									if obj.stdout ~= nil then
-										vim.notify(obj.stdout, vim.log.levels.INFO, { title = "Git pull", style = "minimal" })
+										vim.notify(obj.stdout, vim.log.levels.INFO, { title = "Git pull" })
 									elseif obj.stderr ~= nil then
 										vim.notify(obj.stdout, vim.log.levels.ERROR, { title = "Git pull" })
 									end
@@ -407,44 +407,12 @@ return {
 	-- ===
 	-- Colorschemes
 	{
-		{
-			"olimorris/onedarkpro.nvim",
-			lazy = true,
-			opts = {
-				styles = {
-					comments = "italic",
-					keywords = "bold, italic",
-					conditionals = "italic",
-				},
-				highlights = {
-					NormalFloat = { link = "Normal" },
-					FloatBorder = { link = "UltestBorder" },
-				},
-			},
-		},
-		{
-			"sainnhe/everforest",
-			lazy = true,
-			init = function()
-				vim.g.everforest_background = "medium"
-				vim.g.everforest_better_performance = 1
-				vim.g.everforest_enable_italic = 1
-			end,
-		},
-		{
-			"sainnhe/gruvbox-material",
-			lazy = true,
-			init = function()
-				vim.g.gruvbox_material_foreground = "material"
-				vim.g.gruvbox_material_background = "medium"
-				vim.g.gruvbox_material_enable_italic = 1
-				vim.g.gruvbox_material_enable_bold = 1
-				vim.g.gruvbox_better_performance = 1
-				vim.g.gruvbox_material_transparent_background = 1
-			end,
-		},
-		-- { "sainnhe/edge", lazy = true, init = function() vim.g.edge_style = "default" vim.g.edge_better_performance = 1 vim.g.edge_enable_italic = 1 end, },
-		-- { "mcauley-penney/techbase.nvim", lazy = true, opts = { italic_comments = false, transparent = false, plugin_support = { blink = true, gitsigns = true, lazy = true, lualine = true, mason = true, }, hl_overrides = {}, }, },
+		-- stylua: ignore start
+		{ "sainnhe/gruvbox-material", lazy = true, init = function() vim.g.gruvbox_material_foreground = "material" vim.g.gruvbox_material_background = "medium" vim.g.gruvbox_material_enable_italic = 1 vim.g.gruvbox_material_enable_bold = 1 vim.g.gruvbox_better_performance = 1 vim.g.gruvbox_material_transparent_background = 1 end, },
+		{ "sainnhe/everforest", lazy = true, init = function() vim.g.everforest_background = "medium" vim.g.everforest_better_performance = 1 vim.g.everforest_enable_italic = 1 end, },
+		{ "sainnhe/edge", lazy = true, init = function() vim.g.edge_style = "default" vim.g.edge_better_performance = 1 vim.g.edge_enable_italic = 1 end, },
+		{ "olimorris/onedarkpro.nvim", lazy = true, opts = { styles = { comments = "italic", keywords = "bold, italic", conditionals = "italic", }, highlights = { NormalFloat = { link = "Normal" }, FloatBorder = { link = "UltestBorder" }, }, }, },
+		{ "mcauley-penney/techbase.nvim", lazy = true, opts = { italic_comments = false, transparent = false, plugin_support = { blink = true, gitsigns = true, lazy = true, lualine = true, mason = true, }, hl_overrides = {}, }, },
 		-- { "astronvim/astrotheme", lazy = true, opts = {} },
 		-- { "ribru17/bamboo.nvim", lazy = true, opts = {} },
 		-- { "rebelot/kanagawa.nvim", lazy = true, opts = {} },
@@ -452,6 +420,7 @@ return {
 		-- { "sainnhe/sonokai", lazy = true },
 		-- { "gbprod/nord.nvim", lazy = true },
 		-- { "rose-pine/neovim", name = "rose-pine", lazy = true },
+		-- stylua: ignore off
 	},
 
 	-- ===
@@ -482,6 +451,7 @@ return {
 					css = { "prettier" },
 					javascript = { "prettier" },
 					gotmpl = { "shfmt" },
+					xml = { "xmlformat" },
 				},
 				default_format_opts = {
 					lsp_format = "fallback",
@@ -585,6 +555,12 @@ return {
 					end)
 				end, { desc = "Conditional Breakpoint (S-F9)" })
 				map("n", "<Leader>du", function() require("dap-view").toggle(true) end, { desc = "Toggle Debugger UI" })
+
+				vim.fn.sign_define("DapBreakpoint", { text = icons.debug.breakpoint, texthl = "DiagnosticSignHint" })
+				vim.fn.sign_define("DapBreakpointCondition", { text = icons.debug.conditional, texthl = "DiagnosticSignInfo" })
+				vim.fn.sign_define("DapLogPoint", { text = icons.debug.logpoint, texthl = "DiagnosticSignOk" })
+				vim.fn.sign_define("DapStopped", { text = icons.debug.stopped, texthl = "DiagnosticSignWarn" })
+				vim.fn.sign_define("DapBreakpointRejected", { text = icons.debug.rejected, texthl = "DiagnosticSignError" })
 			end,
 		},
 	},
@@ -967,7 +943,7 @@ return {
 		},
 		{
 			"dmtrKovalenko/fff.nvim",
-			enabled = vim.fs.root(0, ".git") ~= nil,
+			enabled = vim.fs.root(0, ".git") ~= nil and vim.fn.has("win32") == 0,
 			version = "0.10.0",
 			build = function() require("fff.download").download_or_build_binary() end,
 			lazy = false,
@@ -996,9 +972,7 @@ return {
 					grep_fuzzy_active = "DiagnosticHint", -- Highlight for keybind + label when fuzzy is on
 					suggestion_header = "WarningMsg", -- Highlight for the "No results found. Suggested..." banner
 				},
-				git = {
-					status_text_color = true,
-				},
+				git = { status_text_color = true },
 				debug = { enabled = true, show_scores = false },
 			},
 			keys = {
@@ -1032,6 +1006,7 @@ return {
 	{
 		{
 			"aserowy/tmux.nvim",
+			enabled = vim.fn.has("win32") == 0,
 			event = "VeryLazy",
 			opts = {
 				copy_sync = {
@@ -1039,23 +1014,19 @@ return {
 				},
 			},
 		},
-
 		{
 			"windwp/nvim-autopairs",
 			event = "InsertEnter",
 			opts = {},
 		},
-
 		{
 			"kylechui/nvim-surround",
 			opts = {},
 		},
-
 		{
 			"nvim-mini/mini.align",
 			opts = {},
 		},
-
 		{
 			"nvim-mini/mini.bracketed",
 			opts = {
@@ -1064,7 +1035,6 @@ return {
 				indent = { suffix = "h" },
 			},
 		},
-
 		{
 			"nvim-mini/mini.icons",
 			opts = function()
@@ -1131,23 +1101,16 @@ return {
 				map("o", "r", function() flash.remote() end, { desc = "Flash Remote" })
 			end,
 		},
-
 		{
 			"MagicDuck/grug-far.nvim",
 			cmd = "GrugFar",
 			opts = {},
 		},
-
 		{
 			"brenoprata10/nvim-highlight-colors",
+			enabled = vim.fn.has("win32") == 0,
 			opts = {},
 		},
-
-		{
-			"nvimdev/hlsearch.nvim",
-			opts = {},
-		},
-
 		{
 			"fei6409/log-highlight.nvim",
 			ft = "log",
@@ -1235,9 +1198,8 @@ return {
 		},
 		{
 			"folke/noice.nvim",
-			dependencies = {
-				"MunifTanjim/nui.nvim",
-			},
+			enabled = vim.fn.has("win32") == 0,
+			dependencies = { "MunifTanjim/nui.nvim" },
 			event = "VeryLazy",
 			opts = {
 				presets = {
@@ -1499,6 +1461,7 @@ return {
 		},
 		{
 			"akinsho/bufferline.nvim",
+			enabled = vim.fn.has("win32") == 0,
 			event = "VeryLazy",
 			version = "*",
 			opts = {
@@ -2233,6 +2196,7 @@ return {
 		},
 		{
 			"folke/todo-comments.nvim",
+			enabled = vim.fn.has("win32") == 0,
 			dependencies = { "nvim-lua/plenary.nvim" },
 			event = "VeryLazy",
 			opts = {
