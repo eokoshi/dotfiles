@@ -1431,10 +1431,16 @@ return {
 					color = { fg = colors.green, gui = "bold" },
 				})
 				ins_right({
+					"encoding",
+					fmt = string.upper,
+					icons_enabled = true,
+					color = { fg = colors.red, gui = "bold" },
+				})
+				ins_right({
 					"fileformat",
 					fmt = string.upper,
 					icons_enabled = true,
-					color = { fg = colors.green, gui = "bold" },
+					color = { fg = colors.blue, gui = "bold" },
 				})
 				ins_right({
 					"branch",
@@ -1806,6 +1812,8 @@ return {
 			map({ "n", "t", "i" }, "<F7>", function() Snacks.terminal.toggle() end, { desc = "toggle terminal" })
 			map("n", "<Leader>R", function() Snacks.rename.rename_file() end, { desc = "Rename file" })
 
+			local bufferline_avail, _ = pcall(require, "bufferline")
+			if not bufferline_avail then map("n", "vv", function() Snacks.picker.buffers() end, { desc = "buffers" }) end
 			local fff_avail, _ = pcall(require, "fff")
 			if not fff_avail then
 				map("n", "ff", function() Snacks.picker.files() end, { desc = "files" })

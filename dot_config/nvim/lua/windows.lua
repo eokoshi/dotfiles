@@ -14,7 +14,7 @@ if vim.g.neovide then
 	vim.cmd.colorscheme("onelight")
 	vim.g.neovide_title_background_color = string.format("%x", vim.api.nvim_get_hl(0, { id = vim.api.nvim_get_hl_id_by_name("Normal") }).bg)
 
-	vim.o.guifont = "Cascadia_Mono_NF:h10"
+	vim.o.guifont = "Cascadia Mono NF,DejaVuSansM Nerd Font Mono,UD Digi Kyokasho N:h10"
 	vim.g.neovide_title_text_color = "darkgrey"
 	vim.g.neovide_floating_shadow = false
 	vim.o.swapfile = false
