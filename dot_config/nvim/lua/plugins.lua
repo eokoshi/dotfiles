@@ -183,17 +183,17 @@ return {
 							})
 							local remaining = os.difftime(os.time(), duedate) / (24 * 60 * 60)
 							if remaining > 0 then
-								return { sp = "red", undercurl = true }
+								return { fg = "black", sp = "red", undercurl = true }
 							elseif remaining > -1 then
-								return { bg = "#ff5555", bold = true }
+								return { fg = "black", bg = "#ff5555", bold = true }
 							elseif remaining > -7 then
-								return { bg = "#ff6700", bold = true }
+								return { fg = "black", bg = "#ff6700", bold = true }
 							elseif remaining > -14 then
-								return { bg = "orange" }
+								return { fg = "black", bg = "orange" }
 							elseif remaining > -21 then
-								return { bg = "gold" }
+								return { fg = "black", bg = "gold" }
 							elseif remaining > -28 then
-								return { bg = "greenyellow" }
+								return { fg = "black", bg = "greenyellow" }
 							else
 								return { fg = "green" }
 							end
@@ -447,7 +447,7 @@ return {
 					r = { "air" },
 					htmldjango = { "djlint" },
 					yaml = { "prettier" },
-					json = { "fixjson", "prettier" },
+					json = { "fixjson" },
 					css = { "prettier" },
 					javascript = { "prettier" },
 					gotmpl = { "shfmt" },
