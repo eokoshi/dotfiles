@@ -3,7 +3,7 @@ if vim.g.neovide then
 	if hr > 6 and hr < 21 then -- day between 6am and 9pm
 		vim.cmd.colorscheme("onelight")
 	else -- night
-		vim.cmd.colorscheme("techbase")
+		vim.cmd.colorscheme("entryway")
 	end
 
 	-- Title bar color
