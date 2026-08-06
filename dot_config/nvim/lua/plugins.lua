@@ -244,7 +244,6 @@ return {
 		{
 			"obsidian-nvim/obsidian.nvim",
 			version = "*",
-			cmd = "Obsidian",
 			enabled = vim.fn.has("win32") == 1,
 			---@module 'obsidian'
 			---@diagnostic disable-next-line: type-not-found
