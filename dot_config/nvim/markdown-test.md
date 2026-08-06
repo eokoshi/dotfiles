@@ -43,6 +43,16 @@
 - item 3
   - item 3
   - item 3
+1. point 2
+  2. Item3
+    3. point 4
+
+render-markdown does not play nice with list markers other than \d\.
+1. item 3
+  2. long long long long long long long long long long long long long long long long long long long text  long text  long text  long text  long text  long text  long text  long text  long
+  3. medium text medium text medium text medium text medium text medium text medium text medium text medium text medium text medium text medium text
+  45. long text long text long text long text long text long text long text long text long text long text long text long text long text long text long text long text long text long text long text long text long text long text long text long text
+
 
 $$ \begin{bmatrix} 6&8&9 \\ 2&3&2 \end{bmatrix} $$
 

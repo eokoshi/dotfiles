@@ -7,15 +7,13 @@ if vim.g.neovide then
 	end
 
 	-- Title bar color
-	vim.g.neovide_title_background_color = string.format("%x", vim.api.nvim_get_hl(0, { id = vim.api.nvim_get_hl_id_by_name("Normal") }).bg)
 
 	vim.o.guifont = "Cascadia Mono NF,DejaVuSansM Nerd Font Mono,UD Digi Kyokasho N:h10"
+	vim.g.neovide_title_background_color = string.format("%x", vim.api.nvim_get_hl(0, { id = vim.api.nvim_get_hl_id_by_name("Normal") }).bg)
 	vim.g.neovide_title_text_color = "darkgrey"
 	vim.g.neovide_hide_mouse_when_typing = true
 	vim.g.neovide_floating_shadow = false
-	vim.o.swapfile = false
-
-	if next(_G.arg) == nil then vim.cmd({ cmd = "cd", args = { vim.fn.expand("~") } }) end
+	vim.g.neovide_remember_window_size = false
 
 	--- IME stuff
 	local function set_ime(args)

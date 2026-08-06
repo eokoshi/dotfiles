@@ -1,6 +1,5 @@
 local icons = require("stuff.icons")
 
-vim.o.autoread = true
 -- vim.o.clipboard = "unnamedplus"
 vim.o.conceallevel = 2
 vim.o.confirm = true -- Confirm to save changes before exiting modified buffer
@@ -32,19 +31,16 @@ vim.o.formatoptions = "lnjq"
 vim.o.hlsearch = true
 vim.o.ignorecase = true
 vim.o.incsearch = true
-vim.o.linebreak = true -- Wrap lines at convenient points
 vim.opt.listchars = { space = "␠", tab = "_" }
 vim.o.number = true
 vim.o.numberwidth = 2
 vim.o.relativenumber = false
-vim.o.scrolloff = 10 -- Lines of context
 vim.opt.sessionoptions = { "buffers", "curdir", "tabpages", "winsize", "help", "globals", "folds", "options", "resize" }
-vim.o.shell = "/bin/bash"
 vim.o.shiftround = true -- Round indent
 vim.o.shiftwidth = 0 -- Size of an indent, 0 to inherit from tabstop
 vim.o.shortmess = "aoOsIcCF"
-vim.o.showbreak = "⇢ "
 vim.o.signcolumn = "yes" -- Always show the signcolumn, otherwise it would shift the text each time
+vim.o.scrolloff = 10 -- Lines of context
 vim.o.sidescrolloff = 8 -- Columns of context
 vim.o.smartcase = true -- Don't ignore case with capitals
 vim.o.smartindent = false -- Insert indents automatically (messes with python treesitter, so leave false)
@@ -68,6 +64,13 @@ vim.o.cursorline = true -- Enable highlighting of the current line
 vim.o.colorcolumn = "+1"
 vim.o.ruler = false -- Disable the default ruler
 vim.o.showmode = false -- Dont show mode since we have a statusline
+
+-- line wrapping
+vim.o.breakindent = true
+vim.opt.breakindentopt = { "list:-1" }
+vim.o.formatlistpat = "^\\s*\\d\\+[\\.\\,\\)\\]\\}] \\|^\\s*[\\-\\*] "
+vim.o.linebreak = true -- Wrap lines at convenient points
+-- vim.o.showbreak = "⇢ "
 
 -- Built-in Completion
 -- vim.o.autocomplete = true
