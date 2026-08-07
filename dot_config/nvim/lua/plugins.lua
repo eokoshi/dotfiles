@@ -909,7 +909,7 @@ return {
 		},
 		{
 			"dmtrKovalenko/fff.nvim",
-			enabled = vim.fs.root(0, ".git") ~= nil and vim.fn.has("win32") == 0,
+			cond = vim.fs.root(0, ".git") ~= nil and vim.fn.has("win32") == 0,
 			version = "0.10.0",
 			build = function() require("fff.download").download_or_build_binary() end,
 			lazy = false,
@@ -1756,6 +1756,7 @@ return {
 				},
 			},
 			statuscolumn = { enabled = true },
+			zen = { toggles = { dim = false }, show = { statusline = true } },
 		},
 		init = function()
 			local Snacks = require("snacks")
