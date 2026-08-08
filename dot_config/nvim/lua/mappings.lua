@@ -39,6 +39,7 @@ map("n", "<C-l>", "<C-w>l", { desc = "Move to window right" })
 map("n", "<Leader>bA", "<CMD>%y+<CR><CR>", { desc = "Copy whole buffer to clipboard" })
 map("n", "<Leader>bD", function() functions.DOS_to_Unix() end, { desc = "DOS to Unix" })
 map("n", "<Leader>bf", function() vim.lsp.buf.format() end, { desc = "format buffer" })
+map("n", "<Leader>bz", "<CMD>set foldlevel=2<CR>", {desc="set foldlevel=2"})
 
 -- LSP
 map("n", "<Leader>la", function() vim.lsp.buf.code_action() end, { desc = "code actions" })
