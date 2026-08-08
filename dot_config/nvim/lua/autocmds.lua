@@ -165,7 +165,7 @@ vim.api.nvim_create_user_command("SessionSave", function()
 	sessiondir = vim.fs.joinpath(sessiondir, "sessions")
 	if vim.fn.isdirectory(sessiondir) == 0 then vim.fn.mkdir(sessiondir, "p") end
 	local curdir = vim.fn.getcwd()
-	local filename = curdir:gsub("[/%.]", "_") .. ".vim"
+	local filename = curdir:gsub("[\\:/%.]", "_") .. ".vim"
 	local savepath = vim.fs.joinpath(sessiondir, filename)
 	local cmd = string.format("mksession! %s", savepath)
 	vim.cmd(cmd)
@@ -175,7 +175,7 @@ vim.api.nvim_create_user_command("SessionLoad", function()
 	---@cast sessiondir string
 	sessiondir = vim.fs.joinpath(sessiondir, "sessions")
 	local curdir = vim.fn.getcwd()
-	local filename = curdir:gsub("[/%.]", "_") .. ".vim"
+	local filename = curdir:gsub("[\\:/%.]", "_") .. ".vim"
 	local savepath = vim.fs.joinpath(sessiondir, filename)
 	local cmd = string.format("source %s", savepath)
 	vim.cmd(cmd)
