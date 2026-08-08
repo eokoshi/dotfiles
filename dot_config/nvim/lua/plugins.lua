@@ -2,9 +2,8 @@ local icons = require("stuff.icons")
 local map = require("stuff.functions").map
 
 return {
-	-- ===
-	-- Completion
 	{
+		-- Completion
 		{
 			"saghen/blink.cmp",
 			version = "1.*",
@@ -118,9 +117,8 @@ return {
 		},
 	},
 
-	-- ===
-	-- Markdown
 	{
+		-- Markdown
 		{
 			"bngarren/checkmate.nvim",
 			ft = "markdown",
@@ -312,7 +310,6 @@ return {
 						if string.match(vim.v.event.directory, "\\Obsidian") then
 							vim.system(
 								{ "git", "pull" },
-								---@diagnostic disable-next-line: param-type-mismatch
 								{
 									cwd = vim.fn.expand("$HOME/Documents/Obsidian"),
 									text = true,
@@ -334,9 +331,9 @@ return {
 			"MeanderingProgrammer/render-markdown.nvim",
 			version = "*",
 			ft = { "markdown", "ipynb" },
-			---@module 'render-markdown'
 			---@type render.md.UserConfig
 			opts = {
+				ignore = function() return vim.bo.buftype ~= "" end,
 				heading = {
 					sign = false,
 					position = "inline",
@@ -370,15 +367,56 @@ return {
 		},
 	},
 
-	-- ===
-	-- Colorschemes
 	{
-		-- stylua: ignore start
-		{ "sainnhe/gruvbox-material", lazy = true, init = function() vim.g.gruvbox_material_foreground = "material" vim.g.gruvbox_material_background = "medium" vim.g.gruvbox_material_enable_italic = 1 vim.g.gruvbox_material_enable_bold = 1 vim.g.gruvbox_better_performance = 1 vim.g.gruvbox_material_transparent_background = 1 end, },
-		{ "sainnhe/everforest", lazy = true, init = function() vim.g.everforest_background = "medium" vim.g.everforest_better_performance = 1 vim.g.everforest_enable_italic = 1 end, },
-		{ "sainnhe/edge", lazy = true, init = function() vim.g.edge_style = "default" vim.g.edge_better_performance = 1 vim.g.edge_enable_italic = 1 end, },
-		{ "olimorris/onedarkpro.nvim", lazy = true, opts = { styles = { comments = "italic", keywords = "bold, italic", conditionals = "italic", }, highlights = { NormalFloat = { link = "Normal" }, FloatBorder = { link = "UltestBorder" }, }, }, },
-		{ "mcauley-penney/techbase.nvim", lazy = true, opts = { italic_comments = false, transparent = false, plugin_support = { blink = true, gitsigns = true, lazy = true, lualine = true, mason = true, }, hl_overrides = {}, }, },
+		-- Colorschemes
+		{
+			"sainnhe/gruvbox-material",
+			lazy = true,
+			init = function()
+				vim.g.gruvbox_material_foreground = "material"
+				vim.g.gruvbox_material_background = "medium"
+				vim.g.gruvbox_material_enable_italic = 1
+				vim.g.gruvbox_material_enable_bold = 1
+				vim.g.gruvbox_better_performance = 1
+				vim.g.gruvbox_material_transparent_background = 1
+			end,
+		},
+		{
+			"sainnhe/everforest",
+			lazy = true,
+			init = function()
+				vim.g.everforest_background = "medium"
+				vim.g.everforest_better_performance = 1
+				vim.g.everforest_enable_italic = 1
+			end,
+		},
+		{
+			"sainnhe/edge",
+			lazy = true,
+			init = function()
+				vim.g.edge_style = "default"
+				vim.g.edge_better_performance = 1
+				vim.g.edge_enable_italic = 1
+			end,
+		},
+		{
+			"olimorris/onedarkpro.nvim",
+			lazy = true,
+			opts = {
+				styles = { comments = "italic", keywords = "bold, italic", conditionals = "italic" },
+				highlights = { NormalFloat = { link = "Normal" }, FloatBorder = { link = "UltestBorder" } },
+			},
+		},
+		{
+			"mcauley-penney/techbase.nvim",
+			lazy = true,
+			opts = {
+				italic_comments = false,
+				transparent = false,
+				plugin_support = { blink = true, gitsigns = true, lazy = true, lualine = true, mason = true },
+				hl_overrides = {},
+			},
+		},
 		-- { "astronvim/astrotheme", lazy = true, opts = {} },
 		-- { "ribru17/bamboo.nvim", lazy = true, opts = {} },
 		-- { "rebelot/kanagawa.nvim", lazy = true, opts = {} },
@@ -386,12 +424,10 @@ return {
 		-- { "sainnhe/sonokai", lazy = true },
 		-- { "gbprod/nord.nvim", lazy = true },
 		-- { "rose-pine/neovim", name = "rose-pine", lazy = true },
-		-- stylua: ignore off
 	},
 
-	-- ===
-	-- Formatters
 	{
+		-- Formatters
 		{
 			"stevearc/conform.nvim",
 			event = { "BufWritePre" },
@@ -455,9 +491,8 @@ return {
 		},
 	},
 
-	-- ===
-	-- Debugger UI
 	{
+		-- Debugger UI
 		{
 			"mfussenegger/nvim-dap-python",
 			ft = { "python" },
@@ -531,9 +566,8 @@ return {
 		},
 	},
 
-	-- ===
-	-- Git
 	{
+		-- Git
 		{
 			"lewis6991/gitsigns.nvim",
 			opts = {
@@ -620,13 +654,98 @@ return {
 			},
 		},
 		{
-			-- "sindrets/diffview.nvim", cmd = "DiffviewOpen", keys = { { "<Leader>gD", mode = { "n" }, "<CMD>DiffviewOpen<CR>", desc = "Diff repo" }, { "<Leader>gh", mode = { "n" }, "<CMD>DiffviewFileHistory %<CR>", desc = "History: file" }, { "<Leader>gH", mode = { "n" }, "<CMD>DiffviewFileHistory<CR>", desc = "History: repo" }, }, config = function() local actions = require("diffview.actions") require("diffview").setup({ enhanced_diff_hl = true, view = { default = { disable_diagnostics = true, winbar_info = true, }, merge_tool = { layout = "diff3_mixed", }, }, file_panel = { win_config = { position = "bottom", height = 10, }, }, file_history_panel = { win_config = { type = "split", position = "bottom", height = 10, }, }, keymaps = { disable_defaults = true, view = { { "n", "<Leader>q", "<CMD>DiffviewClose<CR>", { desc = "Close DiffView" } }, { "n", "<Leader>e", actions.toggle_files, { desc = "toggle file panel" } }, { "n", "gf", actions.goto_file_edit, { desc = "Open file in previous tabpage" } }, { "n", "g?", actions.help("view"), { desc = "Open help panel" } }, { "n", "co", actions.conflict_choose("ours"), { desc = "Choose conflict --ours" } }, { "n", "ct", actions.conflict_choose("theirs"), { desc = "Choose conflict --theirs" } }, { "n", "cb", actions.conflict_choose("base"), { desc = "Choose conflict --base" } }, { "n", "ca", actions.conflict_choose("all"), { desc = "Choose conflict --all" } }, { "n", "cn", actions.conflict_choose("none"), { desc = "Choose conflict --none" } }, }, file_panel = { { "n", "q", "<CMD>DiffviewClose<CR>", { desc = "Close DiffView" } }, { "n", "<Leader>e", actions.toggle_files, { desc = "toggle file panel" } }, { "n", "j", actions.next_entry, { desc = "Next file entry" } }, { "n", "<down>", actions.select_next_entry, { desc = "Select next file entry" } }, { "n", "k", actions.prev_entry, { desc = "Previous file entry" } }, { "n", "<up>", actions.select_prev_entry, { desc = "Select previous file entry" } }, { "n", "<cr>", actions.select_entry, { desc = "Open diff for selected entry" } }, { "n", "s", actions.toggle_stage_entry, { desc = "Stage/unstage entry" } }, { "n", "S", actions.stage_all, { desc = "Stage all entries" } }, { "n", "U", actions.unstage_all, { desc = "Unstage all entries" } }, { "n", "[x", actions.prev_conflict, { desc = "Go to prev conflict" } }, { "n", "]x", actions.next_conflict, { desc = "Go to next conflict" } }, { "n", "gf", actions.goto_file_edit, { desc = "Open file in previous tabpage" } }, { "n", "co", actions.conflict_choose_all("ours"), { desc = "Choose conflict --ours" } }, { "n", "ct", actions.conflict_choose_all("theirs"), { desc = "Choose conflict --theirs" } }, { "n", "cb", actions.conflict_choose_all("base"), { desc = "Choose conflict --base" } }, { "n", "l", actions.open_fold, { desc = "Expand fold" } }, { "n", "h", actions.close_fold, { desc = "Collapse fold" } }, { "n", "t", actions.listing_style, { desc = "Toggle list/tree views" } }, { "n", "L", actions.open_commit_log, { desc = "Open commit log panel" } }, { "n", "g?", actions.help("file_panel"), { desc = "Open help panel" } }, { "n", "cc", function() vim.ui.input({ prompt = "Commit message: " }, function(msg) if not msg then return end local results = vim.system({ "git", "commit", "-m", msg }, { text = true }):wait() vim.notify(results.stdout, vim.log.levels.INFO, { title = "Commit" }) end) end, }, { "n", "cx", function() local results = vim.system({ "git", "commit", "--amend", "--no-edit" }, { text = true }):wait() vim.notify(results.stdout, vim.log.levels.INFO, { title = "Commit amend" }) end, }, }, file_history_panel = { { "n", "q", "<CMD>DiffviewClose<CR>", { desc = "Close DiffView" } }, { "n", "<Leader>e", actions.toggle_files, { desc = "toggle file panel" } }, { "n", "j", actions.next_entry, { desc = "Next log entry" } }, { "n", "<down>", actions.select_next_entry, { desc = "Select next log entry" } }, { "n", "k", actions.prev_entry, { desc = "Previous log entry" } }, { "n", "<up>", actions.select_prev_entry, { desc = "Select previous file entry" } }, { "n", "<cr>", actions.select_entry, { desc = "Open diff for selected entry" } }, { "n", "gd", actions.open_in_diffview, { desc = "Open entry in diffview" } }, { "n", "y", actions.copy_hash, { desc = "Copy commit hash" } }, { "n", "L", actions.open_commit_log, { desc = "Show commit details" } }, { "n", "gf", actions.goto_file_edit, { desc = "Open file in previous tabpage" } }, { "n", "g?", actions.help("file_history_panel"), { desc = "Open help panel" } }, }, help_panel = { { "n", "q", actions.close, { desc = "Close help menu" } }, { "n", "<ESC>", actions.close, { desc = "Close help menu" } }, }, }, }) end,
+			"sindrets/diffview.nvim",
+			cmd = "DiffviewOpen",
+			keys = {
+				{ "<Leader>gD", mode = { "n" }, "<CMD>DiffviewOpen<CR>", desc = "Diff repo" },
+				{ "<Leader>gh", mode = { "n" }, "<CMD>DiffviewFileHistory %<CR>", desc = "History: file" },
+				{ "<Leader>gH", mode = { "n" }, "<CMD>DiffviewFileHistory<CR>", desc = "History: repo" },
+			},
+			config = function()
+				local da = require("diffview.actions")
+				require("diffview").setup({
+					enhanced_diff_hl = true,
+					view = { default = { disable_diagnostics = true, winbar_info = true }, merge_tool = { layout = "diff3_mixed" } },
+					file_panel = { win_config = { position = "bottom", height = 10 } },
+					file_history_panel = { win_config = { type = "split", position = "bottom", height = 10 } },
+					keymaps = {
+						disable_defaults = true,
+						view = {
+							{ "n", "<Leader>q", "<CMD>DiffviewClose<CR>", { desc = "Close DiffView" } },
+							{ "n", "<Leader>e", da.toggle_files, { desc = "toggle file panel" } },
+							{ "n", "gf", da.goto_file_edit, { desc = "Open file in previous tabpage" } },
+							{ "n", "g?", da.help("view"), { desc = "Open help panel" } },
+							{ "n", "co", da.conflict_choose("ours"), { desc = "Choose conflict --ours" } },
+							{ "n", "ct", da.conflict_choose("theirs"), { desc = "Choose conflict --theirs" } },
+							{ "n", "cb", da.conflict_choose("base"), { desc = "Choose conflict --base" } },
+							{ "n", "ca", da.conflict_choose("all"), { desc = "Choose conflict --all" } },
+							{ "n", "cn", da.conflict_choose("none"), { desc = "Choose conflict --none" } },
+						},
+						file_panel = {
+							{ "n", "q", "<CMD>DiffviewClose<CR>", { desc = "Close DiffView" } },
+							{ "n", "<Leader>e", da.toggle_files, { desc = "toggle file panel" } },
+							{ "n", "j", da.next_entry, { desc = "Next file entry" } },
+							{ "n", "<down>", da.select_next_entry, { desc = "Select next file entry" } },
+							{ "n", "k", da.prev_entry, { desc = "Previous file entry" } },
+							{ "n", "<up>", da.select_prev_entry, { desc = "Select previous file entry" } },
+							{ "n", "<cr>", da.select_entry, { desc = "Open diff for selected entry" } },
+							{ "n", "s", da.toggle_stage_entry, { desc = "Stage/unstage entry" } },
+							{ "n", "S", da.stage_all, { desc = "Stage all entries" } },
+							{ "n", "U", da.unstage_all, { desc = "Unstage all entries" } },
+							{ "n", "[x", da.prev_conflict, { desc = "Go to prev conflict" } },
+							{ "n", "]x", da.next_conflict, { desc = "Go to next conflict" } },
+							{ "n", "gf", da.goto_file_edit, { desc = "Open file in previous tabpage" } },
+							{ "n", "co", da.conflict_choose_all("ours"), { desc = "Choose conflict --ours" } },
+							{ "n", "ct", da.conflict_choose_all("theirs"), { desc = "Choose conflict --theirs" } },
+							{ "n", "cb", da.conflict_choose_all("base"), { desc = "Choose conflict --base" } },
+							{ "n", "l", da.open_fold, { desc = "Expand fold" } },
+							{ "n", "h", da.close_fold, { desc = "Collapse fold" } },
+							{ "n", "t", da.listing_style, { desc = "Toggle list/tree views" } },
+							{ "n", "L", da.open_commit_log, { desc = "Open commit log panel" } },
+							{ "n", "g?", da.help("file_panel"), { desc = "Open help panel" } },
+							{
+								"n",
+								"cc",
+								function()
+									vim.ui.input({ prompt = "Commit message: " }, function(msg)
+										if not msg then return end
+										local results = vim.system({ "git", "commit", "-m", msg }, { text = true }):wait()
+										vim.notify(results.stdout, vim.log.levels.INFO, { title = "Commit" })
+									end)
+								end,
+							},
+							{
+								"n",
+								"cx",
+								function()
+									local results = vim.system({ "git", "commit", "--amend", "--no-edit" }, { text = true }):wait()
+									vim.notify(results.stdout, vim.log.levels.INFO, { title = "Commit amend" })
+								end,
+							},
+						},
+						file_history_panel = {
+							{ "n", "q", "<CMD>DiffviewClose<CR>", { desc = "Close DiffView" } },
+							{ "n", "<Leader>e", da.toggle_files, { desc = "toggle file panel" } },
+							{ "n", "j", da.next_entry, { desc = "Next log entry" } },
+							{ "n", "<down>", da.select_next_entry, { desc = "Select next log entry" } },
+							{ "n", "k", da.prev_entry, { desc = "Previous log entry" } },
+							{ "n", "<up>", da.select_prev_entry, { desc = "Select previous file entry" } },
+							{ "n", "<cr>", da.select_entry, { desc = "Open diff for selected entry" } },
+							{ "n", "gd", da.open_in_diffview, { desc = "Open entry in diffview" } },
+							{ "n", "y", da.copy_hash, { desc = "Copy commit hash" } },
+							{ "n", "L", da.open_commit_log, { desc = "Show commit details" } },
+							{ "n", "gf", da.goto_file_edit, { desc = "Open file in previous tabpage" } },
+							{ "n", "g?", da.help("file_history_panel"), { desc = "Open help panel" } },
+						},
+						help_panel = { { "n", "q", da.close, { desc = "Close help menu" } }, { "n", "<ESC>", da.close, { desc = "Close help menu" } } },
+					},
+				})
+			end,
 		},
 	},
 
-	-- ===
-	-- Filesystem
 	{
+		-- Filesystem
 		{
 			"nvim-mini/mini.files",
 			opts = {
@@ -967,9 +1086,8 @@ return {
 		},
 	},
 
-	-- ===
-	-- Utils
 	{
+		-- Utils
 		{
 			"aserowy/tmux.nvim",
 			enabled = vim.fn.has("win32") == 0,
@@ -1084,9 +1202,8 @@ return {
 		},
 	},
 
-	-- ===
-	-- UI
 	{
+		-- UI
 		{
 			"folke/which-key.nvim",
 			dependencies = {
@@ -1163,81 +1280,7 @@ return {
 			},
 		},
 		{
-			"folke/noice.nvim",
-			enabled = vim.fn.has("win32") == 0,
-			dependencies = { "MunifTanjim/nui.nvim" },
-			event = "VeryLazy",
-			opts = {
-				presets = {
-					bottom_search = true,
-					lsp_doc_border = true,
-				},
-				views = {
-					split = {
-						enter = false,
-						size = "auto",
-					},
-					popup = {
-						size = "auto",
-					},
-				},
-				routes = {
-					{
-						filter = {
-							event = "msg_show",
-							any = {
-								{ kind = "bufwrite" },
-								{ kind = "undo" },
-								{ find = "%d+ lines" },
-								{ find = "%d+ more lines" },
-								{ find = "%d+ fewer" },
-								{ find = "is deprecated" },
-								{ find = "Hunk %d+ of %d+" },
-							},
-						},
-						view = "mini",
-					},
-					{
-						filter = {
-							event = "msg_show",
-							kind = "lua_print",
-						},
-						view = "notify",
-					},
-					{
-						filter = {
-							event = "msg_show",
-							min_height = 5,
-							cmdline = true,
-						},
-						view = "popup",
-					},
-					{
-						filter = {
-							event = "notify",
-							cond = function(message) return message.opts.title == "config sync" end,
-						},
-						view = "mini",
-					},
-				},
-				lsp = {
-					progress = { enabled = false },
-					override = {
-						["cmp.entry.get_documentation"] = false,
-					},
-				},
-				cmdline = {
-					enabled = true,
-					view = "cmdline_popup",
-				},
-				popupmenu = {
-					enabled = true,
-				},
-			},
-			init = function()
-				map({ "n", "i", "s" }, "<C-n>", function() require("noice.lsp").scroll(4) end, { desc = "Scroll hover down" })
-				map({ "n", "i", "s" }, "<C-p>", function() require("noice.lsp").scroll(-4) end, { desc = "Scroll hover up" })
-			end,
+			-- "folke/noice.nvim", enabled = vim.fn.has("win32") == 0, opts = function(_, opts) local config = vim.tbl_deep_extend("force", opts or {}, { lsp = { progress = { enabled = false } }, presets = { bottom_search = true, lsp_doc_border = true }, views = { split = { size = "auto" }, popup = { size = "auto" }, }, routes = { { filter = { event = "msg_show", any = { { kind = "bufwrite" }, { kind = "undo" }, { find = "%d+ lines" }, { find = "%d+ more lines" }, { find = "%d+ fewer" }, { find = "is deprecated" }, { find = "Hunk %d+ of %d+" }, }, }, view = "mini", }, { filter = { event = "msg_show", kind = "lua_print", }, view = "notify", }, { filter = { event = "msg_show", min_height = 5, cmdline = true, }, view = "popup", }, { filter = { event = "notify", cond = function(message) return message.opts.title == "config sync" end, }, view = "mini", }, }, popupmenu = { enabled = false }, }) return config end, init = function() map({ "n", "i", "s" }, "<C-n>", function() require("noice.lsp").scroll(4) end, { desc = "Scroll hover down" }) map({ "n", "i", "s" }, "<C-p>", function() require("noice.lsp").scroll(-4) end, { desc = "Scroll hover up" }) end,
 		},
 		{
 			"nvim-lualine/lualine.nvim",
@@ -1262,10 +1305,9 @@ return {
 					return out
 				end
 
-				-- local formatters = function() local status, conform = pcall(require, "conform") if not status then return "Conform not installed" end local lsp_format = require("conform.lsp_format") local formatters = conform.list_formatters_for_buffer() if formatters and #formatters > 0 then local formatterNames = {} for _, formatter in ipairs(formatters) do table.insert(formatterNames, formatter) end return table.concat(formatterNames, " ") end local bufnr = vim.api.nvim_get_current_buf() local lsp_clients = lsp_format.get_format_clients({ bufnr = bufnr }) if not vim.tbl_isempty(lsp_clients) then return "󰷈 LSP Formatter" end return "" end
-
 				-- my custom config
-				-- return { options = { theme = "auto", component_separators = "", section_separators = { left = icons.lualine.rsep, right = icons.lualine.lsep }, globalstatus = true, disabled_filetypes = { { "snacks_dashboard" } }, }, sections = { lualine_a = { { "mode", separator = { left = icons.lualine.lsep }, right_padding = 2 } }, lualine_b = { "branch" }, lualine_c = { { "filetype", padding = { left = 1, right = 0 }, icon_only = true, }, { "filename", path = 1, symbols = { modified = icons.lualine.modified, readonly = icons.lualine.readonly, unnamed = icons.lualine.unnamed, newfile = icons.lualine.newfile, }, padding = 0, }, {"diagnostics"}, { macro, color = "lualine_c_diagnostics_error_insert", }, { "diff", symbols = { added = icons.git.added .. " ", modified = icons.git.modified .. " ", removed = icons.git.removed .. " ", }, source = function() local gitsigns = vim.b.gitsigns_status_dict if gitsigns then return { added = gitsigns.added, modified = gitsigns.changed, removed = gitsigns.removed, } end end, diff_color = { added = "GitSignsStagedAdd", modified = "GitSignsStagedChange", removed = "GitSignsStagedDelete"}, }, }, lualine_x = { { "lsp_status", formatters, }, }, lualine_y = { { "fileformat", padding = { left = 0, right = 0 } }, "location", }, lualine_z = { { "progress", }, }, }, tabline = { lualine_a = { { "buffers", mode = 4, hide_filename_extension = true, symbols = { alternate_file = icons.lualine.alternate .. " ", modified = " " .. icons.lualine.modified, }, filetype_names = { snacks_picker_list = icons.filetype.snacks_picker_list, ["dap-view-term"] = icons.debug.bug, }, use_mode_colors = true, cond = function() if vim.fn.expand("%") == "" then return false else return true end end, }, }, lualine_b = {}, lualine_c = {}, lualine_x = { { trouble.get, cond = trouble.has, }, }, lualine_y = { { "tabs", use_mode_colors = true, show_modified_status = false, }, }, lualine_z = {}, } }
+				-- local formatters = function() local status, conform = pcall(require, "conform") if not status then return "Conform not installed" end local lsp_format = require("conform.lsp_format") local formatters = conform.list_formatters_for_buffer() if formatters and #formatters > 0 then local formatterNames = {} for _, formatter in ipairs(formatters) do table.insert(formatterNames, formatter) end return table.concat(formatterNames, " ") end local bufnr = vim.api.nvim_get_current_buf() local lsp_clients = lsp_format.get_format_clients({ bufnr = bufnr }) if not vim.tbl_isempty(lsp_clients) then return "󰷈 LSP Formatter" end return "" end
+				-- local config = { options = { theme = "auto", component_separators = "", section_separators = { left = icons.lualine.rsep, right = icons.lualine.lsep }, globalstatus = true, }, sections = { lualine_a = { { "mode", separator = { left = icons.lualine.lsep }, right_padding = 2 } }, lualine_b = { "branch" }, lualine_c = { { "filetype", padding = { left = 1, right = 0 }, icon_only = true }, { "filename", path = 1, symbols = { modified = icons.lualine.modified, readonly = icons.lualine.readonly, unnamed = icons.lualine.unnamed, newfile = icons.lualine.newfile, }, padding = 0, }, { "diagnostics" }, { macro, color = "lualine_c_diagnostics_error_insert" }, { "diff", symbols = { added = icons.git.added .. " ", modified = icons.git.modified .. " ", removed = icons.git.removed .. " " }, source = function() local gitsigns = vim.b.gitsigns_status_dict if gitsigns then return { added = gitsigns.added, modified = gitsigns.changed, removed = gitsigns.removed } end end, diff_color = { added = "GitSignsStagedAdd", modified = "GitSignsStagedChange", removed = "GitSignsStagedDelete" }, }, }, lualine_x = { { "lsp_status" } }, lualine_y = { { "fileformat", padding = { left = 0, right = 0 } }, "location" }, lualine_z = { { "progress" } }, }, tabline = { lualine_a = { { "buffers", mode = 4, hide_filename_extension = true, symbols = { alternate_file = icons.lualine.alternate .. " ", modified = " " .. icons.lualine.modified }, filetype_names = { snacks_picker_list = icons.filetype.snacks_picker_list, ["dap-view-term"] = icons.debug.bug }, use_mode_colors = true, cond = function() if vim.fn.expand("%:t") == "" then return false else return true end end, }, }, lualine_b = {}, lualine_c = {}, lualine_x = {}, lualine_y = { { "tabs", use_mode_colors = true, show_modified_status = false } }, lualine_z = {}, }, }
 
 				-- Evilline
 				local conditions = {
@@ -1295,7 +1337,6 @@ return {
 						globalstatus = true,
 						component_separators = "",
 						section_separators = "",
-						disabled_filetypes = { "snacks_dashboard" },
 					},
 					sections = {
 						lualine_a = {},
@@ -1380,6 +1421,7 @@ return {
 					path = 1,
 					color = { fg = colors.magenta, gui = "bold" },
 				})
+				ins_right({ "searchcount", color = { fg = colors.red, gui = "bold" } })
 				ins_right({
 					"lsp_status",
 					icon = "",
@@ -1461,9 +1503,8 @@ return {
 		},
 	},
 
-	-- ===
-	-- Mason
 	{
+		-- Mason
 		{
 			"mason-org/mason.nvim",
 			version = "*",
@@ -1520,124 +1561,319 @@ return {
 		},
 	},
 
-	-- ===
-	-- Sessions
 	{
-		"stevearc/resession.nvim",
-		opts = {
-			autosave = {
-				enabled = true,
-				interval = 60,
-				notify = false,
-			},
-		},
-		init = function()
-			local resession = require("resession")
-			local function get_session_name()
-				local name = vim.fn.getcwd()
-				local branch = vim.trim(vim.fn.system("git branch --show-current"))
-				if vim.v.shell_error == 0 then
-					return name .. branch
-				else
-					return name
-				end
-			end
-			vim.api.nvim_create_autocmd("VimLeavePre", {
-				callback = function() resession.save(get_session_name(), { dir = "dirsession", notify = false }) end,
-			})
-		end,
+		-- "stevearc/resession.nvim", opts = { autosave = { enabled = true, interval = 60, notify = false, }, }, init = function() local resession = require("resession") local function get_session_name() local name = vim.fn.getcwd() local branch = vim.trim(vim.fn.system("git branch --show-current")) if vim.v.shell_error == 0 then return name .. branch else return name end end vim.api.nvim_create_autocmd("VimLeavePre", { callback = function() resession.save(get_session_name(), { dir = "dirsession", notify = false }) end, }) end,
 	},
 
-	-- ===
-	-- Snacks
 	{
-		"folke/snacks.nvim",
-		priority = 1000,
-		lazy = false,
-		---@type snacks.Config
-		opts = {
-			bigfile = { enabled = true },
-			terminal = {
-				win = {
-					wo = { statuscolumn = " ", winhighlight = "Normal:Normal,FloatBorder:Green" },
-					position = "float",
-					backdrop = 100,
-					border = "rounded",
-					height = 0.9,
-				},
-				auto_close = true,
-			},
-			explorer = { enabled = true, replace_netrw = false },
-			dashboard = {
-				preset = {
-					header = require("stuff.ascii").cat,
-					keys = {
-						-- { icon = " ", key = "n", desc = "New File", action = ":ene | startinsert" },
-						{
-							icon = " ",
-							key = "f",
-							desc = "Find File",
-							action = ":lua Snacks.dashboard.pick('files')",
+		-- Snacks
+		{
+			"folke/snacks.nvim",
+			priority = 1000,
+			lazy = false,
+			opts = function(_, opts)
+				---@type snacks.Config
+				local config = vim.tbl_deep_extend("force", opts, {
+					bigfile = { enabled = true, line_length = 99999 },
+					terminal = {
+						win = {
+							wo = { statuscolumn = " ", winhighlight = "Normal:Normal,FloatBorder:Green" },
+							position = "float",
+							backdrop = 100,
+							border = "rounded",
+							height = 0.9,
 						},
-						{
-							icon = "󰙅 ",
-							key = "e",
-							desc = "File Explorer",
-							action = ":e .",
-						},
-						{
-							icon = " ",
-							key = "d",
-							desc = "CodeDiff",
-							action = ":CodeDiff",
-						},
-						{
-							icon = " ",
-							key = "s",
-							desc = "Restore Session",
-							action = function()
-								local function get_session_name()
-									local name = vim.fn.getcwd()
-									local branch = vim.trim(vim.fn.system("git branch --show-current"))
-									if vim.v.shell_error == 0 then
-										return name .. branch
-									else
-										return name
-									end
-								end
-								require("resession").load(get_session_name(), { dir = "dirsession", silence_errors = true })
-							end,
-						},
-						{ icon = " ", key = "q", desc = "Quit", action = ":qa" },
+						auto_close = true,
 					},
-				},
-				sections = {
-					{ section = "header" },
-					{ section = "keys", gap = 0, padding = 2 },
-					{
-						section = "recent_files",
-						icon = " ",
-						title = "Recent Files",
-						indent = 2,
-						padding = 2,
-						limit = 10,
+					explorer = { enabled = false },
+					dashboard = {
+						preset = {
+							header = require("stuff.ascii").cat,
+							keys = {
+								-- { icon = " ", key = "n", desc = "New File", action = ":ene | startinsert" },
+								{
+									icon = " ",
+									key = "f",
+									desc = "Find File",
+									action = ":lua Snacks.dashboard.pick('files')",
+								},
+								{
+									icon = "󰙅 ",
+									key = "e",
+									desc = "File Explorer",
+									action = ":e .",
+								},
+								{
+									icon = " ",
+									key = "d",
+									desc = "CodeDiff",
+									action = ":CodeDiff",
+								},
+								{
+									icon = " ",
+									key = "s",
+									desc = "Restore Session",
+									action = ":SessionLoad",
+								},
+								{ icon = " ", key = "q", desc = "Quit", action = ":qa" },
+							},
+						},
+						sections = {
+							{ section = "header" },
+							{ section = "keys", gap = 0, padding = 2 },
+							{
+								section = "recent_files",
+								icon = " ",
+								title = "Recent Files",
+								indent = 2,
+								padding = 2,
+								limit = 10,
+							},
+							{ section = "startup" },
+						},
 					},
-					{ section = "startup" },
-				},
-			},
-			image = { enabled = true, math = { enabled = false } },
-			indent = { enabled = true, scope = { only_current = true } },
-			input = { enabled = true },
-			---@diagnostic disable-next-line: missing-fields
-			lazygit = { theme = { selectedLineBgColor = { bg = "Visual" } } },
-			picker = {
-				layout = function()
-					if vim.o.columns >= 140 then
-						---@diagnostic disable-next-line: return-type-mismatch
-						return { preset = "default" }
+					image = { enabled = true, math = { enabled = false } },
+					indent = {
+						enabled = true,
+						scope = { only_current = true },
+						filter = function(buf, _win)
+							return vim.g.snacks_indent ~= false
+								and vim.b[buf].snacks_indent ~= false
+								and vim.bo[buf].buftype == ""
+								and vim.bo[buf].filetype ~= "snacks_picker_preview"
+						end,
+					},
+					input = { enabled = true },
+					---@type snacks.picker.Config
+					picker = {
+						layout = function()
+							local layouts = require("snacks.picker.config.layouts")
+							---@type snacks.picker.layout.Config
+							local cfg = layouts["default"]
+							if vim.o.columns < 140 then
+								---@type snacks.picker.layout.Config
+								cfg = vim.deepcopy(layouts["vertical"])
+								cfg.layout.width = 0.8
+								cfg.layout.min_width = 90
+								cfg.layout[3] = vim.tbl_deep_extend("force", cfg.layout[3], {
+									win = "preview",
+									height = 0.8,
+									border = "top",
+									wo = { wrap = true, number = false, statuscolumn = "%l ", relativenumber = false, foldcolumn = "0" },
+								})
+							end
+							return cfg
+						end,
+						sources = {
+							explorer = {
+								exclude = { "__**__", ".ipynb_checkpoints" },
+								follow_file = true,
+								hidden = true,
+								ignored = true,
+								follow = true,
+							},
+							colorschemes = {
+								layout = { preset = "dropdown" },
+							},
+						},
+						win = {
+							input = {
+								keys = {
+									["/"] = "focus_preview",
+									["<C-p>"] = "preview_scroll_up",
+									["<C-n>"] = "preview_scroll_down",
+									["<a-i>"] = "inspect",
+									["<C-w>"] = { "<c-s-w>", mode = { "i" }, expr = true, desc = "" },
+									["<C-b>"] = false,
+									["<C-f>"] = false,
+									["<S-CR>"] = false,
+									["<a-f>"] = false,
+									["<a-h>"] = false,
+									["<a-m>"] = false,
+									["<c-j>"] = false,
+									["<c-k>"] = false,
+									["<C-Down>"] = false,
+									["<C-Up>"] = false,
+									["<a-d>"] = false,
+									["<c-g>"] = false,
+									["<c-t>"] = false,
+									["<c-r><c-a>"] = false,
+									["<c-r><c-f>"] = false,
+									["<c-r><c-l>"] = false,
+									["<c-r><c-p>"] = false,
+									["<c-r><c-w>"] = false,
+									["<C-c>"] = false,
+									["<a-w>"] = false,
+								},
+							},
+							list = {
+								keys = {
+									["/"] = "focus_preview",
+									["<C-p>"] = "preview_scroll_up",
+									["<C-n>"] = "preview_scroll_down",
+									["<a-i>"] = "inspect",
+									["<C-w>"] = { "<c-s-w>", mode = { "i" }, expr = true, desc = "" },
+									["<C-b>"] = false,
+									["<C-f>"] = false,
+									["<S-CR>"] = false,
+									["<a-f>"] = false,
+									["<a-h>"] = false,
+									["<a-m>"] = false,
+									["<c-j>"] = false,
+									["<c-k>"] = false,
+									["<C-Down>"] = false,
+									["<C-Up>"] = false,
+									["<a-d>"] = false,
+									["<c-g>"] = false,
+									["<c-t>"] = false,
+									["<c-r><c-a>"] = false,
+									["<c-r><c-f>"] = false,
+									["<c-r><c-l>"] = false,
+									["<c-r><c-p>"] = false,
+									["<c-r><c-w>"] = false,
+									["<C-c>"] = false,
+									["<a-w>"] = false,
+								},
+							},
+							preview = {
+								keys = {
+									["/"] = "focus_list",
+								},
+							},
+						},
+					},
+					notifier = { enabled = true },
+					quickfile = { enabled = true },
+					scope = { enabled = false },
+					scratch = {
+						win = {
+							wo = {
+								number = true,
+								relativenumber = false,
+								numberwidth = 2,
+								statuscolumn = "%l %s",
+								winhighlight = "Normal:Normal,FloatBorder:SnacksPickerBorder,FloatTitle:SnacksPickerTitle",
+							},
+							relative = "editor",
+						},
+					},
+					statuscolumn = { enabled = true },
+					zen = { toggles = { dim = false }, show = { statusline = true } },
+				})
+				return config
+			end,
+			init = function()
+				local Snacks = require("snacks")
+				vim.print = function(...) Snacks.debug.inspect(...) end
+
+				map("n", "<leader>c", function() Snacks.bufdelete() end, { desc = "Close buffer" })
+				map("n", "<leader>bc", function() Snacks.bufdelete.other() end, { desc = "Close all other buffers" })
+				map("n", "<Leader>fe", function() Snacks.explorer() end, { desc = "File explorer" })
+				map({ "n", "t", "i" }, "<F7>", function() Snacks.terminal.toggle() end, { desc = "toggle terminal" })
+				map("n", "<Leader>R", function() Snacks.rename.rename_file() end, { desc = "Rename file" })
+
+				local bufferline_avail, _ = pcall(require, "bufferline")
+				if not bufferline_avail then map("n", "vv", function() Snacks.picker.buffers() end, { desc = "buffers" }) end
+
+				local fff_avail, _ = pcall(require, "fff")
+				if not fff_avail then
+					map("n", "ff", function() Snacks.picker.files() end, { desc = "files" })
+					map("n", "<Leader>fw", function() Snacks.picker.grep({ cmd = "rg" }) end, { desc = "word" })
+					map({ "n", "x" }, "<Leader>f*", function() Snacks.picker.grep_word() end, { desc = "grep current selection" })
+				end
+
+				map("n", "<Leader>ff", function() Snacks.picker.files({ hidden = true, ignored = true, cmd = "fd" }) end, { desc = "all files" })
+				map("n", "<Leader>fW", function() Snacks.picker.grep({ cmd = "rg", hidden = true, ignored = true }) end, { desc = "Word in all files" })
+
+				map("n", "<Leader>f:", function() Snacks.picker.command_history() end, { desc = "Command history" })
+				map("n", "<Leader>f<space>", function() Snacks.picker.resume() end, { desc = "Resume last search" })
+				map("n", "<Leader>f=", function() Snacks.picker.spelling() end, { desc = "Spelling Suggestions" })
+				map("n", "<Leader>fA", function() Snacks.picker.autocmds() end, { desc = "autocmds" })
+				map("n", "<Leader>fC", function() Snacks.picker.commands() end, { desc = "Commands" })
+				map("n", "<Leader>fJ", function() Snacks.picker.jumps() end, { desc = "jumps" })
+				map("n", "<Leader>fL", function() Snacks.picker.loclist() end, { desc = "location list" })
+				map("n", "<Leader>fM", function() Snacks.picker.man() end, { desc = "Man pages" })
+				map("n", "<Leader>fR", function() Snacks.picker.registers() end, { desc = "registers" })
+				map("n", "<Leader>fb", function() Snacks.picker.buffers() end, { desc = "buffers" })
+				map("n", "<Leader>fd", function() Snacks.picker.diagnostics_buffer() end, { desc = "diagnostics" })
+				map("n", "<Leader>fk", function() Snacks.picker.keymaps() end, { desc = "keymaps" })
+				map("n", "<Leader>fh", function() Snacks.picker.help() end, { desc = "help pages" })
+				map("n", "<Leader>fH", function() Snacks.picker.highlights() end, { desc = "Highlights" })
+				map("n", "<Leader>fm", function() Snacks.picker.marks() end, { desc = "marks" })
+				map("n", "<Leader>fp", function() Snacks.picker.projects() end, { desc = "projects" })
+				map("n", "<Leader>fq", function() Snacks.picker.qflist() end, { desc = "quickfix list" })
+				map("n", "<Leader>fr", function() Snacks.picker.recent() end, { desc = "recent" })
+				map("n", "<Leader>fu", function() Snacks.picker.undo() end, { desc = "undo" })
+				map("n", "<Leader>fz", function() Snacks.picker.files({ cwd = vim.fn.stdpath("config") }) end, { desc = "local config" })
+				map("n", "<Leader>fS", function() Snacks.picker.scratch() end, { desc = "local config" })
+
+				map("n", "<Leader>bs", function() Snacks.scratch() end, { desc = "scratch buffer" })
+				map("n", "<Leader>bS", function() Snacks.scratch.select() end, { desc = "search scratch buffers" })
+				map("n", "<Leader>uc", function() Snacks.picker.colorschemes() end, { desc = "search colorschemes" })
+				map("n", "<Leader>uz", function() Snacks.zen.zoom() end, { desc = "zoom pane" })
+				map("n", "<Leader>uZ", function() Snacks.zen.zen() end, { desc = "Zen mode" })
+				map("n", "<Leader>un", function() Snacks.notifier.hide() end, { desc = "dismiss all notifications" })
+				map("n", "<Leader>gl", function() Snacks.picker.git_log_file() end, { desc = "Log file" })
+				map("n", "<Leader>gg", function() Snacks.lazygit() end, { desc = "Lazygit" })
+
+				map("n", "<Leader>ll", "", { desc = "LSP" })
+				map("n", "<Leader>llr", function() Snacks.picker.lsp_references() end, { nowait = true, desc = "references" })
+				map("n", "<Leader>lls", function() Snacks.picker.lsp_symbols() end, { desc = "LSP symbols" })
+				map("n", "<Leader>llw", function() Snacks.picker.lsp_workspace_symbols() end, { desc = "LSP workspace Symbols" })
+				map("n", "<Leader>lli", function() Snacks.picker.lsp_implementations() end, { desc = "Go to Implementation" })
+				map("n", "<Leader>llt", function() Snacks.picker.lsp_type_definitions() end, { desc = "Go to type definition" })
+				map("n", "gd", function() Snacks.picker.lsp_definitions() end, { desc = "Go to definition" })
+				map("n", "gD", function() Snacks.picker.lsp_declarations() end, { desc = "Go to Declaration" })
+
+				local toggles = require("stuff.toggles")
+				toggles.autosave():map("<Leader>ba")
+				toggles.formatting():map("<Leader>bF")
+				toggles.completion():map("<Leader>bC")
+				toggles.virtual_text():map("<Leader>uv")
+				toggles.virtual_lines():map("<Leader>uV")
+				toggles.math_virt():map("<Leader>um")
+				Snacks.toggle.option("spell", { name = "spellcheck" }):map("<leader>us")
+				Snacks.toggle.option("wrap", { name = "wrap" }):map("<leader>uw")
+				Snacks.toggle.option("relativenumber", { name = "relative number" }):map("<leader>ul")
+				Snacks.toggle.option("background", { off = "light", on = "dark", name = "dark background" }):map("<leader>ub")
+				Snacks.toggle.option("scrollbind"):map("<leader>uS")
+				Snacks.toggle.diagnostics():map("<leader>ud")
+				Snacks.toggle.line_number():map("<leader>uL")
+				Snacks.toggle.treesitter():map("<leader>uT")
+				Snacks.toggle.inlay_hints():map("<leader>uI")
+				Snacks.toggle.indent():map("<leader>ug")
+				Snacks.toggle.dim():map("<leader>uD")
+
+				map("n", "<Leader>fa", function()
+					if vim.fn.has("win32") == 1 then
+						vim.notify("Do not mess with config from Windows", vim.log.levels.ERROR)
 					else
-						---@diagnostic disable-next-line: return-type-mismatch
-						return {
+						Snacks.picker.files({
+							hidden = true,
+							ignored = true,
+							follow = true,
+							dirs = { os.getenv("HOME") .. "/.local/share/chezmoi" },
+						})
+					end
+				end, { desc = "config" })
+
+				map(
+					"n",
+					"<Leader>ui",
+					function()
+						require("snacks.picker").icons({
+							custom_sources = { unicode = vim.fn.stdpath("config") .. "/unicode_chars.json" },
+						})
+					end,
+					{ desc = "icons" }
+				)
+				-- map("i", "<C-l>", function() local pos = vim.fn.getcursorcharpos() require("snacks.picker").icons({ custom_sources = { unicode = vim.fn.stdpath("config") .. "/unicode_chars.json" }, }) vim.fn.setcursorcharpos(pos) end, { desc = "insert icon" })
+				map("n", "<Leader>N", function()
+					require("snacks").picker.notifications({
+						confirm = { "yank", "close" },
+						focus = "list",
+						layout = {
+							---@diagnostic disable-next-line: missing-fields
 							layout = {
 								box = "vertical",
 								backdrop = false,
@@ -1649,7 +1885,7 @@ return {
 								title = "{title} {live} {flags}",
 								title_pos = "center",
 								{ win = "input", height = 1, border = "bottom" },
-								{ win = "list", border = "bottom" },
+								{ win = "list", border = "none" },
 								{
 									win = "preview",
 									title = "{preview}",
@@ -1658,371 +1894,121 @@ return {
 									wo = { wrap = true, statuscolumn = "%l ", relativenumber = false, foldcolumn = "0" },
 								},
 							},
-						}
-					end
-				end,
-				sources = {
-					explorer = {
-						exclude = { "__**__", ".ipynb_checkpoints" },
-						follow_file = true,
-						hidden = true,
-						ignored = true,
-						follow = true,
-					},
-					colorschemes = {
-						layout = { preset = "dropdown" },
-					},
-				},
-				win = {
-					input = {
-						keys = {
-							["/"] = "focus_preview",
-							["<C-p>"] = "preview_scroll_up",
-							["<C-n>"] = "preview_scroll_down",
-							["<a-i>"] = "inspect",
-							["<C-w>"] = { "<c-s-w>", mode = { "i" }, expr = true, desc = "" },
-							["<C-b>"] = false,
-							["<C-f>"] = false,
-							["<S-CR>"] = false,
-							["<a-f>"] = false,
-							["<a-h>"] = false,
-							["<a-m>"] = false,
-							["<c-j>"] = false,
-							["<c-k>"] = false,
-							["<C-Down>"] = false,
-							["<C-Up>"] = false,
-							["<a-d>"] = false,
-							["<c-g>"] = false,
-							["<c-t>"] = false,
-							["<c-r><c-a>"] = false,
-							["<c-r><c-f>"] = false,
-							["<c-r><c-l>"] = false,
-							["<c-r><c-p>"] = false,
-							["<c-r><c-w>"] = false,
-							["<C-c>"] = false,
-							["<a-w>"] = false,
 						},
-					},
-					list = {
-						keys = {
-							["/"] = "focus_preview",
-							["<C-p>"] = "preview_scroll_up",
-							["<C-n>"] = "preview_scroll_down",
-							["<a-i>"] = "inspect",
-							["<C-w>"] = { "<c-s-w>", mode = { "i" }, expr = true, desc = "" },
-							["<C-b>"] = false,
-							["<C-f>"] = false,
-							["<S-CR>"] = false,
-							["<a-f>"] = false,
-							["<a-h>"] = false,
-							["<a-m>"] = false,
-							["<c-j>"] = false,
-							["<c-k>"] = false,
-							["<C-Down>"] = false,
-							["<C-Up>"] = false,
-							["<a-d>"] = false,
-							["<c-g>"] = false,
-							["<c-t>"] = false,
-							["<c-r><c-a>"] = false,
-							["<c-r><c-f>"] = false,
-							["<c-r><c-l>"] = false,
-							["<c-r><c-p>"] = false,
-							["<c-r><c-w>"] = false,
-							["<C-c>"] = false,
-							["<a-w>"] = false,
+						win = {
+							input = { keys = { ["<C-Space>"] = { "cycle_win", mode = { "i", "n" } } } },
+							list = { keys = { ["<C-Space>"] = { "cycle_win", mode = { "i", "n" } } } },
+							preview = { keys = { ["<C-Space>"] = { "cycle_win", mode = { "i", "n" } } } },
 						},
-					},
-					preview = {
-						keys = {
-							["/"] = "focus_list",
-						},
-					},
-				},
-			},
-			notifier = { enabled = true },
-			quickfile = { enabled = true },
-			scope = { enabled = false },
-			scratch = {
-				---@diagnostic disable-next-line: missing-fields
-				win = {
-					wo = {
-						number = true,
-						relativenumber = false,
-						numberwidth = 2,
-						statuscolumn = "%l %s",
-						winhighlight = "Normal:Normal,FloatBorder:SnacksPickerBorder,FloatTitle:SnacksPickerTitle",
-					},
-					relative = "editor",
-				},
-			},
-			statuscolumn = { enabled = true },
-			zen = { toggles = { dim = false }, show = { statusline = true } },
+					})
+				end, { desc = "Notification history" })
+			end,
 		},
-		init = function()
-			local Snacks = require("snacks")
-			local group = vim.api.nvim_create_augroup("Snacks", { clear = true })
+	},
 
-			vim.api.nvim_create_autocmd("User", {
-				pattern = "VeryLazy",
-				group = group,
-				callback = function()
-					---@diagnostic disable-next-line: global-in-non-module
-					_G.dd = function(...) Snacks.debug.inspect(...) end
-					---@diagnostic disable-next-line: global-in-non-module
-					_G.bt = function() Snacks.debug.backtrace() end
-					vim.print = _G.dd
-				end,
-			})
-			map("n", "<leader>c", function() Snacks.bufdelete() end, { desc = "Close buffer" })
-			map("n", "<leader>bc", function() Snacks.bufdelete.other() end, { desc = "Close all other buffers" })
-			map("n", "<Leader>fe", function() Snacks.explorer() end, { desc = "File explorer" })
-			map({ "n", "t", "i" }, "<F7>", function() Snacks.terminal.toggle() end, { desc = "toggle terminal" })
-			map("n", "<Leader>R", function() Snacks.rename.rename_file() end, { desc = "Rename file" })
+	{
+		-- sniprun
+		{
+			"michaelb/sniprun",
+			branch = "master",
+			build = "bash install.sh 1",
+			enabled = vim.fn.has("linux") == 1,
+			ft = "python",
+			opts = {
+				selected_interpreters = { "Python3_fifo" },
+				repl_enable = { "Python3_fifo" },
+				display = { "Terminal" },
+				display_options = { terminal_position = "horizontal" },
+			},
+			init = function()
+				vim.api.nvim_create_autocmd("FileType", {
+					group = vim.api.nvim_create_augroup("SnipRun", { clear = true }),
+					pattern = { "python" },
+					callback = function()
+						map("n", "<Leader>r", "", { desc = "Run Code", buffer = true })
+						map("n", "<CR>", "<CMD>SnipRun<CR>", { desc = "Run line", buffer = true })
+						map("v", "<CR>", ":SnipRun<CR>", { desc = "Run selection", buffer = true })
+						map("n", "<Leader>rc", "<CMD>SnipClose<CR>", { desc = "Close REPL", buffer = true })
+						map("n", "<Leader>rl", "<CMD>SnipRun<CR>", { desc = "Run line", buffer = true })
+						map("n", "<Leader>rf", "<CMD>%SnipRun<CR>", { desc = "Run file", buffer = true })
+						map("n", "<Leader>rR", "<CMD>SnipReset<CR>", { desc = "Reset REPL", buffer = true })
+						map("n", "<Leader>rb", function()
+							vim.api.nvim_feedkeys("Vggok", "n", false)
+							vim.cmd("SnipRun")
+							vim.cmd("normal! ")
+						end, { desc = "Run above", buffer = true })
+						-- map("n", "<Leader>r<Space>", function()
+						-- 	vim.api.nvim_feedkeys("vaj", "n", false)
+						-- 	vim.cmd("SnipRun")
+						-- 	vim.cmd("normal! ")
+						-- end, { desc = "Run cell", buffer = true })
 
-			local bufferline_avail, _ = pcall(require, "bufferline")
-			if not bufferline_avail then map("n", "vv", function() Snacks.picker.buffers() end, { desc = "buffers" }) end
-			local fff_avail, _ = pcall(require, "fff")
-			if not fff_avail then
-				map("n", "ff", function() Snacks.picker.files() end, { desc = "files" })
-				map("n", "<Leader>fw", function() Snacks.picker.grep({ cmd = "rg" }) end, { desc = "word" })
-				map({ "n", "x" }, "<Leader>f*", function() Snacks.picker.grep_word() end, { desc = "grep current selection" })
-			end
-			map("n", "<Leader>ff", function() Snacks.picker.files({ hidden = true, ignored = true, cmd = "fd" }) end, { desc = "all files" })
-			map("n", "<Leader>fW", function() Snacks.picker.grep({ cmd = "rg", hidden = true, ignored = true }) end, { desc = "Word in all files" })
+						-- TODO: API viewer
+						-- local sa = require("sniprun.api")
+						-- local function listener(d)
+						-- 	local config = { midline_pct = 0.4, topline_pct = 0.2, height_pct = 0.6, outwin = { width_pct = 0.55 } }
+						-- 	vim.b.sniprun_buf = vim.api.nvim_get_current_buf()
+						-- 	vim.b.sniprun_win = vim.api.nvim_get_current_win()
+						-- 	local win_config = vim.api.nvim_win_get_config(vim.b.sniprun_win)
+						-- 	if win_config.relative ~= "" then
+						-- 		local cols, rows = vim.o.columns, vim.o.lines
+						-- 		local height = math.ceil(rows * config.height_pct)
+						-- 		vim.api.nvim_win_set_config(
+						-- 			vim.b.sniprun_win,
+						-- 			{ relative = "editor", anchor = "NE", col = cols * config.midline_pct, row = rows * config.topline_pct, height = height }
+						-- 		)
+						-- 		if not vim.b.sniprun_outbuf then vim.b.sniprun_outbuf = vim.api.nvim_create_buf(false, true) end
+						-- 		vim.schedule(function()
+						-- 			if vim.b.sniprun_outwin == nil then
+						-- 				vim.b.sniprun_outwin = vim.api.nvim_open_win(
+						-- 					vim.b.sniprun_outbuf,
+						-- 					false,
+						-- 					{
+						-- 						relative = "editor",
+						-- 						col = cols * config.midline_pct,
+						-- 						row = rows * config.topline_pct,
+						-- 						width = math.max(win_config.width, math.ceil(cols * config.outwin.width_pct)),
+						-- 						height = height,
+						-- 						style = "minimal",
+						-- 					}
+						-- 				)
+						-- 				vim.api.nvim_create_autocmd(
+						-- 					"BufHidden",
+						-- 					{
+						-- 						group = vim.api.nvim_create_augroup("SnipRun_APIWinClose", { clear = true }),
+						-- 						pattern = tostring(vim.b.sniprun_buf),
+						-- 						callback = function() vim.api.nvim_win_close(vim.b.sniprun_outwin, true) end,
+						-- 					}
+						-- 				)
+						-- 			end
+						-- 		end)
+						-- 		vim.api.nvim_set_option_value("winhl", vim.wo[vim.b.sniprun_win].winhighlight, { win = vim.b.sniprun_outwin })
+						-- 		print("in floating cond", vim.b.sniprun_outbuf, vim.b.sniprun_outwin)
+						-- 		if vim.b.sniprun_outbuf == 0 or vim.b.sniprun_outwin == 0 then
+						-- 			vim.notify("SnipRun output buffer could not be created", vim.log.levels.ERROR)
+						-- 			return
+						-- 		end
+						-- 		print("hellooo")
+						-- 		if d.status == "ok" then
+						-- 			print("nice: ", d.message)
+						-- 		elseif d.status == "error" then
+						-- 			print("no: ", d.message)
+						-- 		else
+						-- 			print("Unknown status: ", d.status)
+						-- 		end
+						-- 	end
+						-- end
+						-- if #sa.listeners == 0 then sa.register_listener(listener) end
 
-			map("n", "<Leader>f:", function() Snacks.picker.command_history() end, { desc = "Command history" })
-			map("n", "<Leader>f<space>", function() Snacks.picker.resume() end, { desc = "Resume last search" })
-			map("n", "<Leader>f=", function() Snacks.picker.spelling() end, { desc = "Spelling Suggestions" })
-			map("n", "<Leader>fA", function() Snacks.picker.autocmds() end, { desc = "autocmds" })
-			map("n", "<Leader>fC", function() Snacks.picker.commands() end, { desc = "Commands" })
-			map("n", "<Leader>fJ", function() Snacks.picker.jumps() end, { desc = "jumps" })
-			map("n", "<Leader>fL", function() Snacks.picker.loclist() end, { desc = "location list" })
-			map("n", "<Leader>fM", function() Snacks.picker.man() end, { desc = "Man pages" })
-			map("n", "<Leader>fR", function() Snacks.picker.registers() end, { desc = "registers" })
-			map("n", "<Leader>fb", function() Snacks.picker.buffers() end, { desc = "buffers" })
-			map("n", "<Leader>fd", function() Snacks.picker.diagnostics_buffer() end, { desc = "diagnostics" })
-			map("n", "<Leader>fk", function() Snacks.picker.keymaps() end, { desc = "keymaps" })
-			map("n", "<Leader>fH", function() Snacks.picker.highlights() end, { desc = "Highlights" })
-			map("n", "<Leader>fm", function() Snacks.picker.marks() end, { desc = "marks" })
-			map("n", "<Leader>fp", function() Snacks.picker.projects() end, { desc = "projects" })
-			map("n", "<Leader>fq", function() Snacks.picker.qflist() end, { desc = "quickfix list" })
-			map("n", "<Leader>fr", function() Snacks.picker.recent() end, { desc = "recent" })
-			map("n", "<Leader>fu", function() Snacks.picker.undo() end, { desc = "undo" })
-			map("n", "<Leader>fz", function() Snacks.picker.files({ cwd = vim.fn.stdpath("config") }) end, { desc = "local config" })
-			map("n", "<Leader>fS", function() Snacks.picker.scratch() end, { desc = "local config" })
-
-			map("n", "<Leader>bs", function() Snacks.scratch() end, { desc = "scratch buffer" })
-			map("n", "<Leader>bS", function() Snacks.scratch.select() end, { desc = "search scratch buffers" })
-			map("n", "<Leader>uc", function() Snacks.picker.colorschemes() end, { desc = "search colorschemes" })
-			map("n", "<Leader>uz", function() Snacks.zen.zoom() end, { desc = "zoom pane" })
-			---@diagnostic disable-next-line: missing-parameter
-			map("n", "<Leader>uZ", function() Snacks.zen() end, { desc = "Zen mode" })
-			map("n", "<Leader>un", function() Snacks.notifier.hide() end, { desc = "dismiss all notifications" })
-			map("n", "<Leader>gl", function() Snacks.picker.git_log_file() end, { desc = "Log file" })
-			map("n", "<Leader>gg", function() Snacks.lazygit() end, { desc = "Lazygit" })
-
-			map("n", "<Leader>ll", "", { desc = "LSP" })
-			map("n", "<Leader>llr", function() Snacks.picker.lsp_references() end, { nowait = true, desc = "references" })
-			map("n", "<Leader>lls", function() Snacks.picker.lsp_symbols() end, { desc = "LSP symbols" })
-			map("n", "<Leader>llw", function() Snacks.picker.lsp_workspace_symbols() end, { desc = "LSP workspace Symbols" })
-			map("n", "<Leader>lli", function() Snacks.picker.lsp_implementations() end, { desc = "Go to Implementation" })
-			map("n", "<Leader>llt", function() Snacks.picker.lsp_type_definitions() end, { desc = "Go to type definition" })
-			map("n", "gd", function() Snacks.picker.lsp_definitions() end, { desc = "Go to definition" })
-			map("n", "gD", function() Snacks.picker.lsp_declarations() end, { desc = "Go to Declaration" })
-
-			local toggles = require("stuff.toggles")
-			toggles.autosave():map("<Leader>ba")
-			toggles.formatting():map("<Leader>bF")
-			toggles.completion():map("<Leader>bC")
-			toggles.virtual_text():map("<Leader>uv")
-			toggles.virtual_lines():map("<Leader>uV")
-			toggles.math_virt():map("<Leader>um")
-			Snacks.toggle.option("spell", { name = "spellcheck" }):map("<leader>us")
-			Snacks.toggle.option("wrap", { name = "wrap" }):map("<leader>uw")
-			Snacks.toggle.option("relativenumber", { name = "relative number" }):map("<leader>ul")
-			Snacks.toggle.option("background", { off = "light", on = "dark", name = "dark background" }):map("<leader>ub")
-			Snacks.toggle.option("scrollbind"):map("<leader>uS")
-			Snacks.toggle.diagnostics():map("<leader>ud")
-			Snacks.toggle.line_number():map("<leader>uL")
-			Snacks.toggle.treesitter():map("<leader>uT")
-			Snacks.toggle.inlay_hints():map("<leader>uI")
-			Snacks.toggle.indent():map("<leader>ug")
-			Snacks.toggle.dim():map("<leader>uD")
-
-			map("n", "<Leader>fa", function()
-				if vim.fn.has("win32") == 1 then
-					vim.notify("Do not mess with config from Windows", vim.log.levels.ERROR)
-				else
-					Snacks.picker.files({
-						hidden = true,
-						ignored = true,
-						follow = true,
-						dirs = { os.getenv("HOME") .. "/.local/share/chezmoi" },
-					})
-				end
-			end, { desc = "config" })
-
-			map("n", "<Leader>fh", function()
-				local cols = vim.o.columns
-				local lines = vim.o.lines
-				if (cols / lines > 3) and (cols > 180) then
-					return Snacks.picker.help({ confirm = "vsplit" })
-				else
-					return Snacks.picker.help()
-				end
-			end, { desc = "help pages" })
-
-			map(
-				"n",
-				"<Leader>ui",
-				function()
-					require("snacks.picker").icons({
-						custom_sources = { unicode = vim.fn.stdpath("config") .. "/unicode_chars.json" },
-					})
-				end,
-				{ desc = "icons" }
-			)
-			-- map("i", "<C-l>", function() local pos = vim.fn.getcursorcharpos() require("snacks.picker").icons({ custom_sources = { unicode = vim.fn.stdpath("config") .. "/unicode_chars.json" }, }) vim.fn.setcursorcharpos(pos) end, { desc = "insert icon" })
-			map("n", "<Leader>N", function()
-				require("snacks").picker.notifications({
-					confirm = { "yank", "close" },
-					focus = "list",
-					layout = {
-						---@diagnostic disable-next-line: missing-fields
-						layout = {
-							box = "vertical",
-							backdrop = false,
-							width = 0.8,
-							min_width = 90,
-							height = 0.8,
-							min_height = 30,
-							border = "rounded",
-							title = "{title} {live} {flags}",
-							title_pos = "center",
-							{ win = "input", height = 1, border = "bottom" },
-							{ win = "list", border = "none" },
-							{
-								win = "preview",
-								title = "{preview}",
-								height = 0.8,
-								border = "top",
-								wo = { wrap = true, statuscolumn = "%l ", relativenumber = false, foldcolumn = "0" },
-							},
-						},
-					},
-					win = {
-						input = { keys = { ["<C-Space>"] = { "cycle_win", mode = { "i", "n" } } } },
-						list = { keys = { ["<C-Space>"] = { "cycle_win", mode = { "i", "n" } } } },
-						preview = { keys = { ["<C-Space>"] = { "cycle_win", mode = { "i", "n" } } } },
-					},
+					end,
 				})
-			end, { desc = "Notification history" })
-		end,
-	},
 
-	-- ===
-	-- sniprun — code runner
-	{
-		"michaelb/sniprun",
-		branch = "master",
-		build = "bash install.sh 1",
-		enabled = vim.fn.has("linux") == 1,
-		ft = "python",
-		opts = {
-			selected_interpreters = { "Python3_fifo" },
-			repl_enable = { "Python3_fifo" },
-			display = { "Terminal" },
-			display_options = { terminal_position = "horizontal" },
+			end,
 		},
-		init = function()
-			vim.api.nvim_create_autocmd("FileType", {
-				group = vim.api.nvim_create_augroup("SnipRun", { clear = true }),
-				pattern = { "python" },
-				callback = function()
-					map("n", "<Leader>r", "", { desc = "Run Code", buffer = true })
-					map("n", "<CR>", "<CMD>SnipRun<CR>", { desc = "Run line", buffer = true })
-					map("v", "<CR>", ":SnipRun<CR>", { desc = "Run selection", buffer = true })
-					map("n", "<Leader>rc", "<CMD>SnipClose<CR>", { desc = "Close REPL", buffer = true })
-					map("n", "<Leader>rl", "<CMD>SnipRun<CR>", { desc = "Run line", buffer = true })
-					map("n", "<Leader>rf", "<CMD>%SnipRun<CR>", { desc = "Run file", buffer = true })
-					map("n", "<Leader>rR", "<CMD>SnipReset<CR>", { desc = "Reset REPL", buffer = true })
-					map("n", "<Leader>rb", function()
-						vim.api.nvim_feedkeys("Vggok", "n", false)
-						vim.cmd("SnipRun")
-						vim.cmd("normal! ")
-					end, { desc = "Run above", buffer = true })
-					-- map("n", "<Leader>r<Space>", function()
-					-- 	vim.api.nvim_feedkeys("vaj", "n", false)
-					-- 	vim.cmd("SnipRun")
-					-- 	vim.cmd("normal! ")
-					-- end, { desc = "Run cell", buffer = true })
-
-					-- TODO: API viewer
-					-- local sa = require("sniprun.api")
-					-- local function listener(d)
-					-- 	local config = { midline_pct = 0.4, topline_pct = 0.2, height_pct = 0.6, outwin = { width_pct = 0.55 } }
-					-- 	vim.b.sniprun_buf = vim.api.nvim_get_current_buf()
-					-- 	vim.b.sniprun_win = vim.api.nvim_get_current_win()
-					-- 	local win_config = vim.api.nvim_win_get_config(vim.b.sniprun_win)
-					-- 	if win_config.relative ~= "" then
-					-- 		local cols, rows = vim.o.columns, vim.o.lines
-					-- 		local height = math.ceil(rows * config.height_pct)
-					-- 		vim.api.nvim_win_set_config(
-					-- 			vim.b.sniprun_win,
-					-- 			{ relative = "editor", anchor = "NE", col = cols * config.midline_pct, row = rows * config.topline_pct, height = height }
-					-- 		)
-					-- 		if not vim.b.sniprun_outbuf then vim.b.sniprun_outbuf = vim.api.nvim_create_buf(false, true) end
-					-- 		vim.schedule(function()
-					-- 			if vim.b.sniprun_outwin == nil then
-					-- 				vim.b.sniprun_outwin = vim.api.nvim_open_win(
-					-- 					vim.b.sniprun_outbuf,
-					-- 					false,
-					-- 					{
-					-- 						relative = "editor",
-					-- 						col = cols * config.midline_pct,
-					-- 						row = rows * config.topline_pct,
-					-- 						width = math.max(win_config.width, math.ceil(cols * config.outwin.width_pct)),
-					-- 						height = height,
-					-- 						style = "minimal",
-					-- 					}
-					-- 				)
-					-- 				vim.api.nvim_create_autocmd(
-					-- 					"BufHidden",
-					-- 					{
-					-- 						group = vim.api.nvim_create_augroup("SnipRun_APIWinClose", { clear = true }),
-					-- 						pattern = tostring(vim.b.sniprun_buf),
-					-- 						callback = function() vim.api.nvim_win_close(vim.b.sniprun_outwin, true) end,
-					-- 					}
-					-- 				)
-					-- 			end
-					-- 		end)
-					-- 		vim.api.nvim_set_option_value("winhl", vim.wo[vim.b.sniprun_win].winhighlight, { win = vim.b.sniprun_outwin })
-					-- 		print("in floating cond", vim.b.sniprun_outbuf, vim.b.sniprun_outwin)
-					-- 		if vim.b.sniprun_outbuf == 0 or vim.b.sniprun_outwin == 0 then
-					-- 			vim.notify("SnipRun output buffer could not be created", vim.log.levels.ERROR)
-					-- 			return
-					-- 		end
-					-- 		print("hellooo")
-					-- 		if d.status == "ok" then
-					-- 			print("nice: ", d.message)
-					-- 		elseif d.status == "error" then
-					-- 			print("no: ", d.message)
-					-- 		else
-					-- 			print("Unknown status: ", d.status)
-					-- 		end
-					-- 	end
-					-- end
-					-- if #sa.listeners == 0 then sa.register_listener(listener) end
-
-				end,
-			})
-
-		end,
 	},
 
-	-- ===
-	-- Treesitter
 	{
+		-- Treesitter
 		{
 			"nvim-treesitter/nvim-treesitter",
 			lazy = false,
@@ -2160,9 +2146,8 @@ return {
 		},
 	},
 
-	-- ===
-	-- LSP/Diagnostics
 	{
+		-- LSP/Diagnostics
 		{
 			-- "WilliamHsieh/overlook.nvim", event = "LspAttach", opts = {}, init = function() map("n", "go", require("overlook.api").peek_definition, { desc = "Peek definition" }) end,
 		},
@@ -2203,197 +2188,20 @@ return {
 		},
 	},
 
-	-- ===
-	-- Notebooks
 	{
+		-- Notebooks
 		{
-			-- "SUSTech-data/neopyter",
-			-- dependencies = {
-			-- 	"AbaoFromCUG/websocket.nvim", -- for mode='direct'
-			-- },
-			-- ---@type neopyter.Option
-			-- opts = {
-			-- 	mode = "direct",
-			-- 	remote_address = "127.0.0.1:9001",
-			-- 	file_pattern = { "*.ju.*" },
-			-- 	on_attach = function(buf)
-			-- 		map("n", "<C-Enter>", "<cmd>Neopyter execute notebook:run-cell<cr>", { desc = "run selected", buffer = buf })
-			-- 		map("n", "<space>X", "<cmd>Neopyter execute notebook:run-all-above<cr>", { desc = "run all above cell", buffer = buf })
-			-- 		map("n", "<space>nt", "<cmd>Neopyter execute kernelmenu:restart<cr>", { desc = "restart kernel", buffer = buf })
-			-- 		map(
-			-- 			"n",
-			-- 			"<S-Enter>",
-			-- 			"<cmd>Neopyter execute notebook:run-cell-and-select-next<cr>",
-			-- 			{ desc = "run selected and select next", buffer = buf }
-			-- 		)
-			-- 		map(
-			-- 			"n",
-			-- 			"<M-Enter>",
-			-- 			"<cmd>Neopyter execute notebook:run-cell-and-insert-below<cr>",
-			-- 			{ desc = "run selected and insert below", buffer = buf }
-			-- 		)
-			-- 		map("n", "<F5>", "<cmd>Neopyter execute notebook:restart-run-all<cr>", { desc = "restart kernel and run all", buffer = buf })
-			-- 	end,
-			-- },
+			-- "SUSTech-data/neopyter", dependencies = { "AbaoFromCUG/websocket.nvim", -- for mode='direct' }, opts = { mode = "direct", remote_address = "127.0.0.1:9001", file_pattern = { "*.ju.*" }, on_attach = function(buf) map("n", "<C-Enter>", "<cmd>Neopyter execute notebook:run-cell<cr>", { desc = "run selected", buffer = buf }) map("n", "<space>X", "<cmd>Neopyter execute notebook:run-all-above<cr>", { desc = "run all above cell", buffer = buf }) map("n", "<space>nt", "<cmd>Neopyter execute kernelmenu:restart<cr>", { desc = "restart kernel", buffer = buf }) map( "n", "<S-Enter>", "<cmd>Neopyter execute notebook:run-cell-and-select-next<cr>", { desc = "run selected and select next", buffer = buf }) map( "n", "<M-Enter>", "<cmd>Neopyter execute notebook:run-cell-and-insert-below<cr>", { desc = "run selected and insert below", buffer = buf }) map("n", "<F5>", "<cmd>Neopyter execute notebook:restart-run-all<cr>", { desc = "restart kernel and run all", buffer = buf }) end, },
 		},
 	},
 
-	-- ===
-	-- AI
 	{
+		-- AI
 		{
-			-- 	"yetone/avante.nvim",
-			-- 	build = vim.fn.has("win32") ~= 0 and "powershell -ExecutionPolicy Bypass -File Build.ps1 -BuildFromSource false" or "make",
-			-- 	event = "VeryLazy",
-			-- 	version = false,
-			-- 	---@module 'avante'
-			-- 	---@type avante.Config
-			-- 	opts = {
-			-- 		instructions_file = "avante.md",
-			-- 		provider = "openrouter",
-			-- 		providers = {
-			-- 			openrouter = {
-			-- 				__inherited_from = "openai",
-			-- 				endpoint = "https://openrouter.ai/api/v1",
-			-- 				api_key_name = "OPENROUTER_API_KEY",
-			-- 				model = "z-ai/glm-4.5-air:free",
-			-- 			},
-			-- 		},
-			-- 		selector = {
-			-- 			provider = "snacks",
-			-- 			provider_opts = {},
-			-- 		},
-			-- 		input = {
-			-- 			provider = "snacks",
-			-- 			provider_opts = {
-			-- 				title = "Avante Input",
-			-- 				icon = " ",
-			-- 			},
-			-- 		},
-			-- 	},
-			-- 	dependencies = {
-			-- 		"nvim-lua/plenary.nvim",
-			-- 		"MunifTanjim/nui.nvim",
-			-- 		"folke/snacks.nvim",
-			-- 		{
-			-- 			"MeanderingProgrammer/render-markdown.nvim",
-			-- 			opts = { file_types = { "markdown", "Avante" } },
-			-- 			ft = { "markdown", "Avante" },
-			-- 		},
-			-- 	},
+			-- "yetone/avante.nvim", build = vim.fn.has("win32") ~= 0 and "powershell -ExecutionPolicy Bypass -File Build.ps1 -BuildFromSource false" or "make", event = "VeryLazy", version = false, opts = { instructions_file = "avante.md", provider = "openrouter", providers = { openrouter = { __inherited_from = "openai", endpoint = "https://openrouter.ai/api/v1", api_key_name = "OPENROUTER_API_KEY", model = "z-ai/glm-4.5-air:free", }, }, selector = { provider = "snacks", provider_opts = {}, }, input = { provider = "snacks", provider_opts = { title = "Avante Input", icon = " ", }, }, }, dependencies = { "nvim-lua/plenary.nvim", "MunifTanjim/nui.nvim", "folke/snacks.nvim", { "MeanderingProgrammer/render-markdown.nvim", opts = { file_types = { "markdown", "Avante" } }, ft = { "markdown", "Avante" }, }, },
 		},
 		{
-			-- 	"olimorris/codecompanion.nvim",
-			-- 	version = "17.33.0",
-			-- 	dependencies = {
-			-- 		"nvim-lua/plenary.nvim",
-			-- 	},
-			-- 	cmd = { "CodeCompanion", "CodeCompanionChat", "CodeCompanionCmd", "CodeCompanionActions" },
-			-- 	opts = {
-			-- 		display = {
-			-- 			chat = {
-			-- 				intro_message = "Chatbot time 󰭹 󰓠 󰚩   . Press ? for options",
-			-- 				separator = "---",
-			-- 				start_in_insert_mode = false,
-			-- 				icons = { buffer_watch = " " },
-			-- 				window = { layout = "horizontal", height = 0.45 },
-			-- 			},
-			-- 			diff = {
-			-- 				provider_opts = {
-			-- 					split = { opts = { "filler", "closeoff", "algorithm:minimal", "followwrap", "linematch:120" } },
-			-- 				},
-			-- 			},
-			-- 			action_palette = { provider = "default" },
-			-- 		},
-			-- 		strategies = {
-			-- 			chat = {
-			-- 				adapter = "gptoss120b_ol_df2",
-			-- 				variables = {
-			-- 					["buffer"] = { opts = { default_params = "watch" } },
-			-- 				},
-			-- 				tools = {
-			-- 					opts = {
-			-- 						auto_submit_errors = true,
-			-- 						auto_submit_success = true,
-			-- 						default_tools = { "web_search", "file_search", "grep_search", "read_file" },
-			-- 					},
-			-- 				},
-			-- 			},
-			-- 			inline = { adapter = "qwen3vl_ol_df2" },
-			-- 			cmd = { adapter = "gptoss120b_ol_df2" },
-			-- 		},
-			-- 		adapters = {
-			-- 			http = {
-			-- 				opts = { show_defaults = false },
-			-- 				gptoss120b_ol_df2 = function()
-			-- 					return require("codecompanion.adapters").extend("ollama", {
-			-- 						name = "gptoss120b_ol_df2",
-			-- 						env = { url = "http://100.106.205.69:11434" },
-			-- 						headers = { ["Content-Type"] = "application/json" },
-			-- 						schema = {
-			-- 							model = { default = "gpt-oss:120b" },
-			-- 							keep_alive = { default = "15m" },
-			-- 						},
-			-- 					})
-			-- 				end,
-			-- 				qwen3vl_ol_df2 = function()
-			-- 					return require("codecompanion.adapters").extend("ollama", {
-			-- 						name = "qwen3vl_ol_df2",
-			-- 						env = { url = "http://100.106.205.69:11434" },
-			-- 						headers = { ["Content-Type"] = "application/json" },
-			-- 						schema = {
-			-- 							model = { default = "qwen3-vl:32b" },
-			-- 							keep_alive = { default = "15m" },
-			-- 						},
-			-- 					})
-			-- 				end,
-			-- 				gptoss120b_lc_df2 = function()
-			-- 					return require("codecompanion.adapters").extend("openai", {
-			-- 						name = "llamacpp",
-			-- 						url = "http://100.106.205.69:8000/v1/chat/completions",
-			-- 						schema = {
-			-- 							model = { default = "/models/gpt-oss-120b/gpt-oss-120b-mxfp4-00001-of-00003.gguf" },
-			-- 						},
-			-- 					})
-			-- 				end,
-			-- 				gptoss20b_lc_bs = function()
-			-- 					return require("codecompanion.adapters").extend("openai", {
-			-- 						name = "llamacpp",
-			-- 						url = "http://100.92.126.115:8000/v1/chat/completions",
-			-- 						schema = {
-			-- 							model = { default = "/models/gpt-oss-20b/gpt-oss-20b-mxfp4.gguf" },
-			-- 						},
-			-- 					})
-			-- 				end,
-			-- 				qwen3_ol_office = function()
-			-- 					return require("codecompanion.adapters").extend("ollama", {
-			-- 						name = "ollama_office",
-			-- 						env = { url = "http://100.113.130.46:11434" },
-			-- 						headers = { ["Content-Type"] = "application/json" },
-			-- 						schema = {
-			-- 							model = { default = "qwen3:latest" },
-			-- 							num_ctx = { default = 16384 },
-			-- 							keep_alive = { default = "60m" },
-			-- 						},
-			-- 					})
-			-- 				end,
-			-- 				tavily = function()
-			-- 					return require("codecompanion.adapters").extend("tavily", {
-			-- 						env = { api_key = "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" },
-			-- 					})
-			-- 				end,
-			-- 			},
-			-- 			acp = { opts = { show_defaults = false } },
-			-- 		},
-			-- 	},
-			-- 	init = function()
-			-- 		local map = require("stuff.functions").map
-			-- 		map({ "n", "x" }, "<Leader>a", "", { desc = "Chatbot" })
-			-- 		map({ "n", "x" }, "<Leader>aa", "<CMD>CodeCompanionActions<CR>", { desc = "actions" })
-			-- 		map({ "n", "x" }, "<Leader>at", "<CMD>CodeCompanionChat Toggle<CR>", { desc = "toggle chat window" })
-			-- 		map({ "n", "x" }, "<Leader>ai", ":CodeCompanion ", { desc = "inline assist" })
-			-- 		map("x", "<Leader>ac", "<CMD>CodeCompanionChat Add<CR>", { desc = "add visual selection to chat" })
-			-- 	end,
+			-- "olimorris/codecompanion.nvim", version = "17.33.0", dependencies = { "nvim-lua/plenary.nvim", }, cmd = { "CodeCompanion", "CodeCompanionChat", "CodeCompanionCmd", "CodeCompanionActions" }, opts = { display = { chat = { intro_message = "Chatbot time 󰭹 󰓠 󰚩   . Press ? for options", separator = "---", start_in_insert_mode = false, icons = { buffer_watch = " " }, window = { layout = "horizontal", height = 0.45 }, }, diff = { provider_opts = { split = { opts = { "filler", "closeoff", "algorithm:minimal", "followwrap", "linematch:120" } }, }, }, action_palette = { provider = "default" }, }, strategies = { chat = { adapter = "gptoss120b_ol_df2", variables = { ["buffer"] = { opts = { default_params = "watch" } }, }, tools = { opts = { auto_submit_errors = true, auto_submit_success = true, default_tools = { "web_search", "file_search", "grep_search", "read_file" }, }, }, }, inline = { adapter = "qwen3vl_ol_df2" }, cmd = { adapter = "gptoss120b_ol_df2" }, }, adapters = { http = { opts = { show_defaults = false }, gptoss120b_ol_df2 = function() return require("codecompanion.adapters").extend("ollama", { name = "gptoss120b_ol_df2", env = { url = "http://100.106.205.69:11434" }, headers = { ["Content-Type"] = "application/json" }, schema = { model = { default = "gpt-oss:120b" }, keep_alive = { default = "15m" }, }, }) end, qwen3vl_ol_df2 = function() return require("codecompanion.adapters").extend("ollama", { name = "qwen3vl_ol_df2", env = { url = "http://100.106.205.69:11434" }, headers = { ["Content-Type"] = "application/json" }, schema = { model = { default = "qwen3-vl:32b" }, keep_alive = { default = "15m" }, }, }) end, gptoss120b_lc_df2 = function() return require("codecompanion.adapters").extend("openai", { name = "llamacpp", url = "http://100.106.205.69:8000/v1/chat/completions", schema = { model = { default = "/models/gpt-oss-120b/gpt-oss-120b-mxfp4-00001-of-00003.gguf" }, }, }) end, gptoss20b_lc_bs = function() return require("codecompanion.adapters").extend("openai", { name = "llamacpp", url = "http://100.92.126.115:8000/v1/chat/completions", schema = { model = { default = "/models/gpt-oss-20b/gpt-oss-20b-mxfp4.gguf" }, }, }) end, qwen3_ol_office = function() return require("codecompanion.adapters").extend("ollama", { name = "ollama_office", env = { url = "http://100.113.130.46:11434" }, headers = { ["Content-Type"] = "application/json" }, schema = { model = { default = "qwen3:latest" }, num_ctx = { default = 16384 }, keep_alive = { default = "60m" }, }, }) end, tavily = function() return require("codecompanion.adapters").extend("tavily", { env = { api_key = "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" }, }) end, }, acp = { opts = { show_defaults = false } }, }, }, init = function() local map = require("stuff.functions").map map({ "n", "x" }, "<Leader>a", "", { desc = "Chatbot" }) map({ "n", "x" }, "<Leader>aa", "<CMD>CodeCompanionActions<CR>", { desc = "actions" }) map({ "n", "x" }, "<Leader>at", "<CMD>CodeCompanionChat Toggle<CR>", { desc = "toggle chat window" }) map({ "n", "x" }, "<Leader>ai", ":CodeCompanion ", { desc = "inline assist" }) map("x", "<Leader>ac", "<CMD>CodeCompanionChat Add<CR>", { desc = "add visual selection to chat" }) end,
 		},
 	},
 }

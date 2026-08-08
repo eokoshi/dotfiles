@@ -47,8 +47,8 @@ vim.api.nvim_create_autocmd("BufWritePost", {
 	callback = function()
 		local wsl = vim.fn.stdpath("config")
 		local ch = vim.fn.expand("$HOME/.local/share/chezmoi/dot_config/nvim")
-		-- assumes that a link to windows exists here (wsl)
 		local win = vim.fn.expand("$HOME/windows/AppData/Local/nvim")
+		---@cast win string
 
 		if vim.fn.isdirectory(win) == 1 then
 			-- add new spellings from windows before overwriting everything
@@ -77,6 +77,7 @@ vim.api.nvim_create_autocmd("BufWritePost", {
 					end)
 				end
 			else
+				---@cast result.stdout string
 				vim.notify(result.stdout, vim.log.levels.ERROR, { title = "ch apply failed" })
 			end
 		end)
@@ -99,11 +100,12 @@ vim.api.nvim_create_autocmd("BufWinEnter", {
 		local function start_hl()
 			local res = vim.fn.getreg("/")
 			if vim.v.hlsearch ~= 1 then return end
-			if res ~= nil and res:find([[%#]], 1, true) then
+			---@cast res string
+			if res:find([[%#]], 1, true) then
 				stop_hl()
 				return
 			end
-			ok, status = pcall(vim.fn.search, [[\%#\zs]] .. res, "cnW")
+			local ok, status = pcall(vim.fn.search, [[\%#\zs]] .. res, "cnW")
 			if ok and status == 0 then
 				stop_hl()
 				return
@@ -142,4 +144,93 @@ vim.api.nvim_create_autocmd("BufWinEnter", {
 		hs_event(opt.buf)
 	end,
 	desc = "hlsearch.nvim event",
+})
+
+-- editing plugins.lua
+vim.api.nvim_create_autocmd("BufReadPost", {
+	group = vim.api.nvim_create_augroup("plugins.lua", { clear = true }),
+	pattern = "*/nvim/lua/plugins.lua",
+	callback = function()
+		vim.opt_local.foldmethod = "indent"
+		vim.opt_local.foldtext = "foldtext()"
+	end,
+})
+
+-- Sessions
+vim.api.nvim_create_user_command("SessionSave", function()
+	local sessiondir = vim.fn.stdpath("state")
+	---@cast sessiondir string
+	sessiondir = vim.fs.joinpath(sessiondir, "sessions")
+	if vim.fn.isdirectory(sessiondir) == 0 then vim.fn.mkdir(sessiondir, "p") end
+	local curdir = vim.fn.getcwd()
+	local filename = curdir:gsub("[/%.]", "_") .. ".vim"
+	local savepath = vim.fs.joinpath(sessiondir, filename)
+	local cmd = string.format("mksession! %s", savepath)
+	vim.cmd(cmd)
+end, { desc = "Save mksession file for cwd" })
+vim.api.nvim_create_user_command("SessionLoad", function()
+	local sessiondir = vim.fn.stdpath("state")
+	---@cast sessiondir string
+	sessiondir = vim.fs.joinpath(sessiondir, "sessions")
+	local curdir = vim.fn.getcwd()
+	local filename = curdir:gsub("[/%.]", "_") .. ".vim"
+	local savepath = vim.fs.joinpath(sessiondir, filename)
+	local cmd = string.format("source %s", savepath)
+	vim.cmd(cmd)
+end, { desc = "Load mksession file for cwd" })
+local sessiongroup = vim.api.nvim_create_augroup("Sessions", { clear = true })
+vim.api.nvim_create_autocmd({ "FocusLost", "CursorHold", "BufWritePost" }, {
+	group = sessiongroup,
+	command = "SessionSave",
+})
+
+-- help split
+local help_group = vim.api.nvim_create_augroup("CustomHelpLayout", { clear = true })
+vim.api.nvim_create_autocmd("BufWinEnter", {
+	group = help_group,
+	pattern = "*.txt,*.lua,*.md",
+	callback = function(args)
+		if vim.bo[args.buf].filetype ~= "help" then return end
+		local cols = vim.o.columns
+		local lines = vim.o.lines
+		if (cols / lines > 3) and (cols > 180) then
+			local current_win = vim.api.nvim_get_current_win()
+			local target_win = nil
+			-- 1. Search for an existing help window
+			for _, win in ipairs(vim.api.nvim_list_wins()) do
+				local buf = vim.api.nvim_win_get_buf(win)
+				if win ~= current_win and vim.bo[buf].filetype == "help" then
+					target_win = win
+					break
+				end
+			end
+			-- 2. If an existing help window exists, move the help buffer into it
+			if target_win and vim.api.nvim_win_is_valid(target_win) then
+				vim.api.nvim_win_set_buf(target_win, args.buf)
+				vim.api.nvim_set_current_win(target_win)
+				if current_win ~= target_win then vim.api.nvim_win_close(current_win, false) end
+			else
+				vim.cmd("wincmd L")
+			end
+		end
+	end,
+})
+
+-- ui2
+local ui2_group = vim.api.nvim_create_augroup("UI2WinOpts", { clear = true })
+vim.api.nvim_create_autocmd("FileType", {
+	group = ui2_group,
+	pattern = "msg",
+	callback = function()
+		vim.wo.winhighlight = "NormalFloat:Float"
+		vim.api.nvim_win_set_config(0, { border = "none" })
+	end,
+})
+vim.api.nvim_create_autocmd("FileType", {
+	group = ui2_group,
+	pattern = "pager",
+	callback = function()
+		vim.wo.winhighlight = "NormalFloat:Normal,FloatBorder:Blue"
+		vim.api.nvim_win_set_config(0, { border = "single" })
+	end,
 })

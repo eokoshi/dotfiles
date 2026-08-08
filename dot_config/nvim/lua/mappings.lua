@@ -8,7 +8,7 @@ map("n", "<Leader>Q", "<CMD>qa<CR>", { desc = "Quit nvim" })
 map("n", "<Leader>w", "<CMD>w<CR>", { desc = "Save buffer" })
 map("n", "<Leader>.", "<CMD>cd %:h<CR>", { desc = "cd here" })
 map("n", "<Leader><space>", "<ESC>", { desc = "" })
-map({ "n", "v" }, "c", "\"ac", { desc = "Change" }) -- do not yank text on change
+-- map({ "n", "v" }, "c", "\"ac", { desc = "Change" }) -- do not use unnamed register for change
 map("t", "<ESC>", "<C-\\><C-n>", {desc="Escape terminal mode"})
 map("i", "<S-Tab>", "<C-d>", { desc = "Unindent 1 level" })
 map("n", "J", "mzJ`z", { desc = "Shift J without moving cursor", noremap = false })
