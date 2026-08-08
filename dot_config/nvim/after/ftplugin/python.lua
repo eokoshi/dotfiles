@@ -60,7 +60,7 @@ if vim.bo[bufnr].buftype == "" then
 	if firstline == "import marimo" then
 		if not vim.b.marimo then
 			vim.b.marimo = true
-			vim.notify("Detected marimo notebook in buf " .. bufnr, vim.log.levels.INFO)
+			vim.api.nvim_echo({ { "Detected marimo notebook in buf " .. bufnr, "Red" } }, false, {})
 		end
 		-- import relocation inside cell
 		if not vim.b.marimo_import_relocator then

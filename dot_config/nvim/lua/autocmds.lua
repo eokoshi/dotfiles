@@ -69,11 +69,13 @@ vim.api.nvim_create_autocmd("BufWritePost", {
 						wsl .. "/",
 						win,
 					}, { text = true }, function(rsync_result)
-						if rsync_result.code == 0 then
-							vim.notify(wsl .. " ⮕ " .. win, vim.log.levels.INFO, { title = "config sync" })
-						else
-							vim.notify("code=" .. rsync_result.code, vim.log.levels.ERROR, { title = "rsync error" })
-						end
+						vim.schedule(function()
+							if rsync_result.code == 0 then
+								vim.api.nvim_echo({ { "Synced config to windows: " .. wsl .. " → " .. win, "Ignore" } }, false, { id = "configsyncwslwin" })
+							else
+								vim.api.nvim_echo({ { "code=" .. rsync_result.code } }, true, { err = true })
+							end
+						end)
 					end)
 				end
 			else

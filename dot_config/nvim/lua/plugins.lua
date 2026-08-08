@@ -308,17 +308,16 @@ return {
 					callback = function()
 						---@diagnostic disable-next-line: undefined-field
 						if string.match(vim.v.event.directory, "\\Obsidian") then
+							local cwd = vim.fn.expand("$HOME/Documents/Obsidian")
+							---@cast cwd string
 							vim.system(
 								{ "git", "pull" },
-								{
-									cwd = vim.fn.expand("$HOME/Documents/Obsidian"),
-									text = true,
-								},
+								{ cwd = cwd, text = true },
 								vim.schedule_wrap(function(obj)
 									if obj.stdout ~= nil then
-										vim.notify(obj.stdout, vim.log.levels.INFO, { title = "Git pull" })
+										vim.api.nvim_echo({ { obj.stdout } }, true, {})
 									elseif obj.stderr ~= nil then
-										vim.notify(obj.stdout, vim.log.levels.ERROR, { title = "Git pull" })
+										vim.api.nvim_echo({ { obj.stdout } }, true, { err = true })
 									end
 								end)
 							)
