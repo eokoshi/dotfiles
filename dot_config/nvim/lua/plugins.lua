@@ -1616,12 +1616,7 @@ return {
 		},
 		{
 			"brenoprata10/nvim-highlight-colors",
-			enabled = vim.fn.has("win32") == 0,
-			opts = {},
-		},
-		{
-			"fei6409/log-highlight.nvim",
-			ft = "log",
+			cmd = "HighlightColors",
 			opts = {},
 		},
 		{
