@@ -80,7 +80,7 @@ vim.api.nvim_create_autocmd("BufWritePost", {
 				end
 			else
 				---@cast result.stdout string
-				vim.notify(result.stdout, vim.log.levels.ERROR, { title = "ch apply failed" })
+				vim.schedule(function() vim.notify(result.stdout, vim.log.levels.ERROR, { title = "ch apply failed" }) end)
 			end
 		end)
 	end,
