@@ -413,7 +413,7 @@ return {
 							{ section = "startup" },
 						},
 					},
-					image = { enabled = true, math = { enabled = false } },
+					image = { enabled = false, math = { enabled = false } },
 					indent = {
 						enabled = true,
 						scope = { only_current = true },
