@@ -212,7 +212,7 @@ vim.api.nvim_create_autocmd("BufWinEnter", {
 				vim.api.nvim_set_current_win(target_win)
 				if current_win ~= target_win then vim.api.nvim_win_close(current_win, false) end
 			else
-				vim.cmd("wincmd L")
+				vim.cmd.wincmd("L")
 			end
 		end
 	end,
@@ -233,6 +233,23 @@ vim.api.nvim_create_autocmd("FileType", {
 	pattern = "pager",
 	callback = function()
 		vim.wo.winhighlight = "NormalFloat:Normal,FloatBorder:Blue"
-		vim.api.nvim_win_set_config(0, { border = "single" })
+		vim.api.nvim_win_set_config(0, { border = { "", "─", "", "", "", "", "", "" } })
 	end,
+})
+
+-- LSP
+vim.api.nvim_create_autocmd("LspAttach", {
+	callback = function(args)
+		local client = vim.lsp.get_client_by_id(args.data.client_id)
+		if client ~= nil and client:supports_method("textDocument/foldingRange") then
+			vim.wo.foldmethod = "expr"
+			vim.wo.foldexpr = "v:lua.vim.lsp.foldexpr()"
+		end
+	end,
+})
+
+-- log
+vim.api.nvim_create_autocmd({ "BufNewFile", "BufRead" }, {
+	pattern = "*.log",
+	command = "setf log",
 })

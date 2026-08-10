@@ -5,8 +5,6 @@ vim.opt_local.number = false
 vim.opt_local.relativenumber = false
 vim.opt_local.colorcolumn = "0"
 
-vim.b.snacks_indent = false
-
 local helpgroup = vim.api.nvim_create_augroup("HelpFileType", { clear = true })
 vim.api.nvim_create_autocmd({ "BufWinEnter" }, {
 	group = helpgroup,
