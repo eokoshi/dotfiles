@@ -150,6 +150,7 @@ if zoxide --version >&/dev/null; then
 fi
 if uv --version >&/dev/null; then
 	eval "$(uv generate-shell-completion bash)"
+	eval "$(uvx --generate-shell-completion bash)"
 fi
 
 export EDITOR=nvim

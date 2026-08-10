@@ -1995,7 +1995,6 @@ return {
 		},
 		{
 			"akinsho/bufferline.nvim",
-			enabled = vim.fn.has("win32") == 0,
 			event = "VeryLazy",
 			version = "*",
 			opts = {
