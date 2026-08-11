@@ -15,9 +15,21 @@ if [[ "$DISTRO" == "Ubuntu" ]]; then
 
 	## apt packages
 	sudo apt-get update
-	sudo apt-get -y --ignore-missing install ripgrep fd-find python3-venv npm direnv lsd unzip curl openssh-server
+	sudo apt-get -y --ignore-missing install ripgrep fd-find python3-venv direnv lsd unzip curl openssh-server
 	sudo service ssh start
 	sudo ln -sf /usr/bin/fdfind ~/.local/bin/fd
+
+	echo ""
+	read -p "Install npm? [y/n]" -n 1 -r
+	if [[ $REPLY =~ ^[Yy]$ ]]; then
+		sudo apt-get -y --ignore-missing install npm
+	fi
+
+	echo ""
+	read -p "Install cargo? [y/n]" -n 1 -r
+	if [[ $REPLY =~ ^[Yy]$ ]]; then
+		sudo apt-get -y --ignore-missing install cargo
+	fi
 
 	# tmux
 	echo ""
