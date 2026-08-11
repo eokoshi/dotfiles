@@ -54,6 +54,7 @@ __hostname() {
 	eefix) textcolor='\[\e[3;38;5;99m\]' ;;
 	eefplex7050) textcolor='\[\e[3;38;5;184m\]' ;;
 	MANAS-HP) textcolor='\[\e[3;38;5;9m\]' ;;
+	lab-optiplex7050) textcolor='\[\e[3;38;5;120m\]' ;;
 	*) textcolor='\[\e[3;38;5;38m\]' ;;
 	esac
 
