@@ -64,7 +64,8 @@ if [[ "$DISTRO" == "Ubuntu" ]]; then
 	if [[ $REPLY =~ ^[Yy]$ ]]; then
 		curl -fsSL https://tailscale.com/install.sh | sh
 		sudo tailscale up
-		ssh-copy-id office
+		ssh-keygen -t ecdsa
+		ssh-copy-id lab-optiplex7050
 	fi
 
 	echo ""
@@ -85,6 +86,8 @@ if [[ "$DISTRO" == "Ubuntu" ]]; then
 	read -p "Install chezmoi? [y/n]" -n 1 -r
 	if [[ $REPLY =~ ^[Yy]$ ]]; then
 		sh -c "$(curl -fsLS get.chezmoi.io)" -- -b "$HOME"/.local/bin
+		mkdir -p ~/.config/chezmoi
+		scp lab-optiplex7050:~/.config/chezmoi/key.txt ~/.config/chezmoi/
 		chezmoi init --apply eokoshi
 	fi
 
