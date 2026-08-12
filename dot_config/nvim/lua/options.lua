@@ -1,5 +1,4 @@
-local icons = require("stuff.icons")
-
+vim.o.autoindent = true -- copy indent from current line when starting new line
 vim.o.breakindentopt = "list:-1"
 vim.o.breakindent = true
 vim.o.cmdheight = 0
@@ -25,7 +24,7 @@ vim.o.listchars = "space:␠,tab:_"
 vim.go.number = true
 vim.go.numberwidth = 2
 vim.o.ruler = false -- Disable the default ruler
-vim.o.scrolloff = 10 -- Lines of context
+vim.o.scrolloff = 10 -- keep n lines above below cursor in view
 vim.o.sessionoptions = "buffers,curdir,tabpages,winsize,help,globals,folds,resize"
 vim.o.shiftround = true -- Round indent
 vim.o.shiftwidth = 0 -- Size of an indent, 0 to inherit from tabstop
@@ -50,7 +49,7 @@ vim.o.wrap = false -- Disable line wrap
 vim.diagnostic.config({
 	virtual_text = true,
 	float = { border = "single", source = true },
-	signs = { text = { icons.diagnostic.error, icons.diagnostic.warn, icons.diagnostic.info, icons.diagnostic.hint } },
+	signs = { text = { "", "", "", "󰌵" } },
 	severity_sort = true,
 })
 

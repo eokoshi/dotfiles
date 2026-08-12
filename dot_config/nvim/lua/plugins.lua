@@ -133,7 +133,6 @@ return {
 			"folke/todo-comments.nvim",
 			enabled = vim.fn.has("win32") == 0,
 			dependencies = { "nvim-lua/plenary.nvim" },
-			event = "VeryLazy",
 			opts = {
 				keywords = {
 					FIX = { icon = " ", color = "error", alt = { "FIXME", "BUG", "FIXIT", "ISSUE" } },
@@ -1515,7 +1514,7 @@ return {
 		{
 			"aserowy/tmux.nvim",
 			enabled = vim.fn.has("win32") == 0,
-			event = "VeryLazy",
+			cond = vim.env.TMUX ~= nil,
 			opts = {
 				copy_sync = {
 					sync_registers_keymap_reg = false,
@@ -1725,7 +1724,6 @@ return {
 			dependencies = {
 				"nvim-mini/mini.icons",
 			},
-			event = "VeryLazy",
 			opts = {
 				sort = { "order", "group", "alphanum", "mod", "case" },
 				expand = 1,
@@ -1988,7 +1986,7 @@ return {
 		},
 		{
 			"akinsho/bufferline.nvim",
-			event = "VeryLazy",
+			event = "BufWinEnter",
 			version = "*",
 			opts = {
 				options = {
