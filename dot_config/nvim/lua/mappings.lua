@@ -30,10 +30,12 @@ map("n", "n", "nzzzv", { desc = "Jump to next search result" })
 map("n", "N", "Nzzzv", { desc = "Jump to previous search result" })
 map("n", "<C-UP>", "<C-y>", { desc = "Scroll up" })
 map("n", "<C-DOWN>", "<C-e>", { desc = "Scroll down" })
-map("n", "<C-h>", "<C-w>h", { desc = "Move to window left" })
-map("n", "<C-j>", "<C-w>j", { desc = "Move to window above" })
-map("n", "<C-k>", "<C-w>k", { desc = "Move to window below" })
-map("n", "<C-l>", "<C-w>l", { desc = "Move to window right" })
+if vim.env.TMUX == nil then
+	map("n", "<C-h>", "<C-w>h", { desc = "Move to window left" })
+	map("n", "<C-j>", "<C-w>j", { desc = "Move to window above" })
+	map("n", "<C-k>", "<C-w>k", { desc = "Move to window below" })
+	map("n", "<C-l>", "<C-w>l", { desc = "Move to window right" })
+end
 
 -- Buffers
 map("n", "<Leader>bA", "<CMD>%y+<CR><CR>", { desc = "Copy whole buffer to clipboard" })
