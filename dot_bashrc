@@ -159,4 +159,4 @@ export SUDO_EDITOR=nvim
 export SYSTEMD_EDITOR=nvim
 export PATH=/home/ethan/.opencode/bin:$PATH
 
-. "$HOME/.local/bin/env"
+[ -s "$HOME/.local/bin/env" ] && \. "$HOME/.local/bin/env"

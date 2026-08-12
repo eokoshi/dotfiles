@@ -79,7 +79,11 @@ if [[ "$DISTRO" == "Ubuntu" ]]; then
 			&& echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" | sudo tee /etc/apt/sources.list.d/github-cli.list > /dev/null \
 			&& sudo apt update \
 			&& sudo apt install gh -y
+<<<<<<< Updated upstream
 		gh auth login -y
+=======
+		gh auth login --web --clipboard
+>>>>>>> Stashed changes
 	fi
 
 	echo ""
@@ -252,7 +256,8 @@ elif [[ "$DISTRO" == "openSUSE" ]]; then
 		curl -fsSL https://tailscale.com/install.sh | sh
 		sudo tailscale up
 		sudo tailscale set --operator=$USER
-		ssh-copy-id office
+		[ ! -e "$HOME/.ssh/id_ecdsa" ] && ssh-keygen -t ecdsa
+		ssh-copy-id lab-optiplex7050
 	fi
 
 	echo ""
@@ -261,6 +266,8 @@ elif [[ "$DISTRO" == "openSUSE" ]]; then
 		gh auth login
 	fi
 
+	mkdir -p ~/.config/chezmoi
+	scp lab-optiplex7050:~/.config/chezmoi/key.txt ~/.config/chezmoi/
 	chezmoi init --apply eokoshi
 
 fi
