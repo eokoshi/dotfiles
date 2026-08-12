@@ -991,6 +991,7 @@ return {
 		-- { "sainnhe/sonokai", lazy = true },
 		-- { "gbprod/nord.nvim", lazy = true },
 		-- { "rose-pine/neovim", name = "rose-pine", lazy = true },
+		-- { "vague-theme/vague.nvim", opts = {transparent = true} }
 	},
 	{
 		-- Git
