@@ -287,6 +287,7 @@ return {
 						},
 					},
 					documentation = {
+						auto_show = false,
 						auto_show_delay_ms = 300,
 						window = {
 							border = "single",
