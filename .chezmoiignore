@@ -3,3 +3,5 @@ key.txt.age
 .config/btop/btop.log
 .config/nvim/.git
 .config/nvim/.gitignore
+~/.config/nvim/nvim-pack-lock.json
+**/__pycache__

@@ -1,4 +1,4 @@
-# ~/.bashrc: executed by bash(1) for non-login shells.
+# ~/.bashrc: executed by bash(1) for non-login shells./
 # If not running interactively, don't do anything
 case $- in
 *i*) ;;
@@ -96,7 +96,7 @@ function marimo-serve() {
 }
 
 function chdiffnvim() {
-	diff -bur --color=always ~/.local/share/chezmoi/dot_config/nvim/ ~/.config/nvim/ -x ".git*" -x "*stylua*" -x "lazy-lock.json"
+	diff -bur --color=always ~/.local/share/chezmoi/dot_config/nvim/ ~/.config/nvim/ -x ".git*" -x "*stylua*" -x "lazy-lock.json" -x "nvim-pack-lock.json"
 }
 
 function watchlastlog() {
