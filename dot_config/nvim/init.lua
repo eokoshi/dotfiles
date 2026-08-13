@@ -9,7 +9,8 @@ require("autocmds")
 require("mappings")
 require("highlights")
 
-map("n", "<leader>pi", function() vim.pack.update(nil, { offline = true }) end, {})
+map("n", "<leader>pi", function() vim.pack.update(nil, { offline = true }) end, { desc = "vim.pack.update()" })
+map("n", "<leader>pp", function() vim.cmd.source(vim.fn.stdpath("config") .. "/init.lua") end, {})
 
 --- ColorSchemes --- {{{
 vim.pack.add({
@@ -72,7 +73,6 @@ vim.pack.add({
 	{ src = gh("MagicDuck/grug-far.nvim") },
 	{ src = gh("MeanderingProgrammer/render-markdown.nvim"), vim.version.range("*") },
 	{ src = gh("bngarren/checkmate.nvim") },
-	{ src = gh("jbyuki/nabla.nvim") },
 	{ src = gh("akinsho/bufferline.nvim"), vim.version.range("*") },
 	{ src = gh("aserowy/tmux.nvim") },
 	{ src = gh("brenoprata10/nvim-highlight-colors") },
@@ -1623,7 +1623,7 @@ local function get_truncated_filename(bufnr)
 	local name = vim.api.nvim_buf_get_name(bufnr)
 	if name == "" then return "[No Name]" end
 	local rel_path = vim.fn.fnamemodify(name, ":~:.")
-	if #rel_path > 20 then rel_path = vim.fn.pathshorten(rel_path, 3) end
+	if #rel_path > 40 then rel_path = vim.fn.pathshorten(rel_path, 3) end
 	return rel_path
 end
 function get_lsp_formatter(bufnr)
@@ -1666,6 +1666,8 @@ function _G.my_statusline()
 		local mode_info = modes[mode_code] or { name = "UNKNOWN", hl = "StatuslineNormal" }
 		mode_str = string.format("%%#%s# %s %%*", mode_info.hl, mode_info.name)
 	end
+	local macro = ""
+	if is_active then macro = " %#RedBold#" .. get_macro() .. "%*" end
 	local filename = " %1*" .. get_truncated_filename(bufnr) .. "%*"
 	local bufargs = "%8*%m%r%* "
 	local buf = "%3*" .. bufnr .. "%*"
@@ -1674,7 +1676,7 @@ function _G.my_statusline()
 	local encoding = " %4*" .. (vim.bo[bufnr].fileencoding ~= "" and vim.bo[bufnr].fileencoding or vim.o.encoding):upper() .. "%*"
 	local lineending = " %3*" .. (vim.bo[bufnr].fileformat:upper() == "UNIX" and "" or (vim.bo[bufnr].fileformat:upper() == "DOS" and "")) .. "%*"
 	local location = " %8*%l:%c %p%% %*"
-	local macro = " %#RedBold#" .. get_macro() .. "%*"
+
 	local diagnostics = get_diagnostics(bufnr) .. "%*"
 	local lsp_formatter = "%3*" .. get_lsp_formatter(bufnr) .. "%*"
 	return table.concat({
