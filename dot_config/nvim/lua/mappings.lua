@@ -12,7 +12,7 @@ map("t", "<ESC>", "<C-\\><C-n>", { desc = "Escape terminal mode" })
 map("i", "<S-Tab>", "<C-d>", { desc = "Unindent 1 level" })
 map("n", "J", "mzJ`z", { desc = "Shift J without moving cursor", noremap = false })
 map("n", "<BS>", "<C-^>", { desc = "Switch to prev file" })
-map("n", "<leader>bt", "<CMD>tabclose<CR>", { desc = "Close tab" })
+map("n", "<Leader>x", "<CMD>tabclose<CR>", { desc = ":tabclose" })
 
 -- System clipboard
 map({ "n" }, "<C-c>", '"+yy', { desc = "Copy line to system clipboard" })

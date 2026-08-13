@@ -9,8 +9,9 @@ require("autocmds")
 require("mappings")
 require("highlights")
 
-map("n", "<leader>pi", function() vim.pack.update(nil, { offline = true }) end, { desc = "vim.pack.update()" })
-map("n", "<leader>pp", function() vim.cmd.source(vim.fn.stdpath("config") .. "/init.lua") end, {})
+map("n", "<leader>pu", function() vim.pack.update() end, { desc = "vim.pack.update()" })
+map("n", "<leader>pi", function() vim.pack.update(nil, { offline = true }) end, { desc = "[offline] vim.pack.update()" })
+map("n", "<leader>pp", function() vim.cmd.source(vim.fn.stdpath("config") .. "/init.lua") end, { desc = "source init.lua" })
 
 --- ColorSchemes --- {{{
 vim.pack.add({
@@ -1052,6 +1053,7 @@ require("which-key").setup({
 	---@diagnostic disable-next-line: missing-fields
 	win = {
 		no_overlap = false,
+		wo = { winhighlight = "NormalFloat:Normal,FloatBorder:Blue" },
 	},
 })
 --- }}}
