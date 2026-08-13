@@ -49,16 +49,6 @@ fi
 # colored GCC warnings and errors
 export GCC_COLORS='error=01;31:warning=01;35:note=01;36:caret=01;32:locus=01:quote=01'
 
-# source profile.d
-if [ -d /etc/profile.d ]; then
-	for i in /etc/profile.d/*.sh; do
-		if [ -r $i ]; then
-			. $i
-		fi
-	done
-	unset i
-fi
-
 ##### Path
 export PATH="$HOME/.local/bin:$HOME/.cargo/bin:$HOME/.local/share/nvim/mason/bin:$PATH"
 
@@ -159,4 +149,6 @@ export SUDO_EDITOR=nvim
 export SYSTEMD_EDITOR=nvim
 export PATH=/home/ethan/.opencode/bin:$PATH
 
-[ -s "$HOME/.local/bin/env" ] && \. "$HOME/.local/bin/env"
+if [ -s "$HOME/.local/bin/env" ]; then
+	source  "$HOME/.local/bin/env"
+fi
