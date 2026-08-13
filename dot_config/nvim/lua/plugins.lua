@@ -1523,7 +1523,9 @@ return {
 			},
 		},
 		{
-			-- "windwp/nvim-autopairs", event = "InsertEnter", opts = {},
+			"windwp/nvim-autopairs",
+			event = "InsertEnter",
+			opts = {},
 		},
 		{
 			"kylechui/nvim-surround",
@@ -1579,27 +1581,25 @@ return {
 		},
 		{
 			"folke/flash.nvim",
-			event = "InsertEnter",
-			---@type Flash.Config
-			opts = {
-				modes = {
-					---@diagnostic disable-next-line: missing-fields
-					char = {
+			config = function(_, opts)
+				opts = vim.tbl_deep_extend("force", opts, {
+					modes = {
+						char = {
+							enabled = false,
+							autohide = true,
+						},
+					},
+					label = {
+						rainbow = {
+							enabled = true,
+							shade = 6,
+						},
+					},
+					prompt = {
 						enabled = false,
-						autohide = true,
 					},
-				},
-				label = {
-					rainbow = {
-						enabled = true,
-						shade = 6,
-					},
-				},
-				prompt = {
-					enabled = false,
-				},
-			},
-			init = function()
+				})
+				require("flash").setup(opts)
 				---@type Flash.Commands
 				local flash = require("flash")
 				map({ "n", "x", "o" }, "+", function() flash.jump() end, { desc = "Flash Jump" })
@@ -2023,48 +2023,27 @@ return {
 			lazy = false,
 			branch = "main",
 			build = ":TSUpdate",
-			dependencies = {
-				"mason-org/mason.nvim",
-				"nvim-treesitter/nvim-treesitter-textobjects",
-				"nvim-treesitter/nvim-treesitter-context",
-			},
-		},
-		{
-			"MeanderingProgrammer/treesitter-modules.nvim",
-			dependencies = { "nvim-treesitter/nvim-treesitter" },
-			opts = function()
-				local parsers = {
-					"bash",
-					"c",
-					"css",
-					"diff",
-					"dockerfile",
-					"git_config",
-					"gitignore",
-					"json",
-					"lua",
-					"luadoc",
-					"markdown",
-					"markdown_inline",
-					"python",
-					"query",
-					"readline",
-					"ssh_config",
-					"toml",
-					"typescript",
-					"vim",
-					"vimdoc",
-					"yaml",
+			config = function()
+				--stylua: ignore
+				local languages = {
+					"bash", "c", "css", "diff", "dockerfile", "git_config", "gitignore", "json", "lua",
+					"luadoc", "markdown", "markdown_inline", "python", "query", "readline", "ssh_config",
+					"toml", "typescript", "vim", "vimdoc", "yaml",
 				}
-
-				return {
-					ensure_installed = parsers,
-					ignore_install = { "csv" },
-					auto_install = true,
-					fold = { enable = true },
-					highlight = { enable = true },
-					indent = { enable = true },
-				}
+				require("nvim-treesitter").install(languages)
+				vim.api.nvim_create_autocmd("FileType", {
+					group = vim.api.nvim_create_augroup("treesitter.setup", {}),
+					callback = function(args)
+						local buf = args.buf
+						local filetype = args.match
+						local language = vim.treesitter.language.get_lang(filetype) or filetype
+						if not vim.treesitter.language.add(language) then return end
+						vim.wo.foldmethod = "expr"
+						vim.wo.foldexpr = "v:lua.vim.treesitter.foldexpr()"
+						vim.treesitter.start(buf, language)
+						-- vim.bo[buf].indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
+					end,
+				})
 			end,
 		},
 		{

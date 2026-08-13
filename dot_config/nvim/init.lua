@@ -1,7 +1,6 @@
 vim.g.mapleader = " "
-vim.g.maplocalleader = "\\"
 
-require("lazy-init")
+-- require("lazy-init")
 
 require("options")
 require("autocmds")
