@@ -49,12 +49,10 @@ vim.api.nvim_create_autocmd("BufWritePost", {
 		local ch = vim.fn.expand("$HOME/.local/share/chezmoi/dot_config/nvim")
 		local win = vim.fn.expand("$HOME/windows/AppData/Local/nvim")
 		---@cast win string
-
 		if vim.fn.isdirectory(win) == 1 then
 			-- add new spellings from windows before overwriting everything
 			vim.system({ "rsync", "-rtu", win .. "/spell/", ch .. "/spell" }, { text = true })
 		end
-
 		vim.system({ "chezmoi", "apply" }, { text = true, timeout = 1000 }, function(result)
 			if result.code == 0 then
 				if vim.fn.isdirectory(win) == 1 then
@@ -92,13 +90,11 @@ local autonohlsearch_group = vim.api.nvim_create_augroup("autonohlsearch", { cle
 vim.api.nvim_create_autocmd("BufWinEnter", {
 	group = autonohlsearch_group,
 	callback = function(opt)
-
 		local function stop_hl()
 			if vim.v.hlsearch == 0 then return end
 			local keycode = vim.api.nvim_replace_termcodes("<Cmd>nohl<CR>", true, false, true)
 			vim.api.nvim_feedkeys(keycode, "n", false)
 		end
-
 		local function start_hl()
 			local res = vim.fn.getreg("/")
 			if vim.v.hlsearch ~= 1 then return end
@@ -113,7 +109,6 @@ vim.api.nvim_create_autocmd("BufWinEnter", {
 				return
 			end
 		end
-
 		local function hs_event(bufnr)
 			if vim.b.autonohlsearch then return end
 			vim.b.autonohlsearch = true
@@ -123,14 +118,12 @@ vim.api.nvim_create_autocmd("BufWinEnter", {
 				callback = function() start_hl() end,
 				desc = "Auto hlsearch",
 			})
-
 			local ie_id = vim.api.nvim_create_autocmd("InsertEnter", {
 				buffer = bufnr,
 				group = autonohlsearch_group,
 				callback = function() stop_hl() end,
 				desc = "Auto remove hlsearch",
 			})
-
 			vim.api.nvim_create_autocmd("BufDelete", {
 				buffer = bufnr,
 				group = autonohlsearch_group,
@@ -142,18 +135,17 @@ vim.api.nvim_create_autocmd("BufWinEnter", {
 				end,
 			})
 		end
-
 		hs_event(opt.buf)
 	end,
 	desc = "hlsearch.nvim event",
 })
 
--- editing plugins.lua
+-- editing init.lua
 vim.api.nvim_create_autocmd("BufReadPost", {
-	group = vim.api.nvim_create_augroup("plugins.lua", { clear = true }),
-	pattern = "*/nvim/lua/plugins.lua",
+	group = vim.api.nvim_create_augroup("config", { clear = true }),
+	pattern = "*/nvim/init.lua",
 	callback = function()
-		vim.opt_local.foldmethod = "indent"
+		vim.opt_local.foldmethod = "marker"
 		vim.opt_local.foldtext = "foldtext()"
 	end,
 })
@@ -231,7 +223,9 @@ vim.api.nvim_create_autocmd("FileType", {
 vim.api.nvim_create_autocmd("FileType", {
 	group = ui2_group,
 	pattern = "pager",
-	callback = function()
+	callback = function(ev)
+		local detected_ft = vim.filetype.match({ buf = ev.buf }) or "pager"
+		vim.bo[ev.buf].filetype = detected_ft
 		vim.wo.winhighlight = "NormalFloat:Normal,FloatBorder:Blue"
 		vim.api.nvim_win_set_config(0, { border = { "", "─", "", "", "", "", "", "" } })
 	end,
@@ -241,10 +235,7 @@ vim.api.nvim_create_autocmd("FileType", {
 vim.api.nvim_create_autocmd("LspAttach", {
 	callback = function(args)
 		local client = vim.lsp.get_client_by_id(args.data.client_id)
-		if client ~= nil and client:supports_method("textDocument/foldingRange") then
-			vim.wo.foldmethod = "expr"
-			vim.wo.foldexpr = "v:lua.vim.lsp.foldexpr()"
-		end
+		if client ~= nil and client:supports_method("textDocument/foldingRange") then vim.wo.foldexpr = "v:lua.vim.lsp.foldexpr()" end
 	end,
 })
 

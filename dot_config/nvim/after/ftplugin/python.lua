@@ -1,6 +1,7 @@
 vim.opt_local.shiftwidth = 4
 vim.opt_local.tabstop = 4
 
+local map = require("stuff.functions").map
 local bufnr = vim.api.nvim_get_current_buf()
 if vim.bo[bufnr].buftype == "" then
 	local firstline = vim.api.nvim_buf_get_lines(0, 0, 1, false)[1]
@@ -52,7 +53,6 @@ if vim.bo[bufnr].buftype == "" then
 	end, {})
 
 	-- keymaps
-	local map = require("stuff.functions").map
 	map("v", "gd", ":norm ysaw'f=r:A,<CR>gv<Plug>(nvim-surround-visual-line)}iargs = <ESC>va{o^", { desc = "Convert lines to dict", buffer = true })
 
 	-- notebooks
@@ -154,4 +154,133 @@ if vim.bo[bufnr].buftype == "" then
 		map("n", "]j", function() vim.fn.search("^# %%", "W") end, { buffer = true, desc = "cell" })
 		map("n", "[j", function() vim.fn.search("^# %%", "bW") end, { buffer = true, desc = "cell" })
 	end
+
+	-- Builtin :terminal ipython runner (no tmux needed)
+	local ipython_term = { buf = nil, chan = nil }
+
+	local function ipython_term_running(chan)
+		if type(chan) ~= "number" or chan <= 0 then return false end
+		return vim.fn.jobwait({ chan }, 0)[1] == -1
+	end
+
+	local function open_ipython_term()
+		local orig_win = vim.api.nvim_get_current_win()
+		local old_win = -1
+		if ipython_term.buf and vim.api.nvim_buf_is_valid(ipython_term.buf) then old_win = vim.fn.bufwinid(ipython_term.buf) end
+		if old_win ~= -1 then
+			vim.api.nvim_set_current_win(old_win)
+		else
+			local cmd = (vim.o.columns < vim.o.lines) and "vsplit" or "split"
+			vim.cmd(cmd)
+		end
+		vim.cmd("terminal ipython")
+		local buf = vim.api.nvim_get_current_buf()
+		local chan = vim.b[buf].terminal_job_id
+		vim.b[buf].ipython_term = true
+		vim.bo[buf].buflisted = false -- keep it out of ]b/[b buffer cycling
+		vim.bo[buf].bufhidden = "hide"
+		ipython_term = { buf = buf, chan = chan }
+		vim.api.nvim_set_current_win(orig_win)
+
+		-- Wait for the ipython prompt so the first send isn't echoed back as
+		-- raw escape sequences.
+		vim.wait(5000, function()
+			local lines = vim.api.nvim_buf_get_lines(buf, 0, -1, false)
+			for i = #lines, 1, -1 do
+				if lines[i]:match("^In %[%d+%]:") then return true end
+			end
+			return false
+		end, 50)
+		return chan
+	end
+
+	local function ensure_ipython_term()
+		if ipython_term.buf and vim.api.nvim_buf_is_valid(ipython_term.buf) and ipython_term_running(ipython_term.chan) then
+			if vim.fn.bufwinid(ipython_term.buf) == -1 then
+				local orig_win = vim.api.nvim_get_current_win()
+				local cmd = (vim.o.columns > vim.o.lines) and "vsplit" or "split"
+				vim.cmd(cmd)
+				vim.api.nvim_win_set_buf(0, ipython_term.buf)
+				vim.api.nvim_set_current_win(orig_win)
+			end
+			return ipython_term.chan
+		end
+		return open_ipython_term()
+	end
+
+	local function send_to_ipython_term()
+		local chan = ensure_ipython_term()
+		if not ipython_term_running(chan) then
+			vim.notify("ipython terminal is not running", vim.log.levels.WARN)
+			return
+		end
+
+		local mode = vim.api.nvim_get_mode().mode
+		if mode:sub(1, 1) == "v" or mode == "\22" then
+			vim.cmd('normal! "yy')
+		else
+			vim.cmd('normal! "yyy')
+		end
+		local text = vim.fn.getreg('"')
+		if text and #text > 0 then
+			text = text:gsub("\t", "    ")
+			text = text:gsub("%s+$", "")
+			if text ~= "" then
+				text = text .. "\n"
+				-- Bracketed paste keeps multi-line selections as one ipython
+				-- input; the trailing Enter executes it.
+				vim.fn.chansend(chan, "\27[200~" .. text .. "\27[201~" .. "\n")
+			end
+		end
+	end
+
+	map({ "n", "x" }, "<CR>", send_to_ipython_term, { desc = "Send selection/line to ipython terminal", buffer = true })
+
+	-- TMUX ipython
+	local function run_tmux(args) return vim.fn.system(vim.list_extend({ "tmux" }, args)) end
+	local function find_ipython_pane()
+		local out = run_tmux({ "list-panes", "-F", "#{pane_id}\t#{pane_title}" })
+		for line in out:gmatch("[^\n]+") do
+			local pane_id, title = line:match("^(%%%d+)\t(.*)$")
+			if title == "ipython" then return pane_id end
+		end
+		return nil
+	end
+	local function ensure_ipython_pane()
+		local pane = find_ipython_pane()
+		if pane then return pane end
+		local width = tonumber(run_tmux({ "display-message", "-p", "#{pane_width}" }))
+		local height = tonumber(run_tmux({ "display-message", "-p", "#{pane_height}" }))
+		local split = (width and height and width < height) and "-h" or "-v"
+		local current = vim.env.TMUX_PANE
+		if not current or current == "" then current = run_tmux({ "display-message", "-p", "#{pane_id}" }):gsub("%s+", "") end
+		local new_pane = run_tmux({ "split-window", "-d", split, "-t", current, "-P", "-F", "#{pane_id}", "ipython" }):gsub("%s+", "")
+		if new_pane ~= "" then
+			run_tmux({ "select-pane", "-T", "ipython", "-t", new_pane })
+			return new_pane
+		end
+		return current
+	end
+	local function send_to_tmux()
+		local target_pane = ensure_ipython_pane()
+		local mode = vim.api.nvim_get_mode().mode
+		if mode:sub(1, 1) == "v" or mode == "\22" then
+			vim.cmd('normal! "yy')
+		else
+			vim.cmd('normal! "yyy')
+		end
+		local text = vim.fn.getreg('"')
+		---@cast text string
+		if text and #text > 0 then
+			text = text:gsub("\t", "    ")
+			text = text:gsub("%s+$", "")
+			if text ~= "" then
+				text = text .. "\n"
+				run_tmux({ "set-buffer", "--", text })
+				run_tmux({ "paste-buffer", "-dp", "-t", target_pane })
+				run_tmux({ "send-keys", "-t", target_pane, "Enter" })
+			end
+		end
+	end
+	-- map({ "n", "x" }, "<CR>", send_to_tmux, { desc = "Send selection/line to ipython tmux pane", buffer=true })
 end

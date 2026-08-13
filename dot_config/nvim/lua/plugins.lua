@@ -1516,11 +1516,7 @@ return {
 		{
 			"aserowy/tmux.nvim",
 			cond = vim.env.TMUX ~= nil,
-			opts = {
-				copy_sync = {
-					sync_registers_keymap_reg = false,
-				},
-			},
+			opts = {},
 		},
 		{
 			"windwp/nvim-autopairs",

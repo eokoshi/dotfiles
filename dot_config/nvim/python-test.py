@@ -11,7 +11,7 @@ import logging
 import math
 import os
 import random
-from typing import Dict, Generator, Iterable, List
+from collections.abc import Generator, Iterable
 
 # Global constants
 
@@ -28,7 +28,7 @@ except:
 
 
 print("yo")
-for i in range(100):
+for i in range(10):
     print(i)
 
 
@@ -44,14 +44,14 @@ def compute_factorial(n: int) -> int:
     return math.factorial(n)
 
 
-def random_numbers(count: int, start: int = 0, end: int = 100) -> List[int]:
+def random_numbers(count: int, start: int = 0, end: int = 100) -> list[int]:
     """Generate a list of random integers."""
     return [random.randint(start, end) for _ in range(count)]
 
 
-def group_by_length(words: Iterable[str]) -> Dict[int, List[str]]:
+def group_by_length(words: Iterable[str]) -> dict[int, list[str]]:
     """Group words by their length."""
-    result: Dict[int, List[str]] = collections.defaultdict(list)
+    result: dict[int, list[str]] = collections.defaultdict(list)
     for w in words:
         result[len(w)].append(w)
     return dict(result)
@@ -69,7 +69,7 @@ class Demo:
 
     _instance_count = 0
 
-    def __init__(self, name: str, values: List[int] | None = None):
+    def __init__(self, name: str, values: list[int] | None = None):
         self.name = name
         self.values = values or []
         Demo._instance_count += 1
