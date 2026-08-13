@@ -1515,7 +1515,6 @@ return {
 		-- Utils
 		{
 			"aserowy/tmux.nvim",
-			enabled = vim.fn.has("win32") == 0,
 			cond = vim.env.TMUX ~= nil,
 			opts = {
 				copy_sync = {
