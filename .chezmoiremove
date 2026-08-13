@@ -1,5 +1,6 @@
 .config/nvim/after/ftplugin/javascript.lua
 .config/nvim/after/ftplugin/json.lua
+.config/nvim/after/ftplugin/marimo.lua
 .config/nvim/after/ftplugin/lua.lua
 .config/nvim/after/ftplugin/php.lua
 .config/nvim/lua/plugins
