@@ -1,6 +1,5 @@
 -- General Settings
 local user_general = vim.api.nvim_create_augroup("UserGeneral", { clear = true })
-
 vim.api.nvim_create_autocmd("TextYankPost", {
 	callback = function() vim.hl.on_yank() end,
 	group = user_general,
@@ -26,20 +25,14 @@ vim.api.nvim_create_autocmd("VimResized", {
 	desc = "Equalize Splits",
 })
 
-vim.api.nvim_create_autocmd("BufEnter", {
+vim.api.nvim_create_autocmd({ "BufNewFile", "BufRead" }, {
 	group = user_general,
-	callback = function()
-		local bufnr = vim.api.nvim_get_current_buf()
-		if vim.bo[bufnr].buftype == "nofile" then
-			vim.opt.colorcolumn = ""
-		else
-			vim.opt.colorcolumn = "+1"
-		end
-	end,
-	desc = "Remove colorcolumn in nofile buffers",
+	pattern = "*.log",
+	command = "setf log",
+	desc = "set log filetype",
 })
 
--- Syncing Config with Windows and chezmoi
+-- Syncing Config with Windows and chezmoi auto-apply
 local confsync = vim.api.nvim_create_augroup("ConfigSync", { clear = true })
 vim.api.nvim_create_autocmd("BufWritePost", {
 	group = confsync,
@@ -82,7 +75,7 @@ vim.api.nvim_create_autocmd("BufWritePost", {
 			end
 		end)
 	end,
-	desc = "Push edited config file to Windows via rsync",
+	desc = "chezmoi apply then push edited config file to Windows via rsync",
 })
 
 -- auto nohlsearch
@@ -137,7 +130,7 @@ vim.api.nvim_create_autocmd("BufWinEnter", {
 		end
 		hs_event(opt.buf)
 	end,
-	desc = "hlsearch.nvim event",
+	desc = "automatically turn off hlsearch on movement",
 })
 
 -- editing init.lua
@@ -174,6 +167,7 @@ vim.api.nvim_create_user_command("SessionLoad", function()
 end, { desc = "Load mksession file for cwd" })
 local sessiongroup = vim.api.nvim_create_augroup("Sessions", { clear = true })
 vim.api.nvim_create_autocmd({ "FocusLost", "CursorHold", "BufWritePost" }, {
+	desc = "autosave dirsession",
 	group = sessiongroup,
 	command = "SessionSave",
 })
@@ -181,6 +175,7 @@ vim.api.nvim_create_autocmd({ "FocusLost", "CursorHold", "BufWritePost" }, {
 -- help split
 local help_group = vim.api.nvim_create_augroup("CustomHelpLayout", { clear = true })
 vim.api.nvim_create_autocmd("BufWinEnter", {
+	desc = "open help split H/V depending on win size",
 	group = help_group,
 	pattern = "*.txt,*.lua,*.md",
 	callback = function(args)
@@ -237,10 +232,4 @@ vim.api.nvim_create_autocmd("LspAttach", {
 		local client = vim.lsp.get_client_by_id(args.data.client_id)
 		if client ~= nil and client:supports_method("textDocument/foldingRange") then vim.wo.foldexpr = "v:lua.vim.lsp.foldexpr()" end
 	end,
-})
-
--- log
-vim.api.nvim_create_autocmd({ "BufNewFile", "BufRead" }, {
-	pattern = "*.log",
-	command = "setf log",
 })
