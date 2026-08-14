@@ -1,17 +1,7 @@
----@diagnostic disable: missing-fields, undefined-field
 local map = require("stuff.functions").map
 local gh = function(x) return "https://github.com/" .. x end
 local icons = require("stuff.icons")
 vim.g.mapleader = " "
-
-require("options")
-require("autocmds")
-require("mappings")
-require("highlights")
-
-map("n", "<leader>pu", function() vim.pack.update() end, { desc = "vim.pack.update()" })
-map("n", "<leader>pi", function() vim.pack.update(nil, { offline = true }) end, { desc = "[offline] vim.pack.update()" })
-map("n", "<leader>pp", function() vim.cmd.source(vim.fn.stdpath("config") .. "/init.lua") end, { desc = "source init.lua" })
 
 --- ColorSchemes --- {{{
 vim.pack.add({
@@ -20,10 +10,10 @@ vim.pack.add({
 	-- { src = gh("sainnhe/sonokai") },
 	-- { src = gh("vague-theme/vague.nvim") },
 	-- { src = gh("rose-pine/neovim"), name = "rose-pine" },
+	-- { src = gh("sainnhe/edge") },
+	{ src = gh("sainnhe/everforest") },
 	{ src = gh("mcauley-penney/techbase.nvim") },
 	{ src = gh("olimorris/onedarkpro.nvim") },
-	{ src = gh("sainnhe/edge") },
-	{ src = gh("sainnhe/everforest") },
 	{ src = gh("sainnhe/gruvbox-material") },
 })
 
@@ -51,8 +41,23 @@ vim.g.gruvbox_material_enable_italic = 1
 vim.g.gruvbox_material_enable_bold = 1
 vim.g.gruvbox_better_performance = 1
 vim.g.gruvbox_material_transparent_background = 1
-vim.cmd.colorscheme("gruvbox-material")
+if vim.env.TERM == "linux" then
+	vim.cmd.colorscheme("default")
+else
+	vim.cmd.colorscheme("gruvbox-material")
+end
 --- }}}
+
+require("options")
+require("autocmds")
+require("mappings")
+require("highlights")
+
+if vim.fn.has("win32") == 1 then require("windows") end
+
+map("n", "<leader>pu", function() vim.pack.update() end, { desc = "vim.pack.update()" })
+map("n", "<leader>pi", function() vim.pack.update(nil, { offline = true }) end, { desc = "[offline] vim.pack.update()" })
+map("n", "<leader>pp", function() vim.cmd.source(vim.fn.stdpath("config") .. "/init.lua") end, { desc = "source init.lua" })
 
 vim.api.nvim_create_autocmd("PackChanged", {
 	callback = function(ev)
@@ -156,9 +161,9 @@ local function get_diagnostics(bufnr)
 		info = #vim.diagnostic.get(bufnr, { severity = vim.diagnostic.severity.INFO }),
 	}
 	local res = {}
-	if count.errors > 0 then table.insert(res, "%4*" .. count.errors .. "%*") end
-	if count.warnings > 0 then table.insert(res, "%5*" .. count.warnings .. "%*") end
-	if count.info > 0 then table.insert(res, "%3*" .. count.info .. "%*") end
+	if count.errors > 0 then table.insert(res, "%4* " .. count.errors .. "%*") end
+	if count.warnings > 0 then table.insert(res, "%5* " .. count.warnings .. "%*") end
+	if count.info > 0 then table.insert(res, "%3* " .. count.info .. "%*") end
 	if #res == 0 then return "" end
 	return " " .. table.concat(res, " ")
 end
@@ -184,7 +189,7 @@ local function set_statusline_highlights()
 	vim.api.nvim_set_hl(0, "StatuslineReplace", { fg = "#1e1e2e", bg = "#f38ba8", bold = true })
 	vim.api.nvim_set_hl(0, "StatuslineCommand", { fg = "#1e1e2e", bg = "#cba6f7", bold = true })
 	vim.api.nvim_set_hl(0, "StatuslineTerminal", { fg = "#1e1e2e", bg = "#94e2d5", bold = true })
-	vim.api.nvim_set_hl(0, "StatuslineSection", { fg = "#cdd6f4", bg = "#313244" })
+	vim.api.nvim_set_hl(0, "StatuslineSection", { fg = "#888888", bg = "#444444" })
 	vim.api.nvim_set_hl(0, "User1", { link = "Purple" })
 	vim.api.nvim_set_hl(0, "User2", { link = "Green" })
 	vim.api.nvim_set_hl(0, "User3", { link = "Blue" })
@@ -193,6 +198,7 @@ local function set_statusline_highlights()
 	vim.api.nvim_set_hl(0, "User6", { link = "Aqua" })
 	vim.api.nvim_set_hl(0, "User7", { link = "Orange" })
 	vim.api.nvim_set_hl(0, "User8", { link = "Grey" })
+	vim.api.nvim_set_hl(0, "User9", { link = "OkMsg" })
 end
 set_statusline_highlights()
 vim.api.nvim_create_autocmd("ColorScheme", {
@@ -203,25 +209,22 @@ function _G.my_statusline()
 	local bufnr = vim.api.nvim_win_get_buf(winid)
 	local is_active = (winid == vim.api.nvim_get_current_win())
 
-	local mode_str = ""
-	if is_active then
-		local mode_code = vim.api.nvim_get_mode().mode
-		local mode_info = modes[mode_code] or { name = "UNKNOWN", hl = "StatuslineNormal" }
-		mode_str = string.format("%%#%s# %s %%*", mode_info.hl, mode_info.name)
-	end
+	local mode_code = vim.api.nvim_get_mode().mode
+	local mode_info = modes[mode_code] or { name = "UNKNOWN", hl = "StatuslineNormal" }
+	local mode_str = string.format("%%#%s# %s %%*", "StatuslineSection", mode_info.name)
+	if is_active then mode_str = string.format("%%#%s# %s %%*", mode_info.hl, mode_info.name) end
 	local macro = ""
 	if is_active then macro = " %#RedBold#" .. get_macro() .. "%*" end
 	local filename = " %1*" .. get_truncated_filename(bufnr) .. "%*"
 	local bufargs = "%8*%m%r%* "
-	local buf = "%3*" .. bufnr .. "%*"
-	local filesize = " %5*" .. (get_filesize(bufnr) or "0B") .. "%*"
+	local buf = "%8*" .. bufnr .. "%*"
+	local filesize = " %8*" .. (get_filesize(bufnr) or "0B") .. "%*"
 	local filetype = " %6*" .. (vim.bo[bufnr].filetype ~= "" and vim.bo[bufnr].filetype or ""):upper() .. "%*"
-	local encoding = " %4*" .. (vim.bo[bufnr].fileencoding ~= "" and vim.bo[bufnr].fileencoding or vim.o.encoding):upper() .. "%*"
+	local encoding = "  %4*" .. (vim.bo[bufnr].fileencoding ~= "" and vim.bo[bufnr].fileencoding or vim.o.encoding):upper() .. "%* "
 	local lineending = " %3*" .. (vim.bo[bufnr].fileformat:upper() == "UNIX" and "" or (vim.bo[bufnr].fileformat:upper() == "DOS" and "")) .. "%*"
-	local location = " %8*%l:%c %p%% %*"
-
-	local diagnostics = get_diagnostics(bufnr) .. "%*"
-	local lsp_formatter = "%3*" .. get_lsp_formatter(bufnr) .. "%*"
+	local location = " %3*%l:%c %p%% %*"
+	local diagnostics = get_diagnostics(bufnr) .. "%*  "
+	local lsp_formatter = "%3*" .. get_lsp_formatter(bufnr) .. "%* "
 	return table.concat({
 		mode_str,
 		filename,
@@ -231,8 +234,8 @@ function _G.my_statusline()
 		location,
 		macro,
 		"%=", -- Alignment separator (pushes following items to the right)
-		lsp_formatter,
 		diagnostics,
+		lsp_formatter,
 		filetype,
 		encoding,
 		lineending,
@@ -667,6 +670,46 @@ require("blink.cmp").setup({
 			ghost_text = { enabled = false },
 		},
 	},
+})
+--- }}}
+
+--- html-css {{{
+vim.api.nvim_create_autocmd("FileType", {
+	pattern = { "html", "htmldjango" },
+	once = true,
+	callback = function()
+		-- vim.pack.add({ { src = gh("jezda1337/nvim-html-css") } })
+		vim.pack.add({ { src = gh("marioy47/nvim-html-css"), version = "bda9a78", name = "html-css" } })
+		require("html-css").setup({
+			enable_on = { "html", "htmldjango", "php", "templ" },
+			handlers = {
+				definition = {
+					bind = "gd",
+				},
+				hover = {
+					bind = "K",
+					wrap = true,
+					border = "none",
+					position = "cursor",
+				},
+			},
+			documentation = {
+				auto_show = true,
+			},
+			peek = {
+				enabled = true,
+				border = "rounded",
+				position = "center",
+				width = 0.5,
+				height = 0.5,
+				focus = true,
+				style = "minimal",
+			},
+			style_sheets = {
+				"https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css",
+			},
+		})
+	end,
 })
 --- }}}
 
@@ -1558,6 +1601,67 @@ vim.schedule(
 )
 --- }}}
 
+--- obsidian {{{
+vim.api.nvim_create_autocmd({ "BufReadPre", "BufNewFile" }, {
+	pattern = "**/[Oo]bsidian/**",
+	once = true,
+	callback = function()
+		vim.pack.add({
+			{ src = gh("obsidian-nvim/obsidian.nvim"), version = vim.version.range("*") },
+		})
+		require("obsidian").setup({
+			legacy_commands = false,
+			statusline = { enabled = false },
+			new_notes_location = "current_dir",
+			link = { auto_update = true },
+			workspaces = {
+				{
+					name = "personal",
+					path = "~/Documents/Obsidian",
+				},
+			},
+			note_id_func = require("obsidian.builtin").title_id,
+			templates = { folder = "Templates" },
+			picker = { name = "snacks.picker" },
+			daily_notes = {
+				folder = "Daily Notes",
+				template = "Templates/dailynote.md",
+			},
+			ui = { enabled = false },
+			attachments = { folder = "Images" },
+			footer = { enabled = false },
+			checkbox = { enabled = false },
+		})
+		map("n", "<Leader>mt", "<CMD>Obsidian today<CR>", { desc = "today's note" })
+		map("n", "<Leader>my", "<CMD>Obsidian yesterday<CR>", { desc = "yesterday's note" })
+		map("n", "<Leader>md", "<CMD>Obsidian dailies -48 0<CR>", { desc = "find daily notes" })
+		map("n", "<Leader>mn", "<CMD>Obsidian new_from_template<CR>", { desc = "new from template" })
+		map("n", "<leader>mo", "<CMD>cd ~/Documents/Obsidian<CR>", { desc = "cd vault" })
+		vim.api.nvim_create_autocmd("User", {
+			pattern = "ObsidianNoteEnter",
+			callback = function()
+				vim.keymap.set("n", "<CR>", function()
+					local M = require("obsidian.api")
+					if M.cursor_link() then
+						return "<cmd>Obsidian follow_link<cr>"
+					elseif M.cursor_tag() then
+						return "<cmd>Obsidian tags<cr>"
+					elseif M.cursor_heading() then
+						return "za"
+					else
+						return "<cmd>Checkmate metadata toggle done<cr>"
+					end
+				end, {
+					expr = true,
+					buffer = true,
+					desc = "smart action",
+				})
+			end,
+		})
+	end,
+})
+--- }}}
+
 --- render-markdown {{{
 require("render-markdown").setup({
 	ignore = function() return vim.bo.buftype ~= "" end,
@@ -1701,11 +1805,5 @@ require("nvim-highlight-colors").setup({
 	exclude_filetypes = { "bigfile" },
 })
 --- }}}
-
-if vim.fn.has("win32") == 1 then
-	require("windows")
-elseif vim.env.TERM == "linux" then
-	vim.cmd.colorscheme("default")
-end
 
 require("final")
