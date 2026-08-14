@@ -34,9 +34,7 @@ function M.autosave(opts)
 					group = group,
 					buffer = bufnr,
 					callback = function()
-						if vim.b.autosave and vim.bo.modifiable and vim.bo.modified then
-							vim.cmd("silent write")
-						end
+						if vim.b.autosave and vim.bo.modifiable and vim.bo.modified then vim.cmd("silent write") end
 					end,
 				})
 			else

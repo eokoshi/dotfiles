@@ -1,7 +1,7 @@
 vim.opt_local.shiftwidth = 4
 vim.opt_local.tabstop = 4
 
-local map = require("stuff.functions").map
+local map = require("functions").map
 local bufnr = vim.api.nvim_get_current_buf()
 if vim.bo[bufnr].buftype == "" then
 	local firstline = vim.api.nvim_buf_get_lines(0, 0, 1, false)[1]

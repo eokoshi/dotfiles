@@ -4,8 +4,7 @@ vim.opt_local.expandtab = true
 vim.opt_local.tabstop = 2
 vim.opt_local.shiftwidth = 2
 
-local toggles = require("stuff.toggles")
-local map = require("stuff.functions").map
+local map = require("functions").map
 map("n", "<Leader>m", "", { desc = "Markdown", buffer = true })
 map({ "n", "v" }, "<CR>", "<cmd>Checkmate metadata toggle done<CR>", { desc = "Toggle todo item", buffer = true })
 map({ "n", "v" }, "<leader>mc", "", { desc = "Checkmate", buffer = true })
@@ -19,4 +18,6 @@ map("n", "<leader>mcv", "<cmd>Checkmate metadata select_value<CR>", { desc = "Up
 map("n", "<leader>mc]", "<cmd>Checkmate metadata jump_next<CR>", { desc = "Move cursor to next metadata tag", buffer = true })
 map("n", "<leader>mc[", "<cmd>Checkmate metadata jump_previous<CR>", { desc = "Move cursor to previous metadata tag", buffer = true })
 map("n", "<Leader>mm", function() require("nabla").popup({ border = "solid" }) end, { desc = "Show math popup", buffer = true })
+
+local toggles = require("stuff.toggles")
 toggles.math_virt():map("<Leader>mv", { buffer = true })

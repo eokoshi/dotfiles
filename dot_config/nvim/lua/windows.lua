@@ -12,8 +12,6 @@ vim.opt.shellquote = ""
 vim.opt.shellxquote = ""
 vim.env.__SuppressAnsiEscapeSequences = 1
 
-require("neovide")
-
 --- Obsidian
 vim.api.nvim_create_autocmd("DirChangedPre", {
 	pattern = "global",
