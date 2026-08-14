@@ -365,7 +365,7 @@ local function updateMiniWithGit(buf_id, gitStatusMap)
 						hl_mode = "combine",
 					})
 					local line = vim.api.nvim_buf_get_lines(buf_id, i - 1, i, false)[1]
-					local nameStartCol = line--[[@cast -?]]:find(vim.pesc(entry.name)) or 0
+					local nameStartCol = line:find(vim.pesc(entry.name)) or 0
 					if nameStartCol > 0 then
 						vim.api.nvim_buf_set_extmark(buf_id, nsMiniFiles, i - 1, nameStartCol - 1, {
 							end_col = nameStartCol + #entry.name - 1,
@@ -387,9 +387,7 @@ local function parseGitStatus(content)
 		---@diagnostic disable-next-line: param-type-mismatch
 		if status == "R " then filePath = string.match(filePath, "^.*%s%-%>%s(.*)") end
 		local parts = {}
-		for part in
-			filePath--[[@cast -?]]:gmatch("[^/]+")
-		do
+		for part in filePath:gmatch("[^/]+") do
 			table.insert(parts, part)
 		end
 		local currentKey = ""
@@ -490,9 +488,7 @@ local toggle_preview = function()
 		windows = { preview = preview_next },
 	})
 	if preview then
-		local branch = MiniFiles
-			.get_explorer_state()--[[@cast -?]]
-			.branch
+		local branch = MiniFiles.get_explorer_state().branch
 		table.remove(branch)
 		pcall(function()
 			MiniFiles.set_branch(branch)
@@ -637,8 +633,6 @@ require("blink.cmp").setup({
 				enabled = function() return vim.fs.root(0, ".git") ~= nil end,
 				module = "blink-ripgrep",
 				name = "rg",
-				---@module "blink-ripgrep"
-				---@type blink-ripgrep.Options
 				opts = {
 					prefix_min_len = 3,
 					backend = {
