@@ -31,6 +31,7 @@ map({ "n", "x", "o" }, "-", function() flash.treesitter() end, { desc = "Flash T
 map("o", "r", function() flash.remote() end, { desc = "Flash Remote" })
 
 require("options")
+vim.cmd("set statusline&")
 
 local function vscode_call(cmd)
 	return function() require("vscode").call(cmd) end
