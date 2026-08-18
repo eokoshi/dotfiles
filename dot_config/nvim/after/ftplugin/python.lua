@@ -7,64 +7,41 @@ if vim.bo[bufnr].buftype == "" then
 	local firstline = vim.api.nvim_buf_get_lines(0, 0, 1, false)[1]
 
 	-- commands
-	vim.api.nvim_buf_create_user_command(0, "Importpd", function()
-		local import_row = 0
-		for i = 0, 50 do
-			local line = vim.api.nvim_buf_get_lines(0, i - 1, i, false)[1] or ""
-			if line:match("^import ") or line:match("^from .* import ") then
-				import_row = i
-				break
-			elseif line:match("^__author__.*") then
-				import_row = i - 1
-				break
+	local args = { "pd", "np", "plt", "pl" }
+	local outputs = {
+		pd = "import pandas as pd",
+		np = "import numpy as np",
+		plt = "import matplotlib.pyplot as plt",
+		pl = "import polars as pl",
+	}
+	vim.api.nvim_buf_create_user_command(0, "Import", function(data)
+		local function put_line(import_line)
+			local cursor_line = vim.api.nvim_win_get_cursor(0)[1]
+			local lines = vim.api.nvim_buf_get_lines(0, 0, cursor_line, false)
+			local target_row = cursor_line
+			local indent = ""
+			for i = cursor_line, 1, -1 do
+				local line = lines[i] or ""
+				if line:match("^%s*import%s+") or line:match("^%s*from%s+.-%s+import%s+") then
+					target_row = i
+					indent = line:match("^(%s*)") or ""
+					break
+				end
 			end
-		end
-		vim.schedule(function() vim.api.nvim_buf_set_lines(0, import_row, import_row, false, { "import pandas as pd" }) end)
-	end, {})
-	vim.api.nvim_buf_create_user_command(0, "Importpl", function()
-		local import_row = 0
-		for i = 0, 50 do
-			local line = vim.api.nvim_buf_get_lines(0, i - 1, i, false)[1] or ""
-			if line:match("^import ") or line:match("^from .* import ") then
-				import_row = i
-				break
-			elseif line:match("^__author__.*") then
-				import_row = i - 1
-				break
+			if target_row == cursor_line then
+				target_row = 0
+				indent = ""
 			end
+			import_line = indent .. import_line
+			vim.schedule(function() vim.api.nvim_buf_set_lines(0, target_row, target_row, false, { import_line }) end)
 		end
-		vim.schedule(function() vim.api.nvim_buf_set_lines(0, import_row, import_row, false, { "import polars as pl" }) end)
-	end, {})
 
-	vim.api.nvim_buf_create_user_command(0, "Importnp", function()
-		local import_row = 0
-		for i = 0, 50 do
-			local line = vim.api.nvim_buf_get_lines(0, i - 1, i, false)[1] or ""
-			if line:match("^import ") or line:match("^from .* import ") then
-				import_row = i
-				break
-			elseif line:match("^__author__.*") then
-				import_row = i - 1
-				break
-			end
+		if #data.fargs == 0 then
+			vim.ui.select(args, { prompt = "Select shorthand import" }, function(item, _idx) put_line(outputs[item]) end)
+		else
+			put_line(outputs[data.fargs[1]])
 		end
-		vim.schedule(function() vim.api.nvim_buf_set_lines(0, import_row, import_row, false, { "import numpy as np" }) end)
-	end, {})
-
-	vim.api.nvim_buf_create_user_command(0, "Importplt", function()
-		local import_row = 0
-		for i = 0, 50 do
-			local line = vim.api.nvim_buf_get_lines(0, i - 1, i, false)[1] or ""
-			if line:match("^import ") or line:match("^from .* import ") then
-				import_row = i
-				break
-			elseif line:match("^__author__.*") then
-				import_row = i - 1
-				break
-			end
-		end
-		vim.schedule(function() vim.api.nvim_buf_set_lines(0, import_row, import_row, false, { "import matplotlib.pyplot as plt" }) end)
-	end, {})
+	end, { nargs = "*", complete = function(lead, cmdline, cursorpos) return args end })
 
 	-- keymaps
 	map("v", "gd", ":norm ysaw'f=r:A,<CR>gv<Plug>(nvim-surround-visual-line)}iargs = <ESC>va{o^", { desc = "Convert lines to dict", buffer = true })

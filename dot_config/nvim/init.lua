@@ -1026,80 +1026,6 @@ vim.api.nvim_set_hl(0, "SnacksPickerPathIgnored", { link = "Ignore" })
 vim.api.nvim_set_hl(0, "SnacksPickerGitStatussdfIgnored", { link = "Ignore" })
 --- }}}
 
---- which-key {{{
-require("which-key").setup({ ---@as wk.Opts
-	sort = { "order", "group", "alphanum", "mod", "case" },
-	expand = 1,
-	preset = "helix",
-	show_help = false,
-	spec = {
-		{ "<BS>", mode = { "n" }, group = "Close" },
-		{ "<Leader>e", mode = { "n" }, group = "Explorer" },
-		{ "<Leader>f", mode = { "n", "x" }, group = "Find" },
-		{ "<Leader>g", mode = { "n", "x" }, group = "Git" },
-		{ "<Leader>l", mode = { "n", "x" }, group = "Language Tools" },
-		{ "<Leader>b", mode = "n", group = "Buffers" },
-		{ "<Leader>u", mode = "n", group = "UI" },
-		{ "<Leader>d", mode = "n", group = "Debugger" },
-		{ "<Leader>p", mode = "n", group = "Packages" },
-		{ "<Leader>x", mode = "n", group = "Extras" },
-		{ "<Leader>m", mode = "n", group = "Markdown" },
-		{ ">>", mode = "n", desc = "indent line" },
-		{ "<<", mode = "n", desc = "unindent line" },
-	},
-	icons = {
-		separator = "",
-		group = "",
-		rules = {
-			{ pattern = "buffer", icon = "", color = "green" },
-			{ pattern = "explorer", icon = "󰙅", color = "red" },
-			{ pattern = "undotree", icon = "󰕍", color = "red" },
-			{ pattern = "history", icon = "", color = "yellow" },
-			{ pattern = "language", icon = "󱌯", color = "purple" },
-			{ pattern = "conflict", icon = "", color = "green" },
-			{ pattern = "config", icon = "", color = "orange" },
-			{ pattern = "packages", icon = "󰏗", color = "red" },
-			{ pattern = "extras", icon = "󱁖", color = "yellow" },
-			{ pattern = "home", icon = "", color = "purple" },
-			{ pattern = "cd", icon = "", color = "cyan" },
-			{ pattern = "math", icon = "󰒠", color = "purple" },
-			{ pattern = "fold", icon = "", color = "gray" },
-			{ pattern = "right", icon = "󱦰", color = "azure" },
-			{ pattern = "left", icon = "󱦱", color = "azure" },
-			{ pattern = "top", icon = "", color = "azure" },
-			{ pattern = "bottom", icon = "", color = "azure" },
-			{ pattern = "center", icon = "󰘢", color = "azure" },
-			{ pattern = "list", icon = "󰉹", color = "blue" },
-			{ pattern = "chatbot", icon = "󱚡", color = "gray" },
-			{ pattern = "markdown", icon = "", color = "purple" },
-			{ pattern = "debugger", icon = "", color = "red" },
-			{ pattern = "trouble", icon = "", color = "red" },
-			{ pattern = "overlook", icon = "", color = "blue" },
-			{ pattern = "peek", icon = "", color = "green" },
-			{ pattern = "noneckpain", icon = "", color = "blue" },
-			{ pattern = "yazi", icon = "󰙅", color = "cyan" },
-			{ pattern = "go", icon = "", color = "yellow" },
-			{ pattern = "align", icon = "󱇃", color = "green" },
-			{ pattern = "prev", icon = "󱦱", color = "purple" },
-			{ pattern = "first", icon = "󰘀", color = "purple" },
-			{ pattern = "last", icon = "󰘁", color = "purple" },
-			{ pattern = "insert", icon = "", color = "green" },
-			{ pattern = "selection", icon = "󰒉", color = "red" },
-			{ pattern = "lowercase", icon = "󰀬", color = "azure" },
-			{ pattern = "uppercase", icon = "󱀍", color = "azure" },
-			{ pattern = "vim", icon = "", color = "azure" },
-			{ pattern = "cycle", icon = "⭮", color = "azure" },
-		},
-	},
-	win = {
-		no_overlap = false,
-	},
-})
-vim.api.nvim_set_hl(0, "WhichKeyNormal", { link = "Normal" })
-vim.api.nvim_set_hl(0, "WhichKeyTitle", { link = "Green" })
-vim.api.nvim_set_hl(0, "WhichKeyBorder", { link = "Blue" })
---- }}}
-
 --- bufferline {{{
 require("bufferline").setup({
 	options = {
@@ -1836,6 +1762,80 @@ require("todo-comments").setup({
 require("nvim-highlight-colors").setup({
 	exclude_filetypes = { "bigfile" },
 })
+--- }}}
+
+--- which-key {{{
+require("which-key").setup({ ---@as wk.Opts
+	sort = { "order", "group", "alphanum", "mod", "case" },
+	expand = 1,
+	preset = "helix",
+	show_help = false,
+	spec = {
+		{ "<BS>", mode = { "n" }, group = "Close" },
+		{ "<Leader>e", mode = { "n" }, group = "Explorer" },
+		{ "<Leader>f", mode = { "n", "x" }, group = "Find" },
+		{ "<Leader>g", mode = { "n", "x" }, group = "Git" },
+		{ "<Leader>l", mode = { "n", "x" }, group = "Language Tools" },
+		{ "<Leader>b", mode = "n", group = "Buffers" },
+		{ "<Leader>u", mode = "n", group = "UI" },
+		{ "<Leader>d", mode = "n", group = "Debugger" },
+		{ "<Leader>p", mode = "n", group = "Packages" },
+		{ "<Leader>x", mode = "n", group = "Extras" },
+		{ "<Leader>m", mode = "n", group = "Markdown" },
+		{ ">>", mode = "n", desc = "indent line" },
+		{ "<<", mode = "n", desc = "unindent line" },
+	},
+	icons = {
+		separator = "",
+		group = "",
+		rules = {
+			{ pattern = "buffer", icon = "", color = "green" },
+			{ pattern = "explorer", icon = "󰙅", color = "red" },
+			{ pattern = "undotree", icon = "󰕍", color = "red" },
+			{ pattern = "history", icon = "", color = "yellow" },
+			{ pattern = "language", icon = "󱌯", color = "purple" },
+			{ pattern = "conflict", icon = "", color = "green" },
+			{ pattern = "config", icon = "", color = "orange" },
+			{ pattern = "packages", icon = "󰏗", color = "red" },
+			{ pattern = "extras", icon = "󱁖", color = "yellow" },
+			{ pattern = "home", icon = "", color = "purple" },
+			{ pattern = "cd", icon = "", color = "cyan" },
+			{ pattern = "math", icon = "󰒠", color = "purple" },
+			{ pattern = "fold", icon = "", color = "gray" },
+			{ pattern = "right", icon = "󱦰", color = "azure" },
+			{ pattern = "left", icon = "󱦱", color = "azure" },
+			{ pattern = "top", icon = "", color = "azure" },
+			{ pattern = "bottom", icon = "", color = "azure" },
+			{ pattern = "center", icon = "󰘢", color = "azure" },
+			{ pattern = "list", icon = "󰉹", color = "blue" },
+			{ pattern = "chatbot", icon = "󱚡", color = "gray" },
+			{ pattern = "markdown", icon = "", color = "purple" },
+			{ pattern = "debugger", icon = "", color = "red" },
+			{ pattern = "trouble", icon = "", color = "red" },
+			{ pattern = "overlook", icon = "", color = "blue" },
+			{ pattern = "peek", icon = "", color = "green" },
+			{ pattern = "noneckpain", icon = "", color = "blue" },
+			{ pattern = "yazi", icon = "󰙅", color = "cyan" },
+			{ pattern = "go", icon = "", color = "yellow" },
+			{ pattern = "align", icon = "󱇃", color = "green" },
+			{ pattern = "prev", icon = "󱦱", color = "purple" },
+			{ pattern = "first", icon = "󰘀", color = "purple" },
+			{ pattern = "last", icon = "󰘁", color = "purple" },
+			{ pattern = "insert", icon = "", color = "green" },
+			{ pattern = "selection", icon = "󰒉", color = "red" },
+			{ pattern = "lowercase", icon = "󰀬", color = "azure" },
+			{ pattern = "uppercase", icon = "󱀍", color = "azure" },
+			{ pattern = "vim", icon = "", color = "azure" },
+			{ pattern = "cycle", icon = "⭮", color = "azure" },
+		},
+	},
+	win = {
+		no_overlap = false,
+	},
+})
+vim.api.nvim_set_hl(0, "WhichKeyNormal", { link = "Normal" })
+vim.api.nvim_set_hl(0, "WhichKeyTitle", { link = "Green" })
+vim.api.nvim_set_hl(0, "WhichKeyBorder", { link = "Blue" })
 --- }}}
 --- }}}
 
