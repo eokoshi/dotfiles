@@ -27,12 +27,13 @@ sql_linter = true
 [display]
 cell_output = "below"
 code_editor_font_size = 12
+code_lens = true
 dataframes = "rich"
 default_table_max_columns = 50
 default_table_page_size = 10
 default_width = "medium"
 reference_highlighting = true
-theme = "system"
+theme = "dark"
 
 [formatting]
 line_length = 80
