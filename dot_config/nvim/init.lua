@@ -53,6 +53,7 @@ vim.pack.add({
 	{ src = gh("nvim-treesitter/nvim-treesitter-textobjects") },
 	{ src = gh("rafamadriz/friendly-snippets") },
 	{ src = gh("saghen/blink.cmp"), version = vim.version.range("1.*") },
+	{ src = gh("mistweaverco/kulala.nvim") },
 	{ src = gh("sindrets/diffview.nvim") },
 	{ src = gh("stevearc/conform.nvim") },
 	{ src = gh("windwp/nvim-autopairs") },
@@ -336,7 +337,7 @@ local function updateMiniWithGit(buf_id, gitStatusMap)
 		local nlines = vim.api.nvim_buf_line_count(buf_id)
 		local cwd = vim.fs.root(buf_id, ".git")
 		local escapedcwd = cwd and vim.pesc(cwd)
-		---@diagnostic disable-next-line: param-type-mismatch
+		---@cast escapedcwd string
 		escapedcwd = vim.fs.normalize(escapedcwd)
 		for i = 1, nlines do
 			local entry = MiniFiles.get_fs_entry(buf_id, i)
@@ -384,7 +385,6 @@ local function parseGitStatus(content)
 	local gitStatusMap = {}
 	for line in content:gmatch("[^\r\n]+") do
 		local status, filePath = string.match(line, "^(..)%s+(.*)")
-		---@diagnostic disable-next-line: param-type-mismatch
 		if status == "R " then filePath = string.match(filePath, "^.*%s%-%>%s(.*)") end
 		local parts = {}
 		for part in filePath:gmatch("[^/]+") do
@@ -519,8 +519,7 @@ vim.api.nvim_create_autocmd("User", {
 --- }}}
 
 --- conform {{{
----@diagnostic disable-next-line: param-type-mismatch
-require("conform").setup({
+require("conform").setup({ ---@as conform.setupOpts
 	formatters_by_ft = {
 		lua = { "stylua" },
 		python = { "ruff_fix", "ruff_organize_imports", "ruff_format" },
@@ -567,9 +566,8 @@ vim.api.nvim_create_user_command("FormatEnable", function() vim.b.autoformat = t
 --- }}}
 
 --- blink --- {{{
----@diagnostic disable-next-line: param-type-mismatch
-require("blink.cmp").setup({
-	enabled = function() return vim.b.completion or vim.b.completion == nil end,
+require("blink.cmp").setup({ ---@as blink.cmp.Config
+	enabled = function() return (vim.b.completion or vim.b.completion == nil) and not vim.tbl_contains({ "minifiles" }, vim.bo.filetype) end,
 	keymap = {
 		["<C-Space>"] = { "show", "show_documentation", "hide_documentation" },
 		["<C-e>"] = { "cancel", "fallback" },
@@ -985,48 +983,51 @@ map(
 	{ desc = "icons" }
 )
 -- map("i", "<C-l>", function() local pos = vim.fn.getcursorcharpos() require("snacks.picker").icons({ custom_sources = { unicode = vim.fn.stdpath("config") .. "/unicode_chars.json" }, }) vim.fn.setcursorcharpos(pos) end, { desc = "insert icon" })
-map("n", "<Leader>N", function()
-	require("snacks").picker.notifications({
-		confirm = { "yank", "close" },
-		focus = "list",
-		layout = {
-			---@diagnostic disable-next-line: missing-fields
+map(
+	"n",
+	"<Leader>N",
+	function()
+		require("snacks").picker.notifications({
+			confirm = { "yank", "close" },
+			focus = "list",
 			layout = {
-				box = "vertical",
-				backdrop = false,
-				width = 0.8,
-				min_width = 90,
-				height = 0.8,
-				min_height = 30,
-				border = "rounded",
-				title = "{title} {live} {flags}",
-				title_pos = "center",
-				{ win = "input", height = 1, border = "bottom" },
-				{ win = "list", border = "none" },
-				{
-					win = "preview",
-					title = "{preview}",
+				layout = {
+					box = "vertical",
+					backdrop = false,
+					width = 0.8,
+					min_width = 90,
 					height = 0.8,
-					border = "top",
-					wo = { wrap = true, statuscolumn = "%l ", relativenumber = false, foldcolumn = "0" },
+					min_height = 30,
+					border = "rounded",
+					title = "{title} {live} {flags}",
+					title_pos = "center",
+					{ win = "input", height = 1, border = "bottom" },
+					{ win = "list", border = "none" },
+					{
+						win = "preview",
+						title = "{preview}",
+						height = 0.8,
+						border = "top",
+						wo = { wrap = true, statuscolumn = "%l ", relativenumber = false, foldcolumn = "0" },
+					},
 				},
 			},
-		},
-		win = {
-			input = { keys = { ["<C-Space>"] = { "cycle_win", mode = { "i", "n" } } } },
-			list = { keys = { ["<C-Space>"] = { "cycle_win", mode = { "i", "n" } } } },
-			preview = { keys = { ["<C-Space>"] = { "cycle_win", mode = { "i", "n" } } } },
-		},
-	})
-end, { desc = "Notification history" })
+			win = {
+				input = { keys = { ["<C-Space>"] = { "cycle_win", mode = { "i", "n" } } } },
+				list = { keys = { ["<C-Space>"] = { "cycle_win", mode = { "i", "n" } } } },
+				preview = { keys = { ["<C-Space>"] = { "cycle_win", mode = { "i", "n" } } } },
+			},
+		})
+	end,
+	{ desc = "Notification history" }
+)
 vim.api.nvim_set_hl(0, "SnacksTitle", { link = "Title" })
 vim.api.nvim_set_hl(0, "SnacksPickerPathIgnored", { link = "Ignore" })
 vim.api.nvim_set_hl(0, "SnacksPickerGitStatussdfIgnored", { link = "Ignore" })
 --- }}}
 
 --- which-key {{{
----@diagnostic disable-next-line: missing-fields, param-type-mismatch
-require("which-key").setup({
+require("which-key").setup({ ---@as wk.Opts
 	sort = { "order", "group", "alphanum", "mod", "case" },
 	expand = 1,
 	preset = "helix",
@@ -1090,7 +1091,6 @@ require("which-key").setup({
 			{ pattern = "cycle", icon = "⭮", color = "azure" },
 		},
 	},
-	---@diagnostic disable-next-line: missing-fields
 	win = {
 		no_overlap = false,
 	},
@@ -1177,7 +1177,7 @@ local installs = { "marksman", "prettier", "fixjson" }
 if vim.fn.has("win32") == 0 then
 	vim.list_extend(installs, {
 		"ruff",
-		"ty",
+		"pyrefly",
 		"debugpy",
 		"tombi",
 		"bash-language-server",
@@ -1665,6 +1665,26 @@ vim.api.nvim_create_autocmd({ "BufReadPre", "BufNewFile" }, {
 })
 --- }}}
 
+--- kulala {{{
+require("kulala").setup({
+	ui = {
+		split_direction = function()
+			if vim.o.columns < 140 then
+				return "below"
+			else
+				return "right"
+			end
+		end,
+	},
+	global_keymaps = true,
+	global_keymaps_prefix = "<leader>r",
+	kulala_keymaps = {
+		["Previous tab"] = false,
+		["Next tab"] = false,
+	},
+})
+--- }}}
+
 --- render-markdown {{{
 require("render-markdown").setup({
 	ignore = function() return vim.bo.buftype ~= "" end,
@@ -1694,8 +1714,7 @@ require("render-markdown").setup({
 --- }}}
 
 --- checkmate {{{
----@diagnostic disable-next-line: missing-fields, param-type-mismatch
-require("checkmate").setup({
+require("checkmate").setup({ ---@as checkmate.Config
 	files = { "*.md", "todo", "*.todo", "TODO" },
 	todo_states = {
 		checked = {
