@@ -1605,6 +1605,7 @@ vim.schedule(
 --- }}}
 
 --- obsidian {{{
+obsidiangroup = vim.api.nvim_create_augroup("obsidian", { clear = true })
 local function setup_obsidian()
 	vim.pack.add({
 		{ src = gh("obsidian-nvim/obsidian.nvim"), version = vim.version.range("*") },
@@ -1638,6 +1639,7 @@ local function setup_obsidian()
 	map("n", "<Leader>mn", "<CMD>Obsidian new_from_template<CR>", { desc = "new from template" })
 	map("n", "<leader>mo", "<CMD>cd ~/Documents/Obsidian<CR>", { desc = "cd vault" })
 	vim.api.nvim_create_autocmd("User", {
+		group = obsidiangroup,
 		pattern = "ObsidianNoteEnter",
 		callback = function()
 			vim.keymap.set("n", "<CR>", function()
@@ -1659,7 +1661,6 @@ local function setup_obsidian()
 		end,
 	})
 end
-obsidiangroup = vim.api.nvim_create_augroup("obsidian", { clear = true })
 vim.api.nvim_create_autocmd({ "BufReadPre", "BufNewFile" }, {
 	group = obsidiangroup,
 	pattern = "**/[Oo]bsidian/**",
