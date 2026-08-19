@@ -898,19 +898,15 @@ require("snacks").setup({
 })
 local Snacks = require("snacks")
 vim.print = function(...) Snacks.debug.inspect(...) end
+map("n", "vv", function() Snacks.picker.buffers() end, { desc = "buffers" })
+map("n", "ff", function() Snacks.picker.files() end, { desc = "files" })
+map("n", "<Leader>fw", function() Snacks.picker.grep({ cmd = "rg" }) end, { desc = "word" })
+map({ "n", "x" }, "<Leader>f*", function() Snacks.picker.grep_word() end, { desc = "grep current selection" })
 map("n", "<leader>c", function() Snacks.bufdelete() end, { desc = "Close buffer" })
 map("n", "<leader>bc", function() Snacks.bufdelete.other() end, { desc = "Close all other buffers" })
 map("n", "<Leader>fe", function() Snacks.explorer() end, { desc = "File explorer" })
 map({ "n", "t", "i" }, "<F7>", function() Snacks.terminal.toggle() end, { desc = "toggle terminal" })
 map("n", "<Leader>R", function() Snacks.rename.rename_file() end, { desc = "Rename file" })
-local bufferline_avail, _ = pcall(require, "bufferline")
-if not bufferline_avail then map("n", "vv", function() Snacks.picker.buffers() end, { desc = "buffers" }) end
-local fff_avail, _ = pcall(require, "fff")
-if not fff_avail then
-	map("n", "ff", function() Snacks.picker.files() end, { desc = "files" })
-	map("n", "<Leader>fw", function() Snacks.picker.grep({ cmd = "rg" }) end, { desc = "word" })
-	map({ "n", "x" }, "<Leader>f*", function() Snacks.picker.grep_word() end, { desc = "grep current selection" })
-end
 map("n", "<Leader>ff", function() Snacks.picker.files({ hidden = true, ignored = true, cmd = "fd" }) end, { desc = "all files" })
 map("n", "<Leader>fW", function() Snacks.picker.grep({ cmd = "rg", hidden = true, ignored = true }) end, { desc = "Word in all files" })
 map("n", "<Leader>f:", function() Snacks.picker.command_history() end, { desc = "Command history" })
