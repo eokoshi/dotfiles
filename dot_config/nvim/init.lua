@@ -3,27 +3,24 @@ local icons = require("stuff.icons")
 vim.g.mapleader = " "
 
 --- Plugins {{{
-map("n", "<leader>pu", function() vim.pack.update() end, { desc = "vim.pack.update()" })
-map("n", "<leader>pi", function() vim.pack.update(nil, { offline = true }) end, { desc = "[offline] vim.pack.update()" })
-map("n", "<leader>pp", function() vim.cmd.source(vim.fn.stdpath("config") .. "/init.lua") end, { desc = "source init.lua" })
 vim.api.nvim_create_autocmd("PackChanged", {
 	callback = function(ev)
 		local name, kind = ev.data.spec.name, ev.data.kind
 		if name == "nvim-treesitter" and kind == "update" then
-			if not ev.data.active then vim.cmd.packadd("nvim-treesitter") end
+			if not ev.data.active then vim.cmd("packadd nvim-treesitter") end
 			vim.cmd("TSUpdate")
 		elseif name == "mason" and kind == "update" then
-			if not ev.data.active then vim.cmd.packadd("mason.nvim") end
+			if not ev.data.active then vim.cmd("packadd mason.nvim") end
 			vim.cmd("MasonUpdate")
 		elseif name == "fff" and (kind == "update" or kind == "install") then
-			if not ev.data.active then vim.cmd.packadd("fff") end
+			if not ev.data.active then vim.cmd("packadd fff") end
 			require("fff.download").download_or_build_binary()
 		end
 	end,
 })
 
 local gh = require("functions").gh
-vim.cmd.packadd("nvim.undotree")
+vim.cmd("packadd nvim.undotree")
 vim.pack.add({
 	{ src = gh("MagicDuck/grug-far.nvim") },
 	{ src = gh("MeanderingProgrammer/render-markdown.nvim"), vim.version.range("*") },
@@ -60,6 +57,9 @@ vim.pack.add({
 	{ src = gh("sindrets/diffview.nvim") },
 	{ src = gh("stevearc/conform.nvim") },
 	{ src = gh("windwp/nvim-autopairs") },
+	{ src = gh("jezda1337/nvim-html-css") },
+	{ src = gh("dmtrKovalenko/fff"), version = vim.version.range("*") },
+	{ src = gh("obsidian-nvim/obsidian.nvim"), version = vim.version.range("*") },
 	{ src = gh("sainnhe/everforest") },
 	{ src = gh("mcauley-penney/techbase.nvim") },
 	{ src = gh("olimorris/onedarkpro.nvim") },
@@ -76,21 +76,28 @@ vim.pack.add({
 require("onedarkpro").setup({
 	styles = { comments = "italic", keywords = "bold, italic", conditionals = "italic" },
 	highlights = { NormalFloat = { link = "Normal" }, FloatBorder = { link = "UltestBorder" } },
-	options = { transparency = true },
+	options = { transparency = vim.g.neovide ~= true },
 })
 
 require("techbase").setup({
 	italic_comments = true,
 })
 
+vim.g.edge_style = "default"
+vim.g.edge_better_performance = 1
+vim.g.edge_enable_italic = 1
+vim.g.everforest_background = "medium"
+vim.g.everforest_better_performance = 1
+vim.g.everforest_enable_italic = 1
+if vim.g.neovide ~= true then vim.g.everforest_transparent_background = 1 end
 vim.g.gruvbox_material_foreground = "material"
 vim.g.gruvbox_material_background = "medium"
 vim.g.gruvbox_material_enable_italic = 1
 vim.g.gruvbox_material_enable_bold = 1
 vim.g.gruvbox_better_performance = 1
-vim.g.gruvbox_material_transparent_background = 1
+if vim.g.neovide ~= true then vim.g.gruvbox_material_transparent_background = 1 end
 vim.api.nvim_create_autocmd("ColorScheme", {
-	group = vim.api.nvim_create_augroup("custom_highlights_gruvboxmaterial", {}),
+	group = vim.api.nvim_create_augroup("custom_highlights_gruvboxmaterial", { clear = true }),
 	pattern = "gruvbox-material",
 	callback = function()
 		local config = vim.fn["gruvbox_material#get_configuration"]()
@@ -101,17 +108,10 @@ vim.api.nvim_create_autocmd("ColorScheme", {
 	desc = "Set custom highlights specific to gruvbox-material",
 })
 
-vim.g.edge_style = "default"
-vim.g.edge_better_performance = 1
-vim.g.edge_enable_italic = 1
-vim.g.everforest_background = "medium"
-vim.g.everforest_better_performance = 1
-vim.g.everforest_enable_italic = 1
-vim.g.everforest_transparent_background = 1
 if vim.env.TERM == "linux" then
-	vim.cmd.colorscheme("default")
+	vim.cmd("colorscheme default")
 else
-	vim.cmd.colorscheme("gruvbox-material")
+	vim.cmd("colorscheme gruvbox-material")
 end
 --- }}}
 
@@ -146,7 +146,7 @@ end
 local function get_filesize(bufnr)
 	local file = vim.api.nvim_buf_get_name(bufnr)
 	if file == "" or #file == 0 then return "" end
-	local size = vim.fn.getfsize(file)
+	local size = vim.fn.getfsize(file) ---@type number
 	if size <= 0 then return "" end
 	local units = { "B", "KB", "MB", "GB" }
 	local i = 1
@@ -369,6 +369,7 @@ local function updateMiniWithGit(buf_id, gitStatusMap)
 						hl_mode = "combine",
 					})
 					local line = vim.api.nvim_buf_get_lines(buf_id, i - 1, i, false)[1]
+					if not line then return end
 					local nameStartCol = line:find(vim.pesc(entry.name)) or 0
 					if nameStartCol > 0 then
 						vim.api.nvim_buf_set_extmark(buf_id, nsMiniFiles, i - 1, nameStartCol - 1, {
@@ -388,7 +389,9 @@ local function parseGitStatus(content)
 	local gitStatusMap = {}
 	for line in content:gmatch("[^\r\n]+") do
 		local status, filePath = string.match(line, "^(..)%s+(.*)")
+		if not filePath then return {} end
 		if status == "R " then filePath = string.match(filePath, "^.*%s%-%>%s(.*)") end
+		if not filePath then return {} end
 		local parts = {}
 		for part in filePath:gmatch("[^/]+") do
 			table.insert(parts, part)
@@ -491,7 +494,9 @@ local toggle_preview = function()
 		windows = { preview = preview_next },
 	})
 	if preview then
-		local branch = MiniFiles.get_explorer_state().branch
+		local state = MiniFiles.get_explorer_state()
+		if not state then return 1 end
+		local branch = state.branch
 		table.remove(branch)
 		pcall(function()
 			MiniFiles.set_branch(branch)
@@ -539,6 +544,7 @@ require("conform").setup({ ---@as conform.setupOpts
 		lsp_format = "fallback",
 	},
 	format_on_save = function(bufnr)
+		---@diagnostic disable-next-line: return-type-mismatch
 		if vim.b[bufnr].autoformat or vim.b[bufnr].autoformat == nil then return { timeout_ms = 500, lsp_format = "fallback" } end
 	end,
 	formatters = {
@@ -673,8 +679,6 @@ vim.api.nvim_create_autocmd("FileType", {
 	pattern = { "html", "htmldjango" },
 	once = true,
 	callback = function()
-		-- vim.pack.add({ { src = gh("jezda1337/nvim-html-css") } })
-		vim.pack.add({ { src = gh("marioy47/nvim-html-css"), version = "bda9a78", name = "html-css" } })
 		require("html-css").setup({
 			enable_on = { "html", "htmldjango", "php", "templ" },
 			handlers = {
@@ -1357,7 +1361,7 @@ require("nvim-surround").setup({})
 
 --- tmux {{{
 if vim.env.TMUX ~= nil then
-	require("tmux").setup({ copy_sync = { sync_registers_keymap_reg = false } }) --fixes whichkey register display
+	require("tmux").setup({})
 else
 	map("n", "<C-h>", "<C-w>h", { desc = "Move to window left" })
 	map("n", "<C-j>", "<C-w>j", { desc = "Move to window above" })
@@ -1447,7 +1451,6 @@ vim.api.nvim_set_hl(0, "GitSignsDeleteInline", { link = "DiffText" })
 
 --- fff {{{
 if vim.fs.root(0, ".git") ~= nil then
-	vim.pack.add({ { src = gh("dmtrKovalenko/fff"), version = vim.version.range("*") } })
 	require("fff").setup({
 		prompt = "❭ ",
 		title = "fff",
@@ -1610,9 +1613,7 @@ vim.schedule(
 --- obsidian {{{
 obsidiangroup = vim.api.nvim_create_augroup("obsidian", { clear = true })
 local function setup_obsidian()
-	vim.pack.add({
-		{ src = gh("obsidian-nvim/obsidian.nvim"), version = vim.version.range("*") },
-	})
+	if _G.Obsidian then return end
 	require("obsidian").setup({
 		legacy_commands = false,
 		statusline = { enabled = false },
@@ -1727,6 +1728,7 @@ require("render-markdown").setup({
 --- }}}
 
 --- checkmate {{{
+---@diagnostic disable-next-line: missing-fields
 require("checkmate").setup({ ---@as checkmate.Config
 	files = { "*.md", "todo", "*.todo", "TODO" },
 	todo_states = {
@@ -1887,6 +1889,12 @@ map("n", "<Leader>lw", function() vim.lsp.buf.workspace_diagnostics() end, { des
 map("n", "<Leader>li", "<CMD>checkhealth vim.lsp<CR>", { desc = "LSP info" })
 map("n", "gco", "o<Esc>Vcx<Esc><Cmd>normal gcc<CR>fxa<BS>", { desc = "Add comment below" })
 map("n", "gcO", "O<Esc>Vcx<Esc><Cmd>normal gcc<CR>fxa<BS>", { desc = "Add comment above" })
+
+-- Packages
+map("n", "<leader>pu", function() vim.pack.update() end, { desc = "vim.pack.update()" })
+map("n", "<leader>pi", function() vim.pack.update(nil, { offline = true }) end, { desc = "[offline] vim.pack.update()" })
+map("n", "<leader>pp", function() vim.cmd("source " .. vim.fn.stdpath("config") .. "/init.lua") end, { desc = "source init.lua" })
+--- }}}
 
 --- Highlights {{{
 vim.api.nvim_set_hl(0, "LspSignatureActiveParameter", { italic = true, bold = true })
