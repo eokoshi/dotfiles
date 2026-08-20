@@ -4,7 +4,7 @@ return {
 		python = {
 			analysis = {
 				completeFunctionParens = true,
-				showHoverGoToLink = false,
+				showHoverGoToLinks = false,
 			},
 			pyrefly = {
 				displayTypeErrors = "force-off",
