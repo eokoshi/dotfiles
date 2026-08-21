@@ -79,11 +79,7 @@ if [[ "$DISTRO" == "Ubuntu" ]]; then
 			&& echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" | sudo tee /etc/apt/sources.list.d/github-cli.list > /dev/null \
 			&& sudo apt update \
 			&& sudo apt install gh -y
-<<<<<<< Updated upstream
 		gh auth login -y
-=======
-		gh auth login --web --clipboard
->>>>>>> Stashed changes
 	fi
 
 	echo ""

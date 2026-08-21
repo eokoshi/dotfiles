@@ -146,63 +146,76 @@ if vim.bo[bufnr].buftype == "" then
 		map("n", "[j", function() vim.fn.search("^# %%", "bW") end, { buffer = true, desc = "cell" })
 	end
 
-	-- Builtin :terminal ipython runner (no tmux needed)
-	local ipython_term = { buf = nil, chan = nil }
+	-- Builtin :terminal python runner (no tmux needed)
+	local python_term = { buf = nil, chan = nil }
 
-	local function ipython_term_running(chan)
+	local function python_term_running(chan)
 		if type(chan) ~= "number" or chan <= 0 then return false end
 		return vim.fn.jobwait({ chan }, 0)[1] == -1
 	end
 
-	local function open_ipython_term()
+	local function open_python_term(command)
+		if not command then return end
+
 		local orig_win = vim.api.nvim_get_current_win()
-		local old_win = -1
-		if ipython_term.buf and vim.api.nvim_buf_is_valid(ipython_term.buf) then old_win = vim.fn.bufwinid(ipython_term.buf) end
-		if old_win ~= -1 then
-			vim.api.nvim_set_current_win(old_win)
+		local open_win = -1
+		local buf = -1
+		if python_term.buf and vim.api.nvim_buf_is_valid(python_term.buf) then
+			open_win = vim.fn.bufwinid(python_term.buf)
+			buf = python_term.buf
 		else
-			local cmd = (vim.o.columns < vim.o.lines) and "vsplit" or "split"
-			vim.cmd(cmd)
+			buf = vim.api.nvim_create_buf(false, true)
 		end
-		vim.cmd("terminal ipython")
-		local buf = vim.api.nvim_get_current_buf()
-		local chan = vim.b[buf].terminal_job_id
+
+		if open_win ~= -1 then
+			vim.api.nvim_set_current_win(open_win)
+		else
+			local split = (vim.o.columns > 160) and "right" or "below"
+			vim.api.nvim_open_win(buf, false, {
+				split = split,
+				style = "minimal",
+			})
+		end
+		vim.nvim_open_term(buf, {})
+
+		local chan = vim.b[buf].channel
 		vim.b[buf].ipython_term = true
 		vim.bo[buf].buflisted = false -- keep it out of ]b/[b buffer cycling
 		vim.bo[buf].bufhidden = "hide"
-		ipython_term = { buf = buf, chan = chan }
+		python_term = { buf = buf, chan = chan }
 		vim.api.nvim_set_current_win(orig_win)
 
-		-- Wait for the ipython prompt so the first send isn't echoed back as
-		-- raw escape sequences.
+		-- Wait for the python prompt so the first send isn't echoed back as raw escape sequences.
 		vim.wait(5000, function()
 			local lines = vim.api.nvim_buf_get_lines(buf, 0, -1, false)
 			for i = #lines, 1, -1 do
 				if lines[i]:match("^In %[%d+%]:") then return true end
+				if lines[i]:match("command not found") then return false end
 			end
 			return false
 		end, 50)
 		return chan
 	end
 
-	local function ensure_ipython_term()
-		if ipython_term.buf and vim.api.nvim_buf_is_valid(ipython_term.buf) and ipython_term_running(ipython_term.chan) then
-			if vim.fn.bufwinid(ipython_term.buf) == -1 then
+	local function ensure_python_term()
+		if python_term.buf and vim.api.nvim_buf_is_valid(python_term.buf) and python_term_running(python_term.chan) then
+			if vim.fn.bufwinid(python_term.buf) == -1 then
 				local orig_win = vim.api.nvim_get_current_win()
 				local cmd = (vim.o.columns > vim.o.lines) and "vsplit" or "split"
 				vim.cmd(cmd)
-				vim.api.nvim_win_set_buf(0, ipython_term.buf)
+				vim.api.nvim_win_set_buf(0, python_term.buf)
 				vim.api.nvim_set_current_win(orig_win)
 			end
-			return ipython_term.chan
+			return python_term.chan
 		end
-		return open_ipython_term()
+		vim.ui.input({ prompt = "enter cli command to start REPL: ", default = "ipython" }, function(input) vim.g.replcmd = input end)
+		return open_python_term(vim.g.replcmd)
 	end
 
-	local function send_to_ipython_term()
-		local chan = ensure_ipython_term()
-		if not ipython_term_running(chan) then
-			vim.notify("ipython terminal is not running", vim.log.levels.WARN)
+	local function send_to_python_term()
+		local chan = ensure_python_term()
+		if not python_term_running(chan) then
+			vim.notify("python terminal is not running", vim.log.levels.WARN)
 			return
 		end
 
@@ -218,14 +231,13 @@ if vim.bo[bufnr].buftype == "" then
 			text = text:gsub("%s+$", "")
 			if text ~= "" then
 				text = text .. "\n"
-				-- Bracketed paste keeps multi-line selections as one ipython
-				-- input; the trailing Enter executes it.
+				-- Bracketed paste keeps multi-line selections as one ipython input; the trailing Enter executes it.
 				vim.fn.chansend(chan, "\27[200~" .. text .. "\27[201~" .. "\n")
 			end
 		end
 	end
 
-	map({ "n", "x" }, "<CR>", send_to_ipython_term, { desc = "Send selection/line to ipython terminal", buffer = true })
+	map({ "n", "x" }, "<CR>", send_to_python_term, { desc = "Send selection/line to ipython terminal", buffer = true })
 
 	-- TMUX ipython
 	local function run_tmux(args) return vim.fn.system(vim.list_extend({ "tmux" }, args)) end

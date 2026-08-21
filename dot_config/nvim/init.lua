@@ -137,6 +137,7 @@ local modes = {
 	["r?"] = { name = "r?", hl = "StatuslineCommand" },
 	["!"] = { name = "!", hl = "StatuslineCommand" },
 	["t"] = { name = "t", hl = "StatuslineTerminal" },
+	["nt"] = { name = "nt", hl = "StatuslineNormal" },
 }
 local function get_macro()
 	local reg = vim.fn.reg_recording()
@@ -213,7 +214,7 @@ function _G.my_statusline()
 	local is_active = (winid == vim.api.nvim_get_current_win())
 
 	local mode_code = vim.api.nvim_get_mode().mode
-	local mode_info = modes[mode_code] or { name = "UNKNOWN", hl = "StatuslineNormal" }
+	local mode_info = modes[mode_code] or { name = mode_code, hl = "StatuslineSection" }
 	local mode_str = string.format("%%#%s# %s %%*", "StatuslineSection", mode_info.name)
 	if is_active then mode_str = string.format("%%#%s# %s %%*", mode_info.hl, mode_info.name) end
 	local macro = ""
