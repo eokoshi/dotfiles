@@ -1358,7 +1358,7 @@ require("nvim-surround").setup({})
 
 --- tmux {{{
 if vim.env.TMUX ~= nil then
-	require("tmux").setup({})
+	require("tmux").setup({ copy_sync = { sync_registers_keymap_reg = false } })
 else
 	map("n", "<C-h>", "<C-w>h", { desc = "Move to window left" })
 	map("n", "<C-j>", "<C-w>j", { desc = "Move to window above" })
