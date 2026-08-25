@@ -147,46 +147,70 @@ if vim.bo[bufnr].buftype == "" then
 	--- }}}
 
 	-- Builtin :terminal python runner {{{
-	local python_term = { buf = nil, chan = nil, cmd = nil }
+	vim.b.python_term = vim.b.python_term or { buf = nil, chan = nil, cmd = nil }
 	local function term_is_running(chan) return type(chan) == "number" and chan > 0 and vim.fn.jobwait({ chan }, 0)[1] == -1 end
-
-	local function open_python_term(command)
-		if not command or command == "" then return end
-
-		-- Cleanup existing buffer and its attached window
-		if python_term.buf and vim.api.nvim_buf_is_valid(python_term.buf) then vim.api.nvim_buf_delete(python_term.buf, { force = true }) end
-
-		local buf = vim.api.nvim_create_buf(false, true)
-		local split_dir = (vim.o.columns > 240) and "right" or "below"
-
-		-- Open window non-intrusively without switching active focus
-		local win = vim.api.nvim_open_win(buf, false, {
-			split = split_dir,
-			style = "minimal",
-		})
-
-		-- jobstart with term = true creates the buffer terminal and spawns the process automatically
-		local chan = vim.api.nvim_buf_call(buf, function() return vim.fn.jobstart(command, { term = true }) end)
-
-		python_term = { buf = buf, chan = chan, cmd = command }
+	local function is_floating(win) return vim.api.nvim_win_get_config(win).relative ~= "" end
+	local function open_python_term(buf)
+		local orig_win = vim.api.nvim_get_current_win()
+		local win
+		if is_floating(orig_win) then
+			local cfg = vim.api.nvim_win_get_config(orig_win)
+			win = vim.api.nvim_open_win(buf, false, {
+				relative = "win",
+				row = cfg.height + 1,
+				col = -1,
+				width = cfg.width,
+				height = cfg.height,
+				style = "minimal",
+			})
+			vim.wo[win].winhighlight = "NormalFloat:Normal,FloatBorder:Green"
+			vim.api.nvim_win_set_config(orig_win, {
+				relative = "editor",
+				col = cfg.col,
+				row = 2,
+			})
+			vim.api.nvim_create_autocmd("WinClosed", {
+				pattern = tostring(orig_win),
+				once = true,
+				callback = function()
+					local t_term = vim.b[bufnr].python_term
+					if t_term and t_term.buf and vim.api.nvim_buf_is_valid(t_term.buf) then
+						local t_win = vim.fn.bufwinid(t_term.buf)
+						if t_win ~= -1 then vim.api.nvim_win_close(t_win, true) end
+					end
+				end,
+			})
+		else
+			local split_dir = (vim.o.columns > 240) and "right" or "below"
+			win = vim.api.nvim_open_win(buf, false, {
+				split = split_dir,
+				style = "minimal",
+			})
+		end
 		vim.api.nvim_win_set_cursor(win, { vim.api.nvim_buf_line_count(buf), 0 })
+	end
+
+	local function start_python_term(command)
+		if not command or command == "" then return end
+		-- Cleanup existing buffer and its attached window
+		if vim.b.python_term.buf and vim.api.nvim_buf_is_valid(vim.b.python_term.buf) then
+			vim.api.nvim_buf_delete(vim.b.python_term.buf, { force = true })
+		end
+		local buf = vim.api.nvim_create_buf(false, true)
+		open_python_term(buf)
+		local chan = vim.api.nvim_buf_call(buf, function() return vim.fn.jobstart(command, { term = true }) end)
+		vim.b.python_term = { buf = buf, chan = chan, cmd = command }
 		return chan
 	end
 
 	local function ensure_python_term()
-		if python_term.buf and vim.api.nvim_buf_is_valid(python_term.buf) and term_is_running(python_term.chan) then
-			if vim.fn.bufwinid(python_term.buf) == -1 then
-				local split_dir = (vim.o.columns >= 240) and "right" or "below"
-				local win = vim.api.nvim_open_win(python_term.buf, false, {
-					split = split_dir,
-					style = "minimal",
-				})
-				vim.api.nvim_win_set_cursor(win, { vim.api.nvim_buf_line_count(python_term.buf), 0 })
-			end
-			return python_term.chan
+		if vim.b.python_term.buf and vim.api.nvim_buf_is_valid(vim.b.python_term.buf) and term_is_running(vim.b.python_term.chan) then
+			local buf = vim.api.nvim_create_buf(false, true)
+			open_python_term(buf)
+			return vim.b.python_term.chan
 		end
-		local command = vim.fn.input("Enter CLI command to start REPL: ", "uvx ipython")
-		return open_python_term(command)
+		local command = vim.fn.input("Enter CLI command to start REPL: ", "ipython")
+		return start_python_term(command)
 	end
 
 	local function send_to_python_term()
@@ -207,7 +231,7 @@ if vim.bo[bufnr].buftype == "" then
 
 		local text = table.concat(lines, "\n"):gsub("\t", "    "):gsub("%s+$", "")
 		if text ~= "" then
-			if python_term.cmd and python_term.cmd:match("ipython") then
+			if vim.b.python_term.cmd and vim.b.python_term.cmd:match("ipython") then
 				vim.fn.chansend(chan, "\27[200~\n" .. text .. "\n\27[201~\n")
 			else
 				text = text:gsub("^[ \t]+", ""):gsub("\n[ \t]+", "\n")

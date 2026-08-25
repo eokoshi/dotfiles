@@ -96,7 +96,7 @@ function marimo-serve() {
 }
 
 function chdiffnvim() {
-	diff -bur --color=always ~/.local/share/chezmoi/dot_config/nvim/ ~/.config/nvim/ -x ".git*" -x "*stylua*" -x "lazy-lock.json" -x "nvim-pack-lock.json"
+	diff -bur --color=always ~/.local/share/chezmoi/dot_config/nvim/ ~/.config/nvim/ -x ".git*" -x "*stylua*" -x "lazy-lock.json" -x "nvim-pack-lock.json" -x ".venv" -x ".envrc"
 }
 
 function watchlastlog() {
