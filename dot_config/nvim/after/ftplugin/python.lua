@@ -92,59 +92,59 @@ if vim.bo[bufnr].buftype == "" then
 				on_reload = function() vim.b.marimo_import_relocator = nil end,
 			})
 		end
-
-	-- py:percent
-	elseif firstline and string.match(firstline, "^# %%%%") ~= nil then
-		local function get_cursor_row() return vim.api.nvim_win_get_cursor(0)[1] - 1 end
-		local function get_line(row) return vim.api.nvim_buf_get_lines(0, row, row + 1, false)[1] end
-		local function is_marker(row)
-			local line = get_line(row)
-			return line and line:match("^# %%%%")
-		end
-		local function find_cell_start()
-			local row = get_cursor_row()
-			while row >= 0 do
-				if is_marker(row) then return row end
-				row = row - 1
-			end
-			return 0
-		end
-		local function find_cell_end(start_row)
-			local last = vim.api.nvim_buf_line_count(0) - 1
-			local row = start_row + 1
-			while row <= last do
-				if is_marker(row) then return row - 1 end
-				row = row + 1
-			end
-			return last
-		end
-
-		local function select_range(start_row, end_row)
-			vim.fn.setpos("'<", { 0, start_row + 1, 1, 0 })
-			vim.fn.setpos("'>", { 0, end_row + 1, 1, 0 })
-			vim.cmd("normal! gvV")
-		end
-
-		local function select_outer()
-			local start_row = find_cell_start()
-			local end_row = find_cell_end(start_row)
-			select_range(start_row, end_row)
-		end
-
-		local function select_inner()
-			local start_row = find_cell_start() + 1
-			local end_row = find_cell_end(start_row - 1)
-
-			if start_row <= end_row then select_range(start_row, end_row) end
-		end
-
-		map("o", "aj", select_outer, { buffer = true, desc = "cell" })
-		map("x", "aj", select_outer, { buffer = true, desc = "cell" })
-		map("o", "ij", select_inner, { buffer = true, desc = "cell" })
-		map("x", "ij", select_inner, { buffer = true, desc = "cell" })
-		map("n", "]j", function() vim.fn.search("^# %%", "W") end, { buffer = true, desc = "cell" })
-		map("n", "[j", function() vim.fn.search("^# %%", "bW") end, { buffer = true, desc = "cell" })
 	end
+
+	-- py:percent {{{
+	local function get_cursor_row() return vim.api.nvim_win_get_cursor(0)[1] - 1 end
+	local function get_line(row) return vim.api.nvim_buf_get_lines(0, row, row + 1, false)[1] end
+	local function is_marker(row)
+		local line = get_line(row)
+		return line and line:match("^# %%%%")
+	end
+	local function find_cell_start()
+		local row = get_cursor_row()
+		while row >= 0 do
+			if is_marker(row) then return row end
+			row = row - 1
+		end
+		return 0
+	end
+	local function find_cell_end(start_row)
+		local last = vim.api.nvim_buf_line_count(0) - 1
+		local row = start_row + 1
+		while row <= last do
+			if is_marker(row) then return row - 1 end
+			row = row + 1
+		end
+		return last
+	end
+
+	local function select_range(start_row, end_row)
+		vim.fn.setpos("'<", { 0, start_row + 1, 1, 0 })
+		vim.fn.setpos("'>", { 0, end_row + 1, 1, 0 })
+		vim.cmd("normal! gvV")
+	end
+
+	local function select_outer()
+		local start_row = find_cell_start()
+		local end_row = find_cell_end(start_row)
+		select_range(start_row, end_row)
+	end
+
+	local function select_inner()
+		local start_row = find_cell_start() + 1
+		local end_row = find_cell_end(start_row - 1)
+
+		if start_row <= end_row then select_range(start_row, end_row) end
+	end
+
+	map("o", "aj", select_outer, { buffer = true, desc = "cell" })
+	map("x", "aj", select_outer, { buffer = true, desc = "cell" })
+	map("o", "ij", select_inner, { buffer = true, desc = "cell" })
+	map("x", "ij", select_inner, { buffer = true, desc = "cell" })
+	map("n", "]j", function() vim.fn.search("^# %%", "W") end, { buffer = true, desc = "cell" })
+	map("n", "[j", function() vim.fn.search("^# %%", "bW") end, { buffer = true, desc = "cell" })
+	--- }}}
 
 	-- Builtin :terminal python runner {{{
 	local python_term = { buf = nil, chan = nil, cmd = nil }
@@ -185,7 +185,7 @@ if vim.bo[bufnr].buftype == "" then
 			end
 			return python_term.chan
 		end
-		local command = vim.fn.input("Enter CLI command to start REPL: ", "ipython")
+		local command = vim.fn.input("Enter CLI command to start REPL: ", "uvx ipython")
 		return open_python_term(command)
 	end
 
@@ -210,7 +210,7 @@ if vim.bo[bufnr].buftype == "" then
 			if python_term.cmd and python_term.cmd:match("ipython") then
 				vim.fn.chansend(chan, "\27[200~\n" .. text .. "\n\27[201~\n")
 			else
-				text = text:gsub("^%s+", ""):gsub("\n%s+", "\n")
+				text = text:gsub("^[ \t]+", ""):gsub("\n[ \t]+", "\n")
 				vim.fn.chansend(chan, text .. "\n\n")
 			end
 		end
