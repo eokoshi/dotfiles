@@ -152,7 +152,7 @@ if vim.bo[bufnr].buftype == "" then
 	local function is_floating(win) return vim.api.nvim_win_get_config(win).relative ~= "" end
 	local function open_python_term(buf)
 		local orig_win = vim.api.nvim_get_current_win()
-		local win
+		local win = 0
 		if is_floating(orig_win) then
 			local cfg = vim.api.nvim_win_get_config(orig_win)
 			win = vim.api.nvim_open_win(buf, false, {
@@ -205,8 +205,8 @@ if vim.bo[bufnr].buftype == "" then
 
 	local function ensure_python_term()
 		if vim.b.python_term.buf and vim.api.nvim_buf_is_valid(vim.b.python_term.buf) and term_is_running(vim.b.python_term.chan) then
-			local buf = vim.api.nvim_create_buf(false, true)
-			open_python_term(buf)
+			local win = vim.fn.bufwinid(vim.b.python_term.buf)
+			if win == -1 then open_python_term(vim.b.python_term.buf) end
 			return vim.b.python_term.chan
 		end
 		local command = vim.fn.input("Enter CLI command to start REPL: ", "ipython")
@@ -236,6 +236,14 @@ if vim.bo[bufnr].buftype == "" then
 			else
 				text = text:gsub("^[ \t]+", ""):gsub("\n[ \t]+", "\n")
 				vim.fn.chansend(chan, text .. "\n\n")
+			end
+			local term_buf = vim.b.python_term.buf
+			if term_buf and vim.api.nvim_buf_is_valid(term_buf) then
+				local win = vim.fn.bufwinid(term_buf)
+				if win ~= -1 then
+					local line_count = vim.api.nvim_buf_line_count(term_buf)
+					vim.api.nvim_win_set_cursor(win, { line_count, 0 })
+				end
 			end
 		end
 	end
