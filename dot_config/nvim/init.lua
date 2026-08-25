@@ -1677,23 +1677,25 @@ vim.api.nvim_create_autocmd("VimEnter", {
 --- }}}
 
 --- kulala {{{
-require("kulala").setup({
-	ui = {
-		split_direction = function()
-			if vim.o.columns < 140 then
-				return "below"
-			else
-				return "right"
-			end
-		end,
-	},
-	global_keymaps = true,
-	global_keymaps_prefix = "<leader>r",
-	kulala_keymaps = {
-		["Previous tab"] = false,
-		["Next tab"] = false,
-	},
-})
+if vim.fn.has("linux") == 1 then
+	require("kulala").setup({
+		ui = {
+			split_direction = function()
+				if vim.o.columns < 140 then
+					return "below"
+				else
+					return "right"
+				end
+			end,
+		},
+		global_keymaps = true,
+		global_keymaps_prefix = "<leader>r",
+		kulala_keymaps = {
+			["Previous tab"] = false,
+			["Next tab"] = false,
+		},
+	})
+end
 --- }}}
 
 --- render-markdown {{{
