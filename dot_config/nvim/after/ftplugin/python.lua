@@ -146,75 +146,76 @@ if vim.bo[bufnr].buftype == "" then
 		map("n", "[j", function() vim.fn.search("^# %%", "bW") end, { buffer = true, desc = "cell" })
 	end
 
-	-- Builtin :terminal python runner
-	local python_term = { buf = nil, chan = nil }
-	local function python_term_running(chan)
-		if type(chan) ~= "number" or chan <= 0 then return false end
-		return vim.fn.jobwait({ chan }, 0)[1] == -1
-	end
+	-- Builtin :terminal python runner {{{
+	local python_term = { buf = nil, chan = nil, cmd = nil }
+	local function term_is_running(chan) return type(chan) == "number" and chan > 0 and vim.fn.jobwait({ chan }, 0)[1] == -1 end
 
 	local function open_python_term(command)
 		if not command or command == "" then return end
-		local orig_win = vim.api.nvim_get_current_win()
-		if python_term.buf and vim.api.nvim_buf_is_valid(python_term.buf) then
-			local old_win = vim.fn.bufwinid(python_term.buf)
-			if old_win ~= -1 then vim.api.nvim_win_close(old_win, true) end
-			vim.api.nvim_buf_delete(python_term.buf, { force = true })
-		end
+
+		-- Cleanup existing buffer and its attached window
+		if python_term.buf and vim.api.nvim_buf_is_valid(python_term.buf) then vim.api.nvim_buf_delete(python_term.buf, { force = true }) end
+
 		local buf = vim.api.nvim_create_buf(false, true)
-		vim.b[buf].ipython_term = true
-		local split = (vim.o.columns > 160) and "right" or "below"
+		local split_dir = (vim.o.columns > 240) and "right" or "below"
+
+		-- Open window non-intrusively without switching active focus
 		local win = vim.api.nvim_open_win(buf, false, {
-			split = split,
+			split = split_dir,
 			style = "minimal",
 		})
-		vim.api.nvim_set_current_win(win)
-		local chan = vim.fn.jobstart(command, { term = true })
-		python_term = { buf = buf, chan = chan }
-		vim.api.nvim_set_current_win(orig_win)
-		if chan <= 0 then return chan end
+
+		-- jobstart with term = true creates the buffer terminal and spawns the process automatically
+		local chan = vim.api.nvim_buf_call(buf, function() return vim.fn.jobstart(command, { term = true }) end)
+
+		python_term = { buf = buf, chan = chan, cmd = command }
+		vim.api.nvim_win_set_cursor(win, { vim.api.nvim_buf_line_count(buf), 0 })
 		return chan
 	end
 
 	local function ensure_python_term()
-		if python_term.buf and vim.api.nvim_buf_is_valid(python_term.buf) and python_term_running(python_term.chan) then
+		if python_term.buf and vim.api.nvim_buf_is_valid(python_term.buf) and term_is_running(python_term.chan) then
 			if vim.fn.bufwinid(python_term.buf) == -1 then
-				local orig_win = vim.api.nvim_get_current_win()
-				local cmd = (vim.o.columns > vim.o.lines) and "vsplit" or "split"
-				vim.cmd(cmd)
-				vim.api.nvim_win_set_buf(0, python_term.buf)
-				vim.api.nvim_set_current_win(orig_win)
+				local split_dir = (vim.o.columns >= 240) and "right" or "below"
+				local win = vim.api.nvim_open_win(python_term.buf, false, {
+					split = split_dir,
+					style = "minimal",
+				})
+				vim.api.nvim_win_set_cursor(win, { vim.api.nvim_buf_line_count(python_term.buf), 0 })
 			end
 			return python_term.chan
 		end
-		local command = vim.fn.input("enter cli command to start REPL: ", "ipython")
-		if command == "" then return nil end
+		local command = vim.fn.input("Enter CLI command to start REPL: ", "ipython")
 		return open_python_term(command)
 	end
 
 	local function send_to_python_term()
 		local chan = ensure_python_term()
-		if not python_term_running(chan) then
-			vim.notify("python terminal is not running", vim.log.levels.WARN)
+		if not term_is_running(chan) then
+			vim.notify("Python terminal is not running", vim.log.levels.WARN)
 			return
 		end
+
 		local mode = vim.api.nvim_get_mode().mode
-		if mode:sub(1, 1) == "v" or mode == "\22" then
-			vim.cmd('normal! "yy')
+		local lines
+		if mode:sub(1, 1):lower() == "v" or mode == "\22" then
+			lines = vim.fn.getregion(vim.fn.getpos("v"), vim.fn.getpos("."), { type = mode })
+			vim.api.nvim_feedkeys(vim.keycode("<ESC>"), "n", false)
 		else
-			vim.cmd('normal! "yyy')
+			lines = { vim.api.nvim_get_current_line() }
 		end
-		local text = vim.fn.getreg('"')
-		if text and #text > 0 then
-			text = text:gsub("\t", "    ")
-			text = text:gsub("%s+$", "")
-			if text ~= "" then
-				text = text .. "\n"
-				-- Bracketed paste keeps multi-line selections as one ipython input; the trailing Enter executes it.
-				vim.fn.chansend(chan, "\27[200~" .. text .. "\27[201~" .. "\n")
+
+		local text = table.concat(lines, "\n"):gsub("\t", "    "):gsub("%s+$", "")
+		if text ~= "" then
+			if python_term.cmd and python_term.cmd:match("ipython") then
+				vim.fn.chansend(chan, "\27[200~\n" .. text .. "\n\27[201~\n")
+			else
+				text = text:gsub("^%s+", ""):gsub("\n%s+", "\n")
+				vim.fn.chansend(chan, text .. "\n\n")
 			end
 		end
 	end
 
 	map({ "n", "x" }, "<CR>", send_to_python_term, { desc = "Send selection/line to ipython terminal", buffer = true })
+	--- }}}
 end
