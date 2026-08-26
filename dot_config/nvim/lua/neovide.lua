@@ -1,4 +1,4 @@
-vim.o.guifont = "0xProto Nerd Font Mono,UD Digi Kyokasho N:h10"
+vim.o.guifont = "Cascadia Mono NF,BIZ UDGothic:h10"
 vim.g.neovide_hide_mouse_when_typing = true
 vim.g.neovide_floating_shadow = false
 vim.g.neovide_remember_window_size = false
