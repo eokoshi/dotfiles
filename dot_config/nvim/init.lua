@@ -784,6 +784,9 @@ require("snacks").setup({
 	},
 	input = { enabled = true },
 	picker = {
+		matcher = {
+			frecency = true,
+		},
 		layout = function()
 			local layouts = require("snacks.picker.config.layouts")
 			---@type snacks.picker.layout.Config
@@ -822,26 +825,6 @@ require("snacks").setup({
 					["<C-n>"] = "preview_scroll_down",
 					["<a-i>"] = "inspect",
 					["<C-w>"] = { "<c-s-w>", mode = { "i" }, expr = true, desc = "" },
-					["<C-b>"] = false,
-					["<C-f>"] = false,
-					["<S-CR>"] = false,
-					["<a-f>"] = false,
-					["<a-h>"] = false,
-					["<a-m>"] = false,
-					["<c-j>"] = false,
-					["<c-k>"] = false,
-					["<C-Down>"] = false,
-					["<C-Up>"] = false,
-					["<a-d>"] = false,
-					["<c-g>"] = false,
-					["<c-t>"] = false,
-					["<c-r><c-a>"] = false,
-					["<c-r><c-f>"] = false,
-					["<c-r><c-l>"] = false,
-					["<c-r><c-p>"] = false,
-					["<c-r><c-w>"] = false,
-					["<C-c>"] = false,
-					["<a-w>"] = false,
 				},
 			},
 			list = {
@@ -851,26 +834,6 @@ require("snacks").setup({
 					["<C-n>"] = "preview_scroll_down",
 					["<a-i>"] = "inspect",
 					["<C-w>"] = { "<c-s-w>", mode = { "i" }, expr = true, desc = "" },
-					["<C-b>"] = false,
-					["<C-f>"] = false,
-					["<S-CR>"] = false,
-					["<a-f>"] = false,
-					["<a-h>"] = false,
-					["<a-m>"] = false,
-					["<c-j>"] = false,
-					["<c-k>"] = false,
-					["<C-Down>"] = false,
-					["<C-Up>"] = false,
-					["<a-d>"] = false,
-					["<c-g>"] = false,
-					["<c-t>"] = false,
-					["<c-r><c-a>"] = false,
-					["<c-r><c-f>"] = false,
-					["<c-r><c-l>"] = false,
-					["<c-r><c-p>"] = false,
-					["<c-r><c-w>"] = false,
-					["<C-c>"] = false,
-					["<a-w>"] = false,
 				},
 			},
 			preview = {
@@ -986,7 +949,12 @@ map(
 	end,
 	{ desc = "icons" }
 )
--- map("i", "<C-l>", function() local pos = vim.fn.getcursorcharpos() require("snacks.picker").icons({ custom_sources = { unicode = vim.fn.stdpath("config") .. "/unicode_chars.json" }, }) vim.fn.setcursorcharpos(pos) end, { desc = "insert icon" })
+map(
+	"i",
+	"<C-l>",
+	function() require("snacks.picker").icons({ custom_sources = { unicode = vim.fn.stdpath("config") .. "/unicode_chars.json" } }) end,
+	{ desc = "insert icon" }
+)
 map(
 	"n",
 	"<Leader>N",
@@ -1045,6 +1013,7 @@ require("which-key").setup({ ---@as wk.Opts
 		{ "<Leader>b", mode = "n", group = "Buffers" },
 		{ "<Leader>u", mode = "n", group = "UI" },
 		{ "<Leader>d", mode = "n", group = "Debugger" },
+		{ "<Leader>n", mode = "n", group = "Network" },
 		{ "<Leader>p", mode = "n", group = "Packages" },
 		{ "<Leader>x", mode = "n", group = "Extras" },
 		{ "<Leader>m", mode = "n", group = "Markdown" },
@@ -1055,6 +1024,7 @@ require("which-key").setup({ ---@as wk.Opts
 		separator = "",
 		group = "",
 		rules = {
+			{ pattern = "network", icon = "", color = "cyan" },
 			{ pattern = "buffer", icon = "", color = "green" },
 			{ pattern = "explorer", icon = "󰙅", color = "red" },
 			{ pattern = "undotree", icon = "󰕍", color = "red" },
@@ -1677,25 +1647,29 @@ vim.api.nvim_create_autocmd("VimEnter", {
 --- }}}
 
 --- kulala {{{
-if vim.fn.has("linux") == 1 then
-	require("kulala").setup({
-		ui = {
-			split_direction = function()
-				if vim.o.columns < 140 then
-					return "below"
-				else
-					return "right"
-				end
-			end,
-		},
-		global_keymaps = true,
-		global_keymaps_prefix = "<leader>r",
-		kulala_keymaps = {
-			["Previous tab"] = false,
-			["Next tab"] = false,
-		},
-	})
-end
+vim.api.nvim_create_user_command("Kulala", function()
+	if vim.g.KulalaSetup == nil then
+		require("kulala").setup({
+			ui = {
+				split_direction = function()
+					if vim.o.columns < 140 then
+						return "below"
+					else
+						return "right"
+					end
+				end,
+			},
+			global_keymaps = true,
+			global_keymaps_prefix = "<leader>n",
+			kulala_keymaps = {
+				["Previous tab"] = false,
+				["Next tab"] = false,
+			},
+		})
+		vim.g.KulalaSetup = true
+	end
+	require("kulala").open()
+end, {})
 --- }}}
 
 --- render-markdown {{{
@@ -1854,8 +1828,8 @@ map("t", "<ESC>", "<C-\\><C-n>", { desc = "Escape terminal mode" })
 map("i", "<S-Tab>", "<C-d>", { desc = "Unindent 1 level" })
 map("n", "J", "mzJ`z", { desc = "Shift J without moving cursor", noremap = false })
 map("n", "<BS>", "<C-^>", { desc = "Switch to prev file" })
-map("n", "<Leader>x", "<CMD>tabclose<CR>", { desc = ":tabclose" })
-map("n", "<Leader>gx", "<CMD>tabclose<CR>", { desc = ":tabclose" })
+map("n", "<Leader>x", "<CMD>tabclose<CR>", { desc = "::tabclose" })
+map("n", "<Leader>bd", "<CMD>bd!<CR>", { desc = "::bd!" })
 
 -- System clipboard
 map({ "n" }, "<C-c>", '"+yy', { desc = "Copy line to system clipboard" })
@@ -1890,6 +1864,7 @@ map("n", "gco", "o<Esc>Vcx<Esc><Cmd>normal gcc<CR>fxa<BS>", { desc = "Add commen
 map("n", "gcO", "O<Esc>Vcx<Esc><Cmd>normal gcc<CR>fxa<BS>", { desc = "Add comment above" })
 
 -- Packages
+map("n", "<leader>pu", function() vim.pack.update() end, { desc = "vim.pack.update()" })
 map("n", "<leader>pu", function() vim.pack.update() end, { desc = "vim.pack.update()" })
 map("n", "<leader>pi", function() vim.pack.update(nil, { offline = true }) end, { desc = "[offline] vim.pack.update()" })
 map("n", "<leader>pp", function() vim.cmd("source " .. vim.fn.stdpath("config") .. "/init.lua") end, { desc = "source init.lua" })
