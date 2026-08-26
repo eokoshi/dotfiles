@@ -54,7 +54,6 @@ vim.pack.add({
 	{ src = gh("rafamadriz/friendly-snippets") },
 	{ src = gh("saghen/blink.cmp"), version = vim.version.range("1.*") },
 	{ src = gh("mistweaverco/kulala.nvim") },
-	{ src = gh("sindrets/diffview.nvim") },
 	{ src = gh("stevearc/conform.nvim") },
 	{ src = gh("windwp/nvim-autopairs") },
 	{ src = gh("jezda1337/nvim-html-css") },
@@ -1451,87 +1450,6 @@ if vim.fs.root(0, ".git") ~= nil then
 	map("n", "<leader>fj", function() require("fff").live_grep({ grep = { modes = { "fuzzy", "plain" } } }) end, { desc = "fuzzy grep" })
 	map({ "n", "x" }, "<leader>f*", function() require("fff").live_grep_under_cursor() end, { desc = "current word / selection" })
 end
---- }}}
-
---- diffview {{{
-local da = require("diffview.actions")
-require("diffview").setup({
-	enhanced_diff_hl = true,
-	view = { default = { disable_diagnostics = true, winbar_info = true }, merge_tool = { layout = "diff3_mixed" } },
-	file_panel = { win_config = { position = "bottom", height = 10 } },
-	file_history_panel = { win_config = { type = "split", position = "bottom", height = 10 } },
-	keymaps = {
-		disable_defaults = true,
-		view = {
-			{ "n", "<Leader>q", "<CMD>DiffviewClose<CR>", { desc = "Close DiffView" } },
-			{ "n", "<Leader>e", da.toggle_files, { desc = "toggle file panel" } },
-			{ "n", "gf", da.goto_file_edit, { desc = "Open file in previous tabpage" } },
-			{ "n", "g?", da.help("view"), { desc = "Open help panel" } },
-			{ "n", "co", da.conflict_choose("ours"), { desc = "Choose conflict --ours" } },
-			{ "n", "ct", da.conflict_choose("theirs"), { desc = "Choose conflict --theirs" } },
-			{ "n", "cb", da.conflict_choose("base"), { desc = "Choose conflict --base" } },
-			{ "n", "ca", da.conflict_choose("all"), { desc = "Choose conflict --all" } },
-			{ "n", "cn", da.conflict_choose("none"), { desc = "Choose conflict --none" } },
-		},
-		file_panel = {
-			{ "n", "q", "<CMD>DiffviewClose<CR>", { desc = "Close DiffView" } },
-			{ "n", "<Leader>e", da.toggle_files, { desc = "toggle file panel" } },
-			{ "n", "j", da.next_entry, { desc = "Next file entry" } },
-			{ "n", "<down>", da.select_next_entry, { desc = "Select next file entry" } },
-			{ "n", "k", da.prev_entry, { desc = "Previous file entry" } },
-			{ "n", "<up>", da.select_prev_entry, { desc = "Select previous file entry" } },
-			{ "n", "<cr>", da.select_entry, { desc = "Open diff for selected entry" } },
-			{ "n", "s", da.toggle_stage_entry, { desc = "Stage/unstage entry" } },
-			{ "n", "S", da.stage_all, { desc = "Stage all entries" } },
-			{ "n", "U", da.unstage_all, { desc = "Unstage all entries" } },
-			{ "n", "[x", da.prev_conflict, { desc = "Go to prev conflict" } },
-			{ "n", "]x", da.next_conflict, { desc = "Go to next conflict" } },
-			{ "n", "gf", da.goto_file_edit, { desc = "Open file in previous tabpage" } },
-			{ "n", "co", da.conflict_choose_all("ours"), { desc = "Choose conflict --ours" } },
-			{ "n", "ct", da.conflict_choose_all("theirs"), { desc = "Choose conflict --theirs" } },
-			{ "n", "cb", da.conflict_choose_all("base"), { desc = "Choose conflict --base" } },
-			{ "n", "l", da.open_fold, { desc = "Expand fold" } },
-			{ "n", "h", da.close_fold, { desc = "Collapse fold" } },
-			{ "n", "t", da.listing_style, { desc = "Toggle list/tree views" } },
-			{ "n", "L", da.open_commit_log, { desc = "Open commit log panel" } },
-			{ "n", "g?", da.help("file_panel"), { desc = "Open help panel" } },
-			{
-				"n",
-				"cc",
-				function()
-					vim.ui.input({ prompt = "Commit message: " }, function(msg)
-						if not msg then return end
-						local results = vim.system({ "git", "commit", "-m", msg }, { text = true }):wait()
-						vim.notify(results.stdout or "", vim.log.levels.INFO, { title = "Commit" })
-					end)
-				end,
-			},
-			{
-				"n",
-				"cx",
-				function()
-					local results = vim.system({ "git", "commit", "--amend", "--no-edit" }, { text = true }):wait()
-					vim.notify(results.stdout or "", vim.log.levels.INFO, { title = "Commit amend" })
-				end,
-			},
-		},
-		file_history_panel = {
-			{ "n", "q", "<CMD>DiffviewClose<CR>", { desc = "Close DiffView" } },
-			{ "n", "<Leader>e", da.toggle_files, { desc = "toggle file panel" } },
-			{ "n", "j", da.next_entry, { desc = "Next log entry" } },
-			{ "n", "<down>", da.select_next_entry, { desc = "Select next log entry" } },
-			{ "n", "k", da.prev_entry, { desc = "Previous log entry" } },
-			{ "n", "<up>", da.select_prev_entry, { desc = "Select previous file entry" } },
-			{ "n", "<cr>", da.select_entry, { desc = "Open diff for selected entry" } },
-			{ "n", "gd", da.open_in_diffview, { desc = "Open entry in diffview" } },
-			{ "n", "y", da.copy_hash, { desc = "Copy commit hash" } },
-			{ "n", "L", da.open_commit_log, { desc = "Show commit details" } },
-			{ "n", "gf", da.goto_file_edit, { desc = "Open file in previous tabpage" } },
-			{ "n", "g?", da.help("file_history_panel"), { desc = "Open help panel" } },
-		},
-		help_panel = { { "n", "q", da.close, { desc = "Close help menu" } }, { "n", "<ESC>", da.close, { desc = "Close help menu" } } },
-	},
-})
 --- }}}
 
 --- codediff {{{

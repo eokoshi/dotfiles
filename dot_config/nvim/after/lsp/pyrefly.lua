@@ -7,7 +7,7 @@ return {
 				showHoverGoToLinks = false,
 			},
 			pyrefly = {
-				displayTypeErrors = "force-off",
+				disableLanguageServices = false,
 			},
 		},
 	},
