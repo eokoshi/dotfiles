@@ -192,13 +192,27 @@ if vim.bo[bufnr].buftype == "" then
 
 	local function start_python_term(command)
 		if not command or command == "" then return end
-		-- Cleanup existing buffer and its attached window
 		if vim.b.python_term.buf and vim.api.nvim_buf_is_valid(vim.b.python_term.buf) then
 			vim.api.nvim_buf_delete(vim.b.python_term.buf, { force = true })
 		end
 		local buf = vim.api.nvim_create_buf(false, true)
 		open_python_term(buf)
 		local chan = vim.api.nvim_buf_call(buf, function() return vim.fn.jobstart(command, { term = true }) end)
+
+		local _started, error = vim.wait(5000, function()
+			local lines = vim.api.nvim_buf_get_lines(buf, 0, -1, false)
+			for i = #lines, 1, -1 do
+				if lines[i]:match("command not found") or lines[i]:match("is not recognized") then return true, true end
+				if lines[i]:match("^Python") or lines[i]:match("In %[%d+ %]:") then return true, false end
+			end
+		end, 50)
+
+		if error then
+			if vim.api.nvim_buf_is_valid(buf) then vim.api.nvim_buf_delete(buf, { force = true }) end
+			vim.notify("Command not found: " .. command, vim.log.levels.ERROR)
+			return
+		end
+
 		vim.b.python_term = { buf = buf, chan = chan, cmd = command }
 		return chan
 	end
@@ -215,11 +229,7 @@ if vim.bo[bufnr].buftype == "" then
 
 	local function send_to_python_term()
 		local chan = ensure_python_term()
-		if not term_is_running(chan) then
-			vim.notify("Python terminal is not running", vim.log.levels.WARN)
-			return
-		end
-
+		if chan == nil then return end
 		local mode = vim.api.nvim_get_mode().mode
 		local lines
 		if mode:sub(1, 1):lower() == "v" or mode == "\22" then
