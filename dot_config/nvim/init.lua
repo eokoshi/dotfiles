@@ -535,7 +535,7 @@ require("conform").setup({ ---@as conform.setupOpts
 		r = { "air" },
 		htmldjango = { "djlint" },
 		yaml = { "prettier" },
-		json = { "fixjson" },
+		json = { "fixjson", "jq" },
 		css = { "prettier" },
 		javascript = { "prettier" },
 		gotmpl = { "shfmt" },
