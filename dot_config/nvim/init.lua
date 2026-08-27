@@ -534,23 +534,24 @@ require("conform").setup({ ---@as conform.setupOpts
 		r = { "air" },
 		htmldjango = { "djlint" },
 		yaml = { "prettier" },
-		json = { "fixjson", "jq" },
+		json = { "fixjson", "jq", stop_after_first = true },
 		css = { "prettier" },
 		javascript = { "prettier" },
 		gotmpl = { "shfmt" },
+		rust = { "rustfmt" },
 		xml = { "xmlformat" },
 	},
 	default_format_opts = {
+		timeout_ms = 3000,
+		async = false,
+		quiet = false,
 		lsp_format = "fallback",
 	},
 	format_on_save = function(bufnr)
-		---@diagnostic disable-next-line: return-type-mismatch
 		if vim.b[bufnr].autoformat or vim.b[bufnr].autoformat == nil then return { timeout_ms = 500, lsp_format = "fallback" } end
 	end,
 	formatters = {
-		ruff_format = {
-			append_args = { "--extension", "ipynb:python" },
-		},
+		ruff_format = { append_args = { "--extension", "ipynb:python" } },
 		stylua = {
 			append_args = function()
 				local paths = {
