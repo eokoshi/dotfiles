@@ -155,12 +155,13 @@ if vim.bo[bufnr].buftype == "" then
 		local win = 0
 		if is_floating(orig_win) then
 			local cfg = vim.api.nvim_win_get_config(orig_win)
+			local height = math.floor(vim.o.lines * 0.9 / 2)
 			win = vim.api.nvim_open_win(buf, false, {
 				relative = "win",
-				row = cfg.height + 1,
+				row = height + 1,
 				col = -1,
 				width = cfg.width,
-				height = cfg.height,
+				height = height,
 				style = "minimal",
 			})
 			vim.wo[win].winhighlight = "NormalFloat:Normal,FloatBorder:Green"
@@ -168,6 +169,7 @@ if vim.bo[bufnr].buftype == "" then
 				relative = "editor",
 				col = cfg.col,
 				row = 2,
+				height = height,
 			})
 			vim.api.nvim_create_autocmd("WinClosed", {
 				pattern = tostring(orig_win),
@@ -199,17 +201,18 @@ if vim.bo[bufnr].buftype == "" then
 		open_python_term(buf)
 		local chan = vim.api.nvim_buf_call(buf, function() return vim.fn.jobstart(command, { term = true }) end)
 
-		local _started, error = vim.wait(5000, function()
+		local _started, errormsg = vim.wait(5000, function()
 			local lines = vim.api.nvim_buf_get_lines(buf, 0, -1, false)
 			for i = #lines, 1, -1 do
-				if lines[i]:match("command not found") or lines[i]:match("is not recognized") then return true, true end
-				if lines[i]:match("^Python") or lines[i]:match("In %[%d+ %]:") then return true, false end
+				if lines[i]:match("command not found") or lines[i]:match("is not recognized") then return true, "Command not found: " .. command end
+				if lines[i]:match("Traceback") then return true, table.concat(lines, "\n") end
+				if lines[i]:match("^Python") or lines[i]:match("In %[%d+ %]:") then return true, "" end
 			end
 		end, 50)
 
-		if error then
+		if errormsg ~= "" then
 			if vim.api.nvim_buf_is_valid(buf) then vim.api.nvim_buf_delete(buf, { force = true }) end
-			vim.notify("Command not found: " .. command, vim.log.levels.ERROR)
+			vim.notify(errormsg, vim.log.levels.ERROR)
 			return
 		end
 

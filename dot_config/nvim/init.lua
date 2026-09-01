@@ -1,6 +1,7 @@
 local map = require("functions").map
 local icons = require("stuff.icons")
 vim.g.mapleader = " "
+vim.g.maplocalleader = ","
 
 --- Plugins {{{
 vim.api.nvim_create_autocmd("PackChanged", {
@@ -170,6 +171,11 @@ local function get_diagnostics(bufnr)
 	if #res == 0 then return "" end
 	return " " .. table.concat(res, " ")
 end
+local function get_searchcount(bufnr)
+	if vim.v.hlsearch == 0 then return "" end
+	local sc = vim.fn.searchcount()
+	return "[" .. sc.current .. "/" .. sc.total .. "]"
+end
 local function get_truncated_filename(bufnr)
 	local name = vim.api.nvim_buf_get_name(bufnr)
 	if name == "" then return "[No Name]" end
@@ -216,8 +222,8 @@ function _G.my_statusline()
 	local mode_info = modes[mode_code] or { name = mode_code, hl = "StatuslineSection" }
 	local mode_str = string.format("%%#%s# %s %%*", "StatuslineSection", mode_info.name)
 	if is_active then mode_str = string.format("%%#%s# %s %%*", mode_info.hl, mode_info.name) end
-	local macro = ""
-	if is_active then macro = " %#RedBold#" .. get_macro() .. "%*" end
+	local macro = " %#RedBold#" .. get_macro() .. "%*"
+	local searchcount = " %#AquaItalic#" .. get_searchcount() .. "%*"
 	local filename = " %1*" .. get_truncated_filename(bufnr) .. "%*"
 	local bufargs = "%8*%m%r%* "
 	local buf = "%8*" .. bufnr .. "%*"
@@ -237,6 +243,7 @@ function _G.my_statusline()
 		location,
 		macro,
 		"%=", -- Alignment separator (pushes following items to the right)
+		searchcount,
 		diagnostics,
 		lsp_formatter,
 		filetype,
@@ -1137,6 +1144,7 @@ local flash = require("flash")
 map({ "n", "x", "o" }, "+", function() flash.jump() end, { desc = "Flash Jump" })
 map({ "n", "x", "o" }, "-", function() flash.treesitter() end, { desc = "Flash Treesitter" })
 map("o", "r", function() flash.remote() end, { desc = "Flash Remote" })
+map({ "o", "x" }, "R", function() flash.treesitter_search() end, { desc = "Treesitter search" })
 --- }}}
 
 --- grug-far {{{
