@@ -57,6 +57,8 @@ vim.api.nvim_create_autocmd("BufWritePost", {
 						".git",
 						"--exclude",
 						"lazy-lock.json",
+						"--exclude",
+						".venv",
 						wsl .. "/",
 						win,
 					}, { text = true }, function(rsync_result)
@@ -69,6 +71,8 @@ vim.api.nvim_create_autocmd("BufWritePost", {
 						end)
 					end)
 				end
+			elseif result.code == 124 then
+				vim.schedule(function() vim.notify("timeout", vim.log.levels.ERROR, { title = "ch apply failed" }) end)
 			else
 				---@cast result.stdout string
 				vim.schedule(function() vim.notify(result.stdout, vim.log.levels.ERROR, { title = "ch apply failed" }) end)

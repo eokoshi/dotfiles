@@ -733,37 +733,47 @@ require("snacks").setup({
 		},
 		auto_close = true,
 	},
-	explorer = { enabled = false },
 	dashboard = {
 		preset = {
 			header = require("stuff.ascii").cat,
-			keys = {
-				{
-					icon = " ",
-					key = "f",
-					desc = "Find File",
-					action = ":lua Snacks.dashboard.pick('files')",
-				},
-				{
-					icon = "󰙅 ",
-					key = "e",
-					desc = "File Explorer",
-					action = ":e .",
-				},
-				{
-					icon = " ",
-					key = "d",
-					desc = "CodeDiff",
-					action = ":CodeDiff",
-				},
-				{
-					icon = " ",
-					key = "s",
-					desc = "Restore Session",
-					action = ":SessionLoad",
-				},
-				{ icon = " ", key = "q", desc = "Quit", action = ":qa" },
-			},
+			keys = function()
+				local cfg = {
+					{
+						icon = " ",
+						key = "f",
+						desc = "Find File",
+						action = ":lua Snacks.dashboard.pick('files')",
+					},
+					{
+						icon = "󰛔 ",
+						key = "g",
+						desc = "GrugFar",
+						action = ":tabnew | GrugFar",
+					},
+					{
+						icon = " ",
+						key = "d",
+						desc = "CodeDiff",
+						action = ":CodeDiff",
+					},
+					{
+						icon = " ",
+						key = "s",
+						desc = "Restore Session",
+						action = ":SessionLoad",
+					},
+					{ icon = " ", key = "q", desc = "Quit", action = ":qa" },
+				}
+				if vim.fn.has("win32") then
+					table.insert(cfg, 3, {
+						icon = " ",
+						key = "n",
+						desc = "Daily Note",
+						action = "<leader>mt",
+					})
+				end
+				return cfg
+			end,
 		},
 		sections = {
 			{ section = "header" },
@@ -778,7 +788,6 @@ require("snacks").setup({
 			},
 		},
 	},
-	image = { enabled = false, math = { enabled = false } },
 	indent = {
 		enabled = true,
 		scope = { only_current = true },
@@ -852,7 +861,6 @@ require("snacks").setup({
 	},
 	notifier = { enabled = true },
 	quickfile = { enabled = true },
-	scope = { enabled = false },
 	scratch = {
 		win = {
 			wo = {
@@ -900,16 +908,15 @@ map("n", "<Leader>fq", function() Snacks.picker.qflist() end, { desc = "quickfix
 map("n", "<Leader>fr", function() Snacks.picker.recent() end, { desc = "recent" })
 map("n", "<Leader>fu", function() Snacks.picker.undo() end, { desc = "undo" })
 map("n", "<Leader>fz", function() Snacks.picker.files({ cwd = vim.fn.stdpath("config") }) end, { desc = "local config" })
+map("n", "<Leader>fs", function() Snacks.scratch.select() end, { desc = "search scratch buffers" })
 map("n", "<Leader>fS", function() Snacks.picker.scratch() end, { desc = "local config" })
 map("n", "<Leader>bs", function() Snacks.scratch() end, { desc = "scratch buffer" })
-map("n", "<Leader>bS", function() Snacks.scratch.select() end, { desc = "search scratch buffers" })
 map("n", "<Leader>uc", function() Snacks.picker.colorschemes() end, { desc = "search colorschemes" })
 map("n", "<Leader>uz", function() Snacks.zen.zoom() end, { desc = "zoom pane" })
 map("n", "<Leader>uZ", function() Snacks.zen.zen() end, { desc = "Zen mode" })
 map("n", "<Leader>un", function() Snacks.notifier.hide() end, { desc = "dismiss all notifications" })
 map("n", "<Leader>gl", function() Snacks.picker.git_log_file() end, { desc = "Log file" })
 map("n", "<Leader>gg", function() Snacks.lazygit() end, { desc = "Lazygit" })
-map("n", "<Leader>ll", "", { desc = "LSP" })
 map("n", "<Leader>llr", function() Snacks.picker.lsp_references() end, { nowait = true, desc = "references" })
 map("n", "<Leader>lls", function() Snacks.picker.lsp_symbols() end, { desc = "LSP symbols" })
 map("n", "<Leader>llw", function() Snacks.picker.lsp_workspace_symbols() end, { desc = "LSP workspace Symbols" })
@@ -934,6 +941,7 @@ Snacks.toggle.treesitter():map("<leader>uT")
 Snacks.toggle.inlay_hints():map("<leader>uI")
 Snacks.toggle.indent():map("<leader>ug")
 Snacks.toggle.dim():map("<leader>uD")
+Snacks.toggle.words():map("<leader>uW")
 map("n", "<Leader>fa", function()
 	if vim.fn.has("win32") == 1 then
 		vim.notify("Do not mess with config from Windows", vim.log.levels.ERROR)
@@ -1000,6 +1008,10 @@ map(
 	end,
 	{ desc = "Notification history" }
 )
+vim.api.nvim_create_autocmd("User", {
+	pattern = "MiniFilesActionRename",
+	callback = function(event) Snacks.rename.on_rename_file(event.data.from, event.data.to) end,
+})
 vim.api.nvim_set_hl(0, "SnacksTitle", { link = "Title" })
 vim.api.nvim_set_hl(0, "SnacksPickerPathIgnored", { link = "Ignore" })
 vim.api.nvim_set_hl(0, "SnacksPickerGitStatussdfIgnored", { link = "Ignore" })
@@ -1017,6 +1029,7 @@ require("which-key").setup({ ---@as wk.Opts
 		{ "<Leader>f", mode = { "n", "x" }, group = "Find" },
 		{ "<Leader>g", mode = { "n", "x" }, group = "Git" },
 		{ "<Leader>l", mode = { "n", "x" }, group = "Language Tools" },
+		{ "<Leader>ll", mode = { "n", "x" }, group = "LSP" },
 		{ "<Leader>b", mode = "n", group = "Buffers" },
 		{ "<Leader>u", mode = "n", group = "UI" },
 		{ "<Leader>d", mode = "n", group = "Debugger" },
@@ -1121,6 +1134,10 @@ require("mini.bracketed").setup({
 })
 --- }}}
 
+--- nvim-surround {{{
+require("nvim-surround").setup({})
+--- }}}
+
 --- flash {{{
 require("flash").setup({
 	modes = {
@@ -1158,6 +1175,7 @@ local registry = require("mason-registry")
 local installs = { "marksman", "prettier", "fixjson" }
 if vim.fn.has("win32") == 0 then
 	vim.list_extend(installs, {
+		"ast-grep",
 		"ruff",
 		"pyrefly",
 		"debugpy",
@@ -1328,10 +1346,6 @@ vim.fn.sign_define("DapLogPoint", { text = icons.debug.logpoint, texthl = "Diagn
 vim.fn.sign_define("DapStopped", { text = icons.debug.stopped, texthl = "DiagnosticSignWarn" })
 vim.fn.sign_define("DapBreakpointRejected", { text = icons.debug.rejected, texthl = "DiagnosticSignError" })
 --stylua: ignore end
---- }}}
-
---- nvim-surround {{{
-require("nvim-surround").setup({})
 --- }}}
 
 --- tmux {{{
