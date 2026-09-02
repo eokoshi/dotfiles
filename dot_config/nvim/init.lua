@@ -869,7 +869,7 @@ require("snacks").setup({
 			},
 			footer_pos = "center",
 			title_pos = "center",
-			relative = "win",
+			relative = "editor",
 		},
 	},
 	statuscolumn = { enabled = true },

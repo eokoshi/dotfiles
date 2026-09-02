@@ -152,6 +152,7 @@ if vim.bo[bufnr].buftype == "" then
 	local function is_floating(win) return vim.api.nvim_win_get_config(win).relative ~= "" end
 	local function open_python_term(buf)
 		local orig_win = vim.api.nvim_get_current_win()
+		local curpos = vim.api.nvim_win_get_cursor(orig_win)
 		local win = 0
 		if is_floating(orig_win) then
 			local cfg = vim.api.nvim_win_get_config(orig_win)
@@ -190,6 +191,7 @@ if vim.bo[bufnr].buftype == "" then
 			})
 		end
 		vim.api.nvim_win_set_cursor(win, { vim.api.nvim_buf_line_count(buf), 0 })
+		vim.api.nvim_win_set_cursor(orig_win, { curpos[1], 0 })
 	end
 
 	local function start_python_term(command)
@@ -230,6 +232,101 @@ if vim.bo[bufnr].buftype == "" then
 		return start_python_term(command)
 	end
 
+	---Normalize pasted Python so multi-block code executes correctly.
+	--- taken from pyrepl.nvim 9ba320a
+	---@param msg string
+	---@return string
+	local function normalize_python_message(msg)
+		local lines = vim.split(msg, "\n", { plain = true, trimempty = false })
+		if #lines <= 1 then return msg end
+
+		local ok_parser, parser = pcall(vim.treesitter.get_string_parser, msg, "python")
+		if not ok_parser or not parser then return msg end
+
+		local tree = parser:parse()[1]
+		if not tree then return msg end
+
+		local root = tree:root()
+		local top_nodes = {}
+		for node in root:iter_children() do
+			if node:named() and node:type() ~= "ERROR" then table.insert(top_nodes, node) end
+		end
+		if #top_nodes == 0 then return msg end
+
+		---@return integer
+		local function node_last_row(node)
+			local _, _, end_row, end_col = node:range()
+			if end_col == 0 then return math.max(end_row - 1, 0) end
+			return end_row
+		end
+
+		---@param line string|nil
+		---@return boolean
+		local function is_blank_line(line) return (line and line:match("^%s*$")) ~= nil end
+
+		---@param last_row integer
+		---@param next_start integer
+		---@return boolean
+		local function has_blank_line_between(last_row, next_start)
+			for row = last_row + 1, next_start - 1 do
+				local line = lines[row + 1]
+				if is_blank_line(line) then return true end
+			end
+			return false
+		end
+		local compound_top_level_nodes = {
+			async_for_statement = true,
+			async_function_definition = true,
+			async_with_statement = true,
+			class_definition = true,
+			decorated_definition = true,
+			for_statement = true,
+			function_definition = true,
+			if_statement = true,
+			match_statement = true,
+			try_statement = true,
+			while_statement = true,
+			with_statement = true,
+		}
+
+		local insert_after = {}
+		local has_compound = false
+		for idx, node in ipairs(top_nodes) do
+			if compound_top_level_nodes[node:type()] then
+				has_compound = true
+
+				local last_row = node_last_row(node)
+				local next_node = top_nodes[idx + 1]
+				local next_start = next_node and select(1, next_node:range()) or #lines
+
+				if next_start > last_row and not has_blank_line_between(last_row, next_start) then insert_after[last_row + 1] = true end
+			end
+		end
+
+		if has_compound and not is_blank_line(lines[#lines]) then insert_after[#lines] = true end
+
+		if next(insert_after) == nil then return msg end
+
+		local out = {}
+		for i, line in ipairs(lines) do
+			table.insert(out, line)
+			if insert_after[i] then table.insert(out, "") end
+		end
+
+		return table.concat(out, "\n")
+	end
+
+	---Send code to the REPL using bracketed paste.
+	---@param chan integer
+	---@param message string
+	local function raw_send_message(chan, message)
+		if message == "" then return end
+		local prefix = vim.api.nvim_replace_termcodes("<esc>[200~", true, false, true)
+		local suffix = vim.api.nvim_replace_termcodes("<esc>[201~", true, false, true)
+		local normalized = normalize_python_message(message)
+		vim.api.nvim_chan_send(chan, prefix .. normalized .. suffix .. "\n")
+	end
+
 	local function send_to_python_term()
 		local chan = ensure_python_term()
 		if chan == nil then return end
@@ -242,14 +339,9 @@ if vim.bo[bufnr].buftype == "" then
 			lines = { vim.api.nvim_get_current_line() }
 		end
 
-		local text = table.concat(lines, "\n"):gsub("\t", "    "):gsub("%s+$", "")
+		local text = table.concat(lines, "\n")
 		if text ~= "" then
-			if vim.b.python_term.cmd and vim.b.python_term.cmd:match("ipython") then
-				vim.fn.chansend(chan, "\27[200~\n" .. text .. "\n\27[201~\n")
-			else
-				text = text:gsub("^[ \t]+", ""):gsub("\n[ \t]+", "\n")
-				vim.fn.chansend(chan, text .. "\n\n")
-			end
+			raw_send_message(chan, text)
 			local term_buf = vim.b.python_term.buf
 			if term_buf and vim.api.nvim_buf_is_valid(term_buf) then
 				local win = vim.fn.bufwinid(term_buf)
