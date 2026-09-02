@@ -1145,6 +1145,11 @@ require("flash").setup({
 			enabled = false,
 			autohide = true,
 		},
+		treesitter = {
+			highlight = {
+				backdrop = true,
+			},
+		},
 	},
 	label = {
 		rainbow = {
