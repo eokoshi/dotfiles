@@ -1,3 +1,4 @@
+---@diagnostic disable: missing-fields
 local map = require("functions").map
 local icons = require("stuff.icons")
 vim.g.mapleader = " "
@@ -35,7 +36,6 @@ vim.pack.add({
 	{ src = gh("folke/todo-comments.nvim") },
 	{ src = gh("folke/which-key.nvim") },
 	{ src = gh("igorlfs/nvim-dap-view"), version = vim.version.range("1.*") },
-	{ src = gh("jbyuki/nabla.nvim") },
 	{ src = gh("kylechui/nvim-surround") },
 	{ src = gh("lewis6991/gitsigns.nvim") },
 	{ src = gh("mason-org/mason-lspconfig.nvim") },
@@ -44,7 +44,6 @@ vim.pack.add({
 	{ src = gh("mfussenegger/nvim-dap-python") },
 	{ src = gh("mikavilpas/blink-ripgrep.nvim"), version = vim.version.range("*") },
 	{ src = gh("neovim/nvim-lspconfig"), version = vim.version.range("*") },
-	{ src = gh("nvim-lualine/lualine.nvim") },
 	{ src = gh("nvim-mini/mini.align") },
 	{ src = gh("nvim-mini/mini.bracketed") },
 	{ src = gh("nvim-mini/mini.files") },
@@ -346,8 +345,7 @@ local function updateMiniWithGit(buf_id, gitStatusMap)
 	vim.schedule(function()
 		local nlines = vim.api.nvim_buf_line_count(buf_id)
 		local cwd = vim.fs.root(buf_id, ".git")
-		local escapedcwd = cwd and vim.pesc(cwd)
-		---@cast escapedcwd string
+		local escapedcwd = cwd and vim.pesc(cwd) ---@type string
 		escapedcwd = vim.fs.normalize(escapedcwd)
 		for i = 1, nlines do
 			local entry = MiniFiles.get_fs_entry(buf_id, i)
@@ -598,16 +596,14 @@ require("blink.cmp").setup({ ---@as blink.cmp.Config
 	},
 	completion = {
 		trigger = {
-			show_in_snippet = false,
 			show_on_blocked_trigger_characters = function()
 				if vim.bo.filetype == "markdown" then return { " ", "\n", "\t", ".", "/", "(", "[" } end
 				return { " ", "\n", "\t" }
 			end,
 		},
 		list = {
-			max_items = 25,
 			selection = {
-				preselect = true,
+				preselect = false,
 				auto_insert = false,
 			},
 		},
@@ -615,9 +611,18 @@ require("blink.cmp").setup({ ---@as blink.cmp.Config
 			border = "none",
 			auto_show_delay_ms = 200,
 			draw = {
+				treesitter = { "lsp" },
 				columns = { { "kind_icon" }, { "label" }, { "source_name" } },
 				components = {
 					source_name = {
+						ellipsis = true,
+						text = function(ctx)
+							if ctx.source_id == "lsp" then
+								return ctx.item.client_name
+							else
+								return ctx.source_name
+							end
+						end,
 						highlight = function(ctx) return ctx.kind_hl end,
 					},
 				},
@@ -625,7 +630,6 @@ require("blink.cmp").setup({ ---@as blink.cmp.Config
 		},
 		documentation = {
 			auto_show = false,
-			auto_show_delay_ms = 300,
 			window = {
 				border = "single",
 				winhighlight = "Normal:NormalFloat,FloatBorder:FloatBorder,CursorLine:PmenuSel,Search:None",
@@ -688,7 +692,7 @@ vim.api.nvim_create_autocmd("FileType", {
 	once = true,
 	callback = function()
 		require("html-css").setup({
-			enable_on = { "html", "htmldjango", "php", "templ" },
+			enable_on = { "html", "htmldjango" },
 			handlers = {
 				definition = {
 					bind = "gd",
@@ -746,13 +750,13 @@ require("snacks").setup({
 					},
 					{
 						icon = "󰛔 ",
-						key = "g",
+						key = "G",
 						desc = "GrugFar",
 						action = ":tabnew | GrugFar",
 					},
 					{
 						icon = " ",
-						key = "d",
+						key = "C",
 						desc = "CodeDiff",
 						action = ":CodeDiff",
 					},
@@ -805,11 +809,9 @@ require("snacks").setup({
 		},
 		layout = function()
 			local layouts = require("snacks.picker.config.layouts")
-			---@type snacks.picker.layout.Config
-			local cfg = layouts["default"]
+			local cfg = layouts["default"] ---@type snacks.picker.layout.Config
 			if vim.o.columns < 140 then
-				---@type snacks.picker.layout.Config
-				cfg = vim.deepcopy(layouts["vertical"])
+				cfg = vim.deepcopy(layouts["vertical"]) ---@type snacks.picker.layout.Config
 				cfg.layout.width = 0.8
 				cfg.layout.min_width = 90
 				cfg.layout[3] = vim.tbl_deep_extend("force", cfg.layout[3], {
@@ -1161,8 +1163,7 @@ require("flash").setup({
 		enabled = false,
 	},
 })
----@type Flash.Commands
-local flash = require("flash")
+local flash = require("flash") ---@type Flash.Commands
 map({ "n", "x", "o" }, "+", function() flash.jump() end, { desc = "Flash Jump" })
 map({ "n", "x", "o" }, "-", function() flash.treesitter() end, { desc = "Flash Treesitter" })
 map("o", "r", function() flash.remote() end, { desc = "Flash Remote" })
@@ -1647,7 +1648,6 @@ require("render-markdown").setup({
 --- }}}
 
 --- checkmate {{{
----@diagnostic disable-next-line: missing-fields
 require("checkmate").setup({ ---@as checkmate.Config
 	files = { "*.md", "todo", "*.todo", "TODO" },
 	todo_states = {

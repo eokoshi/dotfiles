@@ -6,6 +6,7 @@ Description: Description
 __date__ = "2025-12-03"
 
 
+# Section --------
 import collections
 import logging
 import math
@@ -15,10 +16,15 @@ from collections.abc import Generator, Iterable
 
 # Global constants
 
+# region
+
 PI = math.pi
 EULER = math.e
 DEFAULT_PATH = os.path.expanduser("~")
 
+# endregion
+
+# section 2 -------------
 logging.basicConfig()
 
 try:

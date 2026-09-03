@@ -2,8 +2,9 @@
 return {
 	settings = {
 		python = {
+			commentFoldingRanges = true,
 			analysis = {
-				completeFunctionParens = true,
+				completeFunctionParens = false,
 				showHoverGoToLinks = false,
 			},
 			pyrefly = {
