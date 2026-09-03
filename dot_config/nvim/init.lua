@@ -632,7 +632,7 @@ require("blink.cmp").setup({ ---@as blink.cmp.Config
 			auto_show = false,
 			window = {
 				border = "single",
-				winhighlight = "Normal:NormalFloat,FloatBorder:FloatBorder,CursorLine:PmenuSel,Search:None",
+				winhighlight = "CursorLine:PmenuSel,Search:None",
 			},
 		},
 	},
@@ -867,7 +867,7 @@ require("snacks").setup({
 		win = {
 			wo = {
 				statuscolumn = "%l %s",
-				winhighlight = "Normal:Normal,FloatBorder:SnacksPickerBorder,FloatTitle:SnacksPickerTitle",
+				winhighlight = "FloatBorder:SnacksPickerBorder,FloatTitle:SnacksPickerTitle",
 			},
 			footer_pos = "center",
 			title_pos = "center",
@@ -1819,6 +1819,9 @@ map("n", "<leader>pp", function() vim.cmd("source " .. vim.fn.stdpath("config") 
 --- Highlights {{{
 vim.api.nvim_set_hl(0, "LspSignatureActiveParameter", { italic = true, bold = true })
 vim.api.nvim_set_hl(0, "MatchParen", { link = "Error" })
+vim.api.nvim_set_hl(0, "NormalFloat", { link = "Normal" })
+vim.api.nvim_set_hl(0, "FloatBorder", { link = "Blue" })
+vim.api.nvim_set_hl(0, "FloatTitle", { link = "Blue" })
 --- }}}
 
 --- Custom Filetypes {{{
