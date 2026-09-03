@@ -684,6 +684,7 @@ require("blink.cmp").setup({ ---@as blink.cmp.Config
 	},
 })
 vim.api.nvim_set_hl(0, "BlinkCmpKindRipgrepRipgrep", { link = "BlinkCmpKindKey" })
+vim.api.nvim_set_hl(0, "BlinkCmpKindRipgrepGit", { link = "BlinkCmpKindKey" })
 --- }}}
 
 --- html-css {{{
