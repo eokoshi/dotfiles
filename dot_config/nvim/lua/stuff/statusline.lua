@@ -142,3 +142,5 @@ function _G.my_statusline()
 		lineending,
 	})
 end
+
+vim.o.statusline = "%!v:lua.my_statusline()"

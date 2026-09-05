@@ -5,6 +5,7 @@ vim.g.mapleader = " "
 vim.g.maplocalleader = ","
 
 require("autocmds")
+require("stuff.statusline")
 
 --- Options {{{
 vim.o.autoindent = true -- copy indent from current line when starting new line
@@ -46,7 +47,6 @@ vim.o.spelllang = "en_us,medical"
 vim.o.splitbelow = true -- Put new windows below current
 vim.o.splitkeep = "screen"
 vim.o.splitright = true -- Put new windows right of current
-vim.o.statusline = "%!v:lua.my_statusline()"
 vim.o.swapfile = false
 vim.o.tabstop = 2 -- Number of spaces tabs count for
 vim.o.undofile = true
@@ -234,15 +234,6 @@ end
 --- }}}
 
 --- mini.nvim {{{
-require("mini.tabline").setup({
-	tabpage_section = "right",
-	format = function(buf_id, label)
-		local MiniTabline = require("mini.tabline")
-		local suffix = vim.bo[buf_id].modified and "+ " or ""
-		return MiniTabline.default_format(buf_id, label) .. suffix
-	end,
-})
-
 require("mini.splitjoin").setup({})
 
 require("mini.align").setup({})
@@ -253,13 +244,85 @@ require("mini.bracketed").setup({
 	indent = { suffix = "h" },
 })
 
+local MiniPick = require("mini.pick")
+local ui_select_orig = vim.ui.select
+MiniPick.setup({})
+vim.ui.select = ui_select_orig
+local wipeout_cur = function()
+	local matches = MiniPick.get_picker_matches()
+	if matches ~= nil then vim.api.nvim_buf_delete(matches.current.bufnr, {}) end
+end
+map(
+	"n",
+	"vv",
+	function()
+		require("mini.pick").builtin.buffers({ include_current = false }, {
+			mappings = { wipeout = { char = "<C-d>", func = wipeout_cur } },
+			options = {
+				use_cache = true,
+			},
+			window = {
+				config = {
+					relative = "editor",
+					anchor = "NW",
+					row = 1,
+					col = 0,
+					width = 80,
+					height = 10,
+				},
+			},
+		})
+	end,
+	{ desc = "pick buffer" }
+)
+
+local MiniTabline = require("mini.tabline")
+MiniTabline.setup({
+	tabpage_section = "right",
+	format = function(buf_id, label)
+		local suffix = vim.bo[buf_id].modified and "○ " or ""
+		return MiniTabline.default_format(buf_id, label) .. suffix
+	end,
+})
+vim.api.nvim_set_hl(0, "TabLineFill", {
+	bg = nil,
+})
+vim.api.nvim_set_hl(0, "MiniTablineCurrent", {
+	fg = vim.api.nvim_get_hl(0, { name = "Purple" }).fg,
+	bg = vim.api.nvim_get_hl(0, { name = "StatusLine" }).bg,
+	italic = true,
+})
+vim.api.nvim_set_hl(0, "MiniTablineModifiedCurrent", {
+	fg = vim.api.nvim_get_hl(0, { name = "Purple" }).fg,
+	bg = vim.api.nvim_get_hl(0, { name = "StatusLine" }).bg,
+})
+vim.api.nvim_set_hl(0, "MiniTablineVisible", {
+	fg = vim.api.nvim_get_hl(0, { name = "Purple" }).fg,
+	bg = vim.api.nvim_get_hl(0, { name = "StatusLine" }).bg,
+	dim = true,
+})
+vim.api.nvim_set_hl(0, "MiniTablineModifiedVisible", {
+	fg = vim.api.nvim_get_hl(0, { name = "Purple" }).fg,
+	bg = vim.api.nvim_get_hl(0, { name = "StatusLine" }).bg,
+	dim = true,
+})
+vim.api.nvim_set_hl(0, "MiniTablineHidden", {
+	fg = vim.api.nvim_get_hl(0, { name = "Purple" }).fg,
+	dim = true,
+})
+vim.api.nvim_set_hl(0, "MiniTablineModifiedHidden", {
+	fg = vim.api.nvim_get_hl(0, { name = "Purple" }).fg,
+	dim = true,
+})
+
 local style
 if vim.env.TERM == "linux" then
 	style = "ascii"
 else
 	style = "glyph"
 end
-require("mini.icons").setup({
+local MiniIcons = require("mini.icons")
+MiniIcons.setup({
 	style = style,
 	file = {
 		[".chezmoiignore"] = { glyph = icons.basic.chezmoi, hl = "MiniIconsYellow" },
@@ -278,11 +341,12 @@ require("mini.icons").setup({
 	},
 })
 package.preload["nvim-web-devicons"] = function()
-	require("mini.icons").mock_nvim_web_devicons()
+	MiniIcons.mock_nvim_web_devicons()
 	return package.loaded["nvim-web-devicons"]
 end
 
-require("mini.files").setup({
+local MiniFiles = require("mini.files")
+MiniFiles.setup({
 	options = {
 		permanent_delete = false,
 	},
@@ -301,8 +365,6 @@ require("mini.files").setup({
 		reset = "<home>",
 	},
 })
-
-local MiniFiles = require("mini.files")
 local mfutils = require("plugins.minifiles_utils")
 map("n", "<leader>e", function()
 	mfutils.minifiles_toggle(vim.api.nvim_buf_get_name(0), false)
@@ -707,7 +769,6 @@ if _G.Snacks == nil then
 end
 local Snacks = require("snacks")
 vim.print = function(...) Snacks.debug.inspect(...) end
-map("n", "vv", function() Snacks.picker.buffers({ layout = { preset = "select" } }) end, { desc = "buffers" })
 map("n", "ff", function() Snacks.picker.files() end, { desc = "files" })
 map("n", "<Leader>fw", function() Snacks.picker.grep({ cmd = "rg" }) end, { desc = "word" })
 map({ "n", "x" }, "<Leader>f*", function() Snacks.picker.grep_word() end, { desc = "grep current selection" })
