@@ -9,6 +9,5 @@
 .config/nvim/lua/highlights.lua
 .config/nvim/lua/lazy-init.lua
 .config/nvim/lua/mappings.lua
-.config/nvim/lua/plugins
 .config/nvim/lua/plugins.lua
 .config/nvim/lua/stuff/functions.lua

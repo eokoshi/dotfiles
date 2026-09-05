@@ -23,6 +23,7 @@ return {
 				-- 	vim.env.VIMRUNTIME,
 				-- }),
 				library = {
+					vim.fn.stdpath("config"),
 					vim.fn.stdpath("data") .. "/site/pack/core/opt",
 					vim.env.VIMRUNTIME,
 				},

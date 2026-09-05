@@ -4,6 +4,130 @@ local icons = require("stuff.icons")
 vim.g.mapleader = " "
 vim.g.maplocalleader = ","
 
+require("autocmds")
+
+--- Options {{{
+vim.o.autoindent = true -- copy indent from current line when starting new line
+vim.o.breakindent = true
+vim.o.breakindentopt = "list:-1"
+vim.o.cmdheight = 0
+vim.o.colorcolumn = ""
+vim.o.conceallevel = 2
+vim.o.confirm = true -- Confirm to save changes before exiting modified buffer
+vim.o.cursorline = true -- Enable highlighting of the current line
+vim.o.diffopt = "internal,closeoff,filler,hiddenoff,linematch:60"
+vim.o.expandtab = false -- Use spaces instead of tabs when true
+vim.o.fileencodings = "ucs-bom,utf-8,default,cp932,latin1"
+vim.o.fillchars = "foldopen:,foldclose:,fold:,foldsep: ,eob: "
+vim.o.foldlevelstart = 99
+vim.o.foldmethod = "expr"
+vim.o.foldtext = ""
+vim.o.formatlistpat = "^\\s*\\d\\+[\\.\\,\\)\\]\\}] \\|^\\s*[\\-\\*] "
+vim.o.formatoptions = "lnjq"
+vim.o.hlsearch = true
+vim.o.ignorecase = true
+vim.o.incsearch = true
+vim.o.linebreak = true -- Wrap lines at convenient points
+vim.o.listchars = "space:␠,tab:_,conceal:?,nbsp:+"
+vim.o.number = true
+vim.o.numberwidth = 2
+vim.o.ruler = false -- Disable the default ruler
+vim.o.scrolloff = 10 -- keep n lines above below cursor in view
+vim.o.sessionoptions = "buffers,curdir,tabpages,winsize,help,globals,folds,resize"
+vim.o.shiftround = true -- Round indent
+vim.o.shiftwidth = 0 -- Size of an indent, 0 to inherit from tabstop
+vim.o.shortmess = "aoOsIcCF"
+vim.o.showbreak = "⌊ "
+vim.o.showmode = false -- Dont show mode since we have a statusline
+vim.o.sidescrolloff = 8 -- Columns of context
+vim.o.signcolumn = "yes" -- Always show the signcolumn, otherwise it would shift the text each time
+vim.o.smartcase = true -- Don't ignore case with capitals
+vim.o.spelllang = "en_us,medical"
+vim.o.splitbelow = true -- Put new windows below current
+vim.o.splitkeep = "screen"
+vim.o.splitright = true -- Put new windows right of current
+vim.o.statusline = "%!v:lua.my_statusline()"
+vim.o.swapfile = false
+vim.o.tabstop = 2 -- Number of spaces tabs count for
+vim.o.undofile = true
+vim.o.virtualedit = "block" -- Allow cursor to move where there is no text in visual block mode
+vim.o.winborder = "rounded"
+vim.o.wrap = false -- Disable line wrap
+
+-- diagnostics
+vim.diagnostic.config({
+	virtual_text = true,
+	float = { border = "single", source = true },
+	signs = { text = { "", "", "", "󰌵" } },
+	severity_sort = true,
+})
+
+require("vim._core.ui2").enable({
+	enable = true,
+	msg = {
+		---@type 'cmd'|'msg' Default message target, either in the cmdline or in a separate ephemeral message window.
+		---@type string|table<string, 'cmd'|'msg'|'pager'> Default message target or table mapping |ui-messages| kinds and triggers to a target.
+		targets = "msg",
+		dialog = { height = 0.5 },
+		msg = { height = 0.5, timeout = 4000 },
+		pager = { height = 1 },
+	},
+})
+--- }}}
+
+--- Mappings {{{
+-- Basic operations
+map("n", "<Leader>q", "<CMD>q<CR>", { desc = "Quit window" })
+map("n", "<Leader>Q", "<CMD>qa<CR>", { desc = "Quit nvim" })
+map("n", "<Leader>w", "<CMD>w<CR>", { desc = "Save buffer" })
+map("n", "<Leader>.", "<CMD>cd %:h<CR>", { desc = "cd here" })
+map("n", "<Leader><space>", "<ESC>", { desc = "" })
+map("t", "<ESC>", "<C-\\><C-n>", { desc = "Escape terminal mode" })
+map("i", "<S-Tab>", "<C-d>", { desc = "Unindent 1 level" })
+map("n", "J", "mzJ`z", { desc = "Shift J without moving cursor", noremap = false })
+map("n", "<BS>", "<C-^>", { desc = "Switch to prev file" })
+map("n", "<Leader>x", "<CMD>tabclose<CR>", { desc = "::tabclose" })
+map("n", "<Leader>bd", "<CMD>bd!<CR>", { desc = "::bd!" })
+
+-- System clipboard
+map("n", "<C-c>", '"+yy', { desc = "Copy line to system clipboard" })
+map("x", "<C-c>", '"+y', { desc = "Copy selection to system clipboard" })
+map({ "n", "x" }, "<C-v>", '"+p', { desc = "Paste system clipboard" })
+map({ "i", "c" }, "<C-v>", "<C-r>+", { desc = "Paste system clipboard" })
+
+-- Movement
+map("n", "<C-u>", "<C-u>zz", { desc = "Jump up half page" })
+map("n", "<C-d>", "<C-d>zz", { desc = "Jump down half page" })
+map("n", "n", "nzzzv", { desc = "Jump to next search result" })
+map("n", "N", "Nzzzv", { desc = "Jump to previous search result" })
+map("n", "<C-UP>", "<C-y>", { desc = "Scroll up" })
+map("n", "<C-DOWN>", "<C-e>", { desc = "Scroll down" })
+
+-- Buffers
+map("n", "<Leader>bA", "<CMD>%y+<CR><CR>", { desc = "Copy whole buffer to clipboard" })
+map("n", "<Leader>bD", function() require("functions").DOS_to_Unix() end, { desc = "DOS to Unix" })
+map("n", "<Leader>bf", function() vim.lsp.buf.format() end, { desc = "format buffer" })
+map("n", "<Leader>bz", "<CMD>set foldlevel=2<CR>", { desc = "set foldlevel=2" })
+
+-- LSP
+map("n", "<Leader>la", function() vim.lsp.buf.code_action() end, { desc = "code actions" })
+map("n", "<Leader>ld", function() vim.diagnostic.open_float() end, { desc = "show diagnostic" })
+map("n", "<Leader>lc", function() vim.diagnostic.setqflist() end, { desc = "qflist diagnostics" })
+map("n", "<Leader>lr", function() vim.lsp.buf.rename() end, { desc = "rename symbol" })
+map("n", "<Leader>lw", function() vim.lsp.buf.workspace_diagnostics() end, { desc = "workspace diagnostics" })
+map("n", "<Leader>li", "<CMD>checkhealth vim.lsp<CR>", { desc = "LSP info" })
+map("n", "gco", "o<Esc>Vcx<Esc><Cmd>normal gcc<CR>fxa<BS>", { desc = "Add comment below" })
+map("n", "gcO", "O<Esc>Vcx<Esc><Cmd>normal gcc<CR>fxa<BS>", { desc = "Add comment above" })
+
+-- Packages
+map("n", "<leader>pu", function() vim.pack.update() end, { desc = "vim.pack.update()" })
+map("n", "<leader>pu", function() vim.pack.update() end, { desc = "vim.pack.update()" })
+map("n", "<leader>pi", function() vim.pack.update(nil, { offline = true }) end, { desc = "[offline] vim.pack.update()" })
+map("n", "<leader>pp", "<CMD>source $MYVIMRC<CR>", { desc = "source config" })
+map("n", "<leader>pz", "<CMD>edit $MYVIMRC<CR>", { desc = "edit ~/.config/nvim/init.lua" })
+map("n", "<leader>pa", "<CMD>edit ~/.local/share/chezmoi/dot_config/nvim/init.lua<CR>", { desc = "edit chezmoi init.lua" })
+--- }}}
+
 --- Plugins {{{
 vim.api.nvim_create_autocmd("PackChanged", {
 	callback = function(ev)
@@ -24,7 +148,6 @@ vim.api.nvim_create_autocmd("PackChanged", {
 local gh = require("functions").gh
 vim.cmd("packadd nvim.undotree")
 vim.pack.add({
-	{ src = gh("akinsho/bufferline.nvim"), vim.version.range("*") },
 	{ src = gh("aserowy/tmux.nvim") },
 	{ src = gh("brenoprata10/nvim-highlight-colors") },
 	{ src = gh("dmtrKovalenko/fff"), version = vim.version.range("*") },
@@ -42,10 +165,7 @@ vim.pack.add({
 	{ src = gh("mfussenegger/nvim-dap-python") },
 	{ src = gh("mikavilpas/blink-ripgrep.nvim"), version = vim.version.range("*") },
 	{ src = gh("neovim/nvim-lspconfig"), version = vim.version.range("*") },
-	{ src = gh("nvim-mini/mini.align") },
-	{ src = gh("nvim-mini/mini.bracketed") },
-	{ src = gh("nvim-mini/mini.files") },
-	{ src = gh("nvim-mini/mini.icons") },
+	{ src = gh("nvim-mini/mini.nvim") },
 	{ src = gh("nvim-treesitter/nvim-treesitter") },
 	{ src = gh("nvim-treesitter/nvim-treesitter-context") },
 	{ src = gh("nvim-treesitter/nvim-treesitter-textobjects") },
@@ -113,154 +233,61 @@ else
 end
 --- }}}
 
---- statusline --- {{{
-local modes = {
-	["n"] = { name = "n", hl = "StatuslineNormal" },
-	["no"] = { name = "no", hl = "StatuslineNormal" },
-	["v"] = { name = "v", hl = "StatuslineVisual" },
-	["V"] = { name = "V", hl = "StatuslineVisual" },
-	["\22"] = { name = "^V", hl = "StatuslineVisual" },
-	["s"] = { name = "s", hl = "StatuslineVisual" },
-	["S"] = { name = "S", hl = "StatuslineVisual" },
-	["\19"] = { name = "^S", hl = "StatuslineVisual" },
-	["i"] = { name = "i", hl = "StatuslineInsert" },
-	["ic"] = { name = "ic", hl = "StatuslineInsert" },
-	["R"] = { name = "R", hl = "StatuslineReplace" },
-	["Rv"] = { name = "Rv", hl = "StatuslineReplace" },
-	["c"] = { name = "c", hl = "StatuslineCommand" },
-	["cv"] = { name = "cv", hl = "StatuslineCommand" },
-	["ce"] = { name = "ce", hl = "StatuslineCommand" },
-	["r"] = { name = "r", hl = "StatuslineCommand" },
-	["rm"] = { name = "rm", hl = "StatuslineCommand" },
-	["r?"] = { name = "r?", hl = "StatuslineCommand" },
-	["!"] = { name = "!", hl = "StatuslineCommand" },
-	["t"] = { name = "t", hl = "StatuslineTerminal" },
-	["nt"] = { name = "nt", hl = "StatuslineNormal" },
-}
-local function get_macro()
-	local reg = vim.fn.reg_recording()
-	if reg == "" then return "" end
-	return "recording @" .. reg
-end
-local function get_filesize(bufnr)
-	local file = vim.api.nvim_buf_get_name(bufnr)
-	if file == "" or #file == 0 then return "" end
-	local size = vim.fn.getfsize(file) ---@type number
-	if size <= 0 then return "" end
-	local units = { "B", "KB", "MB", "GB" }
-	local i = 1
-	while size > 1024 and i < #units do
-		size = size / 1024
-		i = i + 1
-	end
-	return string.format("%.1f%s", size, units[i])
-end
-local function get_diagnostics(bufnr)
-	if not #vim.lsp.get_clients({ bufnr = bufnr }) then return "" end
-	local count = {
-		errors = #vim.diagnostic.get(bufnr, { severity = vim.diagnostic.severity.ERROR }),
-		warnings = #vim.diagnostic.get(bufnr, { severity = vim.diagnostic.severity.WARN }),
-		info = #vim.diagnostic.get(bufnr, { severity = vim.diagnostic.severity.INFO }),
-	}
-	local res = {}
-	if count.errors > 0 then table.insert(res, "%4* " .. count.errors .. "%*") end
-	if count.warnings > 0 then table.insert(res, "%5* " .. count.warnings .. "%*") end
-	if count.info > 0 then table.insert(res, "%3* " .. count.info .. "%*") end
-	if #res == 0 then return "" end
-	return " " .. table.concat(res, " ")
-end
-local function get_searchcount()
-	if vim.v.hlsearch == 0 then return "" end
-	local sc = vim.fn.searchcount()
-	return "[" .. sc.current .. "/" .. sc.total .. "]"
-end
-local function get_truncated_filename(bufnr)
-	local name = vim.api.nvim_buf_get_name(bufnr)
-	if name == "" then return "[No Name]" end
-	local rel_path = vim.fn.fnamemodify(name, ":~:.")
-	if #rel_path > 40 then rel_path = vim.fn.pathshorten(rel_path, 3) end
-	return rel_path
-end
-function get_lsp_formatter(bufnr)
-	local out = ""
-	if #vim.lsp.get_clients({ bufnr = bufnr }) > 0 then out = out .. " " end
-	local _, conform = pcall(require, "conform")
-	if not conform then return "Conform not installed" end
-	if #conform.list_formatters_for_buffer(bufnr) > 0 then out = out .. "󰉼" end
-	return out
-end
-local function set_statusline_highlights()
-	vim.api.nvim_set_hl(0, "StatuslineNormal", { fg = "#1e1e2e", bg = "#89b4fa", bold = true })
-	vim.api.nvim_set_hl(0, "StatuslineInsert", { fg = "#1e1e2e", bg = "#a6e3a1", bold = true })
-	vim.api.nvim_set_hl(0, "StatuslineVisual", { fg = "#1e1e2e", bg = "#f9e2af", bold = true })
-	vim.api.nvim_set_hl(0, "StatuslineReplace", { fg = "#1e1e2e", bg = "#f38ba8", bold = true })
-	vim.api.nvim_set_hl(0, "StatuslineCommand", { fg = "#1e1e2e", bg = "#cba6f7", bold = true })
-	vim.api.nvim_set_hl(0, "StatuslineTerminal", { fg = "#1e1e2e", bg = "#94e2d5", bold = true })
-	vim.api.nvim_set_hl(0, "StatuslineSection", { fg = "#888888", bg = "#444444" })
-	vim.api.nvim_set_hl(0, "User1", { link = "Purple" })
-	vim.api.nvim_set_hl(0, "User2", { link = "Green" })
-	vim.api.nvim_set_hl(0, "User3", { link = "Blue" })
-	vim.api.nvim_set_hl(0, "User4", { link = "Red" })
-	vim.api.nvim_set_hl(0, "User5", { link = "Yellow" })
-	vim.api.nvim_set_hl(0, "User6", { link = "Aqua" })
-	vim.api.nvim_set_hl(0, "User7", { link = "Orange" })
-	vim.api.nvim_set_hl(0, "User8", { link = "Grey" })
-	vim.api.nvim_set_hl(0, "User9", { link = "OkMsg" })
-end
-set_statusline_highlights()
-vim.api.nvim_create_autocmd("ColorScheme", {
-	callback = set_statusline_highlights,
+--- mini.nvim {{{
+require("mini.tabline").setup({
+	tabpage_section = "right",
+	format = function(buf_id, label)
+		local MiniTabline = require("mini.tabline")
+		local suffix = vim.bo[buf_id].modified and "+ " or ""
+		return MiniTabline.default_format(buf_id, label) .. suffix
+	end,
 })
-function _G.my_statusline()
-	local winid = vim.g.statusline_winid or vim.api.nvim_get_current_win()
-	local bufnr = vim.api.nvim_win_get_buf(winid)
-	local is_active = (winid == vim.api.nvim_get_current_win())
 
-	local mode_code = vim.api.nvim_get_mode().mode
-	local mode_info = modes[mode_code] or { name = mode_code, hl = "StatuslineSection" }
-	local mode_str = string.format("%%#%s# %s %%*", "StatuslineSection", mode_info.name)
-	if is_active then mode_str = string.format("%%#%s# %s %%*", mode_info.hl, mode_info.name) end
-	local macro = " %#RedBold#" .. get_macro() .. "%*"
-	local searchcount = " %#AquaItalic#" .. get_searchcount() .. "%*"
-	local filename = " %1*" .. get_truncated_filename(bufnr) .. "%*"
-	local bufargs = "%8*%m%r%* "
-	local buf = "%8*" .. bufnr .. "%*"
-	local filesize = " %8*" .. (get_filesize(bufnr) or "0B") .. "%*"
-	local filetype = " %6*" .. (vim.bo[bufnr].filetype ~= "" and vim.bo[bufnr].filetype or ""):upper() .. "%*"
-	local encoding = "  %4*" .. (vim.bo[bufnr].fileencoding ~= "" and vim.bo[bufnr].fileencoding or vim.o.encoding):upper() .. "%* "
-	local lineending = " %3*" .. (vim.bo[bufnr].fileformat:upper() == "UNIX" and "" or (vim.bo[bufnr].fileformat:upper() == "DOS" and "")) .. "%*"
-	local location = " %3*%l:%c %p%% %*"
-	local diagnostics = get_diagnostics(bufnr) .. "%*  "
-	local lsp_formatter = "%3*" .. get_lsp_formatter(bufnr) .. "%* "
-	return table.concat({
-		mode_str,
-		filename,
-		bufargs,
-		buf,
-		filesize,
-		location,
-		macro,
-		"%=", -- Alignment separator (pushes following items to the right)
-		searchcount,
-		diagnostics,
-		lsp_formatter,
-		filetype,
-		encoding,
-		lineending,
-	})
+require("mini.splitjoin").setup({})
+
+require("mini.align").setup({})
+
+require("mini.bracketed").setup({
+	comment = { suffix = "#" },
+	file = { suffix = "e" },
+	indent = { suffix = "h" },
+})
+
+local style
+if vim.env.TERM == "linux" then
+	style = "ascii"
+else
+	style = "glyph"
+end
+require("mini.icons").setup({
+	style = style,
+	file = {
+		[".chezmoiignore"] = { glyph = icons.basic.chezmoi, hl = "MiniIconsYellow" },
+		[".chezmoiremove"] = { glyph = icons.basic.chezmoi, hl = "MiniIconsYellow" },
+		[".chezmoiroot"] = { glyph = icons.basic.chezmoi, hl = "MiniIconsYellow" },
+		[".chezmoiversion"] = { glyph = icons.basic.chezmoi, hl = "MiniIconsYellow" },
+		["dot_bashrc"] = { glyph = icons.filetype.bash, hl = "MiniIconsCyan" },
+		["dot_inputrc"] = { glyph = icons.filetype.bash, hl = "MiniIconsCyan" },
+	},
+	filetype = {
+		dotenv = { glyph = icons.filetype.dotenv, hl = "MiniIconsYellow" },
+		checkhealth = { glyph = icons.filetype.checkhealth, hl = "MiniIconsRed" },
+		gotmpl = { glyph = icons.filetype.tmpl, hl = "MiniIconsGray" },
+		sh = { glyph = icons.filetype.sh, hl = "MiniIconsGreen" },
+		age = { glyph = icons.filetype.age, hl = "MiniIconsRed" },
+	},
+})
+package.preload["nvim-web-devicons"] = function()
+	require("mini.icons").mock_nvim_web_devicons()
+	return package.loaded["nvim-web-devicons"]
 end
 
-vim.o.statusline = "%!v:lua.my_statusline()"
---- }}}
-
---- mini.files --- {{{
 require("mini.files").setup({
 	options = {
 		permanent_delete = false,
 	},
 	windows = {
 		preview = false,
-		width_preview = 90,
 	},
 	mappings = {
 		close = "<esc>",
@@ -274,246 +301,13 @@ require("mini.files").setup({
 		reset = "<home>",
 	},
 })
+
 local MiniFiles = require("mini.files")
-local nsMiniFiles = vim.api.nvim_create_namespace("mini_files_git")
-
--- Cache for git status
-local gitStatusCache = {}
-local cacheTimeout = 2000 -- in milliseconds
-local uv = vim.uv
-
-local function isSymlink(path)
-	local stat = uv.fs_lstat(path)
-	return stat and stat.type == "link"
-end
-
----@param status string
----@return string symbol, string hlGroup
-local function mapSymbols(status, is_symlink)
-	local statusMap = {
-		[" M"] = { symbol = "•", hlGroup = "MiniDiffSignChange" }, -- Modified in the working directory
-		["M "] = { symbol = "", hlGroup = "MiniDiffSignChange" }, -- modified in index
-		["MM"] = { symbol = "≠", hlGroup = "MiniDiffSignChange" }, -- modified in both working tree and index
-		["A "] = { symbol = "+", hlGroup = "MiniDiffSignAdd" }, -- Added to the staging area, new file
-		["AA"] = { symbol = "≈", hlGroup = "MiniDiffSignAdd" }, -- file is added in both working tree and index
-		["D "] = { symbol = "D", hlGroup = "MiniDiffSignDelete" }, -- Deleted from the staging area
-		[" D"] = { symbol = "D", hlGroup = "MiniDiffSignDelete" }, -- Deleted from the staging area
-		["AM"] = { symbol = "⊕", hlGroup = "MiniDiffSignChange" }, -- added in working tree, modified in index
-		["AD"] = { symbol = "⯢", hlGroup = "MiniDiffSignChange" }, -- Added in the index and deleted in the working directory
-		["R "] = { symbol = "→", hlGroup = "MiniDiffSignChange" }, -- Renamed in the index
-		["U "] = { symbol = "‖", hlGroup = "MiniDiffSignChange" }, -- Unmerged path
-		["UU"] = { symbol = "⇄", hlGroup = "MiniDiffSignAdd" }, -- file is unmerged
-		["UA"] = { symbol = "⊕", hlGroup = "MiniDiffSignAdd" }, -- file is unmerged and added in working tree
-		["??"] = { symbol = "?", hlGroup = "Macro" }, -- Untracked files
-		["!!"] = { symbol = "", hlGroup = "Ignore" }, -- Ignored files
-	}
-	local result = statusMap[status] or { symbol = "?", hlGroup = "NonText" }
-	local gitSymbol = result.symbol
-	local gitHlGroup = result.hlGroup
-	local symlinkSymbol = is_symlink and "↩" or ""
-	local combinedSymbol = (symlinkSymbol .. gitSymbol):gsub("^%s+", ""):gsub("%s+$", "")
-	local combinedHlGroup = is_symlink and "MiniDiffSignDelete" or gitHlGroup
-	return combinedSymbol, combinedHlGroup
-end
-
----@param cwd string
----@param callback function
----@return nil
-local function fetchGitStatus(cwd, callback)
-	local clean_cwd = cwd:gsub("^minifiles://%d+/", "")
-	---@param content table
-	local function on_exit(content)
-		if content.code == 0 then callback(content.stdout) end
-	end
-	vim.system({ "git", "status", "-uall", "--ignored=matching", "--porcelain" }, { text = true, cwd = clean_cwd }, on_exit)
-end
-
-local function inArray(array, x)
-	if not array then return false end
-	for _, v in ipairs(array) do
-		if v == x then return true end
-	end
-	return false
-end
-
----@param buf_id integer
----@param gitStatusMap table
----@return nil
-local function updateMiniWithGit(buf_id, gitStatusMap)
-	vim.g.tmp = gitStatusMap
-	vim.schedule(function()
-		local nlines = vim.api.nvim_buf_line_count(buf_id)
-		local cwd = vim.fs.root(buf_id, ".git")
-		local escapedcwd = cwd and vim.pesc(cwd) ---@type string
-		escapedcwd = vim.fs.normalize(escapedcwd)
-		for i = 1, nlines do
-			local entry = MiniFiles.get_fs_entry(buf_id, i)
-			if not entry then break end
-			local relativePath = entry.path:gsub("^" .. escapedcwd .. "/", "")
-			local status_tbl = gitStatusMap[relativePath]
-
-			-- handle children of ignored dirs
-			if not status_tbl then
-				local checkPath = relativePath
-				while true do
-					checkPath = checkPath:match("^(.*)/[^/]+$")
-					if not checkPath then break end
-					if inArray(gitStatusMap[checkPath], "!!") then
-						status_tbl = { "!!" }
-						break
-					end
-				end
-			end
-			if status_tbl then
-				for j, status in ipairs(status_tbl) do
-					local symbol, hlGroup = mapSymbols(status, isSymlink(entry.path))
-					vim.api.nvim_buf_set_extmark(buf_id, nsMiniFiles, i - 1, j, {
-						virt_text = { { symbol, hlGroup } },
-						virt_text_pos = "right_align",
-						hl_mode = "combine",
-					})
-					local line = vim.api.nvim_buf_get_lines(buf_id, i - 1, i, false)[1]
-					if not line then return end
-					local nameStartCol = line:find(vim.pesc(entry.name)) or 0
-					if nameStartCol > 0 then
-						vim.api.nvim_buf_set_extmark(buf_id, nsMiniFiles, i - 1, nameStartCol - 1, {
-							end_col = nameStartCol + #entry.name - 1,
-							hl_group = hlGroup,
-						})
-					end
-				end
-			end
-		end
-	end)
-end
-
----@param content string
----@return table
-local function parseGitStatus(content)
-	local gitStatusMap = {}
-	for line in content:gmatch("[^\r\n]+") do
-		local status, filePath = string.match(line, "^(..)%s+(.*)")
-		if not filePath then return {} end
-		if status == "R " then filePath = string.match(filePath, "^.*%s%-%>%s(.*)") end
-		if not filePath then return {} end
-		local parts = {}
-		for part in filePath:gmatch("[^/]+") do
-			table.insert(parts, part)
-		end
-		local currentKey = ""
-		for i, part in ipairs(parts) do
-			if i > 1 then
-				currentKey = currentKey .. "/" .. part
-			else
-				currentKey = part
-			end
-			if i == #parts then
-				gitStatusMap[currentKey] = { status }
-			elseif gitStatusMap[currentKey] and not inArray(gitStatusMap[currentKey], status) and status ~= "!!" then
-				table.insert(gitStatusMap[currentKey], status)
-			else
-				if status ~= "!!" then gitStatusMap[currentKey] = { status } end
-			end
-		end
-	end
-	return gitStatusMap
-end
-
----@param buf_id integer
----@return nil
-local function updateGitStatus(buf_id)
-	local cwd = vim.fs.root(buf_id, ".git")
-	if not cwd then return end
-	local currentTime = os.time()
-	if gitStatusCache[cwd] and currentTime - gitStatusCache[cwd].time < cacheTimeout then
-		updateMiniWithGit(buf_id, gitStatusCache[cwd].statusMap)
-	else
-		fetchGitStatus(cwd, function(content)
-			local gitStatusMap = parseGitStatus(content)
-			gitStatusCache[cwd] = {
-				time = currentTime,
-				statusMap = gitStatusMap,
-			}
-			updateMiniWithGit(buf_id, gitStatusMap)
-		end)
-	end
-end
-
----@return nil
-local function clearCache() gitStatusCache = {} end
-local function augroup(name) return vim.api.nvim_create_augroup("MiniFiles_" .. name, { clear = true }) end
-vim.api.nvim_create_autocmd("User", {
-	group = augroup("close"),
-	pattern = "MiniFilesExplorerClose",
-	callback = function() clearCache() end,
-})
-vim.api.nvim_create_autocmd("User", {
-	group = augroup("update"),
-	pattern = "MiniFilesBufferUpdate",
-	callback = function(args)
-		local bufnr = args.data.buf_id
-		local cwd = vim.fs.root(bufnr, ".git")
-		if not cwd then return end
-		if gitStatusCache[cwd] then
-			updateMiniWithGit(bufnr, gitStatusCache[cwd].statusMap)
-		else
-			updateGitStatus(bufnr)
-		end
-	end,
-})
-
-local minifiles_toggle = function(...)
-	if not MiniFiles.close() then MiniFiles.open(...) end
-end
-local yank_path = function()
-	local path = (MiniFiles.get_fs_entry() or {}).path
-	if path == nil then return vim.notify("Cursor is not on valid entry") end
-	if vim.fs.relpath(vim.fn.getcwd(), path) then
-		path = "./" .. vim.fs.relpath(vim.fn.getcwd(), path)
-	elseif vim.fs.relpath("~", path) and vim.fs.relpath("~", path) ~= "." then
-		path = "~/" .. vim.fs.relpath("~", path)
-	end
-	vim.notify("yanked: " .. path)
-	vim.fn.setreg(vim.v.register, path)
-end
-local set_cwd = function()
-	local path = (MiniFiles.get_fs_entry() or {}).path
-	if path == nil then return vim.notify("Cursor is not on valid entry") end
-	local dir = vim.fs.dirname(path)
-	local msg
-	if vim.fs.relpath("~", dir) then
-		msg = "cwd: ~/" .. vim.fs.relpath("~", dir)
-	else
-		msg = "cwd: " .. dir
-	end
-	vim.notify(msg)
-	vim.fn.chdir(dir)
-end
-local toggle_preview = function()
-	local preview = MiniFiles.config.windows.preview
-	local preview_next = not preview
-	MiniFiles.config.windows.preview = preview_next
-	MiniFiles.trim_right()
-	MiniFiles.refresh({
-		windows = { preview = preview_next },
-	})
-	if preview then
-		local state = MiniFiles.get_explorer_state()
-		if not state then return 1 end
-		local branch = state.branch
-		table.remove(branch)
-		pcall(function()
-			MiniFiles.set_branch(branch)
-			return 0
-		end)
-	end
-end
-
+local mfutils = require("plugins.minifiles_utils")
 map("n", "<leader>e", function()
-	minifiles_toggle(vim.api.nvim_buf_get_name(0), false)
+	mfutils.minifiles_toggle(vim.api.nvim_buf_get_name(0), false)
 	MiniFiles.reveal_cwd()
 end, { desc = "MiniFiles" })
-
 vim.api.nvim_create_autocmd("User", {
 	pattern = "MiniFilesBufferCreate",
 	callback = function(args)
@@ -523,11 +317,13 @@ vim.api.nvim_create_autocmd("User", {
 		map("n", "K", "<UP>", { buffer = b })
 		map("n", "<CR>", function() MiniFiles.go_in({ close_on_file = true }) end, { buffer = b })
 		map("n", "q", function() MiniFiles.close() end, { buffer = b })
-		map("n", "g.", set_cwd, { buffer = b, desc = "Set cwd" })
-		map("n", "gy", yank_path, { buffer = b, desc = "Yank path" })
-		map("n", "<C-space>", toggle_preview, { buffer = b, desc = "Toggle preview" })
+		map("n", "g.", mfutils.set_cwd, { buffer = b, desc = "Set cwd" })
+		map("n", "gy", mfutils.yank_path, { buffer = b, desc = "Yank path" })
+		map("n", "<C-space>", mfutils.toggle_preview, { buffer = b, desc = "Toggle preview" })
 	end,
 })
+vim.api.nvim_set_hl(0, "MiniFilesTitle", { link = "FloatTitle" })
+
 --- }}}
 
 --- conform {{{
@@ -755,161 +551,163 @@ vim.api.nvim_create_autocmd("FileType", {
 --- }}}
 
 --- snacks {{{
-require("snacks").setup({
-	bigfile = { enabled = true, line_length = 99999 },
-	terminal = {
-		win = {
-			wo = { statuscolumn = " ", winhighlight = "Normal:Normal,FloatBorder:Green" },
-			position = "float",
-			backdrop = 100,
-			border = "rounded",
-			height = 0.9,
+if _G.Snacks == nil then
+	require("snacks").setup({
+		bigfile = { enabled = true, line_length = 99999 },
+		terminal = {
+			win = {
+				wo = { statuscolumn = " ", winhighlight = "Normal:Normal,FloatBorder:Green" },
+				position = "float",
+				backdrop = 100,
+				border = "rounded",
+				height = 0.9,
+			},
+			auto_close = true,
 		},
-		auto_close = true,
-	},
-	dashboard = {
-		preset = {
-			header = require("stuff.ascii").cat,
-			keys = function()
-				local cfg = {
-					{
-						icon = " ",
-						key = "f",
-						desc = "Find File",
-						action = ":lua Snacks.dashboard.pick('files')",
-					},
-					{
-						icon = "󰛔 ",
-						key = "G",
-						desc = "GrugFar",
-						action = ":tabnew | GrugFar",
-					},
-					{
-						icon = " ",
-						key = "C",
-						desc = "CodeDiff",
-						action = ":CodeDiff",
-					},
-					{
-						icon = " ",
-						key = "s",
-						desc = "Restore Session",
-						action = ":SessionLoad",
-					},
-					{ icon = " ", key = "q", desc = "Quit", action = ":qa" },
-				}
-				if vim.fn.has("win32") then
-					table.insert(cfg, 3, {
-						icon = " ",
-						key = "n",
-						desc = "Daily Note",
-						action = "<leader>mt",
+		dashboard = {
+			preset = {
+				header = require("stuff.ascii").cat,
+				keys = function()
+					local cfg = {
+						{
+							icon = " ",
+							key = "f",
+							desc = "Find File",
+							action = ":lua Snacks.dashboard.pick('files')",
+						},
+						{
+							icon = "󰛔 ",
+							key = "G",
+							desc = "GrugFar",
+							action = ":tabnew | GrugFar",
+						},
+						{
+							icon = " ",
+							key = "C",
+							desc = "CodeDiff",
+							action = ":CodeDiff",
+						},
+						{
+							icon = " ",
+							key = "s",
+							desc = "Restore Session",
+							action = ":SessionLoad",
+						},
+						{ icon = " ", key = "q", desc = "Quit", action = ":qa" },
+					}
+					if vim.fn.has("win32") then
+						table.insert(cfg, 3, {
+							icon = " ",
+							key = "n",
+							desc = "Daily Note",
+							action = "<leader>mt",
+						})
+					end
+					return cfg
+				end,
+			},
+			sections = {
+				{ section = "header" },
+				{ section = "keys", gap = 0, padding = 2 },
+				{
+					section = "recent_files",
+					icon = " ",
+					title = "Recent Files",
+					indent = 2,
+					padding = 2,
+					limit = 10,
+				},
+			},
+		},
+		indent = {
+			enabled = true,
+			scope = { only_current = true },
+			filter = function(buf, _win)
+				return vim.g.snacks_indent ~= false
+					and vim.b[buf].snacks_indent ~= false
+					and vim.bo[buf].buftype == ""
+					and vim.bo[buf].filetype ~= "snacks_picker_preview"
+			end,
+		},
+		input = { enabled = true },
+		picker = {
+			matcher = {
+				frecency = true,
+			},
+			layout = function()
+				local layouts = require("snacks.picker.config.layouts")
+				local cfg = layouts["default"] ---@type snacks.picker.layout.Config
+				if vim.o.columns < 140 then
+					cfg = vim.deepcopy(layouts["vertical"]) ---@type snacks.picker.layout.Config
+					cfg.layout.width = 0.8
+					cfg.layout.min_width = 90
+					cfg.layout[3] = vim.tbl_deep_extend("force", cfg.layout[3], {
+						win = "preview",
+						height = 0.8,
+						border = "top",
+						wo = { wrap = true, number = false, statuscolumn = "%l ", relativenumber = false, foldcolumn = "0" },
 					})
 				end
 				return cfg
 			end,
-		},
-		sections = {
-			{ section = "header" },
-			{ section = "keys", gap = 0, padding = 2 },
-			{
-				section = "recent_files",
-				icon = " ",
-				title = "Recent Files",
-				indent = 2,
-				padding = 2,
-				limit = 10,
-			},
-		},
-	},
-	indent = {
-		enabled = true,
-		scope = { only_current = true },
-		filter = function(buf, _win)
-			return vim.g.snacks_indent ~= false
-				and vim.b[buf].snacks_indent ~= false
-				and vim.bo[buf].buftype == ""
-				and vim.bo[buf].filetype ~= "snacks_picker_preview"
-		end,
-	},
-	input = { enabled = true },
-	picker = {
-		matcher = {
-			frecency = true,
-		},
-		layout = function()
-			local layouts = require("snacks.picker.config.layouts")
-			local cfg = layouts["default"] ---@type snacks.picker.layout.Config
-			if vim.o.columns < 140 then
-				cfg = vim.deepcopy(layouts["vertical"]) ---@type snacks.picker.layout.Config
-				cfg.layout.width = 0.8
-				cfg.layout.min_width = 90
-				cfg.layout[3] = vim.tbl_deep_extend("force", cfg.layout[3], {
-					win = "preview",
-					height = 0.8,
-					border = "top",
-					wo = { wrap = true, number = false, statuscolumn = "%l ", relativenumber = false, foldcolumn = "0" },
-				})
-			end
-			return cfg
-		end,
-		sources = {
-			explorer = {
-				exclude = { "__**__", ".ipynb_checkpoints" },
-				follow_file = true,
-				hidden = true,
-				ignored = true,
-				follow = true,
-			},
-			colorschemes = {
-				layout = { preset = "dropdown" },
-			},
-		},
-		win = {
-			input = {
-				keys = {
-					["/"] = "focus_preview",
-					["<C-p>"] = "preview_scroll_up",
-					["<C-n>"] = "preview_scroll_down",
-					["<a-i>"] = "inspect",
-					["<C-w>"] = { "<c-s-w>", mode = { "i" }, expr = true, desc = "" },
+			sources = {
+				explorer = {
+					exclude = { "__**__", ".ipynb_checkpoints" },
+					follow_file = true,
+					hidden = true,
+					ignored = true,
+					follow = true,
+				},
+				colorschemes = {
+					layout = { preset = "dropdown" },
 				},
 			},
-			list = {
-				keys = {
-					["/"] = "focus_preview",
-					["<C-p>"] = "preview_scroll_up",
-					["<C-n>"] = "preview_scroll_down",
-					["<a-i>"] = "inspect",
-					["<C-w>"] = { "<c-s-w>", mode = { "i" }, expr = true, desc = "" },
+			win = {
+				input = {
+					keys = {
+						["/"] = "focus_preview",
+						["<C-p>"] = "preview_scroll_up",
+						["<C-n>"] = "preview_scroll_down",
+						["<a-i>"] = "inspect",
+						["<C-w>"] = { "<c-s-w>", mode = { "i" }, expr = true, desc = "" },
+					},
 				},
-			},
-			preview = {
-				keys = {
-					["/"] = "focus_list",
+				list = {
+					keys = {
+						["/"] = "focus_preview",
+						["<C-p>"] = "preview_scroll_up",
+						["<C-n>"] = "preview_scroll_down",
+						["<a-i>"] = "inspect",
+						["<C-w>"] = { "<c-s-w>", mode = { "i" }, expr = true, desc = "" },
+					},
+				},
+				preview = {
+					keys = {
+						["/"] = "focus_list",
+					},
 				},
 			},
 		},
-	},
-	notifier = { enabled = true },
-	quickfile = { enabled = true },
-	scratch = {
-		win = {
-			wo = {
-				statuscolumn = "%l %s",
-				winhighlight = "FloatBorder:SnacksPickerBorder,FloatTitle:SnacksPickerTitle",
+		notifier = { enabled = true },
+		quickfile = { enabled = true },
+		scratch = {
+			win = {
+				wo = {
+					statuscolumn = "%l %s",
+					winhighlight = "FloatBorder:SnacksPickerBorder,FloatTitle:SnacksPickerTitle",
+				},
+				footer_pos = "center",
+				title_pos = "center",
+				relative = "editor",
 			},
-			footer_pos = "center",
-			title_pos = "center",
-			relative = "editor",
 		},
-	},
-	statuscolumn = { enabled = true },
-	zen = { toggles = { dim = false }, show = { statusline = true } },
-})
+		statuscolumn = { enabled = true },
+		zen = { toggles = { dim = false }, show = { statusline = true } },
+	})
+end
 local Snacks = require("snacks")
 vim.print = function(...) Snacks.debug.inspect(...) end
-map("n", "vv", function() Snacks.picker.buffers() end, { desc = "buffers" })
+map("n", "vv", function() Snacks.picker.buffers({ layout = { preset = "select" } }) end, { desc = "buffers" })
 map("n", "ff", function() Snacks.picker.files() end, { desc = "files" })
 map("n", "<Leader>fw", function() Snacks.picker.grep({ cmd = "rg" }) end, { desc = "word" })
 map({ "n", "x" }, "<Leader>f*", function() Snacks.picker.grep_word() end, { desc = "grep current selection" })
@@ -956,12 +754,12 @@ map("n", "<Leader>lli", function() Snacks.picker.lsp_implementations() end, { de
 map("n", "<Leader>llt", function() Snacks.picker.lsp_type_definitions() end, { desc = "Go to type definition" })
 map("n", "gd", function() Snacks.picker.lsp_definitions() end, { desc = "Go to definition" })
 map("n", "gD", function() Snacks.picker.lsp_declarations() end, { desc = "Go to Declaration" })
-local toggles = require("stuff.toggles")
-toggles.autosave():map("<Leader>ba")
-toggles.formatting():map("<Leader>bF")
-toggles.completion():map("<Leader>bC")
-toggles.virtual_text():map("<Leader>uv")
-toggles.virtual_lines():map("<Leader>uV")
+local snacksutils = require("plugins.snacks_utils")
+snacksutils.toggle_autosave():map("<Leader>ba")
+snacksutils.toggle_formatting():map("<Leader>bF")
+snacksutils.toggle_completion():map("<Leader>bC")
+snacksutils.toggle_virtual_text():map("<Leader>uv")
+snacksutils.toggle_virtual_lines():map("<Leader>uV")
 Snacks.toggle.option("spell", { name = "spellcheck" }):map("<leader>us")
 Snacks.toggle.option("wrap", { name = "wrap" }):map("<leader>uw")
 Snacks.toggle.option("background", { off = "light", on = "dark", name = "dark background" }):map("<leader>ub")
@@ -973,56 +771,13 @@ Snacks.toggle.inlay_hints():map("<leader>uI")
 Snacks.toggle.indent():map("<leader>ug")
 Snacks.toggle.dim():map("<leader>uD")
 Snacks.toggle.words():map("<leader>uW")
-map("n", "<Leader>fa", function()
-	if vim.fn.has("win32") == 1 then
-		vim.notify("Do not mess with config from Windows", vim.log.levels.ERROR)
-	else
-		Snacks.picker.files({
-			hidden = true,
-			ignored = true,
-			follow = true,
-			dirs = { os.getenv("HOME") .. "/.local/share/chezmoi" },
-		})
-	end
-end, { desc = "config" })
-map(
-	"n",
-	"<Leader>ui",
-	function()
-		require("snacks.picker").icons({
-			custom_sources = { unicode = vim.fn.stdpath("config") .. "/unicode_chars.json" },
-		})
-	end,
-	{ desc = "icons" }
-)
-map(
-	"i",
-	"<C-l>",
-	function() require("snacks.picker").icons({ custom_sources = { unicode = vim.fn.stdpath("config") .. "/unicode_chars.json" } }) end,
-	{ desc = "insert icon" }
-)
+map("n", "<Leader>fa", function() snacksutils.pick_config_chezmoi() end, { desc = "config" })
+map("n", "<Leader>ui", function() snacksutils.pick_icon() end, { desc = "icons" })
+map("i", "<C-l>", function() snacksutils.pick_icon() end, { desc = "insert icon" })
 map(
 	"n",
 	"<Leader>N",
-	function()
-		require("snacks").picker.notifications({
-			confirm = { "yank", "close" },
-			focus = "list",
-			layout = {
-				layout = {
-					box = "vertical",
-					{ win = "input", height = 1, border = "bottom" },
-					{ win = "list", border = "none" },
-					{
-						win = "preview",
-						height = 0.8,
-						border = "top",
-						wo = { wrap = true, statuscolumn = "%l ", relativenumber = false, foldcolumn = "0" },
-					},
-				},
-			},
-		})
-	end,
+	function() Snacks.picker.notifications({ confirm = { "yank", "close" }, focus = "list" }) end,
 	{ desc = "Notification history" }
 )
 vim.api.nvim_create_autocmd("User", {
@@ -1112,44 +867,8 @@ vim.api.nvim_set_hl(0, "WhichKeyTitle", { link = "Green" })
 vim.api.nvim_set_hl(0, "WhichKeyBorder", { link = "Blue" })
 --- }}}
 
---- bufferline {{{
-require("bufferline").setup({
-	options = {
-		themable = true,
-		right_mouse_command = function() require("snacks").bufdelete() end,
-		diagnostics = "nvim_lsp",
-		show_tab_indicators = true,
-		offsets = {
-			{
-				filetype = "neo-tree",
-				text = "",
-				highlight = "BufferLineTab",
-				separator = true,
-			},
-		},
-		show_buffer_close_icons = false,
-		tab_size = 10,
-	},
-})
-map("n", "vv", "<CMD>BufferLinePick<CR>", { desc = "Pick buffer" })
-map("n", "<leader>bx", "<CMD>BufferLinePickClose<CR>", { desc = "Pick buffer to close" })
-vim.api.nvim_set_hl(0, "BufferLineFill", { link = "Normal" })
---- }}}
-
 --- nvim-autopairs {{{
 require("nvim-autopairs").setup({})
---- }}}
-
---- mini.align {{{
-require("mini.align").setup({})
---- }}}
-
---- mini.bracketed {{{
-require("mini.bracketed").setup({
-	comment = { suffix = "#" },
-	file = { suffix = "e" },
-	indent = { suffix = "h" },
-})
 --- }}}
 
 --- nvim-surround {{{
@@ -1378,37 +1097,6 @@ else
 	map("n", "<C-j>", "<C-w>j", { desc = "Move to window above" })
 	map("n", "<C-k>", "<C-w>k", { desc = "Move to window below" })
 	map("n", "<C-l>", "<C-w>l", { desc = "Move to window right" })
-end
---- }}}
-
---- mini.icons {{{
-local style
-if vim.env.TERM == "linux" then
-	style = "ascii"
-else
-	style = "glyph"
-end
-require("mini.icons").setup({
-	style = style,
-	file = {
-		[".chezmoiignore"] = { glyph = icons.basic.chezmoi, hl = "MiniIconsYellow" },
-		[".chezmoiremove"] = { glyph = icons.basic.chezmoi, hl = "MiniIconsYellow" },
-		[".chezmoiroot"] = { glyph = icons.basic.chezmoi, hl = "MiniIconsYellow" },
-		[".chezmoiversion"] = { glyph = icons.basic.chezmoi, hl = "MiniIconsYellow" },
-		["dot_bashrc"] = { glyph = icons.filetype.bash, hl = "MiniIconsCyan" },
-		["dot_inputrc"] = { glyph = icons.filetype.bash, hl = "MiniIconsCyan" },
-	},
-	filetype = {
-		dotenv = { glyph = icons.filetype.dotenv, hl = "MiniIconsYellow" },
-		checkhealth = { glyph = icons.filetype.checkhealth, hl = "MiniIconsRed" },
-		gotmpl = { glyph = icons.filetype.tmpl, hl = "MiniIconsGray" },
-		sh = { glyph = icons.filetype.sh, hl = "MiniIconsGreen" },
-		age = { glyph = icons.filetype.age, hl = "MiniIconsRed" },
-	},
-})
-package.preload["nvim-web-devicons"] = function()
-	require("mini.icons").mock_nvim_web_devicons()
-	return package.loaded["nvim-web-devicons"]
 end
 --- }}}
 
@@ -1743,59 +1431,6 @@ require("todo-comments").setup({
 	},
 })
 --- }}}
-
---- }}}
-
---- Mappings {{{
--- Basic operations
-map("n", "<Leader>q", "<CMD>q<CR>", { desc = "Quit window" })
-map("n", "<Leader>Q", "<CMD>qa<CR>", { desc = "Quit nvim" })
-map("n", "<Leader>w", "<CMD>w<CR>", { desc = "Save buffer" })
-map("n", "<Leader>.", "<CMD>cd %:h<CR>", { desc = "cd here" })
-map("n", "<Leader><space>", "<ESC>", { desc = "" })
-map("t", "<ESC>", "<C-\\><C-n>", { desc = "Escape terminal mode" })
-map("i", "<S-Tab>", "<C-d>", { desc = "Unindent 1 level" })
-map("n", "J", "mzJ`z", { desc = "Shift J without moving cursor", noremap = false })
-map("n", "<BS>", "<C-^>", { desc = "Switch to prev file" })
-map("n", "<Leader>x", "<CMD>tabclose<CR>", { desc = "::tabclose" })
-map("n", "<Leader>bd", "<CMD>bd!<CR>", { desc = "::bd!" })
-
--- System clipboard
-map("n", "<C-c>", '"+yy', { desc = "Copy line to system clipboard" })
-map("x", "<C-c>", '"+y', { desc = "Copy selection to system clipboard" })
-map({ "n", "x" }, "<C-v>", '"+p', { desc = "Paste system clipboard" })
-map({ "i", "c" }, "<C-v>", "<C-r>+", { desc = "Paste system clipboard" })
-
--- Movement
-map("n", "<C-u>", "<C-u>zz", { desc = "Jump up half page" })
-map("n", "<C-d>", "<C-d>zz", { desc = "Jump down half page" })
-map("n", "n", "nzzzv", { desc = "Jump to next search result" })
-map("n", "N", "Nzzzv", { desc = "Jump to previous search result" })
-map("n", "<C-UP>", "<C-y>", { desc = "Scroll up" })
-map("n", "<C-DOWN>", "<C-e>", { desc = "Scroll down" })
-
--- Buffers
-map("n", "<Leader>bA", "<CMD>%y+<CR><CR>", { desc = "Copy whole buffer to clipboard" })
-map("n", "<Leader>bD", function() require("functions").DOS_to_Unix() end, { desc = "DOS to Unix" })
-map("n", "<Leader>bf", function() vim.lsp.buf.format() end, { desc = "format buffer" })
-map("n", "<Leader>bz", "<CMD>set foldlevel=2<CR>", { desc = "set foldlevel=2" })
-
--- LSP
-map("n", "<Leader>la", function() vim.lsp.buf.code_action() end, { desc = "code actions" })
-map("n", "<Leader>ld", function() vim.diagnostic.open_float() end, { desc = "show diagnostic" })
-map("n", "<Leader>lc", function() vim.diagnostic.setqflist() end, { desc = "qflist diagnostics" })
-map("n", "<Leader>lr", function() vim.lsp.buf.rename() end, { desc = "rename symbol" })
-map("n", "<Leader>lw", function() vim.lsp.buf.workspace_diagnostics() end, { desc = "workspace diagnostics" })
-map("n", "<Leader>li", "<CMD>checkhealth vim.lsp<CR>", { desc = "LSP info" })
-map("n", "gco", "o<Esc>Vcx<Esc><Cmd>normal gcc<CR>fxa<BS>", { desc = "Add comment below" })
-map("n", "gcO", "O<Esc>Vcx<Esc><Cmd>normal gcc<CR>fxa<BS>", { desc = "Add comment above" })
-
--- Packages
-map("n", "<leader>pu", function() vim.pack.update() end, { desc = "vim.pack.update()" })
-map("n", "<leader>pu", function() vim.pack.update() end, { desc = "vim.pack.update()" })
-map("n", "<leader>pi", function() vim.pack.update(nil, { offline = true }) end, { desc = "[offline] vim.pack.update()" })
-map("n", "<leader>pp", "<CMD>source $MYVIMRC<CR>", { desc = "source config" })
-map("n", "<leader>pa", "<CMD>edit $MYVIMRC<CR>", { desc = "edit ~/.config/nvim/init.lua" })
 --- }}}
 
 --- Highlights {{{
@@ -1822,7 +1457,5 @@ vim.filetype.add({
 })
 --- }}}
 
-require("options")
-require("autocmds")
 if vim.fn.has("win32") == 1 then require("windows") end
 if vim.g.neovide then require("neovide") end

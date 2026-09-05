@@ -18,4 +18,11 @@ function M.DOS_to_Unix()
 	vim.bo.fileformat = "unix"
 end
 
+---@param f function
+---@return nil
+function M.safely(f)
+	local success, status = pcall(f)
+	if success == false then vim.notify(status, vim.log.levels.ERROR) end
+end
+
 return M

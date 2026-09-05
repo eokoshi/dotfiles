@@ -2,7 +2,7 @@ local M = {}
 local Snacks = require("snacks")
 
 ---@param opts? snacks.toggle.Config
-function M.virtual_text(opts)
+function M.toggle_virtual_text(opts)
 	return Snacks.toggle.new({
 		id = "virtual_text",
 		name = "virtual text",
@@ -11,7 +11,7 @@ function M.virtual_text(opts)
 	}, opts)
 end
 
-function M.virtual_lines(opts)
+function M.toggle_virtual_lines(opts)
 	return Snacks.toggle.new({
 		id = "virtual_lines",
 		name = "virtual lines",
@@ -21,7 +21,7 @@ function M.virtual_lines(opts)
 end
 
 -- Toggle autosave for current buffer
-function M.autosave(opts)
+function M.toggle_autosave(opts)
 	return Snacks.toggle.new({
 		id = "autosave",
 		name = "autosave",
@@ -45,7 +45,7 @@ function M.autosave(opts)
 	}, opts)
 end
 
-function M.formatting(opts)
+function M.toggle_formatting(opts)
 	return Snacks.toggle.new({
 		id = "formatting",
 		name = "formatting",
@@ -54,7 +54,7 @@ function M.formatting(opts)
 	}, opts)
 end
 
-function M.completion(opts)
+function M.toggle_completion(opts)
 	return Snacks.toggle.new({
 		id = "completion",
 		name = "completion",
@@ -63,7 +63,7 @@ function M.completion(opts)
 	}, opts)
 end
 
-function M.math_virt(opts)
+function M.toggle_math_virt(opts)
 	return Snacks.toggle.new({
 		id = "math_virt",
 		name = "math virtual text",
@@ -75,13 +75,23 @@ function M.math_virt(opts)
 	}, opts)
 end
 
-function M.diagnostics(opts)
-	return Snacks.toggle.new({
-		id = "diagnostics",
-		name = "diagnostics",
-		get = function() return vim.diagnostic.is_enabled() end,
-		set = function(state) vim.diagnostic.config({ virtual_lines = state }) end,
-	}, opts)
+function M.pick_config_chezmoi()
+	if vim.fn.has("win32") == 1 then
+		vim.notify("Do not mess with config from Windows", vim.log.levels.ERROR)
+	else
+		Snacks.picker.files({
+			hidden = true,
+			ignored = true,
+			follow = true,
+			dirs = { os.getenv("HOME") .. "/.local/share/chezmoi" },
+		})
+	end
+end
+
+function M.pick_icon()
+	require("snacks.picker").icons({
+		custom_sources = { unicode = vim.fn.stdpath("config") .. "/unicode_chars.json" },
+	})
 end
 
 return M
