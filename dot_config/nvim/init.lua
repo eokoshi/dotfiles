@@ -252,68 +252,56 @@ local wipeout_cur = function()
 	local matches = MiniPick.get_picker_matches()
 	if matches ~= nil then vim.api.nvim_buf_delete(matches.current.bufnr, {}) end
 end
-map(
-	"n",
-	"vv",
-	function()
-		require("mini.pick").builtin.buffers({ include_current = false }, {
-			mappings = { wipeout = { char = "<C-d>", func = wipeout_cur } },
-			options = {
-				use_cache = true,
-			},
-			window = {
-				config = {
-					relative = "editor",
-					anchor = "NW",
-					row = 1,
-					col = 0,
-					width = 80,
-					height = 10,
-				},
-			},
-		})
-	end,
-	{ desc = "pick buffer" }
-)
+map("n", "vv", function()
+	require("mini.pick").builtin.buffers({ include_current = true }, {
+		mappings = { wipeout = { char = "<C-d>", func = wipeout_cur } },
+		options = { content_from_bottom = true, use_cache = true },
+		window = { config = { relative = "editor", height = 10 } },
+		-- window = { config = { relative = "editor", anchor = "NW", row = 1, col = 0, width = 80, height = 10 } },
+	})
+end, { desc = "pick buffer" })
 
-local MiniTabline = require("mini.tabline")
-MiniTabline.setup({
-	tabpage_section = "right",
-	format = function(buf_id, label)
-		local suffix = vim.bo[buf_id].modified and "○ " or ""
-		return MiniTabline.default_format(buf_id, label) .. suffix
-	end,
-})
-vim.api.nvim_set_hl(0, "TabLineFill", {
-	bg = nil,
-})
-vim.api.nvim_set_hl(0, "MiniTablineCurrent", {
-	fg = vim.api.nvim_get_hl(0, { name = "Purple" }).fg,
-	bg = vim.api.nvim_get_hl(0, { name = "StatusLine" }).bg,
-	italic = true,
-})
-vim.api.nvim_set_hl(0, "MiniTablineModifiedCurrent", {
-	fg = vim.api.nvim_get_hl(0, { name = "Purple" }).fg,
-	bg = vim.api.nvim_get_hl(0, { name = "StatusLine" }).bg,
-})
-vim.api.nvim_set_hl(0, "MiniTablineVisible", {
-	fg = vim.api.nvim_get_hl(0, { name = "Purple" }).fg,
-	bg = vim.api.nvim_get_hl(0, { name = "StatusLine" }).bg,
-	dim = true,
-})
-vim.api.nvim_set_hl(0, "MiniTablineModifiedVisible", {
-	fg = vim.api.nvim_get_hl(0, { name = "Purple" }).fg,
-	bg = vim.api.nvim_get_hl(0, { name = "StatusLine" }).bg,
-	dim = true,
-})
-vim.api.nvim_set_hl(0, "MiniTablineHidden", {
-	fg = vim.api.nvim_get_hl(0, { name = "Purple" }).fg,
-	dim = true,
-})
-vim.api.nvim_set_hl(0, "MiniTablineModifiedHidden", {
-	fg = vim.api.nvim_get_hl(0, { name = "Purple" }).fg,
-	dim = true,
-})
+-- local MiniTabline = require("mini.tabline")
+-- MiniTabline.setup({
+-- 	tabpage_section = "right",
+-- 	format = function(buf_id, label)
+-- 		local suffix = vim.bo[buf_id].modified and "○ " or ""
+-- 		return MiniTabline.default_format(buf_id, label) .. suffix
+-- 	end,
+-- })
+-- vim.api.nvim_set_hl(0, "TabLineFill", {
+-- 	bg = nil,
+-- })
+-- vim.api.nvim_set_hl(0, "MiniTablineCurrent", {
+-- 	fg = vim.api.nvim_get_hl(0, { name = "Purple" }).fg,
+-- 	bg = vim.api.nvim_get_hl(0, { name = "StatusLine" }).bg,
+-- 	dim = true,
+-- 	italic = true,
+-- })
+-- vim.api.nvim_set_hl(0, "MiniTablineModifiedCurrent", {
+-- 	fg = vim.api.nvim_get_hl(0, { name = "Purple" }).fg,
+-- 	bg = vim.api.nvim_get_hl(0, { name = "StatusLine" }).bg,
+-- 	dim = true,
+-- })
+-- vim.api.nvim_set_hl(0, "MiniTablineVisible", {
+-- 	fg = vim.api.nvim_get_hl(0, { name = "Ignore" }).fg,
+-- 	bg = vim.api.nvim_get_hl(0, { name = "StatusLine" }).bg,
+-- 	dim = true,
+-- 	italic = true,
+-- })
+-- vim.api.nvim_set_hl(0, "MiniTablineModifiedVisible", {
+-- 	fg = vim.api.nvim_get_hl(0, { name = "Purple" }).fg,
+-- 	bg = vim.api.nvim_get_hl(0, { name = "StatusLine" }).bg,
+-- 	dim = true,
+-- })
+-- vim.api.nvim_set_hl(0, "MiniTablineHidden", {
+-- 	fg = vim.api.nvim_get_hl(0, { name = "Purple" }).fg,
+-- 	dim = true,
+-- })
+-- vim.api.nvim_set_hl(0, "MiniTablineModifiedHidden", {
+-- 	fg = vim.api.nvim_get_hl(0, { name = "Purple" }).fg,
+-- 	dim = true,
+-- })
 
 local style
 if vim.env.TERM == "linux" then
