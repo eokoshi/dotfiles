@@ -24,18 +24,16 @@ vim.api.nvim_create_autocmd("PackChanged", {
 local gh = require("functions").gh
 vim.cmd("packadd nvim.undotree")
 vim.pack.add({
-	{ src = gh("MagicDuck/grug-far.nvim") },
-	{ src = gh("MeanderingProgrammer/render-markdown.nvim"), vim.version.range("*") },
-	{ src = gh("bngarren/checkmate.nvim") },
 	{ src = gh("akinsho/bufferline.nvim"), vim.version.range("*") },
 	{ src = gh("aserowy/tmux.nvim") },
 	{ src = gh("brenoprata10/nvim-highlight-colors") },
-	{ src = gh("esmuellert/codediff.nvim") },
+	{ src = gh("dmtrKovalenko/fff"), version = vim.version.range("*") },
 	{ src = gh("folke/flash.nvim") },
 	{ src = gh("folke/snacks.nvim") },
 	{ src = gh("folke/todo-comments.nvim") },
 	{ src = gh("folke/which-key.nvim") },
 	{ src = gh("igorlfs/nvim-dap-view"), version = vim.version.range("1.*") },
+	{ src = gh("jezda1337/nvim-html-css") },
 	{ src = gh("kylechui/nvim-surround") },
 	{ src = gh("lewis6991/gitsigns.nvim") },
 	{ src = gh("mason-org/mason-lspconfig.nvim") },
@@ -53,15 +51,16 @@ vim.pack.add({
 	{ src = gh("nvim-treesitter/nvim-treesitter-textobjects") },
 	{ src = gh("rafamadriz/friendly-snippets") },
 	{ src = gh("saghen/blink.cmp"), version = vim.version.range("1.*") },
-	{ src = gh("mistweaverco/kulala.nvim") },
 	{ src = gh("stevearc/conform.nvim") },
 	{ src = gh("windwp/nvim-autopairs") },
-	{ src = gh("jezda1337/nvim-html-css") },
-	{ src = gh("dmtrKovalenko/fff"), version = vim.version.range("*") },
+	{ src = gh("MagicDuck/grug-far.nvim") },
+	{ src = gh("esmuellert/codediff.nvim") },
+	{ src = gh("bngarren/checkmate.nvim") },
 	{ src = gh("obsidian-nvim/obsidian.nvim"), version = vim.version.range("*") },
-	{ src = gh("sainnhe/everforest") },
+	{ src = gh("mistweaverco/kulala.nvim") },
 	{ src = gh("mcauley-penney/techbase.nvim") },
 	{ src = gh("olimorris/onedarkpro.nvim") },
+	{ src = gh("sainnhe/everforest") },
 	{ src = gh("sainnhe/gruvbox-material") },
 	-- { src = gh("folke/tokyonight.nvim") },
 	-- { src = gh("gbprod/nord.nvim") },
@@ -170,7 +169,7 @@ local function get_diagnostics(bufnr)
 	if #res == 0 then return "" end
 	return " " .. table.concat(res, " ")
 end
-local function get_searchcount(bufnr)
+local function get_searchcount()
 	if vim.v.hlsearch == 0 then return "" end
 	local sc = vim.fn.searchcount()
 	return "[" .. sc.current .. "/" .. sc.total .. "]"
@@ -608,8 +607,9 @@ require("blink.cmp").setup({ ---@as blink.cmp.Config
 			},
 		},
 		menu = {
-			border = "none",
+			auto_show = true,
 			auto_show_delay_ms = 200,
+			border = "none",
 			draw = {
 				treesitter = { "lsp" },
 				columns = { { "kind_icon" }, { "label" }, { "source_name" } },
@@ -624,6 +624,29 @@ require("blink.cmp").setup({ ---@as blink.cmp.Config
 							end
 						end,
 						highlight = function(ctx) return ctx.kind_hl end,
+					},
+					-- customize the drawing of kind icons
+					kind_icon = {
+						text = function(ctx)
+							-- default kind icon
+							local icon = ctx.kind_icon
+							-- if LSP source, check for color derived from documentation
+							if ctx.item.source_name == "LSP" then
+								local color_item = require("nvim-highlight-colors").format(ctx.item.documentation, { kind = ctx.kind })
+								if color_item and color_item.abbr ~= "" then icon = color_item.abbr end
+							end
+							return icon .. ctx.icon_gap
+						end,
+						highlight = function(ctx)
+							-- default highlight group
+							local highlight = "BlinkCmpKind" .. ctx.kind
+							-- if LSP source, check for color derived from documentation
+							if ctx.item.source_name == "LSP" then
+								local color_item = require("nvim-highlight-colors").format(ctx.item.documentation, { kind = ctx.kind })
+								if color_item and color_item.abbr_hl_group then highlight = color_item.abbr_hl_group end
+							end
+							return highlight
+						end,
 					},
 				},
 			},
@@ -679,12 +702,18 @@ require("blink.cmp").setup({ ---@as blink.cmp.Config
 					preselect = false,
 				},
 			},
-			ghost_text = { enabled = false },
 		},
 	},
 })
 vim.api.nvim_set_hl(0, "BlinkCmpKindRipgrepRipgrep", { link = "BlinkCmpKindKey" })
 vim.api.nvim_set_hl(0, "BlinkCmpKindRipgrepGit", { link = "BlinkCmpKindKey" })
+--- }}}
+
+--- nvim-highlight-colors {{{
+require("nvim-highlight-colors").setup({
+	enable_hsl_without_function = false,
+	exclude_filetypes = { "bigfile", "checkhealth" },
+})
 --- }}}
 
 --- html-css {{{
@@ -933,7 +962,6 @@ toggles.formatting():map("<Leader>bF")
 toggles.completion():map("<Leader>bC")
 toggles.virtual_text():map("<Leader>uv")
 toggles.virtual_lines():map("<Leader>uV")
-toggles.math_virt():map("<Leader>um")
 Snacks.toggle.option("spell", { name = "spellcheck" }):map("<leader>us")
 Snacks.toggle.option("wrap", { name = "wrap" }):map("<leader>uw")
 Snacks.toggle.option("background", { off = "light", on = "dark", name = "dark background" }):map("<leader>ub")
@@ -983,29 +1011,15 @@ map(
 			layout = {
 				layout = {
 					box = "vertical",
-					backdrop = false,
-					width = 0.8,
-					min_width = 90,
-					height = 0.8,
-					min_height = 30,
-					border = "rounded",
-					title = "{title} {live} {flags}",
-					title_pos = "center",
 					{ win = "input", height = 1, border = "bottom" },
 					{ win = "list", border = "none" },
 					{
 						win = "preview",
-						title = "{preview}",
 						height = 0.8,
 						border = "top",
 						wo = { wrap = true, statuscolumn = "%l ", relativenumber = false, foldcolumn = "0" },
 					},
 				},
-			},
-			win = {
-				input = { keys = { ["<C-Space>"] = { "cycle_win", mode = { "i", "n" } } } },
-				list = { keys = { ["<C-Space>"] = { "cycle_win", mode = { "i", "n" } } } },
-				preview = { keys = { ["<C-Space>"] = { "cycle_win", mode = { "i", "n" } } } },
 			},
 		})
 	end,
@@ -1042,6 +1056,7 @@ require("which-key").setup({ ---@as wk.Opts
 		{ "<Leader>m", mode = "n", group = "Markdown" },
 		{ ">>", mode = "n", desc = "indent line" },
 		{ "<<", mode = "n", desc = "unindent line" },
+		{ "g<", mode = "n", desc = "message history" },
 	},
 	icons = {
 		separator = "",
@@ -1541,7 +1556,7 @@ local function setup_obsidian()
 			},
 		},
 		note_id_func = require("obsidian.builtin").title_id,
-		templates = { folder = "Templates" },
+		templates = { folder = "Templates" }, ---@type obsidian.config.TemplateOpts
 		picker = { name = "snacks.picker" },
 		daily_notes = {
 			folder = "Daily Notes",
@@ -1618,34 +1633,6 @@ vim.api.nvim_create_user_command("Kulala", function()
 	end
 	require("kulala").open()
 end, {})
---- }}}
-
---- render-markdown {{{
-require("render-markdown").setup({
-	ignore = function() return vim.bo.buftype ~= "" end,
-	heading = {
-		sign = false,
-		position = "inline",
-		icons = { "󰉫 ", "󰉬 ", "󰉭 ", "󰉮 ", "󰉯 ", "󰉰 " },
-	},
-	code = {
-		sign = false,
-		position = "right",
-		width = "block",
-		right_pad = 1,
-		min_width = 84,
-		border = "thick",
-		language_right = "█",
-	},
-	checkbox = { enabled = false },
-	latex = { enabled = false },
-	win_options = {
-		conceallevel = {
-			default = vim.api.nvim_get_option_value("conceallevel", {}),
-			rendered = 2,
-		},
-	},
-})
 --- }}}
 
 --- checkmate {{{
@@ -1757,11 +1744,6 @@ require("todo-comments").setup({
 })
 --- }}}
 
---- nvim-highlight-colors {{{
-require("nvim-highlight-colors").setup({
-	exclude_filetypes = { "bigfile" },
-})
---- }}}
 --- }}}
 
 --- Mappings {{{
@@ -1779,16 +1761,14 @@ map("n", "<Leader>x", "<CMD>tabclose<CR>", { desc = "::tabclose" })
 map("n", "<Leader>bd", "<CMD>bd!<CR>", { desc = "::bd!" })
 
 -- System clipboard
-map({ "n" }, "<C-c>", '"+yy', { desc = "Copy line to system clipboard" })
-map({ "v" }, "<C-c>", '"+y', { desc = "Copy selection to system clipboard" })
-map({ "n", "v" }, "<C-v>", '"+p', { desc = "Paste system clipboard" })
+map("n", "<C-c>", '"+yy', { desc = "Copy line to system clipboard" })
+map("x", "<C-c>", '"+y', { desc = "Copy selection to system clipboard" })
+map({ "n", "x" }, "<C-v>", '"+p', { desc = "Paste system clipboard" })
 map({ "i", "c" }, "<C-v>", "<C-r>+", { desc = "Paste system clipboard" })
 
 -- Movement
 map("n", "<C-u>", "<C-u>zz", { desc = "Jump up half page" })
 map("n", "<C-d>", "<C-d>zz", { desc = "Jump down half page" })
-map("n", "<C-o>", "<C-o>zz", { desc = "Jump to previous location" })
-map("n", "<C-i>", "<C-i>zz", { desc = "Jump to next location" })
 map("n", "n", "nzzzv", { desc = "Jump to next search result" })
 map("n", "N", "Nzzzv", { desc = "Jump to previous search result" })
 map("n", "<C-UP>", "<C-y>", { desc = "Scroll up" })
@@ -1814,7 +1794,8 @@ map("n", "gcO", "O<Esc>Vcx<Esc><Cmd>normal gcc<CR>fxa<BS>", { desc = "Add commen
 map("n", "<leader>pu", function() vim.pack.update() end, { desc = "vim.pack.update()" })
 map("n", "<leader>pu", function() vim.pack.update() end, { desc = "vim.pack.update()" })
 map("n", "<leader>pi", function() vim.pack.update(nil, { offline = true }) end, { desc = "[offline] vim.pack.update()" })
-map("n", "<leader>pp", function() vim.cmd("source " .. vim.fn.stdpath("config") .. "/init.lua") end, { desc = "source init.lua" })
+map("n", "<leader>pp", "<CMD>source $MYVIMRC<CR>", { desc = "source config" })
+map("n", "<leader>pa", "<CMD>edit $MYVIMRC<CR>", { desc = "edit ~/.config/nvim/init.lua" })
 --- }}}
 
 --- Highlights {{{

@@ -75,4 +75,13 @@ function M.math_virt(opts)
 	}, opts)
 end
 
+function M.diagnostics(opts)
+	return Snacks.toggle.new({
+		id = "diagnostics",
+		name = "diagnostics",
+		get = function() return vim.diagnostic.is_enabled() end,
+		set = function(state) vim.diagnostic.config({ virtual_lines = state }) end,
+	}, opts)
+end
+
 return M

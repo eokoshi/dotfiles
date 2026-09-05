@@ -17,7 +17,3 @@ map("n", "<leader>mca", "<cmd>Checkmate archive<CR>", { desc = "Archive checked/
 map("n", "<leader>mcv", "<cmd>Checkmate metadata select_value<CR>", { desc = "Update the value of a metadata tag under the cursor", buffer = true })
 map("n", "<leader>mc]", "<cmd>Checkmate metadata jump_next<CR>", { desc = "Move cursor to next metadata tag", buffer = true })
 map("n", "<leader>mc[", "<cmd>Checkmate metadata jump_previous<CR>", { desc = "Move cursor to previous metadata tag", buffer = true })
-map("n", "<Leader>mm", function() require("nabla").popup({ border = "solid" }) end, { desc = "Show math popup", buffer = true })
-
-local toggles = require("stuff.toggles")
-toggles.math_virt():map("<Leader>mv", { buffer = true })

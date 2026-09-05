@@ -1,3 +1,4 @@
-vim.lsp.config("html", {
+---@type vim.lsp.Config
+return {
 	filetypes = { "html", "templ", "htmldjango" },
-})
+}
