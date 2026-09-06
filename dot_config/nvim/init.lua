@@ -60,6 +60,7 @@ vim.diagnostic.config({
 	float = { border = "single", source = true },
 	signs = { text = { "", "", "", "󰌵" } },
 	severity_sort = true,
+	jump = { on_jump = function() vim.diagnostic.open_float() end },
 })
 
 require("vim._core.ui2").enable({
@@ -112,12 +113,19 @@ map("n", "<Leader>bz", "<CMD>set foldlevel=2<CR>", { desc = "set foldlevel=2" })
 -- LSP
 map("n", "<Leader>la", function() vim.lsp.buf.code_action() end, { desc = "code actions" })
 map("n", "<Leader>ld", function() vim.diagnostic.open_float() end, { desc = "show diagnostic" })
-map("n", "<Leader>lc", function() vim.diagnostic.setqflist() end, { desc = "qflist diagnostics" })
+map("n", "<Leader>lq", function()
+	local levels = vim.diagnostic.severity ---@as table
+	vim.ui.select(levels, { prompt = "diagnostic level" }, function(choice) vim.diagnostic.setqflist({ severity = choice }) end)
+end, { desc = "qflist diagnostics" })
 map("n", "<Leader>lr", function() vim.lsp.buf.rename() end, { desc = "rename symbol" })
+map("n", "<Leader>lw", function() vim.lsp.buf.workspace_diagnostics() end, { desc = "workspace diagnostics" })
 map("n", "<Leader>lw", function() vim.lsp.buf.workspace_diagnostics() end, { desc = "workspace diagnostics" })
 map("n", "<Leader>li", "<CMD>checkhealth vim.lsp<CR>", { desc = "LSP info" })
 map("n", "gco", "o<Esc>Vcx<Esc><Cmd>normal gcc<CR>fxa<BS>", { desc = "Add comment below" })
 map("n", "gcO", "O<Esc>Vcx<Esc><Cmd>normal gcc<CR>fxa<BS>", { desc = "Add comment above" })
+map("n", "gd", function() vim.lsp.buf.definition() end, { desc = "go to definition" })
+map("n", "gD", function() vim.lsp.buf.type_definition() end, { desc = "go to type definition" })
+map("n", "gO", function() vim.lsp.buf.document_symbol({ loclist = false }) end, { desc = "document_symbol" })
 
 -- Packages
 map("n", "<leader>pu", function() vim.pack.update() end, { desc = "vim.pack.update()" })
@@ -147,6 +155,7 @@ vim.api.nvim_create_autocmd("PackChanged", {
 
 local gh = require("functions").gh
 vim.cmd("packadd nvim.undotree")
+vim.cmd("packadd cfilter")
 vim.pack.add({
 	{ src = gh("aserowy/tmux.nvim") },
 	{ src = gh("brenoprata10/nvim-highlight-colors") },
@@ -255,53 +264,53 @@ end
 map("n", "vv", function()
 	require("mini.pick").builtin.buffers({ include_current = false }, {
 		mappings = { wipeout = { char = "<C-d>", func = wipeout_cur } },
-		options = { content_from_bottom = true, use_cache = true },
-		window = { config = { relative = "editor", height = 10 } },
-		-- window = { config = { relative = "editor", anchor = "NW", row = 1, col = 0, width = 80, height = 10 } },
+		options = { content_from_bottom = false, use_cache = true },
+		-- window = { config = { relative = "editor", height = 10 } },
+		window = { config = { relative = "editor", anchor = "NW", row = 1, col = 0, width = 80, height = 10 } },
 	})
 end, { desc = "pick buffer" })
 
--- local MiniTabline = require("mini.tabline")
--- MiniTabline.setup({
--- 	tabpage_section = "right",
--- 	format = function(buf_id, label)
--- 		local suffix = vim.bo[buf_id].modified and "○ " or ""
--- 		return MiniTabline.default_format(buf_id, label) .. suffix
--- 	end,
--- })
--- vim.api.nvim_set_hl(0, "TabLineFill", {
--- 	bg = nil,
--- })
--- vim.api.nvim_set_hl(0, "MiniTablineCurrent", {
--- 	fg = vim.api.nvim_get_hl(0, { name = "Purple" }).fg,
--- 	bg = vim.api.nvim_get_hl(0, { name = "StatusLine" }).bg,
--- 	dim = true,
--- 	italic = true,
--- })
--- vim.api.nvim_set_hl(0, "MiniTablineModifiedCurrent", {
--- 	fg = vim.api.nvim_get_hl(0, { name = "Purple" }).fg,
--- 	bg = vim.api.nvim_get_hl(0, { name = "StatusLine" }).bg,
--- 	dim = true,
--- })
--- vim.api.nvim_set_hl(0, "MiniTablineVisible", {
--- 	fg = vim.api.nvim_get_hl(0, { name = "Ignore" }).fg,
--- 	bg = vim.api.nvim_get_hl(0, { name = "StatusLine" }).bg,
--- 	dim = true,
--- 	italic = true,
--- })
--- vim.api.nvim_set_hl(0, "MiniTablineModifiedVisible", {
--- 	fg = vim.api.nvim_get_hl(0, { name = "Purple" }).fg,
--- 	bg = vim.api.nvim_get_hl(0, { name = "StatusLine" }).bg,
--- 	dim = true,
--- })
--- vim.api.nvim_set_hl(0, "MiniTablineHidden", {
--- 	fg = vim.api.nvim_get_hl(0, { name = "Purple" }).fg,
--- 	dim = true,
--- })
--- vim.api.nvim_set_hl(0, "MiniTablineModifiedHidden", {
--- 	fg = vim.api.nvim_get_hl(0, { name = "Purple" }).fg,
--- 	dim = true,
--- })
+local MiniTabline = require("mini.tabline")
+MiniTabline.setup({
+	tabpage_section = "right",
+	format = function(buf_id, label)
+		local suffix = vim.bo[buf_id].modified and "○ " or ""
+		return MiniTabline.default_format(buf_id, label) .. suffix
+	end,
+})
+vim.api.nvim_set_hl(0, "TabLineFill", {
+	bg = nil,
+})
+vim.api.nvim_set_hl(0, "MiniTablineCurrent", {
+	fg = vim.api.nvim_get_hl(0, { name = "Purple" }).fg,
+	bg = vim.api.nvim_get_hl(0, { name = "StatusLine" }).bg,
+	dim = true,
+	italic = true,
+})
+vim.api.nvim_set_hl(0, "MiniTablineModifiedCurrent", {
+	fg = vim.api.nvim_get_hl(0, { name = "Purple" }).fg,
+	bg = vim.api.nvim_get_hl(0, { name = "StatusLine" }).bg,
+	dim = true,
+})
+vim.api.nvim_set_hl(0, "MiniTablineVisible", {
+	fg = vim.api.nvim_get_hl(0, { name = "Ignore" }).fg,
+	bg = vim.api.nvim_get_hl(0, { name = "StatusLine" }).bg,
+	dim = true,
+	italic = true,
+})
+vim.api.nvim_set_hl(0, "MiniTablineModifiedVisible", {
+	fg = vim.api.nvim_get_hl(0, { name = "Purple" }).fg,
+	bg = vim.api.nvim_get_hl(0, { name = "StatusLine" }).bg,
+	dim = true,
+})
+vim.api.nvim_set_hl(0, "MiniTablineHidden", {
+	fg = vim.api.nvim_get_hl(0, { name = "Purple" }).fg,
+	dim = true,
+})
+vim.api.nvim_set_hl(0, "MiniTablineModifiedHidden", {
+	fg = vim.api.nvim_get_hl(0, { name = "Purple" }).fg,
+	dim = true,
+})
 
 local style
 if vim.env.TERM == "linux" then
@@ -798,13 +807,6 @@ map("n", "<Leader>uZ", function() Snacks.zen.zen() end, { desc = "Zen mode" })
 map("n", "<Leader>un", function() Snacks.notifier.hide() end, { desc = "dismiss all notifications" })
 map("n", "<Leader>gl", function() Snacks.picker.git_log_file() end, { desc = "Log file" })
 map("n", "<Leader>gg", function() Snacks.lazygit() end, { desc = "Lazygit" })
-map("n", "<Leader>llr", function() Snacks.picker.lsp_references() end, { nowait = true, desc = "references" })
-map("n", "<Leader>lls", function() Snacks.picker.lsp_symbols() end, { desc = "LSP symbols" })
-map("n", "<Leader>llw", function() Snacks.picker.lsp_workspace_symbols() end, { desc = "LSP workspace Symbols" })
-map("n", "<Leader>lli", function() Snacks.picker.lsp_implementations() end, { desc = "Go to Implementation" })
-map("n", "<Leader>llt", function() Snacks.picker.lsp_type_definitions() end, { desc = "Go to type definition" })
-map("n", "gd", function() Snacks.picker.lsp_definitions() end, { desc = "Go to definition" })
-map("n", "gD", function() Snacks.picker.lsp_declarations() end, { desc = "Go to Declaration" })
 local snacksutils = require("plugins.snacks_utils")
 snacksutils.toggle_autosave():map("<Leader>ba")
 snacksutils.toggle_formatting():map("<Leader>bF")

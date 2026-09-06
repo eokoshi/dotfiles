@@ -1,5 +1,6 @@
-vim.opt_local.shiftwidth = 4
+vim.opt_local.shiftwidth = 0
 vim.opt_local.tabstop = 4
+vim.opt_local.expandtab = true
 
 vim.b.default_repl = "ipython"
 local is_django = vim.fs.root(0, "manage.py") ~= nil
