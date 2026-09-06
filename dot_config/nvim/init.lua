@@ -253,7 +253,7 @@ local wipeout_cur = function()
 	if matches ~= nil then vim.api.nvim_buf_delete(matches.current.bufnr, {}) end
 end
 map("n", "vv", function()
-	require("mini.pick").builtin.buffers({ include_current = true }, {
+	require("mini.pick").builtin.buffers({ include_current = false }, {
 		mappings = { wipeout = { char = "<C-d>", func = wipeout_cur } },
 		options = { content_from_bottom = true, use_cache = true },
 		window = { config = { relative = "editor", height = 10 } },
@@ -563,11 +563,12 @@ require("nvim-highlight-colors").setup({
 --- }}}
 
 --- html-css {{{
+
 vim.api.nvim_create_autocmd("FileType", {
 	pattern = { "html", "htmldjango" },
 	once = true,
 	callback = function()
-		require("html-css").setup({
+		require("html-css").setup({ ---@as Config
 			enable_on = { "html", "htmldjango" },
 			handlers = {
 				definition = {
@@ -598,6 +599,7 @@ vim.api.nvim_create_autocmd("FileType", {
 		})
 	end,
 })
+
 --- }}}
 
 --- snacks {{{
@@ -993,7 +995,7 @@ require("mason-lspconfig").setup()
 --stylua: ignore
 local languages = {
 	"bash", "c", "css", "diff", "dockerfile", "git_config", "gitignore", "json", "lua", "latex",
-	"luadoc", "markdown", "markdown_inline", "python", "query", "readline", "ssh_config",
+	"luadoc", "markdown", "markdown_inline", "python", "query", "readline", "ssh_config", "html", "htmldjango",
 	"toml", "typescript", "vim", "vimdoc", "yaml",
 }
 require("nvim-treesitter").install(languages)

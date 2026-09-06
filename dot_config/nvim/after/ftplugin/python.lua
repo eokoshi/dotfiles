@@ -1,6 +1,10 @@
 vim.opt_local.shiftwidth = 4
 vim.opt_local.tabstop = 4
 
+vim.b.default_repl = "ipython"
+local is_django = vim.fs.root(0, "manage.py") ~= nil
+if is_django then vim.b.default_repl = "python manage.py shell" end
+
 local map = require("functions").map
 local bufnr = vim.api.nvim_get_current_buf()
 if vim.bo[bufnr].buftype == "" then
@@ -228,7 +232,7 @@ if vim.bo[bufnr].buftype == "" then
 			if win == -1 then open_python_term(vim.b.python_term.buf) end
 			return vim.b.python_term.chan
 		end
-		local command = vim.fn.input("Enter CLI command to start REPL: ", "ipython")
+		local command = vim.fn.input("Enter CLI command to start REPL: ", vim.b.default_repl)
 		return start_python_term(command)
 	end
 
@@ -353,6 +357,9 @@ if vim.bo[bufnr].buftype == "" then
 		end
 	end
 
-	map({ "n", "x" }, "<CR>", send_to_python_term, { desc = "Send selection/line to ipython terminal", buffer = true })
+	map({ "n", "x" }, "<CR>", send_to_python_term, { desc = "Send to REPL", buffer = true })
+	map("n", "<leader>bx", function()
+		if vim.b.python_term.buf ~= nil then vim.api.nvim_buf_delete(vim.b.python_term.buf, { force = true }) end
+	end, { desc = "Close REPL", buffer = true })
 	--- }}}
 end
