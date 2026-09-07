@@ -1,3 +1,7 @@
+-- vim.api.nvim_create_autocmd({ "ModeChanged" }, {
+-- 	group = vim.api.nvim_create_augroup("statusline", { clear = true }),
+-- 	callback = function() vim.cmd("redrawstatus") end,
+-- })
 local function get_macro()
 	local reg = vim.fn.reg_recording()
 	if reg == "" then return "" end

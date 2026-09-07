@@ -38,6 +38,7 @@ vim.o.sessionoptions = "buffers,curdir,tabpages,winsize,help,globals,folds,resiz
 vim.o.shiftround = true -- Round indent
 vim.o.shiftwidth = 0 -- Size of an indent, 0 to inherit from tabstop
 vim.o.shortmess = "aoOsIcCF"
+vim.o.showcmd = false
 vim.o.showmode = false -- Dont show mode since we have a statusline
 vim.o.sidescrolloff = 8 -- Columns of context
 vim.o.signcolumn = "yes" -- Always show the signcolumn, otherwise it would shift the text each time
@@ -1026,6 +1027,10 @@ require("treesitter-context").setup({
 	max_lines = 5,
 	multiline_threshold = 1,
 	mode = "topline",
+	on_attach = function()
+		vim.api.nvim_set_hl(0, "TreesitterContext", { bg = "#000000", blend = 90 })
+		return true
+	end,
 })
 
 require("nvim-treesitter-textobjects").setup({

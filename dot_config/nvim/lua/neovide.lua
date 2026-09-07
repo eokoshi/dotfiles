@@ -12,8 +12,6 @@ vim.api.nvim_create_autocmd("ColorScheme", {
 		local fg = hl("Comment").fg or hl("Comment").guifg
 		local bg = hl("Normal").bg or hl("Normal").guibg
 
-		vim.api.nvim_set_hl(0, "TreesitterContext", { bg = bg, blend = 90 })
-
 		vim.g.neovide_title_text_color = string.format("%.6x", fg)
 		vim.g.neovide_title_background_color = string.format("%.6x", bg)
 	end,
