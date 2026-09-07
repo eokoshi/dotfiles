@@ -8,11 +8,11 @@ scrolloff = 4
 prepend_previewers = [
   { url = "*.ipynb", run = 'piper -- nbpreview --no-paging --nerd-font --decorated --no-files --unicode --color --images --color-system=standard --theme=ansi_dark "$1"' },
   { url = "*.h5", run = 'piper -- h5ls "$1"' },
-  { url = "*.csv", run = 'piper -- echo "N rows: " && xan count "$1" && echo "" && xan flatten "$1" -l 1 && echo "" && xan stats "$1" | xan view -s type,count,mean' }
+  { url = "*.csv", run = 'piper -- echo "N rows: " && xan count "$1" && echo "" && xan flatten "$1" -l 1 && echo "" && xan stats "$1" | xan view -s type,count,mean' },
 ]
 prepend_fetchers = [
   { url = "*", run = "git", group = "git" },
-  { url = "*/", run = "git", group = "git" }
+  { url = "*/", run = "git", group = "git" },
 ]
 
 [opener]
@@ -20,13 +20,23 @@ edit = [
   { run = "$EDITOR %s", block = true, desc = "$EDITOR", for = "unix" },
   { run = "%EDITOR% %s", block = true, desc = "%EDITOR%", for = "windows" },
 ]
-open = [
+csvlens = [
   { run = "csvlens --colorful %s", block = true, for = "unix", desc = "csvlens" },
+]
+open = [
+  { run = "xdg-open %s1", desc = "xdg-open" },
+]
+view = [
+  { run = "chafa %s", block = true, for = "unix", desc = "chafa" },
 ]
 
 [open]
 prepend_rules = [
-  { url = "*.csv", use = ["open", "edit"] },
+  { url = "*.csv", use = ["csvlens", "edit"] },
+  { mime = "image/*", use = ["view"] },
+]
+append_rules = [
+  { url = "*", use = ["xdg-open"] },
 ]
 
 [preview]

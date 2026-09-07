@@ -1,5 +1,5 @@
 ---@diagnostic disable: missing-fields
-local map = require("functions").map
+local map = vim.keymap.set
 local icons = require("stuff.icons")
 vim.g.mapleader = " "
 vim.g.maplocalleader = ","
@@ -34,11 +34,11 @@ vim.o.number = true
 vim.o.numberwidth = 2
 vim.o.ruler = false -- Disable the default ruler
 vim.o.scrolloff = 10 -- keep n lines above below cursor in view
+vim.o.smoothscroll = true -- only affects windows with wrap=true, treat wrapped lines as lines when scrolling
 vim.o.sessionoptions = "buffers,curdir,tabpages,winsize,help,globals,folds,resize"
 vim.o.shiftround = true -- Round indent
 vim.o.shiftwidth = 0 -- Size of an indent, 0 to inherit from tabstop
 vim.o.shortmess = "aoOsIcCF"
-vim.o.showbreak = "⌊ "
 vim.o.showmode = false -- Dont show mode since we have a statusline
 vim.o.sidescrolloff = 8 -- Columns of context
 vim.o.signcolumn = "yes" -- Always show the signcolumn, otherwise it would shift the text each time
@@ -49,6 +49,7 @@ vim.o.splitkeep = "screen"
 vim.o.splitright = true -- Put new windows right of current
 vim.o.swapfile = false
 vim.o.tabstop = 2 -- Number of spaces tabs count for
+vim.o.timeoutlen = 500
 vim.o.undofile = true
 vim.o.virtualedit = "block" -- Allow cursor to move where there is no text in visual block mode
 vim.o.winborder = "rounded"
@@ -82,13 +83,12 @@ map("n", "<Leader>q", "<CMD>q<CR>", { desc = "Quit window" })
 map("n", "<Leader>Q", "<CMD>qa<CR>", { desc = "Quit nvim" })
 map("n", "<Leader>w", "<CMD>w<CR>", { desc = "Save buffer" })
 map("n", "<Leader>.", "<CMD>cd %:h<CR>", { desc = "cd here" })
-map("n", "<Leader><space>", "<ESC>", { desc = "" })
-map("t", "<ESC>", "<C-\\><C-n>", { desc = "Escape terminal mode" })
 map("i", "<S-Tab>", "<C-d>", { desc = "Unindent 1 level" })
-map("n", "J", "mzJ`z", { desc = "Shift J without moving cursor", noremap = false })
+map("n", "J", "mzJ`z", { desc = "Shift J without moving cursor", remap = true })
 map("n", "<BS>", "<C-^>", { desc = "Switch to prev file" })
 map("n", "<Leader>x", "<CMD>tabclose<CR>", { desc = "::tabclose" })
 map("n", "<Leader>bd", "<CMD>bd!<CR>", { desc = "::bd!" })
+map("t", "<ESC><ESC>", "<C-\\><C-n>", { desc = "Escape terminal mode" })
 
 -- System clipboard
 map("n", "<C-c>", '"+yy', { desc = "Copy line to system clipboard" })
@@ -157,7 +157,6 @@ local gh = require("functions").gh
 vim.cmd("packadd nvim.undotree")
 vim.cmd("packadd cfilter")
 vim.pack.add({
-	{ src = gh("aserowy/tmux.nvim") },
 	{ src = gh("brenoprata10/nvim-highlight-colors") },
 	{ src = gh("dmtrKovalenko/fff"), version = vim.version.range("*") },
 	{ src = gh("folke/flash.nvim") },
@@ -178,6 +177,7 @@ vim.pack.add({
 	{ src = gh("nvim-treesitter/nvim-treesitter") },
 	{ src = gh("nvim-treesitter/nvim-treesitter-context") },
 	{ src = gh("nvim-treesitter/nvim-treesitter-textobjects") },
+	{ src = gh("smart-splits-nvim/smart-splits.nvim") },
 	{ src = gh("rafamadriz/friendly-snippets") },
 	{ src = gh("saghen/blink.cmp"), version = vim.version.range("1.*") },
 	{ src = gh("stevearc/conform.nvim") },
@@ -1093,7 +1093,6 @@ map({ "n", "x", "o" }, "T", ts_repeat_move.builtin_T_expr, { expr = true })
 --- DAP --- {{{
 require("dap-view").setup(vim.tbl_deep_extend("force", require("dap-view.config").config, {
 	winbar = {
-		sections = { "watches", "scopes", "exceptions", "breakpoints", "threads", "repl" },
 		default_section = "scopes",
 	},
 	windows = {
@@ -1103,37 +1102,40 @@ require("dap-view").setup(vim.tbl_deep_extend("force", require("dap-view.config"
 	},
 	auto_toggle = "keep_terminal",
 }))
+map("n", "<Leader>dh", function() require("dap.ui.widgets").hover() end, { desc = "Debugger Hover" })
+map("n", "<Leader>de", function() require("dap-view").show_view("console") end, { desc = "Show Console" })
+map("n", "<Leader>du", function() require("dap-view").toggle(true) end, { desc = "Toggle Debugger UI" })
+
 require("dap-python").setup("uv")
+map("n", "<Leader>dtc", function() require("dap-python").test_class() end, { desc = "Run test class" })
+map("n", "<Leader>dtm", function() require("dap-python").test_method() end, { desc = "Run test method" })
 local dap = require("dap")
 dap.defaults.fallback.stepping_granularity = "line"
 dap.defaults.fallback.auto_continue_if_many_stopped = false
 --stylua: ignore start
 map("n", "<F5>", function() dap.continue() end, { desc = "Debugger: Start" })
+map("n", "<Leader>dc", function() dap.continue() end, { desc = "Start/Continue (F5)" })
 map("n", "<F6>", function() dap.pause() end, { desc = "Debugger: Pause" })
+map("n", "<Leader>dp", function() dap.pause() end, { desc = "Pause (F6)" })
 map("n", "<F9>", function() dap.toggle_breakpoint() end, { desc = "Debugger: Toggle Breakpoint" })
 map("n", "<F10>", function() dap.step_over() end, { desc = "Debugger: Step Over" })
+map("n", "<Leader>do", function() dap.step_over() end, { desc = "Step Over (F10)" })
 map("n", "<F11>", function() dap.step_into() end, { desc = "Debugger: Step Into" })
+map("n", "<Leader>di", function() dap.step_into() end, { desc = "Step Into (F11)" })
 map("n", "<F17>", function() dap.terminate() end, { desc = "Debugger: Stop" })
+map("n", "<Leader>dQ", function() dap.terminate() end, { desc = "Terminate Session (S-F5)" })
 map("n", "<F21>", function() vim.ui.input({ prompt = "Condition: " }, function(cond) if cond then dap.set_breakpoint(cond) end end) end, { desc = "Debugger: Conditional Breakpoint" })
 map("n", "<F23>", function() dap.step_out() end, { desc = "Debugger: Step Out" })
 map("n", "<F29>", function() dap.restart_frame() end, { desc = "Debugger: Restart" })
+map("n", "<Leader>dr", function() dap.restart_frame() end, { desc = "Restart (C-F5)" })
 map("n", "<Leader>db", function() dap.toggle_breakpoint() end, { desc = "Toggle Breakpoint (F9)" })
 map("n", "<Leader>dB", function() dap.clear_breakpoints() end, { desc = "Clear Breakpoints" })
-map("n", "<Leader>dc", function() dap.continue() end, { desc = "Start/Continue (F5)" })
-map("n", "<Leader>dh", function() require("dap.ui.widgets").hover() end, { desc = "Debugger Hover" })
-map("n", "<Leader>di", function() dap.step_into() end, { desc = "Step Into (F11)" })
 map("n", "<Leader>dj", "<CMD>e $PWD/.vscode/launch.json<CR><CMD>w ++p<CR>", { desc = "Open workspace DAP config" })
-map("n", "<Leader>do", function() dap.step_over() end, { desc = "Step Over (F10)" })
 map("n", "<Leader>dO", function() dap.step_out() end, { desc = "Step Out (S-F11)" })
-map("n", "<Leader>dp", function() dap.pause() end, { desc = "Pause (F6)" })
 map("n", "<Leader>dq", function() dap.close() end, { desc = "Close Session" })
-map("n", "<Leader>dQ", function() dap.terminate() end, { desc = "Terminate Session (S-F5)" })
-map("n", "<Leader>dr", function() dap.restart_frame() end, { desc = "Restart (C-F5)" })
 map("n", "<Leader>dR", function() dap.repl.toggle() end, { desc = "Toggle REPL" })
-map("n", "<Leader>dt", function() require("dap-view").show_view("console") end, { desc = "Show Console" })
 map("n", "<Leader>ds", function() dap.run_to_cursor() end, { desc = "Run To Cursor" })
 map("n", "<Leader>dC", function() vim.ui.input({ prompt = "Condition: " }, function(cond) if cond then dap.set_breakpoint(cond) end end) end, { desc = "Conditional Breakpoint (S-F9)" })
-map("n", "<Leader>du", function() require("dap-view").toggle(true) end, { desc = "Toggle Debugger UI" })
 vim.fn.sign_define("DapBreakpoint", { text = icons.debug.breakpoint, texthl = "DiagnosticSignHint" })
 vim.fn.sign_define("DapBreakpointCondition", { text = icons.debug.conditional, texthl = "DiagnosticSignInfo" })
 vim.fn.sign_define("DapLogPoint", { text = icons.debug.logpoint, texthl = "DiagnosticSignOk" })
@@ -1142,15 +1144,16 @@ vim.fn.sign_define("DapBreakpointRejected", { text = icons.debug.rejected, texth
 --stylua: ignore end
 --- }}}
 
---- tmux {{{
-if vim.env.TMUX ~= nil then
-	require("tmux").setup({ copy_sync = { sync_registers_keymap_reg = false } })
-else
-	map("n", "<C-h>", "<C-w>h", { desc = "Move to window left" })
-	map("n", "<C-j>", "<C-w>j", { desc = "Move to window above" })
-	map("n", "<C-k>", "<C-w>k", { desc = "Move to window below" })
-	map("n", "<C-l>", "<C-w>l", { desc = "Move to window right" })
-end
+--- smart-splits {{{
+require("smart-splits").setup({})
+vim.keymap.set("n", "<A-h>", require("smart-splits").resize_left)
+vim.keymap.set("n", "<A-j>", require("smart-splits").resize_down)
+vim.keymap.set("n", "<A-k>", require("smart-splits").resize_up)
+vim.keymap.set("n", "<A-l>", require("smart-splits").resize_right)
+vim.keymap.set("n", "<C-h>", require("smart-splits").move_cursor_left)
+vim.keymap.set("n", "<C-j>", require("smart-splits").move_cursor_down)
+vim.keymap.set("n", "<C-k>", require("smart-splits").move_cursor_up)
+vim.keymap.set("n", "<C-l>", require("smart-splits").move_cursor_right)
 --- }}}
 
 --- gitsigns {{{

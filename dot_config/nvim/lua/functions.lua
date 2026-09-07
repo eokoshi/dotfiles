@@ -5,7 +5,6 @@ function M.gh(x) return "https://github.com/" .. x end
 -- Set keymaps
 function M.map(mode, lhs, rhs, opts)
 	-- set default value if not specify
-	if opts.noremap == "" then opts.noremap = true end
 	if opts.silent == "" then opts.silent = true end
 
 	vim.keymap.set(mode, lhs, rhs, opts)
