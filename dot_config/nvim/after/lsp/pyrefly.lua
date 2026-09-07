@@ -2,7 +2,7 @@
 return {
 	settings = {
 		python = {
-			commentFoldingRanges = true,
+			commentFoldingRanges = true, -- just doesnt work right now 20260908
 			analysis = {
 				completeFunctionParens = false,
 				showHoverGoToLinks = false,
@@ -12,4 +12,8 @@ return {
 			},
 		},
 	},
+	-- folding is broken, maybe because of custom 'kinds'?
+	on_attach = function(client, bufnr)
+		if client.server_capabilities then client.server_capabilities.foldingRangeProvider = false end
+	end,
 }

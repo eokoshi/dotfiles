@@ -22,6 +22,7 @@ vim.o.expandtab = false -- Use spaces instead of tabs when true
 vim.o.fileencodings = "ucs-bom,utf-8,default,cp932,latin1"
 vim.o.fillchars = "foldopen:,foldclose:,fold:,foldsep: ,eob: "
 vim.o.foldlevelstart = 99
+vim.o.foldtext = ""
 vim.o.foldmethod = "indent"
 vim.o.formatlistpat = "^\\s*\\d\\+[\\.\\,\\)\\]\\}] \\|^\\s*[\\-\\*] "
 vim.o.formatoptions = "lnjq"
@@ -1027,9 +1028,8 @@ vim.api.nvim_create_autocmd("FileType", {
 		local filetype = args.match
 		local language = vim.treesitter.language.get_lang(filetype) or filetype
 		if not vim.treesitter.language.add(language) then return end
-		vim.opt_local.foldexpr = "v:lua.vim.treesitter.foldexpr()"
 		vim.opt_local.foldmethod = "expr"
-		vim.bo[buf].indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
+		vim.opt_local.foldexpr = "v:lua.vim.treesitter.foldexpr()"
 		vim.treesitter.start(buf, language)
 	end,
 })
@@ -1040,7 +1040,7 @@ require("treesitter-context").setup({
 	multiline_threshold = 1,
 	mode = "topline",
 	on_attach = function()
-		vim.api.nvim_set_hl(0, "TreesitterContext", { bg = vim.api.nvim_get_hl(0, { name = "StatusLine" }).bg, blend = 90 })
+		vim.api.nvim_set_hl(0, "TreesitterContext", { blend = 90, update = true })
 		return true
 	end,
 })

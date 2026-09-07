@@ -236,9 +236,16 @@ vim.api.nvim_create_autocmd("LspAttach", {
 	group = lsp_group,
 	callback = function(args)
 		local client = vim.lsp.get_client_by_id(args.data.client_id)
-		if client and client:supports_method("textDocument/foldingRange") then
-			vim.opt_local.foldexpr = "v:lua.vim.lsp.foldexpr()"
+		if
+			client
+			and client:supports_method("textDocument/foldingRange")
+			and client.server_capabilities
+			and client.server_capabilities.foldingRangeProvider
+			and client.server_info
+			and client.server_info.name ~= "pyrefly-lsp"
+		then
 			vim.opt_local.foldmethod = "expr"
+			vim.opt_local.foldexpr = "v:lua.vim.lsp.foldexpr()"
 			vim.opt_local.foldtext = "v:lua.vim.lsp.foldtext()"
 		end
 	end,
