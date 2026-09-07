@@ -1,6 +1,7 @@
 ---@diagnostic disable: missing-fields
 local map = vim.keymap.set
 local icons = require("stuff.icons")
+local init_augroup = vim.api.nvim_create_augroup("init", { clear = true })
 vim.g.mapleader = " "
 vim.g.maplocalleader = ","
 
@@ -71,7 +72,6 @@ require("vim._core.ui2").enable({
 		---@type string|table<string, 'cmd'|'msg'|'pager'> Default message target or table mapping |ui-messages| kinds and triggers to a target.
 		target = "msg",
 		targets = {
-			list_cmd = "cmd",
 			shell_err = "cmd",
 			shell_out = "cmd",
 		},
@@ -89,13 +89,14 @@ map("n", "<Leader>Q", "<CMD>qa<CR>", { desc = "Quit nvim" })
 map("n", "<Leader>w", "<CMD>w<CR>", { desc = "Save buffer" })
 map("n", "<Leader>.", "<CMD>cd %:h<CR>", { desc = "cd here" })
 map("i", "<S-Tab>", "<C-d>", { desc = "Unindent 1 level" })
-map("n", "J", "mzJ`z", { desc = "Shift J without moving cursor", remap = true, silent = true })
+map("n", "J", "mzJ`z", { desc = "Shift J without moving cursor" })
 map("n", "<BS>", "<C-^>", { desc = "Switch to prev file" })
 map("n", "<Leader>x", "<CMD>tabclose<CR>", { desc = "::tabclose" })
 map("n", "<Leader>bd", "<CMD>bd!<CR>", { desc = "::bd!" })
 map("t", "<ESC><ESC>", "<C-\\><C-n>", { desc = "Escape terminal mode" })
 vim.keymap.set("n", "<C-\\>", function() vim.fn.feedkeys("gcc") end)
 vim.keymap.set("x", "<C-\\>", function() vim.fn.feedkeys("gc") end)
+vim.keymap.set("n", "gK", function() require("functions").keywordprg() end, { desc = "keywordprg" })
 
 -- System clipboard
 map("n", "<C-c>", '"+yy', { desc = "Copy line to system clipboard" })
@@ -145,6 +146,7 @@ map("n", "<leader>pa", "<CMD>edit ~/.local/share/chezmoi/dot_config/nvim/init.lu
 
 --- Plugins {{{
 vim.api.nvim_create_autocmd("PackChanged", {
+	group = init_augroup,
 	callback = function(ev)
 		local name, kind = ev.data.spec.name, ev.data.kind
 		if name == "nvim-treesitter" and kind == "update" then
@@ -278,38 +280,45 @@ MiniTabline.setup({
 		return MiniTabline.default_format(buf_id, label) .. suffix
 	end,
 })
-vim.api.nvim_set_hl(0, "TabLineFill", {
-	bg = nil,
-})
-vim.api.nvim_set_hl(0, "MiniTablineCurrent", {
-	fg = vim.api.nvim_get_hl(0, { name = "Purple" }).fg,
-	bg = vim.api.nvim_get_hl(0, { name = "StatusLine" }).bg,
-	dim = true,
-	italic = true,
-})
-vim.api.nvim_set_hl(0, "MiniTablineModifiedCurrent", {
-	fg = vim.api.nvim_get_hl(0, { name = "Purple" }).fg,
-	bg = vim.api.nvim_get_hl(0, { name = "StatusLine" }).bg,
-	dim = true,
-})
-vim.api.nvim_set_hl(0, "MiniTablineVisible", {
-	fg = vim.api.nvim_get_hl(0, { name = "Ignore" }).fg,
-	bg = vim.api.nvim_get_hl(0, { name = "StatusLine" }).bg,
-	dim = true,
-	italic = true,
-})
-vim.api.nvim_set_hl(0, "MiniTablineModifiedVisible", {
-	fg = vim.api.nvim_get_hl(0, { name = "Purple" }).fg,
-	bg = vim.api.nvim_get_hl(0, { name = "StatusLine" }).bg,
-	dim = true,
-})
-vim.api.nvim_set_hl(0, "MiniTablineHidden", {
-	fg = vim.api.nvim_get_hl(0, { name = "Purple" }).fg,
-	dim = true,
-})
-vim.api.nvim_set_hl(0, "MiniTablineModifiedHidden", {
-	fg = vim.api.nvim_get_hl(0, { name = "Purple" }).fg,
-	dim = true,
+local function tabline_colors()
+	vim.api.nvim_set_hl(0, "TabLineFill", {
+		bg = nil,
+	})
+	vim.api.nvim_set_hl(0, "MiniTablineCurrent", {
+		fg = vim.api.nvim_get_hl(0, { name = "Number" }).fg,
+		bg = vim.api.nvim_get_hl(0, { name = "StatusLine" }).bg,
+		dim = true,
+		italic = true,
+	})
+	vim.api.nvim_set_hl(0, "MiniTablineModifiedCurrent", {
+		fg = vim.api.nvim_get_hl(0, { name = "Number" }).fg,
+		bg = vim.api.nvim_get_hl(0, { name = "StatusLine" }).bg,
+		dim = true,
+	})
+	vim.api.nvim_set_hl(0, "MiniTablineVisible", {
+		fg = vim.api.nvim_get_hl(0, { name = "Ignore" }).fg,
+		bg = vim.api.nvim_get_hl(0, { name = "StatusLine" }).bg,
+		dim = true,
+		italic = true,
+	})
+	vim.api.nvim_set_hl(0, "MiniTablineModifiedVisible", {
+		fg = vim.api.nvim_get_hl(0, { name = "Number" }).fg,
+		bg = vim.api.nvim_get_hl(0, { name = "StatusLine" }).bg,
+		dim = true,
+	})
+	vim.api.nvim_set_hl(0, "MiniTablineHidden", {
+		fg = vim.api.nvim_get_hl(0, { name = "Number" }).fg,
+		dim = true,
+	})
+	vim.api.nvim_set_hl(0, "MiniTablineModifiedHidden", {
+		fg = vim.api.nvim_get_hl(0, { name = "Number" }).fg,
+		dim = true,
+	})
+end
+tabline_colors()
+vim.api.nvim_create_autocmd("ColorScheme", {
+	group = init_augroup,
+	callback = tabline_colors,
 })
 
 local style
@@ -368,6 +377,7 @@ map("n", "<leader>e", function()
 	MiniFiles.reveal_cwd()
 end, { desc = "MiniFiles" })
 vim.api.nvim_create_autocmd("User", {
+	group = init_augroup,
 	pattern = "MiniFilesBufferCreate",
 	callback = function(args)
 		local b = args.data.buf_id
@@ -581,6 +591,7 @@ require("nvim-highlight-colors").setup({
 --- html-css {{{
 
 vim.api.nvim_create_autocmd("FileType", {
+	group = init_augroup,
 	pattern = { "html", "htmldjango" },
 	once = true,
 	callback = function()
@@ -841,6 +852,7 @@ map(
 	{ desc = "Notification history" }
 )
 vim.api.nvim_create_autocmd("User", {
+	group = init_augroup,
 	pattern = "MiniFilesActionRename",
 	callback = function(event) Snacks.rename.on_rename_file(event.data.from, event.data.to) end,
 })
@@ -1028,7 +1040,7 @@ require("treesitter-context").setup({
 	multiline_threshold = 1,
 	mode = "topline",
 	on_attach = function()
-		vim.api.nvim_set_hl(0, "TreesitterContext", { bg = "#000000", blend = 90 })
+		vim.api.nvim_set_hl(0, "TreesitterContext", { bg = vim.api.nvim_get_hl(0, { name = "StatusLine" }).bg, blend = 90 })
 		return true
 	end,
 })

@@ -51,7 +51,8 @@ local function get_lsp_formatter(bufnr)
 end
 
 local function set_statusline_highlights()
-	local fg = vim.api.nvim_get_hl(0, { name = "NonText" }).fg
+	-- local fg = vim.api.nvim_get_hl(0, { name = "WinSeparator" }).fg
+	local fg = "NvimDarkGrey1"
 	vim.api.nvim_set_hl(0, "User1", { fg = fg, bg = "#a6e3a1" })
 	vim.api.nvim_set_hl(0, "User2", { fg = fg, bg = "#f9e2af" })
 	vim.api.nvim_set_hl(0, "User3", { fg = fg, bg = "#89b4fa" })
@@ -120,6 +121,8 @@ function _G.my_statusline()
 	local location = "%#Identifier#%l:%c %p%%"
 	local macro = "%#Macro#" .. get_macro()
 	local showcmd = "%#NonText#%{% &showcmdloc == 'statusline' ? '%-10.S ' : '' %}"
+	local progress =
+		"%{% luaeval('(package.loaded[''vim.ui''] and vim.api.nvim_get_current_win() == tonumber(vim.g.actual_curwin or -1) and vim.ui.progress_status()) or '''' ')%}"
 	local searchcount = "%#Comment#" .. get_searchcount()
 	local diagnostics = get_diagnostics(bufnr)
 	local lsp_formatter = "%#Identifier#" .. get_lsp_formatter(bufnr)
@@ -135,7 +138,6 @@ function _G.my_statusline()
 		location,
 		macro,
 		"%=", -- Alignment separator (pushes following items to the right)
-		showcmd,
 		searchcount,
 		diagnostics,
 		lsp_formatter,
@@ -144,6 +146,15 @@ function _G.my_statusline()
 		lineending,
 	}, " ")
 end
-
+local default = [[
+%<%f %h%w%m%r 
+%{% v:lua.require('vim._core.util').term_exitcode() %}
+%=
+%{% luaeval('(package.loaded[''vim.ui''] and vim.api.nvim_get_current_win() == tonumber(vim.g.actual_curwin or -1) and vim.ui.progress_status()) or '''' ')%}
+%{% &showcmdloc == 'statusline' ? '%-10.S ' : '' %}
+%{% exists('b:keymap_name') ? '<'..b:keymap_name..'> ' : '' %}
+%{% &busy > 0 ? '◐ ' : '' %}
+%{% luaeval('(package.loaded[''vim.diagnostic''] and next(vim.diagnostic.count()) and vim.diagnostic.status() .. '' '') or '''' ') %}%{% &ruler ? ( &rulerformat == '' ? '%-14.(%l,%c%V%) %P' : &rulerformat ) : '' %}
+]]
 vim.o.showcmdloc = "statusline"
 vim.o.statusline = "%!v:lua.my_statusline()"

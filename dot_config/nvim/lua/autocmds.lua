@@ -231,7 +231,9 @@ vim.api.nvim_create_autocmd("FileType", {
 })
 
 -- LSP
+local lsp_group = vim.api.nvim_create_augroup("lsp", { clear = true })
 vim.api.nvim_create_autocmd("LspAttach", {
+	group = lsp_group,
 	callback = function(args)
 		local client = vim.lsp.get_client_by_id(args.data.client_id)
 		if client and client:supports_method("textDocument/foldingRange") then
@@ -243,6 +245,7 @@ vim.api.nvim_create_autocmd("LspAttach", {
 })
 
 vim.api.nvim_create_autocmd("LspProgress", {
+	group = lsp_group,
 	callback = function(ev)
 		local value = ev.data.params.value
 		vim.api.nvim_echo({ { value.message or "done" } }, false, {

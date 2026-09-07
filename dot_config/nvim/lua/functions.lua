@@ -24,4 +24,16 @@ function M.safely(f)
 	if success == false then vim.notify(status, vim.log.levels.ERROR) end
 end
 
+function M.keywordprg()
+	local cword = vim.fn.expand("<cword>")
+	local prg = vim.bo.keywordprg
+	if prg == "" then
+		vim.cmd("help!")
+	elseif prg:sub(1, 1) == ":" then
+		vim.cmd(prg:sub(2) .. " " .. cword)
+	else
+		vim.cmd("!" .. prg .. " " .. cword)
+	end
+end
+
 return M
