@@ -399,6 +399,7 @@ require("conform").setup({ ---@as conform.setupOpts
 		gotmpl = { "shfmt" },
 		rust = { "rustfmt" },
 		xml = { "xmlformat" },
+		dts = { "dts_format" },
 	},
 	default_format_opts = {
 		timeout_ms = 3000,
@@ -424,6 +425,12 @@ require("conform").setup({ ---@as conform.setupOpts
 				end
 				return {}
 			end,
+		},
+		dts_format = {
+			command = "dts-format",
+			args = { "--fix", "--use-tabs", "$FILENAME" },
+			stdin = false,
+			cwd = require("conform.util").root_file("zmk"),
 		},
 	},
 })

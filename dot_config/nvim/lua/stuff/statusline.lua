@@ -60,6 +60,7 @@ end
 local function get_searchcount()
 	if vim.v.hlsearch == 0 then return "" end
 	local sc = vim.fn.searchcount()
+	if sc.current == nil or sc.total == nil then return "" end
 	return "[" .. sc.current .. "/" .. sc.total .. "]"
 end
 
@@ -74,9 +75,9 @@ end
 local function get_lsp_formatter(bufnr)
 	local out = ""
 	if #vim.lsp.get_clients({ bufnr = bufnr }) > 0 then out = out .. " " end
-	local _, conform = pcall(require, "conform")
-	if not conform then return "Conform not installed" end
-	if #conform.list_formatters_for_buffer(bufnr) > 0 then out = out .. "󰉼" end
+	local success, conform = pcall(require, "conform")
+	if success == false then return "Conform not installed" end
+	if conform and #conform.list_formatters_for_buffer(bufnr) > 0 then out = out .. "󰉼" end
 	return out
 end
 
