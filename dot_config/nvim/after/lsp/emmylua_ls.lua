@@ -18,14 +18,11 @@ return {
 			},
 			diagnostics = { globals = { "vim" }, disable = { "preferred-local-alias", "unnecessary-if" } },
 			workspace = {
-				-- library = vim.list_extend(vim.api.nvim_get_runtime_file("", true), {
-				-- 	vim.fn.stdpath("data") .. "/site/pack/core/opt",
-				-- 	vim.env.VIMRUNTIME,
-				-- }),
 				library = {
 					vim.fn.stdpath("config"),
 					vim.fn.stdpath("data") .. "/site/pack/core/opt",
-					vim.env.VIMRUNTIME,
+					vim.fn.expand("$VIMRUNTIME/lua"),
+					vim.fn.expand("$VIMRUNTIME/lua/vim/lsp"),
 				},
 			},
 		},

@@ -3,11 +3,13 @@ vim.opt_local.tabstop = 4
 vim.opt_local.softtabstop = 4
 vim.opt_local.shiftwidth = 4
 
+vim.cmd("compiler ruff")
 vim.b.default_repl = "ipython"
+
 local is_django = vim.fs.root(0, "manage.py") ~= nil
 if is_django then vim.b.default_repl = "python manage.py shell" end
 
-local map = require("functions").map
+local map = vim.keymap.set
 local bufnr = vim.api.nvim_get_current_buf()
 if vim.bo[bufnr].buftype == "" then
 	local firstline = vim.api.nvim_buf_get_lines(0, 0, 1, false)[1]
@@ -47,7 +49,10 @@ if vim.bo[bufnr].buftype == "" then
 		else
 			put_line(outputs[data.fargs[1]])
 		end
-	end, { nargs = "*", complete = function(lead, cmdline, cursorpos) return args end })
+	end, {
+		nargs = "*",
+		complete = function(lead, cmdline, cursorpos) return args end,
+	})
 
 	-- keymaps
 	map("v", "gd", ":norm ysaw'f=r:A,<CR>gv<Plug>(nvim-surround-visual-line)}iargs = <ESC>va{o^", { desc = "Convert lines to dict", buffer = true })
@@ -90,7 +95,6 @@ if vim.bo[bufnr].buftype == "" then
 
 							vim.api.nvim_buf_set_lines(0, 0, 1, false, {})
 							vim.api.nvim_buf_set_lines(0, cell_start_row, cell_start_row, false, { "    " .. first_line })
-
 						end)
 					end
 				end,
@@ -360,7 +364,7 @@ if vim.bo[bufnr].buftype == "" then
 	end
 
 	map({ "n", "x" }, "<CR>", send_to_python_term, { desc = "Send to REPL", buffer = true })
-	map("n", "<leader>bx", function()
+	map("n", "<leader><leader>bx", function()
 		if vim.b.python_term.buf ~= nil then vim.api.nvim_buf_delete(vim.b.python_term.buf, { force = true }) end
 	end, { desc = "Close REPL", buffer = true })
 	--- }}}

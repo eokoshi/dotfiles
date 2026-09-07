@@ -21,8 +21,7 @@ vim.o.expandtab = false -- Use spaces instead of tabs when true
 vim.o.fileencodings = "ucs-bom,utf-8,default,cp932,latin1"
 vim.o.fillchars = "foldopen:,foldclose:,fold:,foldsep: ,eob: "
 vim.o.foldlevelstart = 99
-vim.o.foldmethod = "expr"
-vim.o.foldtext = ""
+vim.o.foldmethod = "indent"
 vim.o.formatlistpat = "^\\s*\\d\\+[\\.\\,\\)\\]\\}] \\|^\\s*[\\-\\*] "
 vim.o.formatoptions = "lnjq"
 vim.o.hlsearch = true
@@ -59,7 +58,7 @@ vim.o.wrap = false -- Disable line wrap
 vim.diagnostic.config({
 	virtual_text = true,
 	float = { border = "single", source = true },
-	signs = { text = { "", "", "", "󰌵" } },
+	signs = { text = { "", "", "", "" } },
 	severity_sort = true,
 	jump = { on_jump = function() vim.diagnostic.open_float() end },
 })
@@ -69,7 +68,12 @@ require("vim._core.ui2").enable({
 	msg = {
 		---@type 'cmd'|'msg' Default message target, either in the cmdline or in a separate ephemeral message window.
 		---@type string|table<string, 'cmd'|'msg'|'pager'> Default message target or table mapping |ui-messages| kinds and triggers to a target.
-		targets = "msg",
+		target = "msg",
+		targets = {
+			list_cmd = "cmd",
+			shell_err = "cmd",
+			shell_out = "cmd",
+		},
 		dialog = { height = 0.5 },
 		msg = { height = 0.5, timeout = 4000 },
 		pager = { height = 1 },
@@ -84,11 +88,13 @@ map("n", "<Leader>Q", "<CMD>qa<CR>", { desc = "Quit nvim" })
 map("n", "<Leader>w", "<CMD>w<CR>", { desc = "Save buffer" })
 map("n", "<Leader>.", "<CMD>cd %:h<CR>", { desc = "cd here" })
 map("i", "<S-Tab>", "<C-d>", { desc = "Unindent 1 level" })
-map("n", "J", "mzJ`z", { desc = "Shift J without moving cursor", remap = true })
+map("n", "J", "mzJ`z", { desc = "Shift J without moving cursor", remap = true, silent = true })
 map("n", "<BS>", "<C-^>", { desc = "Switch to prev file" })
 map("n", "<Leader>x", "<CMD>tabclose<CR>", { desc = "::tabclose" })
 map("n", "<Leader>bd", "<CMD>bd!<CR>", { desc = "::bd!" })
 map("t", "<ESC><ESC>", "<C-\\><C-n>", { desc = "Escape terminal mode" })
+vim.keymap.set("n", "<C-\\>", function() vim.fn.feedkeys("gcc") end)
+vim.keymap.set("x", "<C-\\>", function() vim.fn.feedkeys("gc") end)
 
 -- System clipboard
 map("n", "<C-c>", '"+yy', { desc = "Copy line to system clipboard" })
@@ -230,7 +236,7 @@ vim.api.nvim_create_autocmd("ColorScheme", {
 		local config = vim.fn["gruvbox_material#get_configuration"]()
 		local palette = vim.fn["gruvbox_material#get_palette"](config.background, config.foreground, config.colors_override)
 		local set_hl = vim.fn["gruvbox_material#highlight"]
-		set_hl("DiffText", palette.none, palette.bg_visual_red)
+		set_hl("DiffText", palette.none, palette.bg_diff_blue)
 	end,
 	desc = "Set custom highlights specific to gruvbox-material",
 })
@@ -244,14 +250,7 @@ end
 
 --- mini.nvim {{{
 require("mini.splitjoin").setup({})
-
 require("mini.align").setup({})
-
-require("mini.bracketed").setup({
-	comment = { suffix = "#" },
-	file = { suffix = "e" },
-	indent = { suffix = "h" },
-})
 
 local MiniPick = require("mini.pick")
 local ui_select_orig = vim.ui.select
@@ -779,7 +778,7 @@ map("n", "ff", function() Snacks.picker.files() end, { desc = "files" })
 map("n", "<Leader>fw", function() Snacks.picker.grep({ cmd = "rg" }) end, { desc = "word" })
 map({ "n", "x" }, "<Leader>f*", function() Snacks.picker.grep_word() end, { desc = "grep current selection" })
 map("n", "<leader>c", function() Snacks.bufdelete() end, { desc = "Close buffer" })
-map("n", "<leader>bc", function() Snacks.bufdelete.other() end, { desc = "Close all other buffers" })
+map("n", "<leader>bx", function() Snacks.bufdelete.other() end, { desc = "Close all other buffers" })
 map("n", "<Leader>fe", function() Snacks.explorer() end, { desc = "File explorer" })
 map({ "n", "t", "i" }, "<F7>", function() Snacks.terminal.toggle() end, { desc = "toggle terminal" })
 map("n", "<Leader>R", function() Snacks.rename.rename_file() end, { desc = "Rename file" })
@@ -1009,14 +1008,15 @@ local languages = {
 }
 require("nvim-treesitter").install(languages)
 vim.api.nvim_create_autocmd("FileType", {
-	group = vim.api.nvim_create_augroup("treesitter.setup", {}),
+	group = vim.api.nvim_create_augroup("treesitter.setup", { clear = true }),
 	callback = function(args)
 		local buf = args.buf
 		local filetype = args.match
 		local language = vim.treesitter.language.get_lang(filetype) or filetype
 		if not vim.treesitter.language.add(language) then return end
-		vim.wo.foldexpr = "v:lua.vim.treesitter.foldexpr()"
-		-- vim.bo[buf].indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
+		vim.opt_local.foldexpr = "v:lua.vim.treesitter.foldexpr()"
+		vim.opt_local.foldmethod = "expr"
+		vim.bo[buf].indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
 		vim.treesitter.start(buf, language)
 	end,
 })
@@ -1522,3 +1522,5 @@ vim.filetype.add({
 
 if vim.fn.has("win32") == 1 then require("windows") end
 if vim.g.neovide then require("neovide") end
+
+-- vim: set foldmethod=marker

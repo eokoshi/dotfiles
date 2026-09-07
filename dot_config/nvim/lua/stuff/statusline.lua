@@ -1,27 +1,3 @@
-local modes = {
-	["n"] = { name = "n", hl = "StatuslineNormal" },
-	["no"] = { name = "no", hl = "StatuslineNormal" },
-	["v"] = { name = "v", hl = "StatuslineVisual" },
-	["V"] = { name = "V", hl = "StatuslineVisual" },
-	["\22"] = { name = "^V", hl = "StatuslineVisual" },
-	["s"] = { name = "s", hl = "StatuslineVisual" },
-	["S"] = { name = "S", hl = "StatuslineVisual" },
-	["\19"] = { name = "^S", hl = "StatuslineVisual" },
-	["i"] = { name = "i", hl = "StatuslineInsert" },
-	["ic"] = { name = "ic", hl = "StatuslineInsert" },
-	["R"] = { name = "R", hl = "StatuslineReplace" },
-	["Rv"] = { name = "Rv", hl = "StatuslineReplace" },
-	["c"] = { name = "c", hl = "StatuslineCommand" },
-	["cv"] = { name = "cv", hl = "StatuslineCommand" },
-	["ce"] = { name = "ce", hl = "StatuslineCommand" },
-	["r"] = { name = "r", hl = "StatuslineCommand" },
-	["rm"] = { name = "rm", hl = "StatuslineCommand" },
-	["r?"] = { name = "r?", hl = "StatuslineCommand" },
-	["!"] = { name = "!", hl = "StatuslineCommand" },
-	["t"] = { name = "t", hl = "StatuslineTerminal" },
-	["nt"] = { name = "nt", hl = "StatuslineNormal" },
-}
-
 local function get_macro()
 	local reg = vim.fn.reg_recording()
 	if reg == "" then return "" end
@@ -41,20 +17,9 @@ local function get_filesize(bufnr)
 	end
 	return string.format("%.1f%s", size, units[i])
 end
-
 local function get_diagnostics(bufnr)
-	if not #vim.lsp.get_clients({ bufnr = bufnr }) then return "" end
-	local count = {
-		errors = #vim.diagnostic.get(bufnr, { severity = vim.diagnostic.severity.ERROR }),
-		warnings = #vim.diagnostic.get(bufnr, { severity = vim.diagnostic.severity.WARN }),
-		info = #vim.diagnostic.get(bufnr, { severity = vim.diagnostic.severity.INFO }),
-	}
-	local res = {}
-	if count.errors > 0 then table.insert(res, "%4* " .. count.errors .. "%*") end
-	if count.warnings > 0 then table.insert(res, "%5* " .. count.warnings .. "%*") end
-	if count.info > 0 then table.insert(res, "%3* " .. count.info .. "%*") end
-	if #res == 0 then return "" end
-	return " " .. table.concat(res, " ")
+	local text = vim.diagnostic.status(bufnr)
+	return text:gsub(":", " ")
 end
 
 local function get_searchcount()
@@ -82,25 +47,56 @@ local function get_lsp_formatter(bufnr)
 end
 
 local function set_statusline_highlights()
-	vim.api.nvim_set_hl(0, "StatuslineNormal", { fg = "#1e1e2e", bg = "#89b4fa", bold = true })
-	vim.api.nvim_set_hl(0, "StatuslineInsert", { fg = "#1e1e2e", bg = "#a6e3a1", bold = true })
-	vim.api.nvim_set_hl(0, "StatuslineVisual", { fg = "#1e1e2e", bg = "#f9e2af", bold = true })
-	vim.api.nvim_set_hl(0, "StatuslineReplace", { fg = "#1e1e2e", bg = "#f38ba8", bold = true })
-	vim.api.nvim_set_hl(0, "StatuslineCommand", { fg = "#1e1e2e", bg = "#cba6f7", bold = true })
-	vim.api.nvim_set_hl(0, "StatuslineTerminal", { fg = "#1e1e2e", bg = "#94e2d5", bold = true })
-	vim.api.nvim_set_hl(0, "StatuslineSection", { fg = "#888888", bg = "#444444" })
-	vim.api.nvim_set_hl(0, "User1", { link = "Purple" })
-	vim.api.nvim_set_hl(0, "User2", { link = "Green" })
-	vim.api.nvim_set_hl(0, "User3", { link = "Blue" })
-	vim.api.nvim_set_hl(0, "User4", { link = "Red" })
-	vim.api.nvim_set_hl(0, "User5", { link = "Yellow" })
-	vim.api.nvim_set_hl(0, "User6", { link = "Aqua" })
-	vim.api.nvim_set_hl(0, "User7", { link = "Orange" })
-	vim.api.nvim_set_hl(0, "User8", { link = "Grey" })
-	vim.api.nvim_set_hl(0, "User9", { link = "OkMsg" })
+	local fg = vim.api.nvim_get_hl(0, { name = "NonText" }).fg
+	vim.api.nvim_set_hl(0, "User1", { fg = fg, bg = "#a6e3a1" })
+	vim.api.nvim_set_hl(0, "User2", { fg = fg, bg = "#f9e2af" })
+	vim.api.nvim_set_hl(0, "User3", { fg = fg, bg = "#89b4fa" })
+	vim.api.nvim_set_hl(0, "User4", { fg = fg, bg = "#f38ba8" })
+	vim.api.nvim_set_hl(0, "User5", { fg = fg, bg = "#cba6f7" })
+	vim.api.nvim_set_hl(0, "User6", { fg = fg, bg = "#94e2d5" })
+	vim.api.nvim_set_hl(0, "User7", { fg = fg, bg = "#ecae67" })
+	vim.api.nvim_set_hl(0, "User8", { fg = fg, bg = "#ffa8a8" })
+	vim.api.nvim_set_hl(0, "User9", { fg = fg, bg = "#0d7d61" })
 end
+local modes = {
+	["n"] = { name = "n", hl = "User3" },
+	["no"] = { name = "no", hl = "User9" },
+	["nov"] = { name = "nov", hl = "User9" },
+	["noV"] = { name = "noV", hl = "User9" },
+	["no\22"] = { name = "no^V", hl = "User9" },
+	["niI"] = { name = "niI", hl = "User9" },
+	["niR"] = { name = "niR", hl = "User9" },
+	["niV"] = { name = "niV", hl = "User9" },
+	["nt"] = { name = "nt", hl = "User6" },
+	["ntT"] = { name = "ntT", hl = "User9" },
+	["v"] = { name = "v", hl = "User2" },
+	["vs"] = { name = "vs", hl = "User2" },
+	["V"] = { name = "V", hl = "User2" },
+	["Vs"] = { name = "Vs", hl = "User2" },
+	["\22"] = { name = "^V", hl = "User2" },
+	["\22s"] = { name = "^Vs", hl = "User2" },
+	["s"] = { name = "s", hl = "User2" },
+	["S"] = { name = "S", hl = "User2" },
+	["\19"] = { name = "^S", hl = "User2" },
+	["i"] = { name = "i", hl = "User1" },
+	["ic"] = { name = "ic", hl = "User1" },
+	["ix"] = { name = "ic", hl = "User7" },
+	["R"] = { name = "R", hl = "User4" },
+	["Rv"] = { name = "Rv", hl = "User4" },
+	["Rvc"] = { name = "Rvc", hl = "User4" },
+	["Rvx"] = { name = "Rvx", hl = "User7" },
+	["Rx"] = { name = "Rx", hl = "User7" },
+	["c"] = { name = "c", hl = "User5" },
+	["cv"] = { name = "cv", hl = "User5" },
+	["cr"] = { name = "cr", hl = "User5" },
+	["cvr"] = { name = "cvr", hl = "User5" },
+	["r"] = { name = "r", hl = "User8" },
+	["rm"] = { name = "rm", hl = "User8" },
+	["r?"] = { name = "r?", hl = "User8" },
+	["!"] = { name = "!", hl = "User9" },
+	["t"] = { name = "t", hl = "User1" },
+}
 
-set_statusline_highlights()
 vim.api.nvim_create_autocmd("ColorScheme", {
 	callback = set_statusline_highlights,
 })
@@ -109,23 +105,23 @@ function _G.my_statusline()
 	local winid = vim.g.statusline_winid or vim.api.nvim_get_current_win()
 	local bufnr = vim.api.nvim_win_get_buf(winid)
 	local is_active = (winid == vim.api.nvim_get_current_win())
-
 	local mode_code = vim.api.nvim_get_mode().mode
-	local mode_info = modes[mode_code] or { name = mode_code, hl = "StatuslineSection" }
-	local mode_str = string.format("%%#%s# %s %%*", "StatuslineSection", mode_info.name)
+	local mode_info = modes[mode_code] or { name = mode_code, hl = "Error" }
+	local mode_str = string.format("%%#%s# %s %%*", "StatusLineNC", mode_info.name)
 	if is_active then mode_str = string.format("%%#%s# %s %%*", mode_info.hl, mode_info.name) end
-	local macro = " %#RedBold#" .. get_macro() .. "%*"
-	local searchcount = " %#AquaItalic#" .. get_searchcount() .. "%*"
-	local filename = " %1*" .. get_truncated_filename(bufnr) .. "%*"
-	local bufargs = "%8*%m%r%* "
-	local buf = "%8*" .. bufnr .. "%*"
-	local filesize = " %8*" .. (get_filesize(bufnr) or "0B") .. "%*"
-	local filetype = " %6*" .. (vim.bo[bufnr].filetype ~= "" and vim.bo[bufnr].filetype or ""):upper() .. "%*"
-	local encoding = "  %4*" .. (vim.bo[bufnr].fileencoding ~= "" and vim.bo[bufnr].fileencoding or vim.o.encoding):upper() .. "%* "
-	local lineending = " %3*" .. (vim.bo[bufnr].fileformat:upper() == "UNIX" and "" or (vim.bo[bufnr].fileformat:upper() == "DOS" and "")) .. "%*"
-	local location = " %3*%l:%c %p%% %*"
-	local diagnostics = get_diagnostics(bufnr) .. "%*  "
-	local lsp_formatter = "%3*" .. get_lsp_formatter(bufnr) .. "%* "
+	local filename = "%#Number#" .. get_truncated_filename(bufnr)
+	local bufargs = "%#NonText#%m%r%*"
+	local buf = "%#Operator#" .. bufnr
+	local filesize = "%#Type#" .. (get_filesize(bufnr) or "0B")
+	local location = "%#Identifier#%l:%c %p%%"
+	local macro = "%#Macro#" .. get_macro()
+	local showcmd = "%#NonText#%{% &showcmdloc == 'statusline' ? '%-10.S ' : '' %}"
+	local searchcount = "%#Comment#" .. get_searchcount()
+	local diagnostics = get_diagnostics(bufnr)
+	local lsp_formatter = "%#Identifier#" .. get_lsp_formatter(bufnr)
+	local filetype = "%#Constant#" .. (vim.bo[bufnr].filetype ~= "" and vim.bo[bufnr].filetype or "")
+	local encoding = "%#Conditional#" .. (vim.bo[bufnr].fileencoding ~= "" and vim.bo[bufnr].fileencoding or vim.o.encoding)
+	local lineending = "%#Number#" .. (vim.bo[bufnr].fileformat:upper() == "UNIX" and "" or (vim.bo[bufnr].fileformat:upper() == "DOS" and ""))
 	return table.concat({
 		mode_str,
 		filename,
@@ -135,13 +131,15 @@ function _G.my_statusline()
 		location,
 		macro,
 		"%=", -- Alignment separator (pushes following items to the right)
+		showcmd,
 		searchcount,
 		diagnostics,
 		lsp_formatter,
 		filetype,
 		encoding,
 		lineending,
-	})
+	}, " ")
 end
 
+vim.o.showcmdloc = "statusline"
 vim.o.statusline = "%!v:lua.my_statusline()"

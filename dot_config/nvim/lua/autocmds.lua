@@ -234,6 +234,24 @@ vim.api.nvim_create_autocmd("FileType", {
 vim.api.nvim_create_autocmd("LspAttach", {
 	callback = function(args)
 		local client = vim.lsp.get_client_by_id(args.data.client_id)
-		if client ~= nil and client:supports_method("textDocument/foldingRange") then vim.wo.foldexpr = "v:lua.vim.lsp.foldexpr()" end
+		if client and client:supports_method("textDocument/foldingRange") then
+			vim.opt_local.foldexpr = "v:lua.vim.lsp.foldexpr()"
+			vim.opt_local.foldmethod = "expr"
+			vim.opt_local.foldtext = "v:lua.vim.lsp.foldtext()"
+		end
+	end,
+})
+
+vim.api.nvim_create_autocmd("LspProgress", {
+	callback = function(ev)
+		local value = ev.data.params.value
+		vim.api.nvim_echo({ { value.message or "done" } }, false, {
+			id = "lsp." .. ev.data.params.token,
+			kind = "progress",
+			source = "vim.lsp",
+			title = value.title,
+			status = value.kind ~= "end" and "running" or "success",
+			percent = value.percentage,
+		})
 	end,
 })

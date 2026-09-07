@@ -5,7 +5,6 @@ Description: Description
 
 __date__ = "2025-12-03"
 
-
 # Section --------
 import collections
 import logging
