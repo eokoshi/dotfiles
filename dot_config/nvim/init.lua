@@ -136,8 +136,20 @@ map("n", "gd", function() vim.lsp.buf.definition() end, { desc = "go to definiti
 map("n", "gD", function() vim.lsp.buf.type_definition() end, { desc = "go to type definition" })
 map("n", "gO", function() vim.lsp.buf.document_symbol({ loclist = false }) end, { desc = "document_symbol" })
 
+--- Highlights {{{
+vim.api.nvim_create_autocmd("ColorScheme", {
+	group = init_augroup,
+	callback = function()
+		vim.api.nvim_set_hl(0, "LspSignatureActiveParameter", { italic = true, bold = true })
+		vim.api.nvim_set_hl(0, "MatchParen", { link = "Error" })
+		vim.api.nvim_set_hl(0, "NormalFloat", { link = "Normal" })
+		vim.api.nvim_set_hl(0, "FloatBorder", { link = "Changed" })
+		vim.api.nvim_set_hl(0, "FloatTitle", { link = "Changed" })
+	end,
+})
+--- }}}
+
 -- Packages
-map("n", "<leader>pu", function() vim.pack.update() end, { desc = "vim.pack.update()" })
 map("n", "<leader>pu", function() vim.pack.update() end, { desc = "vim.pack.update()" })
 map("n", "<leader>pi", function() vim.pack.update(nil, { offline = true }) end, { desc = "[offline] vim.pack.update()" })
 map("n", "<leader>pp", "<CMD>source $MYVIMRC<CR>", { desc = "source config" })
@@ -1511,14 +1523,6 @@ require("todo-comments").setup({
 	},
 })
 --- }}}
---- }}}
-
---- Highlights {{{
-vim.api.nvim_set_hl(0, "LspSignatureActiveParameter", { italic = true, bold = true })
-vim.api.nvim_set_hl(0, "MatchParen", { link = "Error" })
-vim.api.nvim_set_hl(0, "NormalFloat", { link = "Normal" })
-vim.api.nvim_set_hl(0, "FloatBorder", { link = "Blue" })
-vim.api.nvim_set_hl(0, "FloatTitle", { link = "Blue" })
 --- }}}
 
 --- Custom Filetypes {{{
