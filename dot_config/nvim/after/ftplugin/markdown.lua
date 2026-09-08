@@ -3,8 +3,12 @@ vim.opt_local.wrap = true
 vim.opt_local.expandtab = true
 vim.opt_local.tabstop = 2
 vim.opt_local.shiftwidth = 2
+vim.opt_local.linebreak = true -- Wrap lines at convenient points
+vim.opt_local.showbreak = "> "
 
-local map = require("functions").map
+local map = vim.keymap.set
+map("n", "j", "gj", { buffer = true }) --- move by visual lines
+map("n", "k", "gk", { buffer = true })
 map("n", "<Leader>m", "", { desc = "Markdown", buffer = true })
 map({ "n", "v" }, "<CR>", "<cmd>Checkmate metadata toggle done<CR>", { desc = "Toggle todo item", buffer = true })
 map({ "n", "v" }, "<leader>mc", "", { desc = "Checkmate", buffer = true })

@@ -29,7 +29,6 @@ vim.o.formatoptions = "lnjq"
 vim.o.hlsearch = true
 vim.o.ignorecase = true
 vim.o.incsearch = true
-vim.o.linebreak = true -- Wrap lines at convenient points
 vim.o.listchars = "space:␠,tab:_,conceal:?,nbsp:+"
 vim.o.number = true
 vim.o.numberwidth = 2
@@ -594,15 +593,7 @@ vim.api.nvim_set_hl(0, "BlinkCmpKindRipgrepRipgrep", { link = "BlinkCmpKindKey" 
 vim.api.nvim_set_hl(0, "BlinkCmpKindRipgrepGit", { link = "BlinkCmpKindKey" })
 --- }}}
 
---- nvim-highlight-colors {{{
-require("nvim-highlight-colors").setup({
-	enable_hsl_without_function = false,
-	exclude_filetypes = { "bigfile", "checkhealth" },
-})
---- }}}
-
 --- html-css {{{
-
 vim.api.nvim_create_autocmd("FileType", {
 	group = init_augroup,
 	pattern = { "html", "htmldjango" },
@@ -639,7 +630,6 @@ vim.api.nvim_create_autocmd("FileType", {
 		})
 	end,
 })
-
 --- }}}
 
 --- snacks {{{
@@ -757,7 +747,7 @@ if _G.Snacks == nil then
 			win = {
 				input = {
 					keys = {
-						["/"] = "focus_preview",
+						["<C-space>"] = "focus_preview",
 						["<C-p>"] = "preview_scroll_up",
 						["<C-n>"] = "preview_scroll_down",
 						["<a-i>"] = "inspect",
@@ -766,7 +756,7 @@ if _G.Snacks == nil then
 				},
 				list = {
 					keys = {
-						["/"] = "focus_preview",
+						["<C-space>"] = "focus_preview",
 						["<C-p>"] = "preview_scroll_up",
 						["<C-n>"] = "preview_scroll_down",
 						["<a-i>"] = "inspect",
@@ -775,7 +765,7 @@ if _G.Snacks == nil then
 				},
 				preview = {
 					keys = {
-						["/"] = "focus_list",
+						["<C-space>"] = "focus_list",
 					},
 				},
 			},
@@ -1249,10 +1239,10 @@ if vim.fs.root(0, ".git") ~= nil then
 		preview = { line_numbers = true },
 		keymaps = { focus_preview = "/" },
 		hl = {
-			border = "Purple",
+			border = "Number",
 			normal = "Normal",
-			matched = "Purple",
-			title = "Red",
+			matched = "Number",
+			title = "Constant",
 			prompt = "Question",
 			cursor = "CursorLine",
 			frecency = "Number",
@@ -1260,7 +1250,7 @@ if vim.fs.root(0, ".git") ~= nil then
 			combo_header = "Number",
 			scrollbar = "Comment",
 			directory_path = "Comment",
-			grep_match = "Red", -- Highlight for matched text in grep results
+			grep_match = "Constant", -- Highlight for matched text in grep results
 			grep_line_number = "LineNr", -- Highlight for :line:col location
 			grep_regex_active = "DiagnosticInfo", -- Highlight for keybind + label when regex is on
 			grep_plain_active = "Comment", -- Highlight for keybind + label when regex is off
@@ -1475,19 +1465,19 @@ require("checkmate").setup({ ---@as checkmate.Config
 				})
 				local remaining = os.difftime(os.time(), duedate) / (24 * 60 * 60)
 				if remaining > 0 then
-					return { fg = "black", sp = "red", undercurl = true }
+					return { link = "DiagnosticUnderlineError" }
 				elseif remaining > -1 then
-					return { fg = "black", bg = "#ff5555", bold = true }
+					return { fg = "#ff5555", bold = true, reverse = true }
 				elseif remaining > -7 then
-					return { fg = "black", bg = "#ff6700", bold = true }
+					return { fg = "#ff6700", bold = true, reverse = true }
 				elseif remaining > -14 then
-					return { fg = "black", bg = "orange" }
+					return { fg = "#ff8800", reverse = true }
 				elseif remaining > -21 then
-					return { fg = "black", bg = "gold" }
+					return { fg = "#ffdb00", reverse = true }
 				elseif remaining > -28 then
-					return { fg = "black", bg = "greenyellow" }
+					return { fg = "#acff00", reverse = true }
 				else
-					return { fg = "green" }
+					return { fg = "#00b213" }
 				end
 			end,
 			sort_order = 15,
