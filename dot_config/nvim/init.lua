@@ -851,7 +851,9 @@ map("i", "<C-l>", function() snacksutils.pick_icon() end, { desc = "insert icon"
 map(
 	"n",
 	"<Leader>N",
-	function() Snacks.picker.notifications({ confirm = { "yank", "close" }, focus = "list" }) end,
+	function()
+		Snacks.picker.notifications({ confirm = { "yank", "close" }, focus = "list", win = { preview = { wo = { wrap = true, statuscolumn = "" } } } })
+	end,
 	{ desc = "Notification history" }
 )
 vim.api.nvim_create_autocmd("User", {
