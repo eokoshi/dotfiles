@@ -49,3 +49,11 @@ vim.api.nvim_create_autocmd({ "CmdlineEnter", "CmdlineLeave" }, {
 	pattern = "[/\\?]",
 	callback = set_ime,
 })
+
+-- what do to when opened without a specific file
+if vim.fn.argc() == 0 then
+	vim.cmd({ cmd = "cd", args = { vim.fn.expand("~/Documents/Obsidian") } })
+else
+	vim.cmd("cd %:h")
+	vim.notify(vim.fn.getcwd())
+end

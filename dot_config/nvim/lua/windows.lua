@@ -33,10 +33,3 @@ vim.api.nvim_create_autocmd("DirChangedPre", {
 		end
 	end,
 })
-
--- what do to when opened without a specific file
-if vim.fn.argc() == 0 then
-	vim.cmd({ cmd = "cd", args = { vim.fn.expand("~/Documents/Obsidian") } })
-else
-	vim.notify(vim.fn.getcwd())
-end
