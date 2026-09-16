@@ -5,3 +5,4 @@ key.txt.age
 .config/nvim/.gitignore
 ~/.config/nvim/nvim-pack-lock.json
 **/__pycache__
+**/.venv
