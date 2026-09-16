@@ -19,6 +19,7 @@ vim.o.confirm = true -- Confirm to save changes before exiting modified buffer
 vim.o.cursorline = true -- Enable highlighting of the current line
 vim.o.diffopt = "internal,closeoff,filler,hiddenoff,linematch:60"
 vim.o.expandtab = false -- Use spaces instead of tabs when true
+vim.o.exrc = true
 vim.o.fileencodings = "ucs-bom,utf-8,default,cp932,latin1"
 vim.o.fillchars = "foldopen:,foldclose:,fold:,foldsep: ,eob: "
 vim.o.foldlevelstart = 99
