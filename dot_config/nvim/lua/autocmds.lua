@@ -39,8 +39,8 @@ vim.api.nvim_create_autocmd("BufWritePost", {
 	pattern = "*/.local/share/chezmoi/*",
 	callback = function()
 		local wsl = vim.fn.stdpath("config")
-		local ch = vim.fn.expand("$HOME/.local/share/chezmoi/dot_config/nvim")
-		local win = vim.fn.expand("$HOME/windows/AppData/Local/nvim")
+		local ch = vim.fs.normalize("~/.local/share/chezmoi/dot_config/nvim")
+		local win = vim.fs.normalize("~/windows/AppData/Local/nvim")
 		---@cast win string
 		if vim.fn.isdirectory(win) == 1 then
 			-- add new spellings from windows before overwriting everything

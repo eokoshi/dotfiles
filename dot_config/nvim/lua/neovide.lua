@@ -3,6 +3,8 @@ vim.g.neovide_hide_mouse_when_typing = true
 vim.g.neovide_floating_shadow = false
 vim.g.neovide_remember_window_size = false
 
+vim.o.winblend = 15
+
 vim.g.neovide_scale_factor = 1.0
 local change_scale_factor = function(delta) vim.g.neovide_scale_factor = vim.g.neovide_scale_factor * delta end
 vim.keymap.set("n", "<C-;>", function() change_scale_factor(1.25) end)
@@ -24,7 +26,7 @@ vim.api.nvim_create_autocmd("ColorScheme", {
 })
 
 local hr = tonumber(os.date("%H", os.time()))
-if hr > 6 and hr < 21 then -- day between 6am and 9pm
+if hr > 6 and hr < 18 then -- day between 6am and 6pm
 	vim.cmd("colorscheme onelight")
 else -- night
 	vim.cmd("colorscheme entryway")
@@ -52,11 +54,7 @@ vim.api.nvim_create_autocmd({ "CmdlineEnter", "CmdlineLeave" }, {
 
 -- what do to when opened without a specific file
 if vim.fn.argc() == 0 then
-	if vim.fn.has("win32") == 1 then
-		vim.cmd({ cmd = "cd", args = { vim.fn.expand("~/Documents/Obsidian") } })
-	else
-		vim.cmd({ cmd = "cd", args = { vim.fn.expand("~/documents/Obsidian") } })
-	end
+	vim.cmd({ cmd = "cd", args = { vim.fn.expand("~/Documents/Obsidian") } })
 else
 	vim.cmd("cd %:h")
 	vim.notify(vim.fn.getcwd())

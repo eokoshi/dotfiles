@@ -29,6 +29,7 @@ vim.o.formatlistpat = "^\\s*\\d\\+[\\.\\,\\)\\]\\}] \\|^\\s*[\\-\\*] "
 vim.o.formatoptions = "lnjq"
 vim.o.hlsearch = true
 vim.o.ignorecase = true
+vim.o.linebreak = true
 vim.o.incsearch = true
 vim.o.listchars = "space:␠,tab:_,conceal:?,nbsp:+"
 vim.o.number = true
@@ -207,7 +208,6 @@ vim.pack.add({
 	{ src = gh("MagicDuck/grug-far.nvim") },
 	{ src = gh("esmuellert/codediff.nvim") },
 	{ src = gh("bngarren/checkmate.nvim") },
-	{ src = gh("obsidian-nvim/obsidian.nvim"), version = vim.version.range("*") },
 	{ src = gh("mistweaverco/kulala.nvim") },
 	{ src = gh("mcauley-penney/techbase.nvim") },
 	{ src = gh("olimorris/onedarkpro.nvim") },
@@ -416,7 +416,7 @@ require("conform").setup({ ---@as conform.setupOpts
 		r = { "air" },
 		htmldjango = { "djlint" },
 		yaml = { "prettier" },
-		json = { "fixjson", "jq", stop_after_first = true },
+		json = { "fixjson", "jq", "prettier", stop_after_first = true },
 		css = { "prettier" },
 		javascript = { "prettier" },
 		gotmpl = { "shfmt" },
@@ -639,7 +639,7 @@ if _G.Snacks == nil then
 		bigfile = { enabled = true, line_length = 99999 },
 		terminal = {
 			win = {
-				wo = { statuscolumn = " ", winhighlight = "Normal:Normal,FloatBorder:Green" },
+				wo = { statuscolumn = " ", winhighlight = "Normal:Normal,FloatBorder:Green", winblend = 0 },
 				position = "float",
 				backdrop = 100,
 				border = "rounded",
@@ -710,6 +710,7 @@ if _G.Snacks == nil then
 					and vim.b[buf].snacks_indent ~= false
 					and vim.bo[buf].buftype == ""
 					and vim.bo[buf].filetype ~= "snacks_picker_preview"
+					and vim.bo[buf].filetype ~= "markdown"
 			end,
 		},
 		input = { enabled = true },
@@ -790,7 +791,7 @@ if _G.Snacks == nil then
 end
 local Snacks = require("snacks")
 vim.print = function(...) Snacks.debug.inspect(...) end
-map("n", "ff", function() Snacks.picker.files() end, { desc = "files" })
+map("n", "ff", function() Snacks.picker.files({ hidden = true }) end, { desc = "files" })
 map("n", "<Leader>fw", function() Snacks.picker.grep({ cmd = "rg" }) end, { desc = "word" })
 map({ "n", "x" }, "<Leader>f*", function() Snacks.picker.grep_word() end, { desc = "grep current selection" })
 map("n", "<leader>c", function() Snacks.bufdelete() end, { desc = "Close buffer" })
@@ -992,7 +993,7 @@ require("grug-far").setup()
 require("mason").setup()
 map("n", "<Leader>pm", "<CMD>Mason<CR>", { desc = "Mason" })
 local registry = require("mason-registry")
-local installs = { "marksman", "prettier", "fixjson" }
+local installs = { "markdown-oxide", "prettier", "fixjson" }
 if vim.fn.has("win32") == 0 then
 	vim.list_extend(installs, {
 		"ast-grep",
@@ -1046,7 +1047,7 @@ require("treesitter-context").setup({
 	multiline_threshold = 1,
 	mode = "topline",
 	on_attach = function()
-		vim.api.nvim_set_hl(0, "TreesitterContext", { blend = 90, update = true })
+		vim.api.nvim_set_hl(0, "TreesitterContext", { blend = 40, update = true })
 		return true
 	end,
 })
@@ -1315,60 +1316,39 @@ vim.schedule(
 --- }}}
 
 --- obsidian {{{
+
 obsidiangroup = vim.api.nvim_create_augroup("obsidian", { clear = true })
+
+-- local function setup_obsidian() if _G.Obsidian then return end vim.pack.add({ { src = gh("obsidian-nvim/obsidian.nvim"), version = vim.version.range("*") } }) require("obsidian").setup({ legacy_commands = false, statusline = { enabled = false }, new_notes_location = "current_dir", link = { auto_update = true }, workspaces = { { name = "personal", path = "~/Documents/Obsidian", }, }, note_id_func = require("obsidian.builtin").title_id, templates = { folder = "Templates" }, ---@type obsidian.config.TemplateOpts picker = { name = "snacks.picker" }, daily_notes = { folder = "Daily Notes", template = "Templates/dailynote.md", }, ui = { enabled = false }, attachments = { folder = "Images" }, footer = { enabled = false }, checkbox = { enabled = false }, }) map("n", "<Leader>mt", "<CMD>Obsidian today<CR>", { desc = "today's note" }) map("n", "<Leader>my", "<CMD>Obsidian yesterday<CR>", { desc = "yesterday's note" }) map("n", "<Leader>md", "<CMD>Obsidian dailies -48 0<CR>", { desc = "find daily notes" }) map("n", "<Leader>mn", "<CMD>Obsidian new_from_template<CR>", { desc = "new from template" }) map("n", "<leader>mo", "<CMD>cd ~/Documents/Obsidian<CR>", { desc = "cd vault" }) vim.api.nvim_create_autocmd("User", { group = obsidiangroup, pattern = "ObsidianNoteEnter", callback = function() vim.keymap.set("n", "<CR>", function() local M = require("obsidian.api") if M.cursor_link() then return "<cmd>Obsidian follow_link<cr>" elseif M.cursor_tag() then return "<cmd>Obsidian tags<cr>" elseif M.cursor_heading() then return "za" else return "<cmd>Checkmate metadata toggle done<cr>" end end, { expr = true, buffer = true, desc = "smart action", }) end, }) end
+
 local function setup_obsidian()
-	if _G.Obsidian then return end
-	require("obsidian").setup({
-		legacy_commands = false,
-		statusline = { enabled = false },
-		new_notes_location = "current_dir",
-		link = { auto_update = true },
-		workspaces = {
-			{
-				name = "personal",
-				path = "~/Documents/Obsidian",
-			},
-		},
-		note_id_func = require("obsidian.builtin").title_id,
-		templates = { folder = "Templates" }, ---@type obsidian.config.TemplateOpts
-		picker = { name = "snacks.picker" },
-		daily_notes = {
-			folder = "Daily Notes",
-			template = "Templates/dailynote.md",
-		},
-		ui = { enabled = false },
-		attachments = { folder = "Images" },
-		footer = { enabled = false },
-		checkbox = { enabled = false },
-	})
-	map("n", "<Leader>mt", "<CMD>Obsidian today<CR>", { desc = "today's note" })
-	map("n", "<Leader>my", "<CMD>Obsidian yesterday<CR>", { desc = "yesterday's note" })
-	map("n", "<Leader>md", "<CMD>Obsidian dailies -48 0<CR>", { desc = "find daily notes" })
-	map("n", "<Leader>mn", "<CMD>Obsidian new_from_template<CR>", { desc = "new from template" })
+	local daily_note_dir = vim.fs.normalize("~/Documents/Obsidian/Daily Notes")
+	map("n", "<Leader>mt", function() require("functions").open_daily_note(daily_note_dir) end, { desc = "today's daily note" })
+	map("n", "<Leader>my", function() require("functions").open_previous_daily_note(daily_note_dir) end, { desc = "previous daily note" })
 	map("n", "<leader>mo", "<CMD>cd ~/Documents/Obsidian<CR>", { desc = "cd vault" })
-	vim.api.nvim_create_autocmd("User", {
+	vim.api.nvim_create_autocmd("DirChangedPre", {
 		group = obsidiangroup,
-		pattern = "ObsidianNoteEnter",
+		pattern = "global",
 		callback = function()
-			vim.keymap.set("n", "<CR>", function()
-				local M = require("obsidian.api")
-				if M.cursor_link() then
-					return "<cmd>Obsidian follow_link<cr>"
-				elseif M.cursor_tag() then
-					return "<cmd>Obsidian tags<cr>"
-				elseif M.cursor_heading() then
-					return "za"
-				else
-					return "<cmd>Checkmate metadata toggle done<cr>"
-				end
-			end, {
-				expr = true,
-				buffer = true,
-				desc = "smart action",
-			})
+			if string.match(vim.v.event.directory, "\\Obsidian") then
+				local cwd = vim.fs.normalize("~/Documents/Obsidian")
+				---@cast cwd string
+				vim.system(
+					{ "git", "pull" },
+					{ cwd = cwd, text = true },
+					vim.schedule_wrap(function(obj)
+						if obj.stdout ~= nil then
+							vim.api.nvim_echo({ { obj.stdout } }, true, {})
+						elseif obj.stderr ~= nil then
+							vim.api.nvim_echo({ { obj.stdout } }, true, { err = true })
+						end
+					end)
+				)
+			end
 		end,
 	})
 end
+
 vim.api.nvim_create_autocmd({ "BufReadPre", "BufNewFile" }, {
 	group = obsidiangroup,
 	pattern = "**/[Oo]bsidian/**",
@@ -1381,6 +1361,7 @@ vim.api.nvim_create_autocmd("VimEnter", {
 		if string.match(vim.fn.getcwd(), "[Oo]bsidian") then setup_obsidian() end
 	end,
 })
+
 --- }}}
 
 --- kulala {{{
@@ -1423,14 +1404,16 @@ require("checkmate").setup({ ---@as checkmate.Config
 		priority = {
 			style = function(context)
 				local value = context.value:lower()
-				if value == "high" then
+				if value == "high" or value == "H" then
 					return { fg = "#ff5555", bold = true }
-				elseif value == "medium" then
+				elseif value == "medium" or value == "M" then
 					return { fg = "#ffb86c" }
-				elseif value == "low" then
+				elseif value == "low" or value == "L" then
 					return { fg = "#8be9fd" }
+				elseif value == "wait" or value == "W" then
+					return { fg = "#e100e1" }
 				else
-					return { fg = "#8be9fd" }
+					return { fg = "#d7cb3a" }
 				end
 			end,
 			get_value = function() return "medium" end,
