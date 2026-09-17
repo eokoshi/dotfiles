@@ -875,6 +875,7 @@ require("which-key").setup({ ---@as wk.Opts
 	show_help = false,
 	spec = {
 		{ "<BS>", mode = { "n" }, group = "Close" },
+		{ "<Leader><Leader>", mode = "n", desc = "" },
 		{ "<Leader>e", mode = { "n" }, group = "Explorer" },
 		{ "<Leader>f", mode = { "n", "x" }, group = "Find" },
 		{ "<Leader>g", mode = { "n", "x" }, group = "Git" },
@@ -1040,7 +1041,7 @@ vim.api.nvim_create_autocmd("FileType", {
 })
 
 require("treesitter-context").setup({
-	multiwindow = true,
+	multiwindow = false,
 	max_lines = 5,
 	multiline_threshold = 1,
 	mode = "topline",
