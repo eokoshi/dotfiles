@@ -208,6 +208,7 @@ vim.pack.add({
 	{ src = gh("MagicDuck/grug-far.nvim") },
 	{ src = gh("esmuellert/codediff.nvim") },
 	{ src = gh("bngarren/checkmate.nvim") },
+	{ src = gh("MeanderingProgrammer/render-markdown.nvim"), vim.version.range("*") },
 	{ src = gh("mistweaverco/kulala.nvim") },
 	{ src = gh("mcauley-penney/techbase.nvim") },
 	{ src = gh("olimorris/onedarkpro.nvim") },
@@ -1392,8 +1393,25 @@ end, {})
 
 --- render-markdown {{{
 
--- vim.pack.add({ { src = gh("MeanderingProgrammer/render-markdown.nvim"), vim.version.range("*") } })
--- require("render-markdown").setup({ ignore = function() return vim.bo.buftype ~= "" end, heading = { sign = false, position = "inline", icons = { "󰉫 ", "󰉬 ", "󰉭 ", "󰉮 ", "󰉯 ", "󰉰 " }, }, code = { sign = false, position = "right", width = "block", right_pad = 1, min_width = 84, border = "thick", language_right = "█", disable_background = true, highlight_border = false, }, checkbox = { enabled = false }, latex = { enabled = false }, win_options = { conceallevel = { default = vim.api.nvim_get_option_value("conceallevel", {}), rendered = 2, }, }, })
+require("render-markdown").setup({
+	heading = { sign = false, position = "inline", icons = { "󰉫 ", "󰉬 ", "󰉭 ", "󰉮 ", "󰉯 ", "󰉰 " } },
+	code = {
+		sign = false,
+		position = "right",
+		width = "block",
+		right_pad = 10,
+		language_border = " ",
+		language_left = "",
+		language_right = "",
+	},
+	checkbox = { enabled = false },
+	latex = { enabled = false },
+	overrides = {
+		buftype = {
+			nofile = { code = { border = "hide", language = false, disable_background = true } },
+		},
+	},
+})
 
 --- }}}
 
