@@ -45,7 +45,7 @@ local function get_lsp_formatter(bufnr)
 	local out = ""
 	if #vim.lsp.get_clients({ bufnr = bufnr }) > 0 then out = out .. " " end
 	local success, conform = pcall(require, "conform")
-	if success == false then return "Conform not installed" end
+	if success == false then return "" end
 	if conform and #conform.list_formatters_for_buffer(bufnr) > 0 then out = out .. "󰉼" end
 	return out
 end

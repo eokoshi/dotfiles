@@ -1390,6 +1390,13 @@ vim.api.nvim_create_user_command("Kulala", function()
 end, {})
 --- }}}
 
+--- render-markdown {{{
+
+-- vim.pack.add({ { src = gh("MeanderingProgrammer/render-markdown.nvim"), vim.version.range("*") } })
+-- require("render-markdown").setup({ ignore = function() return vim.bo.buftype ~= "" end, heading = { sign = false, position = "inline", icons = { "󰉫 ", "󰉬 ", "󰉭 ", "󰉮 ", "󰉯 ", "󰉰 " }, }, code = { sign = false, position = "right", width = "block", right_pad = 1, min_width = 84, border = "thick", language_right = "█", disable_background = true, highlight_border = false, }, checkbox = { enabled = false }, latex = { enabled = false }, win_options = { conceallevel = { default = vim.api.nvim_get_option_value("conceallevel", {}), rendered = 2, }, }, })
+
+--- }}}
+
 --- checkmate {{{
 require("checkmate").setup({ ---@as checkmate.Config
 	files = { "*.md", "todo", "*.todo", "TODO" },
