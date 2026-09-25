@@ -11,6 +11,16 @@ vim.keymap.set("n", "<C-;>", function() change_scale_factor(1.25) end)
 vim.keymap.set("n", "<C-->", function() change_scale_factor(1 / 1.25) end)
 vim.keymap.set("n", "<C-0>", function() vim.g.neovide_scale_factor = 1 end)
 
+local config_path
+if vim.fn.has("wsl") == 1 then
+	config_path = vim.fs.normalize("~/windows/AppData/Roaming/neovide/config.toml")
+elseif vim.fn.has("win32") == 1 then
+	config_path = vim.fs.normalize("~/AppData/Roaming/neovide/config.toml")
+else
+	config_path = vim.fs.normalize("~/.config/neovide/config.toml")
+end
+vim.keymap.set("n", "<Leader>pn", function() vim.cmd("edit " .. config_path) end, { desc = "Neovide Config" })
+
 local neovide_augroup = vim.api.nvim_create_augroup("neovide", { clear = true })
 vim.api.nvim_create_autocmd("ColorScheme", {
 	group = neovide_augroup,

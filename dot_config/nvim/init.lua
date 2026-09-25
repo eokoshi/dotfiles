@@ -3,7 +3,7 @@ local map = vim.keymap.set
 local icons = require("stuff.icons")
 local init_augroup = vim.api.nvim_create_augroup("init", { clear = true })
 vim.g.mapleader = " "
-vim.g.maplocalleader = ","
+vim.g.maplocalleader = "_"
 
 require("autocmds")
 require("stuff.statusline")
@@ -877,7 +877,6 @@ require("which-key").setup({ ---@as wk.Opts
 	show_help = false,
 	spec = {
 		{ "<BS>", mode = { "n" }, group = "Close" },
-		{ "<Leader><Leader>", mode = "n", desc = "" },
 		{ "<Leader>e", mode = { "n" }, group = "Explorer" },
 		{ "<Leader>f", mode = { "n", "x" }, group = "Find" },
 		{ "<Leader>g", mode = { "n", "x" }, group = "Git" },
@@ -908,6 +907,7 @@ require("which-key").setup({ ---@as wk.Opts
 			{ pattern = "config", icon = "", color = "orange" },
 			{ pattern = "packages", icon = "󰏗", color = "red" },
 			{ pattern = "extras", icon = "󱁖", color = "yellow" },
+			{ pattern = "misc", icon = "", color = "cyan" },
 			{ pattern = "home", icon = "", color = "purple" },
 			{ pattern = "cd", icon = "", color = "cyan" },
 			{ pattern = "math", icon = "󰒠", color = "purple" },
