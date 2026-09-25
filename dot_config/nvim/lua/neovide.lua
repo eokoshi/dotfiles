@@ -5,6 +5,9 @@ vim.g.neovide_remember_window_size = false
 
 vim.o.winblend = 15
 
+vim.g.everforest_transparent_background = 1
+vim.g.gruvbox_material_transparent_background = 1
+
 vim.g.neovide_scale_factor = 1.0
 local change_scale_factor = function(delta) vim.g.neovide_scale_factor = vim.g.neovide_scale_factor * delta end
 vim.keymap.set("n", "<C-;>", function() change_scale_factor(1.25) end)

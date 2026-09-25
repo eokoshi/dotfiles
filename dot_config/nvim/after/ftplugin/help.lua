@@ -4,4 +4,4 @@ vim.opt_local.number = false
 vim.opt_local.relativenumber = false
 vim.opt_local.colorcolumn = ""
 
-vim.keymap.set("n", "<Leader>w", "", { desc = "do nothing in help", buffer = true })
+vim.keymap.set("n", "<Leader>w", "", { desc = "<noop>", buffer = true })

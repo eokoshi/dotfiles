@@ -9,15 +9,19 @@ vim.opt_local.linebreak = true -- Wrap lines at convenient points
 local map = vim.keymap.set
 map("n", "j", "gj", { buffer = true }) --- move by visual lines
 map("n", "k", "gk", { buffer = true })
-map("n", "<Leader>m", "", { desc = "Markdown", buffer = true })
 map({ "n", "v" }, "<CR>", "<cmd>Checkmate metadata toggle done<CR>", { desc = "Toggle todo item", buffer = true })
-map({ "n", "v" }, "<leader>mc", "", { desc = "Checkmate", buffer = true })
-map({ "n", "v" }, "<leader>mc+", "<cmd>Checkmate cycle_next<CR>", { desc = "Cycle todo item(s) to the next state", buffer = true })
-map({ "n", "v" }, "<leader>mc-", "<cmd>Checkmate cycle_previous<CR>", { desc = "Cycle todo item(s) to the previous state", buffer = true })
-map({ "n", "v" }, "<leader>mcn", "<cmd>Checkmate create<CR>", { desc = "Create todo item", buffer = true })
-map({ "n", "v" }, "<leader>mcr", "<cmd>Checkmate remove<CR>", { desc = "Remove todo marker (convert to text)", buffer = true })
-map({ "n", "v" }, "<leader>mcR", "<cmd>Checkmate remove_all_metadata<CR>", { desc = "Remove all metadata from a todo item", buffer = true })
-map("n", "<leader>mca", "<cmd>Checkmate archive<CR>", { desc = "Archive checked/completed todo items (move to bottom section)", buffer = true })
-map("n", "<leader>mcv", "<cmd>Checkmate metadata select_value<CR>", { desc = "Update the value of a metadata tag under the cursor", buffer = true })
-map("n", "<leader>mc]", "<cmd>Checkmate metadata jump_next<CR>", { desc = "Move cursor to next metadata tag", buffer = true })
-map("n", "<leader>mc[", "<cmd>Checkmate metadata jump_previous<CR>", { desc = "Move cursor to previous metadata tag", buffer = true })
+map({ "n", "v" }, "<localleader>c", "", { desc = "Checkmate", buffer = true })
+map({ "n", "v" }, "<localleader>c+", "<cmd>Checkmate cycle_next<CR>", { desc = "Cycle todo item(s) to the next state", buffer = true })
+map({ "n", "v" }, "<localleader>c-", "<cmd>Checkmate cycle_previous<CR>", { desc = "Cycle todo item(s) to the previous state", buffer = true })
+map({ "n", "v" }, "<localleader>cn", "<cmd>Checkmate create<CR>", { desc = "Create todo item", buffer = true })
+map({ "n", "v" }, "<localleader>cr", "<cmd>Checkmate remove<CR>", { desc = "Remove todo marker (convert to text)", buffer = true })
+map({ "n", "v" }, "<localleader>cR", "<cmd>Checkmate remove_all_metadata<CR>", { desc = "Remove all metadata from a todo item", buffer = true })
+map("n", "<localleader>ca", "<cmd>Checkmate archive<CR>", { desc = "Archive checked/completed todo items (move to bottom section)", buffer = true })
+map(
+	"n",
+	"<localleader>cv",
+	"<cmd>Checkmate metadata select_value<CR>",
+	{ desc = "Update the value of a metadata tag under the cursor", buffer = true }
+)
+map("n", "<localleader>c]", "<cmd>Checkmate metadata jump_next<CR>", { desc = "Move cursor to next metadata tag", buffer = true })
+map("n", "<localleader>c[", "<cmd>Checkmate metadata jump_previous<CR>", { desc = "Move cursor to previous metadata tag", buffer = true })

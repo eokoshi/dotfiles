@@ -364,7 +364,7 @@ if vim.bo[bufnr].buftype == "" then
 	end
 
 	map({ "n", "x" }, "<CR>", send_to_python_term, { desc = "Send to REPL", buffer = true })
-	map("n", "<localleader>bx", function()
+	map("n", "<localleader>x", function()
 		if vim.b.python_term.buf ~= nil then vim.api.nvim_buf_delete(vim.b.python_term.buf, { force = true }) end
 	end, { desc = "Close REPL", buffer = true })
 	--- }}}

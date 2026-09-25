@@ -32,56 +32,6 @@ vim.api.nvim_create_autocmd({ "BufNewFile", "BufRead" }, {
 	desc = "set log filetype",
 })
 
--- Syncing Config with Windows and chezmoi auto-apply
-local confsync = vim.api.nvim_create_augroup("ConfigSync", { clear = true })
-vim.api.nvim_create_autocmd("BufWritePost", {
-	group = confsync,
-	pattern = "*/.local/share/chezmoi/*",
-	callback = function()
-		local wsl = vim.fn.stdpath("config")
-		local ch = vim.fs.normalize("~/.local/share/chezmoi/dot_config/nvim")
-		local win = vim.fs.normalize("~/windows/AppData/Local/nvim")
-		---@cast win string
-		if vim.fn.isdirectory(win) == 1 then
-			-- add new spellings from windows before overwriting everything
-			vim.system({ "rsync", "-rtu", win .. "/spell/", ch .. "/spell" }, { text = true })
-		end
-		vim.system({ "chezmoi", "apply" }, { text = true, timeout = 1000 }, function(result)
-			if result.code == 0 then
-				if vim.fn.isdirectory(win) == 1 then
-					vim.system({
-						"rsync",
-						"-a",
-						"--delete",
-						"--exclude",
-						".git",
-						"--exclude",
-						"lazy-lock.json",
-						"--exclude",
-						".venv",
-						wsl .. "/",
-						win,
-					}, { text = true }, function(rsync_result)
-						vim.schedule(function()
-							if rsync_result.code == 0 then
-								vim.api.nvim_echo({ { "Synced config to windows: " .. wsl .. " → " .. win, "Ignore" } }, false, { id = "configsyncwslwin" })
-							else
-								vim.api.nvim_echo({ { "code=" .. rsync_result.code } }, true, { err = true })
-							end
-						end)
-					end)
-				end
-			elseif result.code == 124 then
-				vim.schedule(function() vim.notify("timeout", vim.log.levels.ERROR, { title = "ch apply failed" }) end)
-			else
-				---@cast result.stdout string
-				vim.schedule(function() vim.notify(result.stdout, vim.log.levels.ERROR, { title = "ch apply failed" }) end)
-			end
-		end)
-	end,
-	desc = "chezmoi apply then push edited config file to Windows via rsync",
-})
-
 -- auto nohlsearch
 local autonohlsearch_group = vim.api.nvim_create_augroup("autonohlsearch", { clear = true })
 vim.api.nvim_create_autocmd("BufWinEnter", {
@@ -135,16 +85,6 @@ vim.api.nvim_create_autocmd("BufWinEnter", {
 		hs_event(opt.buf)
 	end,
 	desc = "automatically turn off hlsearch on movement",
-})
-
--- editing init.lua
-vim.api.nvim_create_autocmd("BufReadPost", {
-	group = vim.api.nvim_create_augroup("config", { clear = true }),
-	pattern = "*/nvim/init.lua",
-	callback = function()
-		vim.opt_local.foldmethod = "marker"
-		vim.opt_local.foldtext = "foldtext()"
-	end,
 })
 
 -- Sessions
@@ -232,6 +172,8 @@ vim.api.nvim_create_autocmd("FileType", {
 
 -- LSP
 local lsp_group = vim.api.nvim_create_augroup("lsp", { clear = true })
+
+--- broken folding (fixed in 13.0)
 vim.api.nvim_create_autocmd("LspAttach", {
 	group = lsp_group,
 	callback = function(args)

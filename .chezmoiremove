@@ -13,5 +13,6 @@
 .config/nvim/lua/options.lua
 .config/nvim/lua/stuff/functions.lua
 .config/nvim/lua/stuff/toggles.lua
+.config/nvim/lua/stuff/statusline.lua
 .config/nvim/after/ftplugin/htmldjango.lua
 .config/CONFIG_README.md

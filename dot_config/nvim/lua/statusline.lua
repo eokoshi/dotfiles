@@ -45,7 +45,7 @@ local function get_lsp_formatter(bufnr)
 	local out = ""
 	if #vim.lsp.get_clients({ bufnr = bufnr }) > 0 then out = out .. " " end
 	local success, conform = pcall(require, "conform")
-	if success == false then return "" end
+	if success == false then return "" end
 	if conform and #conform.list_formatters_for_buffer(bufnr) > 0 then out = out .. "󰉼" end
 	return out
 end
@@ -54,7 +54,7 @@ local function set_statusline_highlights()
 	-- local fg = vim.api.nvim_get_hl(0, { name = "WinSeparator" }).fg
 	local fg = "NvimDarkGrey1"
 	vim.api.nvim_set_hl(0, "User1", { fg = fg, bg = "#a6e3a1" })
-	vim.api.nvim_set_hl(0, "User2", { fg = fg, bg = "#f9e2af" })
+	vim.api.nvim_set_hl(0, "User2", { fg = fg, bg = "#ffe97a" })
 	vim.api.nvim_set_hl(0, "User3", { fg = fg, bg = "#89b4fa" })
 	vim.api.nvim_set_hl(0, "User4", { fg = fg, bg = "#f38ba8" })
 	vim.api.nvim_set_hl(0, "User5", { fg = fg, bg = "#cba6f7" })
