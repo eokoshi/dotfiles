@@ -108,51 +108,47 @@ vim.api.nvim_create_autocmd("ColorScheme", {
 
 function _G.my_statusline()
 	local winid = vim.g.statusline_winid or vim.api.nvim_get_current_win()
-	local bufnr = vim.api.nvim_win_get_buf(winid)
+	local buf = vim.api.nvim_win_get_buf(winid)
 	local is_active = (winid == vim.api.nvim_get_current_win())
 	local mode_code = vim.api.nvim_get_mode().mode
 	local mode_info = modes[mode_code] or { name = mode_code, hl = "Error" }
-	local mode_str = string.format("%%#%s# %s %%*", "StatusLineNC", mode_info.name)
-	if is_active then mode_str = string.format("%%#%s# %s %%*", mode_info.hl, mode_info.name) end
-	local filename = "%#Number#" .. get_truncated_filename(bufnr)
-	local bufargs = "%#NonText#%m%r%*"
-	local buf = "%#Operator#" .. bufnr
-	local filesize = "%#Type#" .. (get_filesize(bufnr) or "0B")
-	local location = "%#Identifier#%l:%c %p%%"
+	local mode_str = string.format("%%#%s# %s %%*", mode_info.hl, mode_info.name)
+	local filename = "%#Number#" .. get_truncated_filename(buf)
+	local bufargs = "%#Error#%m%r%*"
+	local bufnr = "%#Operator#" .. buf
+	local filesize = "%#Type#" .. (get_filesize(buf) or "0B")
+	local location = "%#Identifier#%l:%c"
+	local percent = "%#Character#%p%%"
 	local macro = "%#Macro#" .. get_macro()
-	local showcmd
-	if vim.o.showcmd then
-		showcmd = "%#NonText#%{% &showcmdloc == 'statusline' ? '%-10.S ' : '' %}"
-	else
-		showcmd = ""
-	end
-	local progress =
-		"%{% luaeval('(package.loaded[''vim.ui''] and vim.api.nvim_get_current_win() == tonumber(vim.g.actual_curwin or -1) and vim.ui.progress_status()) or '''' ')%}"
-	local searchcount = "%#Comment#" .. get_searchcount()
-	local diagnostics = get_diagnostics(bufnr)
-	local lsp_formatter = "%#Identifier#" .. get_lsp_formatter(bufnr)
-	local filetype = "%#Constant#" .. (vim.bo[bufnr].filetype ~= "" and vim.bo[bufnr].filetype or "")
-	local encoding = "%#Conditional#" .. (vim.bo[bufnr].fileencoding ~= "" and vim.bo[bufnr].fileencoding or vim.o.encoding)
-	local lineending = "%#Number#" .. (vim.bo[bufnr].fileformat:upper() == "UNIX" and "" or (vim.bo[bufnr].fileformat:upper() == "DOS" and ""))
-	return table.concat({
+	local searchcount = "%#StatusLineNC#" .. get_searchcount()
+	local diagnostics = get_diagnostics(buf)
+	local lsp_formatter = "%#Identifier#" .. get_lsp_formatter(buf)
+	local filetype = "%#Constant#" .. (vim.bo[buf].filetype ~= "" and vim.bo[buf].filetype or "")
+	local encoding = "%#StatusLineNC#" .. (vim.bo[buf].fileencoding ~= "" and vim.bo[buf].fileencoding or vim.o.encoding)
+	local lineending = "%#Number#" .. (vim.bo[buf].fileformat:upper() == "UNIX" and "" or (vim.bo[buf].fileformat:upper() == "DOS" and ""))
+	local statusline = table.concat({
 		mode_str,
-		"%<",
-		filename,
-		bufargs,
-		buf,
+		filename .. "%<" .. bufargs,
+		bufnr,
 		filesize,
 		location,
-		macro,
-		"%=", -- Alignment separator (pushes following items to the right)
-		showcmd,
-		searchcount,
+		percent,
+		macro .. " " .. searchcount,
+		"%=",
 		diagnostics,
+		"%=",
 		lsp_formatter,
 		filetype,
 		encoding,
 		lineending,
 	}, " ")
+	if is_active then
+		return statusline
+	else
+		return statusline:gsub("%#([^#]*)%#", "#StatusLineNC#")
+	end
 end
+
 local default = [[
 %<%f %h%w%m%r 
 %{% v:lua.require('vim._core.util').term_exitcode() %}
