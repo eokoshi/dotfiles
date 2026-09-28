@@ -120,7 +120,12 @@ function _G.my_statusline()
 	local filesize = "%#Type#" .. (get_filesize(bufnr) or "0B")
 	local location = "%#Identifier#%l:%c %p%%"
 	local macro = "%#Macro#" .. get_macro()
-	local showcmd = "%#NonText#%{% &showcmdloc == 'statusline' ? '%-10.S ' : '' %}"
+	local showcmd
+	if vim.o.showcmd then
+		showcmd = "%#NonText#%{% &showcmdloc == 'statusline' ? '%-10.S ' : '' %}"
+	else
+		showcmd = ""
+	end
 	local progress =
 		"%{% luaeval('(package.loaded[''vim.ui''] and vim.api.nvim_get_current_win() == tonumber(vim.g.actual_curwin or -1) and vim.ui.progress_status()) or '''' ')%}"
 	local searchcount = "%#Comment#" .. get_searchcount()
@@ -131,6 +136,7 @@ function _G.my_statusline()
 	local lineending = "%#Number#" .. (vim.bo[bufnr].fileformat:upper() == "UNIX" and "" or (vim.bo[bufnr].fileformat:upper() == "DOS" and ""))
 	return table.concat({
 		mode_str,
+		"%<",
 		filename,
 		bufargs,
 		buf,
@@ -138,6 +144,7 @@ function _G.my_statusline()
 		location,
 		macro,
 		"%=", -- Alignment separator (pushes following items to the right)
+		showcmd,
 		searchcount,
 		diagnostics,
 		lsp_formatter,

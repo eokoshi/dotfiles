@@ -56,7 +56,6 @@ vim.pack.add({
 	{ src = gh("esmuellert/codediff.nvim") },
 	{ src = gh("bngarren/checkmate.nvim") },
 	{ src = gh("MeanderingProgrammer/render-markdown.nvim"), vim.version.range("*") },
-	{ src = gh("mistweaverco/kulala.nvim") },
 	{ src = gh("mcauley-penney/techbase.nvim") },
 	{ src = gh("olimorris/onedarkpro.nvim") },
 	{ src = gh("sainnhe/everforest") },
@@ -269,7 +268,7 @@ require("conform").setup({ ---@as conform.setupOpts
 		dts = { "dts_format" },
 	},
 	default_format_opts = {
-		timeout_ms = 3000,
+		timeout_ms = 1000,
 		async = false,
 		quiet = false,
 		lsp_format = "fallback",
@@ -1163,7 +1162,24 @@ obsidiangroup = vim.api.nvim_create_augroup("obsidian", { clear = true })
 
 -- local function setup_obsidian() if _G.Obsidian then return end vim.pack.add({ { src = gh("obsidian-nvim/obsidian.nvim"), version = vim.version.range("*") } }) require("obsidian").setup({ legacy_commands = false, statusline = { enabled = false }, new_notes_location = "current_dir", link = { auto_update = true }, workspaces = { { name = "personal", path = "~/Documents/Obsidian", }, }, note_id_func = require("obsidian.builtin").title_id, templates = { folder = "Templates" }, ---@type obsidian.config.TemplateOpts picker = { name = "snacks.picker" }, daily_notes = { folder = "Daily Notes", template = "Templates/dailynote.md", }, ui = { enabled = false }, attachments = { folder = "Images" }, footer = { enabled = false }, checkbox = { enabled = false }, }) map("n", "<Leader>mt", "<CMD>Obsidian today<CR>", { desc = "today's note" }) map("n", "<Leader>my", "<CMD>Obsidian yesterday<CR>", { desc = "yesterday's note" }) map("n", "<Leader>md", "<CMD>Obsidian dailies -48 0<CR>", { desc = "find daily notes" }) map("n", "<Leader>mn", "<CMD>Obsidian new_from_template<CR>", { desc = "new from template" }) map("n", "<leader>mo", "<CMD>cd ~/Documents/Obsidian<CR>", { desc = "cd vault" }) vim.api.nvim_create_autocmd("User", { group = obsidiangroup, pattern = "ObsidianNoteEnter", callback = function() vim.keymap.set("n", "<CR>", function() local M = require("obsidian.api") if M.cursor_link() then return "<cmd>Obsidian follow_link<cr>" elseif M.cursor_tag() then return "<cmd>Obsidian tags<cr>" elseif M.cursor_heading() then return "za" else return "<cmd>Checkmate metadata toggle done<cr>" end end, { expr = true, buffer = true, desc = "smart action", }) end, }) end
 
+local function pull_vault()
+	local cwd = vim.fs.normalize("~/Documents/Obsidian")
+	---@cast cwd string
+	vim.system(
+		{ "git", "pull" },
+		{ cwd = cwd, text = true },
+		vim.schedule_wrap(function(obj)
+			if obj.stdout ~= nil then
+				vim.api.nvim_echo({ { obj.stdout } }, true, {})
+			elseif obj.stderr ~= nil then
+				vim.api.nvim_echo({ { obj.stdout } }, true, { err = true })
+			end
+		end)
+	)
+end
+
 local function setup_obsidian()
+	pull_vault()
 	local daily_note_dir = vim.fs.normalize("~/Documents/Obsidian/Daily Notes")
 	map("n", "<Leader>mt", function() require("functions").open_daily_note(daily_note_dir) end, { desc = "today's daily note" })
 	map("n", "<Leader>my", function() require("functions").open_previous_daily_note(daily_note_dir) end, { desc = "previous daily note" })
@@ -1172,21 +1188,7 @@ local function setup_obsidian()
 		group = obsidiangroup,
 		pattern = "global",
 		callback = function()
-			if string.match(vim.v.event.directory, "\\Obsidian") then
-				local cwd = vim.fs.normalize("~/Documents/Obsidian")
-				---@cast cwd string
-				vim.system(
-					{ "git", "pull" },
-					{ cwd = cwd, text = true },
-					vim.schedule_wrap(function(obj)
-						if obj.stdout ~= nil then
-							vim.api.nvim_echo({ { obj.stdout } }, true, {})
-						elseif obj.stderr ~= nil then
-							vim.api.nvim_echo({ { obj.stdout } }, true, { err = true })
-						end
-					end)
-				)
-			end
+			if string.match(vim.v.event.directory, "Obsidian") then pull_vault() end
 		end,
 	})
 end
@@ -1204,32 +1206,6 @@ vim.api.nvim_create_autocmd("VimEnter", {
 	end,
 })
 
---- }}}
-
---- kulala {{{
-vim.api.nvim_create_user_command("Kulala", function()
-	if vim.g.KulalaSetup == nil then
-		require("kulala").setup({
-			ui = {
-				split_direction = function()
-					if vim.o.columns < 140 then
-						return "below"
-					else
-						return "right"
-					end
-				end,
-			},
-			global_keymaps = true,
-			global_keymaps_prefix = "<leader>n",
-			kulala_keymaps = {
-				["Previous tab"] = false,
-				["Next tab"] = false,
-			},
-		})
-		vim.g.KulalaSetup = true
-	end
-	require("kulala").open()
-end, {})
 --- }}}
 
 --- render-markdown {{{
@@ -1384,7 +1360,7 @@ vim.api.nvim_create_autocmd("BufWritePost", {
 			-- add new spellings from windows before overwriting everything
 			vim.system({ "rsync", "-rtu", win .. "/spell/", ch .. "/spell" }, { text = true })
 		end
-		vim.system({ "chezmoi", "apply" }, { text = true, timeout = 1000 }, function(result)
+		vim.system({ "chezmoi", "apply" }, { text = true, timeout = 3000 }, function(result)
 			if result.code == 0 then
 				if vim.fn.isdirectory(win) == 1 then
 					vim.system({
