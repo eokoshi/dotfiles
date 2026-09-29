@@ -180,6 +180,7 @@ elseif vim.fn.has("linux") == 1 then
 	require("linux")
 end
 
+if vim.env.NVIM_NOTES == 1 then require("notes") end
 if vim.g.neovide then require("neovide") end
 
 -- vim: set foldmethod=marker
