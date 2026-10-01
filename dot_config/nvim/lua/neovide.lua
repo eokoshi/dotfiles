@@ -72,3 +72,6 @@ else
 	vim.cmd("cd %:h")
 	vim.notify(vim.fn.getcwd())
 end
+
+--- ensure notes is loaded
+require("notes")

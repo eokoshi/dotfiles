@@ -153,6 +153,10 @@ map("n", "<leader>pu", function() vim.pack.update() end, { desc = "vim.pack.upda
 map("n", "<leader>pi", function() vim.pack.update(nil, { offline = true }) end, { desc = "[offline] vim.pack.update()" })
 map("n", "<leader>pp", "<CMD>source $MYVIMRC<CR>", { desc = "source config" })
 map("n", "<leader>pz", "<CMD>edit $MYVIMRC<CR>", { desc = "edit ~/.config/nvim/init.lua" })
+map("n", "<leader>pl", function()
+	local lockfile = vim.fn.stdpath("config") .. "/nvim-pack-lock.json"
+	vim.cmd("e " .. lockfile)
+end, { desc = "edit lockfile" })
 
 vim.cmd("packadd nvim.undotree")
 vim.cmd("packadd cfilter")
@@ -180,7 +184,7 @@ elseif vim.fn.has("linux") == 1 then
 	require("linux")
 end
 
-if vim.env.NVIM_NOTES == 1 then require("notes") end
+if vim.env.NVIM_NOTES == "1" then require("notes") end
 if vim.g.neovide then require("neovide") end
 
 -- vim: set foldmethod=marker
