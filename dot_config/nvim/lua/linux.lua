@@ -398,7 +398,7 @@ require("blink.cmp").setup({ ---@as blink.cmp.Config
 				},
 			},
 			ripgrep = {
-				enabled = function() return vim.fs.root(0, ".git") ~= nil end,
+				enabled = function() return vim.fs.root(0, ".git") ~= nil and vim.fn.expand("%:p:h"):find("/mnt/c") == nil end,
 				module = "blink-ripgrep",
 				name = "rg",
 				opts = {
@@ -1075,7 +1075,7 @@ vim.api.nvim_set_hl(0, "GitSignsDeleteInline", { link = "DiffText" })
 --- }}}
 
 --- fff {{{
-if vim.fs.root(0, ".git") ~= nil then
+if vim.fs.root(0, ".git") ~= nil and vim.fn.expand("%:p:h"):find("/mnt/c") == nil then
 	require("fff").setup({
 		prompt = "❭ ",
 		title = "fff",
