@@ -180,7 +180,7 @@ vim.filetype.add({
 
 if vim.fn.has("win32") == 1 then
 	require("windows")
-elseif vim.fn.has("linux") == 1 then
+elseif vim.fn.has("linux") == 1 and vim.env.USER ~= "root" then
 	require("linux")
 end
 

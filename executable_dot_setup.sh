@@ -17,7 +17,7 @@ if [[ "$DISTRO" == "Ubuntu" ]]; then
 	sudo apt-get update
 	sudo apt-get -y --ignore-missing install ripgrep fd-find python3-venv direnv lsd unzip curl openssh-server
 	sudo service ssh start
-	sudo ln -sf /usr/bin/fdfind ~/.local/bin/fd
+	sudo ln -sf /usr/bin/fdfind ~/usr/local/bin/fd
 
 	echo ""
 	read -p "Install npm? [y/n]" -n 1 -r
@@ -110,7 +110,7 @@ if [[ "$DISTRO" == "Ubuntu" ]]; then
 		cd ~/.fzf
 		git pull -q
 		./install
-		ln -sf ~/.fzf/bin/fzf ~/.local/bin/fzf
+		ln -sf ~/.fzf/bin/fzf ~/usr/local/bin/fzf
 		cd $DIR
 
 		curl -sSfL https://raw.githubusercontent.com/ajeetdsouza/zoxide/main/install.sh | sh
