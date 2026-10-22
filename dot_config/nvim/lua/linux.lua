@@ -48,6 +48,7 @@ vim.pack.add({
 	{ src = gh("nvim-treesitter/nvim-treesitter-context") },
 	{ src = gh("nvim-treesitter/nvim-treesitter-textobjects") },
 	{ src = gh("smart-splits-nvim/smart-splits.nvim") },
+	{ src = gh("smart-splits-nvim/backend-tmux") },
 	{ src = gh("rafamadriz/friendly-snippets") },
 	{ src = gh("saghen/blink.cmp"), version = vim.version.range("1.*") },
 	{ src = gh("stevearc/conform.nvim") },
@@ -1015,7 +1016,9 @@ vim.fn.sign_define("DapBreakpointRejected", { text = icons.debug.rejected, texth
 --- }}}
 
 --- smart-splits {{{
-require("smart-splits").setup({})
+require("smart-splits").setup({
+	mux = { backend = "smart-splits-backend-tmux" },
+})
 vim.keymap.set("n", "<A-h>", require("smart-splits").resize_left)
 vim.keymap.set("n", "<A-j>", require("smart-splits").resize_down)
 vim.keymap.set("n", "<A-k>", require("smart-splits").resize_up)
