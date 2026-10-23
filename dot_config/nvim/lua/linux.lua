@@ -867,7 +867,7 @@ local languages = {
 	"luadoc", "markdown", "markdown_inline", "python", "query", "readline", "ssh_config", "html", "htmldjango",
 	"toml", "typescript", "vim", "vimdoc", "yaml",
 }
-require("nvim-treesitter").install(languages)
+if pcall(function() vim.system({ "tree-sitter" }):wait(500) end) then require("nvim-treesitter").install(languages) end
 vim.api.nvim_create_autocmd("FileType", {
 	group = vim.api.nvim_create_augroup("treesitter.setup", { clear = true }),
 	callback = function(args)

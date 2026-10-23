@@ -88,33 +88,35 @@ vim.api.nvim_create_autocmd("BufWinEnter", {
 })
 
 -- Sessions
-vim.api.nvim_create_user_command("SessionSave", function()
-	local sessiondir = vim.fn.stdpath("state")
-	---@cast sessiondir string
-	sessiondir = vim.fs.joinpath(sessiondir, "sessions")
-	if vim.fn.isdirectory(sessiondir) == 0 then vim.fn.mkdir(sessiondir, "p") end
-	local curdir = vim.fn.getcwd()
-	local filename = curdir:gsub("[\\:/%.]", "_") .. ".vim"
-	local savepath = vim.fs.joinpath(sessiondir, filename)
-	local cmd = string.format("mksession! %s", savepath)
-	vim.cmd(cmd)
-end, { desc = "Save mksession file for cwd" })
-vim.api.nvim_create_user_command("SessionLoad", function()
-	local sessiondir = vim.fn.stdpath("state")
-	---@cast sessiondir string
-	sessiondir = vim.fs.joinpath(sessiondir, "sessions")
-	local curdir = vim.fn.getcwd()
-	local filename = curdir:gsub("[\\:/%.]", "_") .. ".vim"
-	local savepath = vim.fs.joinpath(sessiondir, filename)
-	local cmd = string.format("source %s", savepath)
-	vim.cmd(cmd)
-end, { desc = "Load mksession file for cwd" })
-local sessiongroup = vim.api.nvim_create_augroup("Sessions", { clear = true })
-vim.api.nvim_create_autocmd({ "FocusLost", "CursorHold", "BufWritePost" }, {
-	desc = "autosave dirsession",
-	group = sessiongroup,
-	command = "SessionSave",
-})
+if vim.env.USER ~= "root" then
+	vim.api.nvim_create_user_command("SessionSave", function()
+		local sessiondir = vim.fn.stdpath("state")
+		---@cast sessiondir string
+		sessiondir = vim.fs.joinpath(sessiondir, "sessions")
+		if vim.fn.isdirectory(sessiondir) == 0 then vim.fn.mkdir(sessiondir, "p") end
+		local curdir = vim.fn.getcwd()
+		local filename = curdir:gsub("[\\:/%.]", "_") .. ".vim"
+		local savepath = vim.fs.joinpath(sessiondir, filename)
+		local cmd = string.format("mksession! %s", savepath)
+		vim.cmd(cmd)
+	end, { desc = "Save mksession file for cwd" })
+	vim.api.nvim_create_user_command("SessionLoad", function()
+		local sessiondir = vim.fn.stdpath("state")
+		---@cast sessiondir string
+		sessiondir = vim.fs.joinpath(sessiondir, "sessions")
+		local curdir = vim.fn.getcwd()
+		local filename = curdir:gsub("[\\:/%.]", "_") .. ".vim"
+		local savepath = vim.fs.joinpath(sessiondir, filename)
+		local cmd = string.format("source %s", savepath)
+		vim.cmd(cmd)
+	end, { desc = "Load mksession file for cwd" })
+	local sessiongroup = vim.api.nvim_create_augroup("Sessions", { clear = true })
+	vim.api.nvim_create_autocmd({ "FocusLost", "CursorHold", "BufWritePost" }, {
+		desc = "autosave dirsession",
+		group = sessiongroup,
+		command = "SessionSave",
+	})
+end
 
 -- help split
 local help_group = vim.api.nvim_create_augroup("CustomHelpLayout", { clear = true })
