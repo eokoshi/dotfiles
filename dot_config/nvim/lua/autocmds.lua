@@ -87,36 +87,26 @@ vim.api.nvim_create_autocmd("BufWinEnter", {
 	desc = "automatically turn off hlsearch on movement",
 })
 
--- Sessions
-if vim.env.USER ~= "root" then
-	vim.api.nvim_create_user_command("SessionSave", function()
-		local sessiondir = vim.fn.stdpath("state")
-		---@cast sessiondir string
-		sessiondir = vim.fs.joinpath(sessiondir, "sessions")
-		if vim.fn.isdirectory(sessiondir) == 0 then vim.fn.mkdir(sessiondir, "p") end
-		local curdir = vim.fn.getcwd()
-		local filename = curdir:gsub("[\\:/%.]", "_") .. ".vim"
-		local savepath = vim.fs.joinpath(sessiondir, filename)
-		local cmd = string.format("mksession! %s", savepath)
-		vim.cmd(cmd)
-	end, { desc = "Save mksession file for cwd" })
-	vim.api.nvim_create_user_command("SessionLoad", function()
-		local sessiondir = vim.fn.stdpath("state")
-		---@cast sessiondir string
-		sessiondir = vim.fs.joinpath(sessiondir, "sessions")
-		local curdir = vim.fn.getcwd()
-		local filename = curdir:gsub("[\\:/%.]", "_") .. ".vim"
-		local savepath = vim.fs.joinpath(sessiondir, filename)
-		local cmd = string.format("source %s", savepath)
-		vim.cmd(cmd)
-	end, { desc = "Load mksession file for cwd" })
-	local sessiongroup = vim.api.nvim_create_augroup("Sessions", { clear = true })
-	vim.api.nvim_create_autocmd({ "FocusLost", "CursorHold", "BufWritePost" }, {
-		desc = "autosave dirsession",
-		group = sessiongroup,
-		command = "SessionSave",
-	})
-end
+-- ui2
+local ui2_group = vim.api.nvim_create_augroup("UI2WinOpts", { clear = true })
+vim.api.nvim_create_autocmd("FileType", {
+	group = ui2_group,
+	pattern = "msg",
+	callback = function()
+		vim.wo.winhighlight = "NormalFloat:Float"
+		vim.api.nvim_win_set_config(0, { border = "none" })
+	end,
+})
+vim.api.nvim_create_autocmd("FileType", {
+	group = ui2_group,
+	pattern = "pager",
+	callback = function(ev)
+		local detected_ft = vim.filetype.match({ buf = ev.buf }) or "pager"
+		vim.bo[ev.buf].filetype = detected_ft
+		vim.wo.winhighlight = "NormalFloat:Normal,FloatBorder:Blue"
+		vim.api.nvim_win_set_config(0, { border = { "", "─", "", "", "", "", "", "" } })
+	end,
+})
 
 -- help split
 local help_group = vim.api.nvim_create_augroup("CustomHelpLayout", { clear = true })
@@ -148,27 +138,6 @@ vim.api.nvim_create_autocmd("BufWinEnter", {
 				vim.cmd.wincmd("L")
 			end
 		end
-	end,
-})
-
--- ui2
-local ui2_group = vim.api.nvim_create_augroup("UI2WinOpts", { clear = true })
-vim.api.nvim_create_autocmd("FileType", {
-	group = ui2_group,
-	pattern = "msg",
-	callback = function()
-		vim.wo.winhighlight = "NormalFloat:Float"
-		vim.api.nvim_win_set_config(0, { border = "none" })
-	end,
-})
-vim.api.nvim_create_autocmd("FileType", {
-	group = ui2_group,
-	pattern = "pager",
-	callback = function(ev)
-		local detected_ft = vim.filetype.match({ buf = ev.buf }) or "pager"
-		vim.bo[ev.buf].filetype = detected_ft
-		vim.wo.winhighlight = "NormalFloat:Normal,FloatBorder:Blue"
-		vim.api.nvim_win_set_config(0, { border = { "", "─", "", "", "", "", "", "" } })
 	end,
 })
 
@@ -209,3 +178,34 @@ vim.api.nvim_create_autocmd("LspProgress", {
 		})
 	end,
 })
+
+-- Sessions
+if vim.env.USER ~= "root" then
+	vim.api.nvim_create_user_command("SessionSave", function()
+		local sessiondir = vim.fn.stdpath("state")
+		---@cast sessiondir string
+		sessiondir = vim.fs.joinpath(sessiondir, "sessions")
+		if vim.fn.isdirectory(sessiondir) == 0 then vim.fn.mkdir(sessiondir, "p") end
+		local curdir = vim.fn.getcwd()
+		local filename = curdir:gsub("[\\:/%.]", "_") .. ".vim"
+		local savepath = vim.fs.joinpath(sessiondir, filename)
+		local cmd = string.format("mksession! %s", savepath)
+		vim.cmd(cmd)
+	end, { desc = "Save mksession file for cwd" })
+	vim.api.nvim_create_user_command("SessionLoad", function()
+		local sessiondir = vim.fn.stdpath("state")
+		---@cast sessiondir string
+		sessiondir = vim.fs.joinpath(sessiondir, "sessions")
+		local curdir = vim.fn.getcwd()
+		local filename = curdir:gsub("[\\:/%.]", "_") .. ".vim"
+		local savepath = vim.fs.joinpath(sessiondir, filename)
+		local cmd = string.format("source %s", savepath)
+		vim.cmd(cmd)
+	end, { desc = "Load mksession file for cwd" })
+	local sessiongroup = vim.api.nvim_create_augroup("Sessions", { clear = true })
+	vim.api.nvim_create_autocmd({ "FocusLost", "CursorHold", "BufWritePost" }, {
+		desc = "autosave dirsession",
+		group = sessiongroup,
+		command = "SessionSave",
+	})
+end
