@@ -103,14 +103,14 @@ if [[ "$DISTRO" == "Ubuntu" ]]; then
 	echo ""
 	read -p "Install zoxide and fzf? [y/n]" -n 1 -r
 	if [[ $REPLY =~ ^[Yy]$ ]]; then
-		if [ ! -d "$HOME"/.fzf ]; then
+		if [ ! -d "$HOME"/.local/share/fzf ]; then
 			git clone --depth 1 https://github.com/junegunn/fzf.git ~/.local/share/fzf
 		fi
 		DIR=$(pwd)
 		cd ~/.local/share/fzf
 		git pull -q
 		./install
-		ln -sf ~/.local/share/fzf/bin/fzf /usr/local/bin/fzf
+		sudo ln -sf ~/.local/share/fzf/bin/fzf /usr/local/bin/fzf
 		cd $DIR
 
 		curl -sSfL https://raw.githubusercontent.com/ajeetdsouza/zoxide/main/install.sh | sh
