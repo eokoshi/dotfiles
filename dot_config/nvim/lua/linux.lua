@@ -1017,7 +1017,7 @@ vim.fn.sign_define("DapBreakpointRejected", { text = icons.debug.rejected, texth
 
 --- smart-splits {{{
 require("smart-splits").setup({
-	mux = { backend = "smart-splits-backend-tmux" },
+	mux = { backend = "smart-splits-backend-tmux", warn_if_unusable = false },
 })
 vim.keymap.set("n", "<A-h>", require("smart-splits").resize_left)
 vim.keymap.set("n", "<A-j>", require("smart-splits").resize_down)
