@@ -9,6 +9,94 @@
 
 RESET='\[\e[00m\]'
 
+# PALETTE
+BLUE=38
+BRIGHTORANGE=202
+BRIGHTRED=9
+CYAN=14
+DARKGRAY=242
+DARKGREEN=22
+DARKORANGE=166
+GREEN=10
+LEMON=226
+LIGHTORANGE=208
+LIGHTPINK=211
+LIGHTPURPLE=177
+BRIGHTPURPLE=13
+OLIVE=58
+LIGHTOLIVE=100
+ORANGEYELLOW=214
+PURPLE=99
+RED=1
+SEABLUE=123
+SEAGREEN=120
+WHITE=7
+YELLOWGREEN=184
+PERIWINKLE=69
+
+__palette() {
+	case $(hostname) in
+	eeftop)
+		HOSTNAME_FG=$CYAN
+		WORKDIR_FG=$PERIWINKLE
+		PROMPT_FG=$BRIGHTPURPLE
+		;;
+	office)
+		HOSTNAME_FG=$GREEN
+		WORKDIR_FG=$PERIWINKLE
+		PROMPT_FG=$BRIGHTPURPLE
+		;;
+	DF1)
+		HOSTNAME_FG=$ORANGEYELLOW
+		WORKDIR_FG=$PERIWINKLE
+		PROMPT_FG=$BRIGHTPURPLE
+		;;
+	DF2)
+		HOSTNAME_FG=$RED
+		WORKDIR_FG=$PERIWINKLE
+		PROMPT_FG=$BRIGHTPURPLE
+		;;
+	blue-starfish)
+		HOSTNAME_FG=$SEABLUE
+		WORKDIR_FG=$PERIWINKLE
+		PROMPT_FG=$BRIGHTPURPLE
+		;;
+	halo)
+		HOSTNAME_FG=$LIGHTPINK
+		WORKDIR_FG=$PERIWINKLE
+		PROMPT_FG=$BRIGHTPURPLE
+		;;
+	eefix)
+		HOSTNAME_FG=$PURPLE
+		WORKDIR_FG=$PERIWINKLE
+		PROMPT_FG=$BRIGHTPURPLE
+		;;
+	MANAS-HP)
+		HOSTNAME_FG=$RED
+		WORKDIR_FG=$PERIWINKLE
+		PROMPT_FG=$BRIGHTPURPLE
+		;;
+	lab-optiplex7050)
+		HOSTNAME_FG=$SEAGREEN
+		WORKDIR_FG=$PERIWINKLE
+		PROMPT_FG=$BRIGHTPURPLE
+		;;
+	baobab)
+		HOSTNAME_FG=$DARKORANGE
+		WORKDIR_FG=$LIGHTOLIVE
+		PROMPT_FG=$RED
+		;;
+	*)
+		HOSTNAME_FG=$GREEN
+		WORKDIR_FG=$PERIWINKLE
+		PROMPT_FG=$BRIGHTPURPLE
+		;;
+	esac
+}
+
+# Make sure the palette is defined even outside of __mkps1.
+__palette
+
 __chroot() {
 	# This string is intentionally single-quoted:
 	# It will be evaluated when $PS1 is evaluated to generate the prompt each time.
@@ -21,8 +109,8 @@ __exitcode() {
 	local code="${LAST_EXIT:-0}"
 	local lsep=$'\ue0b2'
 	local rsep=$'\ue0b0'
-	local fg=7
-	local bg=1
+	local fg=$WHITE
+	local bg=$RED
 	local textcolor="\[\e[0;38;5;${fg};48;5;${bg}m\]"
 	local sepcolor="\[\e[38;5;${bg}m\]"
 
@@ -37,26 +125,14 @@ __time() {
 	local bg=""
 	local sepcolor="\[\e[38;5;${bg}m\]"
 	# local textcolor="\[\e[0;38;5;242;48;5;${bg}m\]"
-	local textcolor="\[\e[0;38;5;242m\]"
+	local textcolor="\[\e[0;38;5;${DARKGRAY}m\]"
 
 	echo " $sepcolor$l_arrow$textcolor\t$RESET$sepcolor$r_arrow$RESET "
 }
 
 __hostname() {
-	local textcolor
-	case $(hostname) in
-	eeftop) textcolor='\[\e[3;38;5;14m\]' ;;
-	office) textcolor='\[\e[3;38;5;10m\]' ;;
-	DF1) textcolor='\[\e[3;38;5;214m\]' ;;
-	DF2) textcolor='\[\e[3;38;5;1m\]' ;;
-	blue-starfish) textcolor='\[\e[3;38;5;123m\]' ;;
-	halo) textcolor='\[\e[3;38;5;211m\]' ;;
-	eefix) textcolor='\[\e[3;38;5;99m\]' ;;
-	eefplex7050) textcolor='\[\e[3;38;5;184m\]' ;;
-	MANAS-HP) textcolor='\[\e[3;38;5;9m\]' ;;
-	lab-optiplex7050) textcolor='\[\e[3;38;5;120m\]' ;;
-	*) textcolor='\[\e[3;38;5;38m\]' ;;
-	esac
+	# Italic (3) is hardcoded here; only the color comes from the palette.
+	local textcolor="\[\e[3;38;5;${HOSTNAME_FG}m\]"
 
 	echo "$textcolor\h$RESET "
 }
@@ -65,12 +141,12 @@ __workdir() {
 	local lsep=$'\ue0ba'
 	local rsep=$'\ue0b0'
 	local diricon=''
-	local fg=7
-	local bg=4
-	local textcolor="\[\e[0;38;5;${fg};48;5;${bg}m\]"
-	local sepcolor="\[\e[38;5;${bg}m\]"
-	local sepcolor2="\[\e[38;5;${bg};48;5;235m\]"
-	local textcolor2="\[\e[0;38;5;69m\]"
+	# local fg=7
+	# local bg=4
+	# local textcolor="\[\e[0;38;5;${fg};48;5;${bg}m\]"
+	# local sepcolor="\[\e[38;5;${bg}m\]"
+	# local sepcolor2="\[\e[38;5;${bg};48;5;235m\]"
+	local textcolor2="\[\e[0;38;5;${WORKDIR_FG}m\]"
 
 	# use top one for the powerline style, bottom one for simple colored text
 	# echo "$sepcolor$lsep$textcolor \w $RESET$sepcolor2$rsep"
@@ -146,7 +222,7 @@ __user_prompt() {
 	local tall_chevron=$'\u3009'
 	local small_chevron=$'\ueab6 '
 	local box_icon=''
-	local textcolor='\[\e[1;38;5;13m\]'
+	local textcolor="\[\e[1;38;5;${PROMPT_FG}m\]"
 	local input='\[\e[0;97m\]'
 
 	echo "$textcolor$box_icon$RESET "
@@ -162,6 +238,7 @@ check_chezmoi_nvim() {
 }
 
 __mkps1() {
+	__palette
 	local ps1="
 $(__box_top)$(__hostname)$(__chroot)$(__workdir)$(__git)$(__venv)$(__exitcode)$(check_chezmoi_nvim)$(__time)
 $(__box_bottom)$(__user_prompt)"
