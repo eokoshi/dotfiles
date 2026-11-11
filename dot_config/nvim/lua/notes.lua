@@ -1,5 +1,6 @@
 local map = vim.keymap.set
 local gh = require("functions").gh
+local clear = require("nvim-dap.lua.dap.repl").clear
 vim.pack.add({
 	{ src = gh("bngarren/checkmate.nvim") },
 	{ src = gh("MeanderingProgrammer/render-markdown.nvim"), vim.version.range("*") },
@@ -163,5 +164,33 @@ require("checkmate").setup({ ---@as checkmate.Config
 			sort_order = 15,
 		},
 	},
+})
+
+local checkmate_augroup = vim.api.nvim_create_augroup("checkmate", { clear = true })
+vim.api.nvim_create_autocmd("FileType", {
+	group = checkmate_augroup,
+	callback = function()
+		map({ "n", "v" }, "<CR>", "<cmd>Checkmate metadata toggle done<CR>", { desc = "Toggle todo item", buffer = true })
+		map({ "n", "v" }, "<localleader>c", "", { desc = "Checkmate", buffer = true })
+		map({ "n", "v" }, "<localleader>c+", "<cmd>Checkmate cycle_next<CR>", { desc = "Cycle todo item(s) to the next state", buffer = true })
+		map({ "n", "v" }, "<localleader>c-", "<cmd>Checkmate cycle_previous<CR>", { desc = "Cycle todo item(s) to the previous state", buffer = true })
+		map({ "n", "v" }, "<localleader>cn", "<cmd>Checkmate create<CR>", { desc = "Create todo item", buffer = true })
+		map({ "n", "v" }, "<localleader>cr", "<cmd>Checkmate remove<CR>", { desc = "Remove todo marker (convert to text)", buffer = true })
+		map({ "n", "v" }, "<localleader>cR", "<cmd>Checkmate remove_all_metadata<CR>", { desc = "Remove all metadata from a todo item", buffer = true })
+		map(
+			"n",
+			"<localleader>ca",
+			"<cmd>Checkmate archive<CR>",
+			{ desc = "Archive checked/completed todo items (move to bottom section)", buffer = true }
+		)
+		map(
+			"n",
+			"<localleader>cv",
+			"<cmd>Checkmate metadata select_value<CR>",
+			{ desc = "Update the value of a metadata tag under the cursor", buffer = true }
+		)
+		map("n", "<localleader>c]", "<cmd>Checkmate metadata jump_next<CR>", { desc = "Move cursor to next metadata tag", buffer = true })
+		map("n", "<localleader>c[", "<cmd>Checkmate metadata jump_previous<CR>", { desc = "Move cursor to previous metadata tag", buffer = true })
+	end,
 })
 --- }}}
