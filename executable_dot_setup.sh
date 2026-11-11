@@ -17,7 +17,7 @@ if [[ "$DISTRO" == "Ubuntu" ]]; then
 	sudo apt-get update
 	sudo apt-get -y --ignore-missing install ripgrep fd-find python3-venv direnv lsd unzip curl openssh-server
 	sudo service ssh start
-	sudo ln -sf /usr/bin/fdfind ~/usr/local/bin/fd
+	sudo ln -sf /usr/bin/fdfind /usr/local/bin/fd
 
 	echo ""
 	read -p "Install npm? [y/n]" -n 1 -r
@@ -104,13 +104,13 @@ if [[ "$DISTRO" == "Ubuntu" ]]; then
 	read -p "Install zoxide and fzf? [y/n]" -n 1 -r
 	if [[ $REPLY =~ ^[Yy]$ ]]; then
 		if [ ! -d "$HOME"/.fzf ]; then
-			git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf
+			git clone --depth 1 https://github.com/junegunn/fzf.git ~/.local/share/fzf
 		fi
 		DIR=$(pwd)
-		cd ~/.fzf
+		cd ~/.local/share/fzf
 		git pull -q
 		./install
-		ln -sf ~/.fzf/bin/fzf ~/usr/local/bin/fzf
+		ln -sf ~/.local/share/fzf/bin/fzf /usr/local/bin/fzf
 		cd $DIR
 
 		curl -sSfL https://raw.githubusercontent.com/ajeetdsouza/zoxide/main/install.sh | sh
